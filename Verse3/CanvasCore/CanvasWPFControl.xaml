@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Verse3.CanvasCore"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" HorizontalAlignment="Center" VerticalAlignment="Center">
+             d:DesignHeight="450" d:DesignWidth="800" HorizontalAlignment="Center" VerticalAlignment="Center" Width="8000" Height="4500" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -14,8 +14,8 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <local:CanvasCamera x:Name="MainCanvas" Style="{StaticResource VirtualControlStyle}">
-            <Ellipse Height="100" Canvas.Left="350" Stroke="Red" Canvas.Top="175" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <local:CanvasCamera x:Name="MainCanvas" Style="{StaticResource VirtualControlStyle}" Width="2000" Height="2000" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+            <Ellipse Height="100" Canvas.Left="950" Stroke="Red" Canvas.Top="950" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         </local:CanvasCamera>
     </Grid>
 </UserControl>
