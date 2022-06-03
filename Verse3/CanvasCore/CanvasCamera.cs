@@ -215,37 +215,68 @@ namespace Verse3.CanvasCore
 
         protected virtual void HandleMouseWheel(object sender, MouseWheelEventArgs e)
         {
+            double oldZoom = _zoom;
             _zoom += _zoomSpeed * e.Delta;
             if (_zoom < _zoomMin) _zoom = _zoomMin;
             if (_zoom > _zoomMax) _zoom = _zoomMax;
+            //TransformGroup transformGroup = LayoutTransform as TransformGroup;
+            //if (transformGroup == null)
+            //{
+            //    transformGroup = new TransformGroup();
+            //    transformGroup.Value.Scale(_zoom, _zoom);
+            //    transformGroup.Value.Translate(TranslateXform.Value.OffsetX, TranslateXform.Value.OffsetY);
+            //}
+            
             var ScaleXform = this.LayoutTransform as ScaleTransform;
-
             if (ScaleXform == null)
             {
-                ScaleXform = new ScaleTransform(1.0, 1.0, e.GetPosition(this).X, e.GetPosition(this).Y);
+                ScaleXform = new ScaleTransform(1.0, 1.0, ((this.ActualWidth / 2) - e.GetPosition(this).X), ((this.ActualHeight / 2) - e.GetPosition(this).Y));
             }
-            ScaleXform.CenterX = e.GetPosition(this).X;
-            ScaleXform.CenterY = e.GetPosition(this).Y;
+            ScaleXform.CenterX = (this.ActualWidth / 2) - e.GetPosition(this).X;
+            ScaleXform.CenterY = (this.ActualHeight / 2) - e.GetPosition(this).Y;
+
+            var transXform = this.TranslateXform as TranslateTransform;
+            if (transXform == null)
+            {
+                transXform = new TranslateTransform(TranslateXform.X, TranslateXform.Y);
+            }
+            //transXform.X -= (((this.ActualWidth / 2) - e.GetPosition(this).X) * (oldZoom - _zoom) / oldZoom);
+            //transXform.Y -= (((this.ActualHeight / 2) - e.GetPosition(this).Y) * (oldZoom - _zoom) / oldZoom);
+            transXform.X -= ScaleXform.CenterX * (oldZoom - _zoom) / oldZoom;
+            transXform.Y -= ScaleXform.CenterY * (oldZoom - _zoom) / oldZoom;
+
+            //transformGroup.Value.ScaleAt(_zoom, _zoom, ((this.ActualWidth / 2) - e.GetPosition(this).X), ((this.ActualHeight / 2) - e.GetPosition(this).Y));
+            //transformGroup.Value.Translate((((this.ActualWidth / 2) - e.GetPosition(this).X) * (_zoom - oldZoom) / oldZoom), (((this.ActualHeight / 2) - e.GetPosition(this).Y) * (_zoom - oldZoom) / oldZoom));
 
             this.LayoutTransform = ScaleXform;
-            this.RenderTransformOrigin = e.GetPosition(this);
-
-            //if ((this.RenderTransform.Value.OffsetY == 0.0) || (this.RenderTransform.Value.OffsetX == 0.0))
-            //{
-            //}
-            //else
-            //{
-            //    this.RenderTransform = new TranslateTransform((GetLeft(this) - (scaler.CenterX / 2)), (GetTop(this) - (scaler.CenterY / 2)));
-            //}
 
             var animator = new DoubleAnimation
             {
-                Duration = new Duration(TimeSpan.FromMilliseconds(100)),
-                To = _zoom,
-                EasingFunction = new ExponentialEase { EasingMode = EasingMode.EaseOut }
+                Duration = new Duration(TimeSpan.FromMilliseconds(1)),
+                To = _zoom
             };
             ScaleXform.BeginAnimation(ScaleTransform.ScaleXProperty, animator);
             ScaleXform.BeginAnimation(ScaleTransform.ScaleYProperty, animator);
+            this.RenderTransform = transXform;
+
+            //var xanimator = new DoubleAnimation
+            //{
+            //    Duration = new Duration(TimeSpan.FromMilliseconds(100)),
+            //    From = this.TranslateXform.Value.OffsetX,
+            //    To = transXform.X,
+            //    EasingFunction = new ExponentialEase { EasingMode = EasingMode.EaseOut }
+            //};
+            ////transXform.BeginAnimation(TranslateTransform.XProperty, xanimator);
+            //var yanimator = new DoubleAnimation
+            //{
+            //    Duration = new Duration(TimeSpan.FromMilliseconds(100)),
+            //    From = this.TranslateXform.Value.OffsetY,
+            //    To = transXform.Y,
+            //    EasingFunction = new ExponentialEase { EasingMode = EasingMode.EaseOut }
+            //};
+            //transXform.BeginAnimation(TranslateTransform.YProperty, yanimator);
+            //this.CanvasOrigin.X += transXform.X;
+            //this.CanvasOrigin.Y += transXform.Y;
 
             //MouseMode = MouseMode.Nothing;
             e.Handled = true;
@@ -344,7 +375,8 @@ namespace Verse3.CanvasCore
                 this.TranslateXform.X -= v.X * _zoom;
                 this.TranslateXform.Y -= v.Y * _zoom;
                 this.RenderTransform = this.TranslateXform;
-                this.CanvasOrigin = new Point(this.TranslateXform.X, this.TranslateXform.Y);
+                this.CanvasOrigin.X += this.TranslateXform.X;
+                this.CanvasOrigin.Y += this.TranslateXform.Y;
                 MouseDownStart = e.GetPosition(this);
             }
             else if (MouseMode == MouseMode.Selection)

@@ -61,6 +61,9 @@
     <Compile Include="CanvasCore\CanvasWPFControl.xaml.cs">
       <DependentUpon>CanvasWPFControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CanvasCore\RichCanvasWPFControl.xaml.cs">
+      <DependentUpon>RichCanvasWPFControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +105,10 @@
     <Page Include="CanvasCore\Resources\CanvasResources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CanvasCore\RichCanvasWPFControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

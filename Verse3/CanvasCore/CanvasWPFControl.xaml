@@ -15,7 +15,13 @@
     </UserControl.Resources>
     <Grid>
         <local:CanvasCamera x:Name="MainCanvas" Style="{StaticResource VirtualControlStyle}" Width="2000" Height="2000" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
-            <Ellipse Height="100" Canvas.Left="950" Stroke="Red" Canvas.Top="950" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Ellipse Height="100" Canvas.Left="676" Stroke="Red" Canvas.Top="804" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Ellipse Height="100" Canvas.Left="1214" Stroke="Red" Canvas.Top="804" Width="100" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Ellipse Height="100" Canvas.Left="1048" Stroke="Red" Canvas.Top="1096" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Ellipse Height="100" Canvas.Left="1284" Stroke="Red" Canvas.Top="1146" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Ellipse Height="100" Canvas.Left="950" Stroke="Red" Canvas.Top="900" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Ellipse Height="100" Canvas.Left="788" Stroke="Red" Canvas.Top="1024" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Ellipse Height="100" Canvas.Left="676" Stroke="Red" Canvas.Top="1146" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         </local:CanvasCamera>
     </Grid>
 </UserControl>
