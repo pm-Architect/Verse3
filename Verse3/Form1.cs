@@ -19,16 +19,16 @@ namespace Verse3
     {
         public Form1()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            label1.Text = canvasWPFControl1.MainCanvas.Zoom.ToString();
-            label2.Text = canvasWPFControl1.MainCanvas.TranslateXform.X.ToString();
-            label3.Text = canvasWPFControl1.MainCanvas.TranslateXform.Y.ToString();
-            label4.Text = Mouse.GetPosition(canvasWPFControl1).X.ToString();
-            label5.Text = Mouse.GetPosition(canvasWPFControl1).Y.ToString();
+            //label1.Text = canvasWPFControl1.MainCanvas.Zoom.ToString();
+            //label2.Text = canvasWPFControl1.MainCanvas.TranslateXform.X.ToString();
+            //label3.Text = canvasWPFControl1.MainCanvas.TranslateXform.Y.ToString();
+            //label4.Text = Mouse.GetPosition(canvasWPFControl1).X.ToString();
+            //label5.Text = Mouse.GetPosition(canvasWPFControl1).Y.ToString();
         }
     }
 }

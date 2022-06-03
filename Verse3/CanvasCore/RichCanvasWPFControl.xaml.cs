@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,8 @@ namespace Verse3.CanvasCore
     /// </summary>
     public partial class RichCanvasWPFControl : UserControl
     {
+        //public ObservableCollection<Element> Items { get; }
+        //public ObservableCollection<Element> SelectedItems { get; }
         public RichCanvasWPFControl()
         {
             InitializeComponent();

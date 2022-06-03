@@ -36,8 +36,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.elementHost2 = new System.Windows.Forms.Integration.ElementHost();
-            this.richCanvasWPFControl1 = new Verse3.CanvasCore.RichCanvasWPFControl();
+            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
+            this.richCanvasWPFControl2 = new Verse3.CanvasCore.RichCanvasWPFControl();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,7 +47,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel1.Controls.Add(this.elementHost2, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.elementHost1, 1, 1);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
@@ -108,15 +108,15 @@
             this.label5.TabIndex = 6;
             this.label5.Text = "label5";
             // 
-            // elementHost2
+            // elementHost1
             // 
-            this.elementHost2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.elementHost2.Location = new System.Drawing.Point(28, 28);
-            this.elementHost2.Name = "elementHost2";
-            this.elementHost2.Size = new System.Drawing.Size(942, 467);
-            this.elementHost2.TabIndex = 7;
-            this.elementHost2.Text = "elementHost2";
-            this.elementHost2.Child = this.richCanvasWPFControl1;
+            this.elementHost1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.elementHost1.Location = new System.Drawing.Point(28, 28);
+            this.elementHost1.Name = "elementHost1";
+            this.elementHost1.Size = new System.Drawing.Size(942, 467);
+            this.elementHost1.TabIndex = 0;
+            this.elementHost1.Text = "elementHost1";
+            this.elementHost1.Child = this.richCanvasWPFControl2;
             // 
             // Form1
             // 
@@ -143,8 +143,9 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Integration.ElementHost elementHost2;
         private CanvasCore.RichCanvasWPFControl richCanvasWPFControl1;
+        private System.Windows.Forms.Integration.ElementHost elementHost1;
+        private CanvasCore.RichCanvasWPFControl richCanvasWPFControl2;
 
         #endregion
 
