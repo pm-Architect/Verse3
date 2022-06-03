@@ -64,10 +64,16 @@ namespace Verse3.CanvasCore
         //public ObservableCollection<Node> SelectedNodes = new ObservableCollection<Node>();
         protected Point Start;
         public WireMode WireMode = WireMode.Nothing;
+        
+        protected Border _selectionZone;
+        protected Point _startPoint;
+        protected bool _wiresDisabled;
+        public bool NeedsRefresh;
+        
+        private Point BasisOrigin => new Point(ActualWidth / 2, ActualHeight / 2);
 
         public CanvasCamera()
         {
-            //Style = FindResource("VirtualControlStyle") as Style;
             Style s = TryFindResource("VirtualControlStyle") as Style;
             if (s != null) this.Style = s;
             ApplyTemplate();
@@ -75,6 +81,50 @@ namespace Verse3.CanvasCore
             MouseDown += HandleMouseDown;
             PreviewMouseMove += HandleMouseMove;
             RenderTransformOrigin = new Point(0.5, 0.5);
+
+            KeyboardNavigation.SetDirectionalNavigation(this, KeyboardNavigationMode.None);
+            PreviewMouseDown += OnMouseDown;
+            MouseMove += OnMouseMove;
+            MouseUp += OnMouseUp;
+            PreviewKeyDown += OnKeyDown;
+            AllowDrop = true;
+            Drop += VirtualControl_Drop;
+            var init = false;
+            Loaded += (sender, args) =>
+            {
+                if (!init)
+                {
+                    InitRoot();
+                    init = true;
+                }
+            };
+        }
+        private void InitRoot()
+        {
+            //var startNode = new StartNode(this);
+            //RootNode = startNode;
+            //RootNode.Id = "0";
+            //Task.Factory.StartNew(() =>
+            //{
+            //    Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => { GoForNode(RootNode); }));
+            //});
+        }
+
+        private void VirtualControl_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                for (var index = 0; index < files.Length; index++)
+                {
+                    var file = files[index];
+                    //var node = new ReadFile(this);
+                    //node.OutputPorts[0].Data.Value = file;
+                    //AddChildren(node, ActualWidth / 2, ActualHeight / 2);
+                    //node.X = node.X - node.ActualWidth;
+                }
+            }
         }
 
         public Point UIelementCoordinates(UIElement element)
@@ -138,7 +188,7 @@ namespace Verse3.CanvasCore
                 }
                 var animator = new DoubleAnimation
                 {
-                    Duration = new Duration(TimeSpan.FromMilliseconds(500)),
+                    Duration = new Duration(TimeSpan.FromMilliseconds(100)),
                     To = _zoom
                 };
                 scaler.BeginAnimation(ScaleTransform.ScaleXProperty, animator);
@@ -162,7 +212,7 @@ namespace Verse3.CanvasCore
                 }
                 var animator = new DoubleAnimation
                 {
-                    Duration = new Duration(TimeSpan.FromMilliseconds(500)),
+                    Duration = new Duration(TimeSpan.FromMilliseconds(100)),
                     To = _zoom
                 };
                 scaler.CenterX = ActualWidth / 2;
@@ -187,14 +237,16 @@ namespace Verse3.CanvasCore
             var scaler = LayoutTransform as ScaleTransform;
 
             if (scaler == null)
-            {
-                scaler = new ScaleTransform(01, 01, Mouse.GetPosition(this).X, Mouse.GetPosition(this).Y);
+            {                
+                scaler = new ScaleTransform(01, 01, e.GetPosition(this).X, e.GetPosition(this).Y);
                 LayoutTransform = scaler;
             }
+            scaler.CenterX = e.GetPosition(this).X;
+            scaler.CenterY = e.GetPosition(this).Y;
 
             var animator = new DoubleAnimation
             {
-                Duration = new Duration(TimeSpan.FromMilliseconds(500)),
+                Duration = new Duration(TimeSpan.FromMilliseconds(100)),
                 To = _zoom
             };
             scaler.BeginAnimation(ScaleTransform.ScaleXProperty, animator);
@@ -264,109 +316,8 @@ namespace Verse3.CanvasCore
         }
 
         #endregion
-        
-        
-    }
 
-    public class VirtualControl : CanvasCamera
-    {
-        //private readonly MouseClickEffect _mouseEffect = new MouseClickEffect();
-        //private readonly List<NodeProperties> CopiedNodes = new List<NodeProperties>();
-        //public readonly InnerLinkingMessageBox InnerMsg = new InnerLinkingMessageBox();
-        //public readonly NodesTree NodesTree;
-        //private readonly Search SearchForm;
-        private Border _selectionZone;
-        private Point _startPoint;
-        //private Node[] _tempNodes;
-        private bool _wiresDisabled;
-        private Point CenterOfGravity;
-        //public IList<Comment> Comments = new List<Comment>();
-        //public List<ExecutionConnector> ExecutionConnectors = new List<ExecutionConnector>();
-        public bool NeedsRefresh;
-        //public IList<Node> Nodes = new List<Node>();
-        //public List<ObjectsConnector> ObjectConnectors = new List<ObjectsConnector>();
-        //public IList<VariableItem> Variables = new List<VariableItem>();
-
-        public VirtualControl()
-        {
-            KeyboardNavigation.SetDirectionalNavigation(this, KeyboardNavigationMode.None);
-            PreviewMouseDown += OnMouseDown;
-            MouseMove += OnMouseMove;
-            MouseUp += OnMouseUp;
-            PreviewKeyDown += OnKeyDown;
-            //ContextMenu = VirtualContextMenu();
-            //AddChildren(InnerMsg);
-            //SelectedNodes.CollectionChanged += SelectedUiElementsOnCollectionChanged;
-            AllowDrop = true;
-            Drop += VirtualControl_Drop;
-            var init = false;
-            //GotFocus += (s, e) => Hub.CurrentHost = this;
-            //SearchForm = new Search(this);
-            Loaded += (sender, args) =>
-            {
-                if (!init)
-                {
-                    InitRoot();
-                    init = true;
-                }
-            };
-            //NodesTree = new NodesTree(this);
-        }
-
-        //public Node RootNode { get; set; }
-
-        //public Wire TempConn { get; set; }
-
-        //public ExecPort TemExecPort { get; set; }
-
-        //public ObjectPort TemObjectPort { get; set; }
-
-        //public Comment TempComment { get; set; }
-        private Point BasisOrigin => new Point(ActualWidth / 2, ActualHeight / 2);
-
-        private void VirtualControl_Drop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                for (var index = 0; index < files.Length; index++)
-                {
-                    var file = files[index];
-                    //var node = new ReadFile(this);
-                    //node.OutputPorts[0].Data.Value = file;
-                    //AddChildren(node, ActualWidth / 2, ActualHeight / 2);
-                    //node.X = node.X - node.ActualWidth;
-                }
-            }
-        }
-
-        //public string SerializeAll()
-        //{
-        //    var data = new VirtualControlData(this);
-        //    return Cipher.SerializeToString(data);
-        //}
-
-        //private void SelectedUiElementsOnCollectionChanged(object sender,
-        //    NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
-        //{
-        //    if (notifyCollectionChangedEventArgs.NewItems == null) return;
-        //    foreach (Node node in notifyCollectionChangedEventArgs.NewItems)
-        //    {
-        //        node.IsSelected = true;
-        //        node.Focus();
-        //    }
-        //}
-
-        //public Node GetNode(string guid)
-        //{
-        //    foreach (var node in Nodes)
-        //        if (node.Id == guid)
-        //            return node;
-        //    return null;
-        //}
-
-        #region  GameControllers
+        #region EventCaptures
 
         private void OnKeyDown(object sender, KeyEventArgs keyEventArgs)
         {
@@ -443,70 +394,47 @@ namespace Verse3.CanvasCore
                         keyEventArgs.Handled = true;
                     }
                     break;
-                //case Key.A:
-                //    SelectedNodes.Clear();
-                //    if (Keyboard.FocusedElement is Node)
+                    //case Key.A:
+                    //    SelectedNodes.Clear();
+                    //    if (Keyboard.FocusedElement is Node)
 
-                //        if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
-                //            if (Nodes != null)
-                //                for (var index = 0; index < Nodes.Count; index++)
-                //                {
-                //                    var node = Nodes[index];
-                //                    node.Focus();
+                    //        if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                    //            if (Nodes != null)
+                    //                for (var index = 0; index < Nodes.Count; index++)
+                    //                {
+                    //                    var node = Nodes[index];
+                    //                    node.Focus();
 
-                //                    SelectedNodes.Add(node);
-                //                }
+                    //                    SelectedNodes.Add(node);
+                    //                }
 
-                //    break;
-                //case Key.F:
-                //    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
-                //        SearchForm.Show();
-                //    break;
-                //case Key.X:
-                //    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
-                //    {
-                //        Copy();
-                //        DeleteSelected();
-                //    }
-                //    break;
-                //case Key.Escape:
-                //    if (Keyboard.FocusedElement is Node)
-                //        if (SelectedNodes.Count != 0)
-                //        {
-                //            for (var index = 0; index < SelectedNodes.Count; index++)
-                //            {
-                //                var node = SelectedNodes[index];
-                //                node.IsSelected = false;
-                //            }
-                //            SelectedNodes.Clear();
-                //        }
+                    //    break;
+                    //case Key.F:
+                    //    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                    //        SearchForm.Show();
+                    //    break;
+                    //case Key.X:
+                    //    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                    //    {
+                    //        Copy();
+                    //        DeleteSelected();
+                    //    }
+                    //    break;
+                    //case Key.Escape:
+                    //    if (Keyboard.FocusedElement is Node)
+                    //        if (SelectedNodes.Count != 0)
+                    //        {
+                    //            for (var index = 0; index < SelectedNodes.Count; index++)
+                    //            {
+                    //                var node = SelectedNodes[index];
+                    //                node.IsSelected = false;
+                    //            }
+                    //            SelectedNodes.Clear();
+                    //        }
 
-                //    break;
+                    //    break;
             }
         }
-
-        #endregion
-
-        private void InitRoot()
-        {
-            //var startNode = new StartNode(this);
-            //RootNode = startNode;
-            //RootNode.Id = "0";
-            //Task.Factory.StartNew(() =>
-            //{
-            //    Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() => { GoForNode(RootNode); }));
-            //});
-        }
-
-        //public void ClearAllSelectedNodes()
-        //{
-        //    for (var index = 0; index < SelectedNodes.Count; index++)
-        //    {
-        //        var node = SelectedNodes[index];
-        //        node.IsSelected = false;
-        //    }
-        //    SelectedNodes.Clear();
-        //}
 
         private void OnMouseDown(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
@@ -580,7 +508,6 @@ namespace Verse3.CanvasCore
                 _selectionZone.Height = h;
                 SetLeft(_selectionZone, x);
                 SetTop(_selectionZone, y);
-                SelectionZoneWorkerOnDoWork();
                 return;
             }
             if (MouseMode == MouseMode.ResizingComment && mouseEventArgs.LeftButton == MouseButtonState.Pressed)
@@ -616,7 +543,7 @@ namespace Verse3.CanvasCore
         {
             if (MouseMode == MouseMode.SelectionRectangle && Children.Contains(_selectionZone))
             {
-                //Children.Remove(_selectionZone);
+                Children.Remove(_selectionZone);
                 //SelectedNodes.Clear();
                 //for (var index = 0; index < Nodes.Count; index++)
                 //{
@@ -654,172 +581,8 @@ namespace Verse3.CanvasCore
             //});
         }
 
-        private void SelectionZoneWorkerOnDoWork()
-        {
-            //Task.Factory.StartNew(() =>
-            //{
-            //    Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
-            //    {
-            //        foreach (var node in Nodes)
-            //            if (node.IsCollapsed == false)
-            //                if (_selectionZone != null)
-            //                    if (node.X >= GetLeft(_selectionZone) &&
-            //                        node.X + node.ActualWidth <= GetLeft(_selectionZone) + _selectionZone.Width &&
-            //                        node.Y >= GetTop(_selectionZone) &&
-            //                        node.Y + node.ActualHeight <= GetTop(_selectionZone) + _selectionZone.Height)
-            //                        node.IsSelected = true;
-            //                    else
-            //                        node.IsSelected = false;
-            //                else
-            //                    node.IsSelected = false;
-            //    }));
-            //});
-        }
-
-        //public void ShowLinkingPossiblity(int possible, Point location)
-        //{
-        //    InnerMsg.Visibility = Visibility.Visible;
-        //    switch (possible)
-        //    {
-        //        case 0:
-        //            InnerMsg.MessageIcon = InnerLinkingMessageBox.InnerMessageIcon.False;
-        //            InnerMsg.Text = "Unlinkable.";
-        //            break;
-        //        case 1:
-        //            InnerMsg.MessageIcon = InnerLinkingMessageBox.InnerMessageIcon.Correct;
-        //            InnerMsg.Text = "Linkable.";
-        //            break;
-        //        case 2:
-        //            InnerMsg.MessageIcon = InnerLinkingMessageBox.InnerMessageIcon.Warning;
-        //            InnerMsg.Text = "Linkable (may require a cast).";
-        //            break;
-        //    }
-
-
-        //    SetTop(InnerMsg, location.Y);
-        //    SetLeft(InnerMsg, location.X + 10);
-        //    SetZIndex(InnerMsg, ZIndexes.AboveAllIndex);
-        //}
-
-        //public void HideLinkingPossiblity()
-        //{
-        //    InnerMsg.Visibility = Visibility.Collapsed;
-        //}
-
-        //public void GoForNode(Node node)
-        //{
-        //    node.X = Math.Truncate(node.X);
-        //    node.Y = Math.Truncate(node.Y);
-        //    var origin = BasisOrigin;
-        //    origin.X -= node.ActualWidth - 10;
-        //    origin.X = Math.Truncate(origin.X);
-        //    origin.Y = Math.Truncate(origin.Y);
-        //    var difference = Point.Subtract(origin, new Point(node.X, node.Y));
-        //    var timer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 0, 0, 01) };
-        //    foreach (var n in Nodes)
-        //    {
-        //        if (difference.X < 0)
-        //            n.X += difference.X;
-        //        else
-        //            n.X += difference.X;
-        //        if (difference.Y < 0)
-        //            n.Y += difference.Y;
-        //        else
-        //            n.Y += difference.Y;
-        //        NeedsRefresh = true;
-        //    }
-        //    difference.X = 10;
-        //    difference.Y = 0;
-        //    if (difference.X != 0 || difference.Y != 0)
-        //        timer.Start();
-        //    timer.Tick += (s, e) =>
-        //    {
-        //        if (difference.X == 0 && difference.Y == 0)
-        //            timer.Stop();
-        //        foreach (var n in Nodes)
-        //        {
-        //            if (difference.X > 0)
-        //                n.X++;
-        //            else
-        //                n.X--;
-        //            if (difference.Y > 0)
-        //                n.Y++;
-        //            else
-        //                n.Y--;
-        //        }
-        //        if (difference.X > 0)
-        //            difference.X--;
-        //        else
-        //            difference.X++;
-        //        if (difference.Y > 0)
-        //            difference.Y--;
-        //        else
-        //            difference.Y++;
-        //    };
-        //    SelectedNodes.Clear();
-        //    SelectedNodes.Add(node);
-        //}
-
-        //public void Copy()
-        //{
-        //    CopiedNodes.Clear();
-        //    for (var index = SelectedNodes.Count - 1; index >= 0; index--)
-        //    {
-        //        var node = SelectedNodes[index];
-        //        if (node.Types == NodeTypes.Root) continue;
-        //        CopiedNodes.Add(new NodeProperties(node));
-        //    }
-        //    Clipboard.SetText(Cipher.SerializeToString(CopiedNodes));
-        //}
-
-        //public void Paste()
-        //{
-        //    try
-        //    {
-        //        SelectedNodes.Clear();
-        //        var dummyList = Cipher.DeSerializeFromString<List<NodeProperties>>(Clipboard.GetText());
-        //        for (var index = dummyList.Count - 1; index >= 0; index--)
-        //        {
-        //            var copiednode = dummyList[index];
-        //            var typename = copiednode.Name;
-        //            Node newNode = null;
-        //            foreach (var node in Hub.LoadedExternalNodes)
-        //            {
-        //                if (node.ToString() != typename) continue;
-        //                newNode = node.Clone();
-        //                AddNode(newNode, copiednode.X, copiednode.Y);
-        //                newNode.DeSerializeData(copiednode.InputData, copiednode.OutputData);
-        //                break;
-        //            }
-        //            if (newNode != null) continue;
-        //            var type = Type.GetType(typename);
-        //            try
-        //            {
-        //                var instance = Activator.CreateInstance(type, this, false);
-        //                AddNode(instance as Node, copiednode.X, copiednode.Y);
-        //            }
-        //            catch (Exception)
-        //            {
-        //                //Ignored
-        //            }
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        //ignored
-        //    }
-        //}
-
-
-        //public void AddNode(Node child, double x, double y, bool addedByBrain = false)
-        //{
-        //    AddChildren(child);
-        //    SetLeft(child, x);
-        //    SetTop(child, y);
-        //    Nodes.Add(child);
-        //    SelectedNodes.Clear();
-        //    SelectedNodes.Add(child);
-        //}
+        #endregion
+        
         public void IndicateStatus()
         {
             var indicator = new Border
@@ -831,59 +594,5 @@ namespace Verse3.CanvasCore
             };
             AddChildren(indicator, 0, 0);
         }
-        //public void AddVariable(ref VariableItem variable, double x, double y)
-        //{
-        //    var gsMenu = new GetSetMenu(ref variable) { Host = this };
-        //    AddChildren(gsMenu, x, y);
-        //}
-        //private void DeleteSelected()
-        //{
-        //    for (var index = 0; index < SelectedNodes.Count; index++)
-        //    {
-        //        var node = SelectedNodes[index];
-        //        node.Delete();
-        //    }
-        //}
-        //private ContextMenu VirtualContextMenu()
-        //{
-        //    var cm = new ContextMenu();
-        //    var add = new TextBlock { Text = "Add Node", Foreground = Brushes.WhiteSmoke };
-        //    var addNode = new MenuItem { Header = add };
-        //    addNode.Click += (s, e) => { NodesTree.Show(); };
-        //    var delete = new TextBlock { Text = "Delete Selected", Foreground = Brushes.WhiteSmoke };
-        //    var deleteNodes = new MenuItem { Header = delete };
-        //    deleteNodes.Click += (s, e) => { DeleteSelected(); };
-        //    var cut = new TextBlock { Text = "Cut Selected", Foreground = Brushes.WhiteSmoke };
-        //    var cutNodes = new MenuItem { Header = cut };
-        //    cutNodes.Click += (s, e) =>
-        //    {
-        //        Copy();
-        //        DeleteSelected();
-        //    };
-        //    var copy = new TextBlock { Text = "Copy Selected", Foreground = Brushes.WhiteSmoke };
-        //    var copyNodes = new MenuItem { Header = copy };
-        //    copyNodes.Click += (s, e) => { Copy(); };
-        //    var paste = new TextBlock { Text = "Paste Selected", Foreground = Brushes.WhiteSmoke };
-        //    var pasteNodes = new MenuItem { Header = paste };
-        //    pasteNodes.Click += (s, e) => { Paste(); };
-        //    var comment = new TextBlock { Text = "Comment Selected", Foreground = Brushes.WhiteSmoke };
-        //    var commentNodes = new MenuItem { Header = comment };
-        //    commentNodes.Click += (s, e) =>
-        //    {
-        //        if (SelectedNodes.Count > 0)
-        //        {
-        //            var comm = new Comment(SelectedNodes, this);
-        //        }
-        //    };
-        //    cm.Items.Add(addNode);
-        //    cm.Items.Add(deleteNodes);
-        //    cm.Items.Add(new Separator { Foreground = Brushes.White });
-        //    cm.Items.Add(cutNodes);
-        //    cm.Items.Add(copyNodes);
-        //    cm.Items.Add(pasteNodes);
-        //    cm.Items.Add(new Separator { Foreground = Brushes.White });
-        //    cm.Items.Add(commentNodes);
-        //    return cm;
-        //}
-    }
+    }    
 }

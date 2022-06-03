@@ -4,7 +4,6 @@
     <Style x:Key="VirtualControlStyle" TargetType="Canvas">
         <Setter Property="ScrollViewer.Visibility" Value="Visible" />
         <Setter Property="LayoutTransform">
-
             <Setter.Value>
                 <MatrixTransform />
             </Setter.Value>
