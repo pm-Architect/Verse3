@@ -3,9 +3,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:richCanvas="clr-namespace:RichCanvas"
              xmlns:local="clr-namespace:Verse3.CanvasCore"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <GeometryDrawing x:Key="GridStyle"
+                         Geometry="M0,0 L0,1 0.03,1 0.03,0.03 1,0.03 1,0 Z"
+                         Brush="Green" />
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <local:RichCanvasWPFControl/>
+    </UserControl.DataContext>
     <Grid>
+        <richCanvas:RichItemsControl ItemsSource="{Binding Items}"
+                                     Grid.Column="1"
+                                     Grid.Row="1"
+                                     x:Name="canvas"
+                                     SelectedItems="{Binding SelectedItems}"
+                                     EnableGrid="true"
+                                     EnableSnapping="false"
+                                     GridStyle="{StaticResource GridStyle}"
+                                     Background="#FF424242"
+                                     GridSpacing="10"
+                                     DisableCache="true"
+                                     DisableZoom="false"
+                                     DisableScroll="false"
+                                     DisableAutoPanning="true"
+                                     Scale="1"
+                                     MinScale="0.05"
+                                     MaxScale="5"
+                                     AutoPanSpeed="0.1"
+                                     AutoPanTickRate="0.9"
+                                     RealTimeSelectionEnabled="True"
+                                     RealTimeDraggingEnabled="True" Foreground="White">
+        </richCanvas:RichItemsControl>
     </Grid>
 </UserControl>
