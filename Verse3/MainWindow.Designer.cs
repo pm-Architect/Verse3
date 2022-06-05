@@ -48,7 +48,7 @@
             this.ClientSize = new System.Drawing.Size(933, 518);
             this.Controls.Add(this.elementHost2);
             this.Name = "MainWindow";
-            this.Text = "Form1";
+            this.Text = "Verse3";
             this.ResumeLayout(false);
 
         }
