@@ -1,6 +1,7 @@
 ﻿using InfiniteCanvas;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -71,15 +72,15 @@ namespace Verse3
         /// </summary>
         private bool prevZoomRectSet = false;
 
-        /// <summary>
-        /// Set to 'true' when the previous select rect is saved.
-        /// </summary>
-        private bool prevSelectRectSet = false;
+        ///// <summary>
+        ///// Set to 'true' when the previous select rect is saved.
+        ///// </summary>
+        //private bool prevSelectRectSet = false;
 
-        /// <summary>
-        /// Saves the previous Select rectangle
-        /// </summary>
-        private Rect prevSelectRect;
+        ///// <summary>
+        ///// Saves the previous Select rectangle
+        ///// </summary>
+        //private Rect prevSelectRect;
 
         public InfiniteCanvasWPFControl()
         {
@@ -534,6 +535,10 @@ namespace Verse3
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ///
 
+        #endregion
+
+        #region SelectFunctions
+
 
         /// <summary>
         /// Initialise the rectangle that the use is dragging out.
@@ -597,7 +602,7 @@ namespace Verse3
             //
             // Record the previous zoom level, so that we can jump back to it when the backspace key is pressed.
             //
-            SavePrevSelectRect();
+            //SavePrevSelectRect();
 
             //
             // Retreive the rectangle that the user draggged out and zoom in on it.
@@ -623,22 +628,22 @@ namespace Verse3
                 });
         }
 
-        //
-        // Record the previous zoom level, so that we can jump back to it when the backspace key is pressed.
-        //
-        private void SavePrevSelectRect()
-        {
-            prevSelectRect = new Rect(InfiniteCanvasControl1.ContentOffsetX, InfiniteCanvasControl1.ContentOffsetY, InfiniteCanvasControl1.ContentViewportWidth, InfiniteCanvasControl1.ContentViewportHeight);
-            prevSelectRectSet = true;
-        }
+        ////
+        //// Record the previous zoom level, so that we can jump back to it when the backspace key is pressed.
+        ////
+        //private void SavePrevSelectRect()
+        //{
+        //    prevSelectRect = new Rect(InfiniteCanvasControl1.ContentOffsetX, InfiniteCanvasControl1.ContentOffsetY, InfiniteCanvasControl1.ContentViewportWidth, InfiniteCanvasControl1.ContentViewportHeight);
+        //    prevSelectRectSet = true;
+        //}
 
-        /// <summary>
-        /// Clear the memory of the previous zoom level.
-        /// </summary>
-        private void ClearPrevSelectRect()
-        {
-            prevSelectRectSet = false;
-        }
+        ///// <summary>
+        ///// Clear the memory of the previous zoom level.
+        ///// </summary>
+        //private void ClearPrevSelectRect()
+        //{
+        //    prevSelectRectSet = false;
+        //}
 
         #endregion
 
@@ -781,5 +786,24 @@ namespace Verse3
         /// The user is left-mouse-button-dragging on the viewport.
         /// </summary>
         Dragging
+    }
+
+    /// <summary>
+    /// PseudoConverter to offset X and Y Positions for setting the canvas origin in the viewport
+    /// https://stackoverflow.com/a/4973289
+    /// </summary>
+    public class CanvasSizeOffsetPseudoConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            double OffsetValue = DataModel.ContentCanvasMarginOffset;
+            double Val = ((double)value);
+
+            return Val + OffsetValue;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

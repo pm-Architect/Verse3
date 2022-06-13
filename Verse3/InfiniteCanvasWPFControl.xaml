@@ -16,6 +16,9 @@
         <local:ColorToBrushConverter 
             x:Key="colorToBrushConverter"
             />
+        <local:CanvasSizeOffsetPseudoConverter 
+            x:Key="canvasSizeOffsetPseudoConverter"
+            />
         <!--
         Defines the UI for an instance of RectangleData.
         -->
@@ -57,12 +60,12 @@
             TargetType="ListBoxItem"
             >
             <Setter 
-                Property="Canvas.Left" 
-                Value="{Binding X}" 
+                Property="Canvas.Left"
+                Value="{Binding X, Converter={StaticResource canvasSizeOffsetPseudoConverter}}" 
                 />
             <Setter 
                 Property="Canvas.Top" 
-                Value="{Binding Y}" 
+                Value="{Binding Y, Converter={StaticResource canvasSizeOffsetPseudoConverter}}" 
                 />
             <Setter 
                 Property="IsSelected" 

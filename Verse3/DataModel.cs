@@ -93,6 +93,8 @@ namespace Verse3
             rectangles.Add(new RectangleData(1200, 1200, 80, 150, Colors.Red));
         }
 
+        public static double ContentCanvasMarginOffset = 200.0;
+
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
@@ -166,7 +168,7 @@ namespace Verse3
             }
             set
             {
-                contentWidth = value;
+                contentWidth = value + (ContentCanvasMarginOffset * 2);
 
                 OnPropertyChanged("ContentWidth");
             }
@@ -183,7 +185,7 @@ namespace Verse3
             }
             set
             {
-                contentHeight = value;
+                contentHeight = value + (ContentCanvasMarginOffset * 2);
 
                 OnPropertyChanged("ContentHeight");
             }
@@ -428,6 +430,7 @@ namespace Verse3
     /// </summary>
     public class ColorToBrushConverter : IValueConverter
     {
+        
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return new SolidColorBrush((Color)value);
