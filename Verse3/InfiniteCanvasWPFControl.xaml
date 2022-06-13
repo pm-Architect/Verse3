@@ -21,10 +21,10 @@
             x:Key="canvasSizeOffsetPseudoConverter"
             />
         <!--
-        Defines the UI for an instance of RectangleData.
+        Defines the UI for an instance of ElementData.
         -->
         <DataTemplate 
-            DataType="{x:Type core:RectangleData}"
+            DataType="{x:Type core:ElementData}"
             >
             <Rectangle
                 Width="{Binding Width}"
@@ -124,7 +124,7 @@
                     x:Name="LBcontent"
                     Background="#FF1D1D1D"
                     Foreground="White"
-                    ItemsSource="{Binding Source={x:Static local:DataViewModel.Instance}, Path=Rectangles}"
+                    ItemsSource="{Binding Source={x:Static local:DataViewModel.Instance}, Path=Elements}"
                     Style="{StaticResource noScrollViewerListBoxStyle}"
                     ItemContainerStyle="{StaticResource listBoxItemStyle}"
                     />

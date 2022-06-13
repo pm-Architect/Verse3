@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Markup;
 
 namespace Verse3
 {
@@ -41,17 +42,17 @@ namespace Verse3
         /// </summary>
         private MouseHandlingMode mouseHandlingMode = MouseHandlingMode.None;
 
-        public MouseHandlingMode MouseHandlingMode { get { return mouseHandlingMode; } }
+        public MouseHandlingMode MouseHandlingMode { get { return mouseHandlingMode; } internal set { mouseHandlingMode = value; } }
 
         /// <summary>
         /// The point that was clicked relative to the ZoomAndPanControl.
         /// </summary>
-        private Point origZoomAndPanControlMouseDownPoint;
+        internal Point origZoomAndPanControlMouseDownPoint;
 
         /// <summary>
         /// The point that was clicked relative to the content that is contained within the ZoomAndPanControl.
         /// </summary>
-        private Point origContentMouseDownPoint;
+        internal Point origContentMouseDownPoint;
 
         /// <summary>
         /// Records which mouse button clicked during mouse dragging.
@@ -86,6 +87,7 @@ namespace Verse3
         public InfiniteCanvasWPFControl()
         {
             InitializeComponent();
+            //TODO Add different view templates
         }
         
         private void Control_Loaded(object sender, RoutedEventArgs e)
@@ -96,24 +98,30 @@ namespace Verse3
         /// <summary>
         /// Expand the content area to fit the rectangles.
         /// </summary>
-        private void ExpandContent()
+        internal void ExpandContent()
         {
+            //if (ElementDataViewTemplate<ElementDataViewWrapper>.InfiniteCanvasWPFControl == null)
+            //{
+            //    ElementDataViewTemplate<ElementDataViewWrapper>.InfiniteCanvasWPFControl = this;
+            //DataViewModel.CreateDataViewModel("");
+            //LBcontent.ItemsSource = DataViewModel.Instance.Elements;
+            //}
             double xOffset = 0;
             double yOffset = 0;
             Rect contentRect = new Rect(0, 0, 0, 0);
-            foreach (RectangleData rectangleData in DataViewModel.Instance.Rectangles)
+            foreach (ElementData elementsData in DataViewModel.Instance.Elements)
             {
-                if (rectangleData.X < xOffset)
+                if (elementsData.X < xOffset)
                 {
-                    xOffset = rectangleData.X;
+                    xOffset = elementsData.X;
                 }
 
-                if (rectangleData.Y < yOffset)
+                if (elementsData.Y < yOffset)
                 {
-                    yOffset = rectangleData.Y;
+                    yOffset = elementsData.Y;
                 }
 
-                contentRect.Union(new Rect(rectangleData.X, rectangleData.Y, rectangleData.Width, rectangleData.Height));
+                contentRect.Union(new Rect(elementsData.X, elementsData.Y, elementsData.Width, elementsData.Height));
             }
 
             //
@@ -122,7 +130,7 @@ namespace Verse3
             xOffset = Math.Abs(xOffset);
             yOffset = Math.Abs(yOffset);
 
-            foreach (RectangleData rectangleData in DataViewModel.Instance.Rectangles)
+            foreach (ElementData rectangleData in DataViewModel.Instance.Elements)
             {
                 rectangleData.X += xOffset;
                 rectangleData.Y += yOffset;
@@ -532,10 +540,6 @@ namespace Verse3
         {
             prevZoomRectSet = false;
         }
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ///
-
         #endregion
 
         #region SelectFunctions
@@ -659,7 +663,7 @@ namespace Verse3
             Keyboard.Focus(LBcontent);
 
             Rectangle rectangle = (Rectangle)sender;
-            RectangleData myRectangle = (RectangleData)rectangle.DataContext;
+            ElementData myRectangle = (ElementData)rectangle.DataContext;
 
             //myRectangle.IsSelected = true;
 
@@ -674,15 +678,15 @@ namespace Verse3
                 return;
             }
 
-            if (mouseHandlingMode != MouseHandlingMode.None)
+            if (this.MouseHandlingMode != MouseHandlingMode.None)
             {
                 //
                 // We are in some other mouse handling mode, don't do anything.
                 return;
             }
 
-            mouseHandlingMode = MouseHandlingMode.DraggingRectangles;
-            origContentMouseDownPoint = e.GetPosition(LBcontent);
+            this.MouseHandlingMode = MouseHandlingMode.DraggingRectangles;
+            this.origContentMouseDownPoint = e.GetPosition(LBcontent);
 
             rectangle.CaptureMouse();
 
@@ -694,7 +698,7 @@ namespace Verse3
         /// </summary>
         private void Rectangle_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (mouseHandlingMode != MouseHandlingMode.DraggingRectangles)
+            if (this.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
             {
                 //
                 // We are not in rectangle dragging mode.
@@ -702,7 +706,7 @@ namespace Verse3
                 return;
             }
 
-            mouseHandlingMode = MouseHandlingMode.None;
+            this.MouseHandlingMode = MouseHandlingMode.None;
 
             Rectangle rectangle = (Rectangle)sender;
             rectangle.ReleaseMouseCapture();
@@ -715,7 +719,7 @@ namespace Verse3
         /// </summary>
         private void Rectangle_MouseMove(object sender, MouseEventArgs e)
         {
-            if (mouseHandlingMode != MouseHandlingMode.DraggingRectangles)
+            if (this.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
             {
                 //
                 // We are not in rectangle dragging mode, so don't do anything.
@@ -724,20 +728,20 @@ namespace Verse3
             }
 
             Point curContentPoint = e.GetPosition(LBcontent);
-            Vector rectangleDragVector = curContentPoint - origContentMouseDownPoint;
+            Vector rectangleDragVector = curContentPoint - this.origContentMouseDownPoint;
 
             //
             // When in 'dragging rectangles' mode update the position of the rectangle as the user drags it.
             //
 
-            origContentMouseDownPoint = curContentPoint;
+            this.origContentMouseDownPoint = curContentPoint;
 
             Rectangle rectangle = (Rectangle)sender;
-            RectangleData myRectangle = (RectangleData)rectangle.DataContext;
+            ElementData myRectangle = (ElementData)rectangle.DataContext;
             myRectangle.X += rectangleDragVector.X;
             myRectangle.Y += rectangleDragVector.Y;
 
-            ExpandContent();
+            this.ExpandContent();
 
             e.Handled = true;
         }

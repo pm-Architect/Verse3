@@ -14,7 +14,7 @@ namespace Core
         /// <summary>
         /// Raises the 'PropertyChanged' event when the value of a property of the data model has changed.
         /// </summary>
-        private void OnPropertyChanged(string name)
+        protected void OnPropertyChanged(string name)
         {
             if (PropertyChanged != null)
             {

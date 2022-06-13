@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Core.Geometry2D;
 
 namespace Core
 {
@@ -13,7 +14,7 @@ namespace Core
     /// A simple example of a data-model.  
     /// The purpose of this data-model is to share display data between the main window and overview window.
     /// </summary>
-    public class DataModel : INotifyPropertyChanged
+    public class DataModel : Observable
     {
         #region Data Members
 
@@ -26,7 +27,7 @@ namespace Core
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
-        protected ObservableCollection<RectangleData> rectangles = new ObservableCollection<RectangleData>();
+        protected ObservableCollection<ElementData> elements = new ObservableCollection<ElementData>();
 
         ///
         /// The current scale at which the content is being viewed.
@@ -76,7 +77,7 @@ namespace Core
         {
             get
             {
-                return instance;
+                return DataModel.instance;
             }
             protected set
             {
@@ -84,15 +85,16 @@ namespace Core
             }
         }
 
-        public DataModel()
+        public DataModel() : base()
         {
             //
-            // Populate the data model with some example data.
+            // Initialize the data model.
             //
-            //rectangles.Add(new RectangleData(50, 50, 80, 150, Colors.Blue));
-            //rectangles.Add(new RectangleData(550, 350, 80, 150, Colors.Green));
-            //rectangles.Add(new RectangleData(850, 850, 30, 20, Colors.Purple));
-            //rectangles.Add(new RectangleData(1200, 1200, 80, 150, Colors.Red));
+            DataModel.Instance = this;
+            DataModel.Instance.Elements.Add(new ElementData(50, 50, 80, 150));
+            DataModel.Instance.Elements.Add(new ElementData(550, 350, 80, 150));
+            DataModel.Instance.Elements.Add(new ElementData(850, 850, 30, 20));
+            DataModel.Instance.Elements.Add(new ElementData(1200, 1200, 80, 150));
         }
 
         public static double ContentCanvasMarginOffset = 200.0;
@@ -100,15 +102,15 @@ namespace Core
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
-        public ObservableCollection<RectangleData> Rectangles
+        public ObservableCollection<ElementData> Elements
         {
             get
             {
-                return rectangles;
+                return elements;
             }
             protected set
             {
-                rectangles = value;
+                elements = value;
             }
         }
 
@@ -234,54 +236,19 @@ namespace Core
                 OnPropertyChanged("ContentViewportHeight");
             }
         }
-
-        #region INotifyPropertyChanged Members
-
-        /// <summary>
-        /// Raises the 'PropertyChanged' event when the value of a property of the data model has changed.
-        /// </summary>
-        protected void OnPropertyChanged(string name)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
-
-        /// <summary>
-        /// 'PropertyChanged' event that is raised when the value of a property of the data model has changed.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion
     }
 
     /// <summary>
     /// Defines the data-model for a simple displayable rectangle.
     /// </summary>
-    public class RectangleData : INotifyPropertyChanged
+    public class ElementData : INotifyPropertyChanged
     {
         #region Data Members
 
         /// <summary>
-        /// The X coordinate of the location of the rectangle (in content coordinates).
+        /// The Bounding Box of the Element (in content coordinates).
         /// </summary>
-        private double x = 0;
-
-        /// <summary>
-        /// The Y coordinate of the location of the rectangle (in content coordinates).
-        /// </summary>
-        private double y = 0;
-
-        /// <summary>
-        /// The width of the rectangle (in content coordinates).
-        /// </summary>
-        private double width = 0;
-
-        /// <summary>
-        /// The height of the rectangle (in content coordinates).
-        /// </summary>
-        private double height = 0;
+        private BoundingBox boundingBox = BoundingBox.Unset;
 
         /// <summary>
         /// The color of the rectangle.
@@ -295,19 +262,33 @@ namespace Core
 
         #endregion Data Members
 
-        public RectangleData()
+        public ElementData()
         {
         }
 
         //public RectangleData(double x, double y, double width, double height, Color color)
-        public RectangleData(double x, double y, double width, double height)
+        public ElementData(double x, double y, double width, double height)
 
         {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
+            this.boundingBox = new BoundingBox(x, y, width, height);
             //this.color = color;
+        }
+
+        /// <summary>
+        /// The Bounding Box of the Element (in content coordinates).
+        /// </summary>
+        public BoundingBox BoundingBox
+        {
+            get
+            {
+                return boundingBox;
+            }
+            set
+            {
+                boundingBox = value;
+
+                OnPropertyChanged("BoundingBox");
+            }
         }
 
         /// <summary>
@@ -317,11 +298,11 @@ namespace Core
         {
             get
             {
-                return x;
+                return boundingBox.Location.X;
             }
             set
             {
-                x = value;
+                boundingBox.Location.X = value;
 
                 OnPropertyChanged("X");
             }
@@ -334,12 +315,12 @@ namespace Core
         {
             get
             {
-                return y;
+                return boundingBox.Location.Y;
             }
             set
             {
-                y = value;
-
+                boundingBox.Location.Y = value;
+                
                 OnPropertyChanged("Y");
             }
         }
@@ -351,11 +332,11 @@ namespace Core
         {
             get
             {
-                return width;
+                return boundingBox.Size.Width;
             }
             set
             {
-                width = value;
+                boundingBox.Size.Width = value;
 
                 OnPropertyChanged("Width");
             }
@@ -368,19 +349,19 @@ namespace Core
         {
             get
             {
-                return height;
+                return boundingBox.Size.Height;
             }
             set
             {
-                height = value;
+                boundingBox.Size.Height = value;
 
                 OnPropertyChanged("Height");
             }
         }
 
-        /// <summary>
-        /// The color of the rectangle.
-        /// </summary>
+        ///// <summary>
+        ///// The color of the rectangle.
+        ///// </summary>
         //public Color Color
         //{
         //    get

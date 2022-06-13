@@ -29,7 +29,6 @@ namespace Verse3
         {
             InitializeComponent();
             //TODO: Remove dev open here
-            DataViewModel.CreateDataViewModel("");
             InfiniteCanvasWPFControl = new InfiniteCanvasWPFControl();
             elementHost1.Child = InfiniteCanvasWPFControl;
             InfiniteCanvasWPFControl.MouseDown += Canvas_MouseDown;
