@@ -241,7 +241,7 @@ namespace Core
     /// <summary>
     /// Defines the data-model for a simple displayable rectangle.
     /// </summary>
-    public class ElementData : INotifyPropertyChanged
+    public class ElementData : Observable
     {
         #region Data Members
 
@@ -392,26 +392,6 @@ namespace Core
                 OnPropertyChanged("IsSelected");
             }
         }
-
-        #region INotifyPropertyChanged Members
-
-        /// <summary>
-        /// Raises the 'PropertyChanged' event when the value of a property of the data model has changed.
-        /// </summary>
-        private void OnPropertyChanged(string name)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
-
-        /// <summary>
-        /// 'PropertyChanged' event that is raised when the value of a property of the data model has changed.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion
     }
 
 }
