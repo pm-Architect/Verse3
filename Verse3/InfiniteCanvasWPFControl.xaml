@@ -16,7 +16,6 @@
         <local:ColorToBrushConverter 
             x:Key="colorToBrushConverter"
             />
-
         <!--
         Defines the UI for an instance of RectangleData.
         -->
@@ -41,7 +40,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBox">
-                        <Canvas 
+                        <Canvas x:Name="InfiniteCanvasBackground" 
                             Background="{TemplateBinding Background}"
                             IsItemsHost="True" 
                             />
@@ -138,6 +137,19 @@
                         BorderBrush="Black"
                         BorderThickness="1"
                         Background="Silver"
+                        CornerRadius="1"
+                        Opacity="0"
+                        />
+                </Canvas>
+                <Canvas
+                    x:Name="dragSelectCanvas"
+                    Visibility="Collapsed"
+                    >
+                    <Border 
+                        x:Name="dragSelectBorder"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        Background="#ff6700"
                         CornerRadius="1"
                         Opacity="0"
                         />

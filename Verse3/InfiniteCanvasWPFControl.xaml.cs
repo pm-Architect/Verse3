@@ -21,10 +21,25 @@ namespace Verse3
     /// </summary>
     public partial class InfiniteCanvasWPFControl : UserControl
     {
+        private System.Windows.Forms.Cursor winFormsCursor = System.Windows.Forms.Cursors.Default;
+        public System.Windows.Forms.Cursor WinFormsCursor
+        {
+            get
+            {
+                return winFormsCursor;
+            }
+            set
+            {
+                winFormsCursor = value;
+            }
+        }
+
         /// <summary>
         /// Specifies the current state of the mouse handling logic.
         /// </summary>
         private MouseHandlingMode mouseHandlingMode = MouseHandlingMode.None;
+
+        public MouseHandlingMode MouseHandlingMode { get { return mouseHandlingMode; } }
 
         /// <summary>
         /// The point that was clicked relative to the ZoomAndPanControl.
@@ -55,7 +70,17 @@ namespace Verse3
         /// Set to 'true' when the previous zoom rect is saved.
         /// </summary>
         private bool prevZoomRectSet = false;
-        
+
+        /// <summary>
+        /// Set to 'true' when the previous select rect is saved.
+        /// </summary>
+        private bool prevSelectRectSet = false;
+
+        /// <summary>
+        /// Saves the previous Select rectangle
+        /// </summary>
+        private Rect prevSelectRect;
+
         public InfiniteCanvasWPFControl()
         {
             InitializeComponent();
@@ -119,14 +144,16 @@ namespace Verse3
             origZoomAndPanControlMouseDownPoint = e.GetPosition(InfiniteCanvasControl1);
             origContentMouseDownPoint = e.GetPosition(LBcontent);
 
-            if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0 &&
-                (e.ChangedButton == MouseButton.Left ||
-                 e.ChangedButton == MouseButton.Right))
-            {
-                // Shift + left- or right-down initiates zooming mode.
-                mouseHandlingMode = MouseHandlingMode.Zooming;
-            }
             if (mouseButtonDown == MouseButton.Left)
+            {
+                mouseHandlingMode = MouseHandlingMode.Selecting;
+                if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0)
+                {
+                    // Shift + left- or right-down initiates zooming mode.
+                    mouseHandlingMode = MouseHandlingMode.Zooming;
+                }
+            }
+            if (mouseButtonDown == MouseButton.Right)
             {
                 // Just a plain old left-down initiates panning mode.
                 mouseHandlingMode = MouseHandlingMode.Panning;
@@ -165,6 +192,11 @@ namespace Verse3
                     // When drag-zooming has finished we zoom in on the rectangle that was highlighted by the user.
                     ApplyDragZoomRect();
                 }
+                else if (mouseHandlingMode == MouseHandlingMode.DragSelecting)
+                {
+                    // When drag-zooming has finished we zoom in on the rectangle that was highlighted by the user.
+                    ApplyDragSelectRect();
+                }
 
                 InfiniteCanvasControl1.ReleaseMouseCapture();
                 mouseHandlingMode = MouseHandlingMode.None;
@@ -189,6 +221,9 @@ namespace Verse3
                 InfiniteCanvasControl1.ContentOffsetX -= dragOffset.X;
                 InfiniteCanvasControl1.ContentOffsetY -= dragOffset.Y;
 
+                this.Cursor = Cursors.SizeAll;
+                this.WinFormsCursor = System.Windows.Forms.Cursors.SizeAll;
+
                 e.Handled = true;
             }
             else if (mouseHandlingMode == MouseHandlingMode.Zooming)
@@ -198,7 +233,7 @@ namespace Verse3
                 double dragThreshold = 10;
                 if (mouseButtonDown == MouseButton.Left &&
                     (Math.Abs(dragOffset.X) > dragThreshold ||
-                     Math.Abs(dragOffset.Y) > dragThreshold))
+                        Math.Abs(dragOffset.Y) > dragThreshold))
                 {
                     //
                     // When Shift + left-down zooming mode and the user drags beyond the drag threshold,
@@ -206,6 +241,8 @@ namespace Verse3
                     // to zoom in on.
                     //
                     mouseHandlingMode = MouseHandlingMode.DragZooming;
+                    this.Cursor = Cursors.SizeNWSE;
+                    this.WinFormsCursor = System.Windows.Forms.Cursors.SizeNWSE;
                     Point curContentMousePoint = e.GetPosition(LBcontent);
                     InitDragZoomRect(origContentMouseDownPoint, curContentMousePoint);
                 }
@@ -214,15 +251,69 @@ namespace Verse3
             }
             else if (mouseHandlingMode == MouseHandlingMode.DragZooming)
             {
-                //
-                // When in drag zooming mode continously update the position of the rectangle
-                // that the user is dragging out.
-                //
+                this.Cursor = Cursors.SizeNWSE;
+                this.WinFormsCursor = System.Windows.Forms.Cursors.SizeNWSE;
                 Point curContentMousePoint = e.GetPosition(LBcontent);
-                SetDragZoomRect(origContentMouseDownPoint, curContentMousePoint);
+                InitDragZoomRect(origContentMouseDownPoint, curContentMousePoint);
+            }
+            else if (mouseHandlingMode == MouseHandlingMode.Selecting)
+            {
+                Point curZoomAndPanControlMousePoint = e.GetPosition(InfiniteCanvasControl1);
+                Vector dragOffset = curZoomAndPanControlMousePoint - origZoomAndPanControlMouseDownPoint;
+                double dragThreshold = 5;
+                if ((Math.Abs(dragOffset.X) > dragThreshold) ||
+                        (Math.Abs(dragOffset.Y) > dragThreshold))
+                {
+                    //
+                    // When left-down selecting mode and the user drags beyond the drag threshold,
+                    // initiate drag selecting mode where the user can drag out a rectangle to select the area
+                    // to select objects from.
+                    //
+                    mouseHandlingMode = MouseHandlingMode.DragSelecting;
+                    this.Cursor = Cursors.Cross;
+                    this.WinFormsCursor = System.Windows.Forms.Cursors.Cross;
+                    Point curContentMousePoint = e.GetPosition(LBcontent);
+                    InitDragSelectRect(origContentMouseDownPoint, curContentMousePoint);
+                }
 
                 e.Handled = true;
             }
+            else if (mouseHandlingMode == MouseHandlingMode.DragSelecting)
+            {
+                this.Cursor = Cursors.Cross;
+                this.WinFormsCursor = System.Windows.Forms.Cursors.Cross;
+                Point curContentMousePoint = e.GetPosition(LBcontent);
+                InitDragSelectRect(origContentMouseDownPoint, curContentMousePoint);
+            }
+            else
+            {
+                if (this.WinFormsCursor != System.Windows.Forms.Cursors.Default)
+                {
+                    this.Cursor = Cursors.Arrow;
+                    this.WinFormsCursor = System.Windows.Forms.Cursors.Default;
+                }
+                else if (mouseHandlingMode == MouseHandlingMode.DragZooming)
+                {
+                    //
+                    // When in drag zooming mode continously update the position of the rectangle
+                    // that the user is dragging out.
+                    //
+                    Point curContentMousePoint = e.GetPosition(LBcontent);
+                    SetDragZoomRect(origContentMouseDownPoint, curContentMousePoint);
+
+                    e.Handled = true;
+                }
+                else if (mouseHandlingMode == MouseHandlingMode.DragSelecting)
+                {
+                    //
+                    // When in drag zooming mode continously update the position of the rectangle
+                    // that the user is dragging out.
+                    //
+                    Point curContentMousePoint = e.GetPosition(LBcontent);
+                    SetDragSelectRect(origContentMouseDownPoint, curContentMousePoint);
+                }
+            }
+            
         }
 
         /// <summary>
@@ -440,9 +531,118 @@ namespace Verse3
             prevZoomRectSet = false;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///
+
+
+        /// <summary>
+        /// Initialise the rectangle that the use is dragging out.
+        /// </summary>
+        private void InitDragSelectRect(Point pt1, Point pt2)
+        {
+            SetDragSelectRect(pt1, pt2);
+
+            dragSelectCanvas.Visibility = Visibility.Visible;
+            dragSelectBorder.Opacity = 0.5;
+        }
+
+        /// <summary>
+        /// Update the position and size of the rectangle that user is dragging out.
+        /// </summary>
+        private void SetDragSelectRect(Point pt1, Point pt2)
+        {
+            double x, y, width, height;
+
+            //
+            // Deterine x,y,width and height of the rect inverting the points if necessary.
+            // 
+
+            if (pt2.X < pt1.X)
+            {
+                x = pt2.X;
+                width = pt1.X - pt2.X;
+            }
+            else
+            {
+                x = pt1.X;
+                width = pt2.X - pt1.X;
+            }
+
+            if (pt2.Y < pt1.Y)
+            {
+                y = pt2.Y;
+                height = pt1.Y - pt2.Y;
+            }
+            else
+            {
+                y = pt1.Y;
+                height = pt2.Y - pt1.Y;
+            }
+
+            //
+            // Update the coordinates of the rectangle that is being dragged out by the user.
+            // The we offset and rescale to convert from content coordinates.
+            //
+            Canvas.SetLeft(dragSelectBorder, x);
+            Canvas.SetTop(dragSelectBorder, y);
+            dragSelectBorder.Width = width;
+            dragSelectBorder.Height = height;
+        }
+
+        /// <summary>
+        /// When the user has finished dragging out the rectangle the zoom operation is applied.
+        /// </summary>
+        private void ApplyDragSelectRect()
+        {
+            //
+            // Record the previous zoom level, so that we can jump back to it when the backspace key is pressed.
+            //
+            SavePrevSelectRect();
+
+            //
+            // Retreive the rectangle that the user draggged out and zoom in on it.
+            //
+            double contentX = Canvas.GetLeft(dragSelectBorder);
+            double contentY = Canvas.GetTop(dragSelectBorder);
+            double contentWidth = dragSelectBorder.Width;
+            double contentHeight = dragSelectBorder.Height;
+
+            //TODO: Actually select the items in the select rectangle
+
+            FadeOutDragSelectRect();
+        }
+        //
+        // Fade out the drag zoom rectangle.
+        //
+        private void FadeOutDragSelectRect()
+        {
+            AnimationHelper.StartAnimation(dragSelectBorder, Border.OpacityProperty, 0.0, 0.1,
+                delegate (object sender, EventArgs e)
+                {
+                    dragSelectCanvas.Visibility = Visibility.Collapsed;
+                });
+        }
+
+        //
+        // Record the previous zoom level, so that we can jump back to it when the backspace key is pressed.
+        //
+        private void SavePrevSelectRect()
+        {
+            prevSelectRect = new Rect(InfiniteCanvasControl1.ContentOffsetX, InfiniteCanvasControl1.ContentOffsetY, InfiniteCanvasControl1.ContentViewportWidth, InfiniteCanvasControl1.ContentViewportHeight);
+            prevSelectRectSet = true;
+        }
+
+        /// <summary>
+        /// Clear the memory of the previous zoom level.
+        /// </summary>
+        private void ClearPrevSelectRect()
+        {
+            prevSelectRectSet = false;
+        }
+
         #endregion
 
-        #region RectangleEvenetsTEMP
+        #region RectangleTEMP
 
         /// <summary>
         /// Event raised when a mouse button is clicked down over a Rectangle.
@@ -563,8 +763,23 @@ namespace Verse3
         Zooming,
 
         /// <summary>
+        /// The user is holding down shift and left-clicking or right-clicking to zoom in or out.
+        /// </summary>
+        Selecting,
+
+        /// <summary>
         /// The user is holding down shift and left-mouse-button-dragging to select a region to zoom to.
         /// </summary>
         DragZooming,
+
+        /// <summary>
+        /// The user is holding down shift and left-mouse-button-dragging to select a region to zoom to.
+        /// </summary>
+        DragSelecting,
+
+        /// <summary>
+        /// The user is left-mouse-button-dragging on the viewport.
+        /// </summary>
+        Dragging
     }
 }

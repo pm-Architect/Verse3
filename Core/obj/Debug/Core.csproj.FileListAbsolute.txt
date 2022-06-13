@@ -1,0 +1,6 @@
+C:\Users\ARPM02\Dropbox\Desktop\Hackuble\Verse3\Verse3\Core\bin\Debug\Core.dll
+C:\Users\ARPM02\Dropbox\Desktop\Hackuble\Verse3\Verse3\Core\bin\Debug\Core.pdb
+C:\Users\ARPM02\Dropbox\Desktop\Hackuble\Verse3\Verse3\Core\obj\Debug\Core.csproj.AssemblyReference.cache
+C:\Users\ARPM02\Dropbox\Desktop\Hackuble\Verse3\Verse3\Core\obj\Debug\Core.csproj.CoreCompileInputs.cache
+C:\Users\ARPM02\Dropbox\Desktop\Hackuble\Verse3\Verse3\Core\obj\Debug\Core.dll
+C:\Users\ARPM02\Dropbox\Desktop\Hackuble\Verse3\Verse3\Core\obj\Debug\Core.pdb

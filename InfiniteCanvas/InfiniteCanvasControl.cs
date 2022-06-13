@@ -63,14 +63,12 @@ namespace InfiniteCanvas
 
         //
         // These data members are for the implementation of the IScrollInfo interface.
-        // This interface works with the ScrollViewer such that when ZoomAndPanControl is 
-        // wrapped (in XAML) with a ScrollViewer the IScrollInfo interface allows the ZoomAndPanControl to
+        // This interface works with the ScrollViewer such that when InfiniteCanvasControl is 
+        // wrapped (in XAML) with a ScrollViewer the IScrollInfo interface allows the InfiniteCanvasControl to
         // handle the the scrollbar offsets.
         //
-        // The IScrollInfo properties and member functions are implemented in ZoomAndPanControl_IScrollInfo.cs.
-        //
         // There is a good series of articles showing how to implement IScrollInfo starting here:
-        //     http://blogs.msdn.com/bencon/archive/2006/01/05/509991.aspx
+        //     https://docs.microsoft.com/en-us/archive/blogs/bencon/iscrollinfo-in-avalon-part-i
         //
 
         /// <summary>
