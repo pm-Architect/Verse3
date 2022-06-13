@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Verse3"
              xmlns:InfiniteCanvas="clr-namespace:InfiniteCanvas;assembly=InfiniteCanvas"
+             xmlns:core="clr-namespace:Core;assembly=Core"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              Loaded="Control_Loaded"
@@ -23,12 +24,12 @@
         Defines the UI for an instance of RectangleData.
         -->
         <DataTemplate 
-            DataType="{x:Type local:RectangleData}"
+            DataType="{x:Type core:RectangleData}"
             >
             <Rectangle
                 Width="{Binding Width}"
                 Height="{Binding Height}"
-                Fill="{Binding Color, Converter={StaticResource colorToBrushConverter}}"
+                Fill="#408080"
                 Cursor="Hand"
                 MouseDown="Rectangle_MouseDown"
                 MouseUp="Rectangle_MouseUp"
@@ -105,11 +106,11 @@
     </UserControl.Resources>
     <DockPanel>
         <InfiniteCanvas:InfiniteCanvasControl x:Name="InfiniteCanvasControl1"
-                                              ContentScale="{Binding Source={x:Static local:DataModel.Instance}, Path=ContentScale, Mode=TwoWay}"
-                                              ContentOffsetX="{Binding Source={x:Static local:DataModel.Instance}, Path=ContentOffsetX, Mode=TwoWay}"
-                                              ContentOffsetY="{Binding Source={x:Static local:DataModel.Instance}, Path=ContentOffsetY, Mode=TwoWay}"
-                                              ContentViewportWidth="{Binding Source={x:Static local:DataModel.Instance}, Path=ContentViewportWidth, Mode=OneWayToSource}"
-                                              ContentViewportHeight="{Binding Source={x:Static local:DataModel.Instance}, Path=ContentViewportHeight, Mode=OneWayToSource}"
+                                              ContentScale="{Binding Source={x:Static local:DataViewModel.Instance}, Path=ContentScale, Mode=TwoWay}"
+                                              ContentOffsetX="{Binding Source={x:Static local:DataViewModel.Instance}, Path=ContentOffsetX, Mode=TwoWay}"
+                                              ContentOffsetY="{Binding Source={x:Static local:DataViewModel.Instance}, Path=ContentOffsetY, Mode=TwoWay}"
+                                              ContentViewportWidth="{Binding Source={x:Static local:DataViewModel.Instance}, Path=ContentViewportWidth, Mode=OneWayToSource}"
+                                              ContentViewportHeight="{Binding Source={x:Static local:DataViewModel.Instance}, Path=ContentViewportHeight, Mode=OneWayToSource}"
                                               Background="#FF292929"
                                               MouseDown="zoomAndPanControl_MouseDown"
                                               MouseUp="zoomAndPanControl_MouseUp"
@@ -117,13 +118,13 @@
                                               MouseWheel="zoomAndPanControl_MouseWheel"
                                               MouseDoubleClick="zoomAndPanControl_MouseDoubleClick" Foreground="White">
             <Grid
-                Width="{Binding Source={x:Static local:DataModel.Instance}, Path=ContentWidth}"
-                Height="{Binding Source={x:Static local:DataModel.Instance}, Path=ContentHeight}">
+                Width="{Binding Source={x:Static local:DataViewModel.Instance}, Path=ContentWidth}"
+                Height="{Binding Source={x:Static local:DataViewModel.Instance}, Path=ContentHeight}">
                 <ListBox
                     x:Name="LBcontent"
                     Background="#FF1D1D1D"
                     Foreground="White"
-                    ItemsSource="{Binding Source={x:Static local:DataModel.Instance}, Path=Rectangles}"
+                    ItemsSource="{Binding Source={x:Static local:DataViewModel.Instance}, Path=Rectangles}"
                     Style="{StaticResource noScrollViewerListBoxStyle}"
                     ItemContainerStyle="{StaticResource listBoxItemStyle}"
                     />

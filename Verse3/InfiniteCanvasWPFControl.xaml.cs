@@ -1,4 +1,5 @@
-﻿using InfiniteCanvas;
+﻿using Core;
+using InfiniteCanvas;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -100,7 +101,7 @@ namespace Verse3
             double xOffset = 0;
             double yOffset = 0;
             Rect contentRect = new Rect(0, 0, 0, 0);
-            foreach (RectangleData rectangleData in DataModel.Instance.Rectangles)
+            foreach (RectangleData rectangleData in DataViewModel.Instance.Rectangles)
             {
                 if (rectangleData.X < xOffset)
                 {
@@ -121,14 +122,14 @@ namespace Verse3
             xOffset = Math.Abs(xOffset);
             yOffset = Math.Abs(yOffset);
 
-            foreach (RectangleData rectangleData in DataModel.Instance.Rectangles)
+            foreach (RectangleData rectangleData in DataViewModel.Instance.Rectangles)
             {
                 rectangleData.X += xOffset;
                 rectangleData.Y += yOffset;
             }
 
-            DataModel.Instance.ContentWidth = contentRect.Width;
-            DataModel.Instance.ContentHeight = contentRect.Height;
+            DataViewModel.Instance.ContentWidth = contentRect.Width;
+            DataViewModel.Instance.ContentHeight = contentRect.Height;
         }
 
         #region MouseEvents
@@ -660,7 +661,9 @@ namespace Verse3
             Rectangle rectangle = (Rectangle)sender;
             RectangleData myRectangle = (RectangleData)rectangle.DataContext;
 
-            myRectangle.IsSelected = true;
+            //myRectangle.IsSelected = true;
+
+            //mouseButtonDown = e.ChangedButton;
 
             if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0)
             {
@@ -786,24 +789,5 @@ namespace Verse3
         /// The user is left-mouse-button-dragging on the viewport.
         /// </summary>
         Dragging
-    }
-
-    /// <summary>
-    /// PseudoConverter to offset X and Y Positions for setting the canvas origin in the viewport
-    /// https://stackoverflow.com/a/4973289
-    /// </summary>
-    public class CanvasSizeOffsetPseudoConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            double OffsetValue = DataModel.ContentCanvasMarginOffset;
-            double Val = ((double)value);
-
-            return Val + OffsetValue;
-        }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

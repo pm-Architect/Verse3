@@ -6,10 +6,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Data;
-using System.Windows.Media;
 
-namespace Verse3
+namespace Core
 {
     /// <summary>
     /// A simple example of a data-model.  
@@ -23,51 +21,51 @@ namespace Verse3
         /// The singleton instance.
         /// This is a singleton for convenience.
         /// </summary>
-        private static DataModel instance = new DataModel();
+        protected static DataModel instance = new DataModel();
 
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
-        private ObservableCollection<RectangleData> rectangles = new ObservableCollection<RectangleData>();
+        protected ObservableCollection<RectangleData> rectangles = new ObservableCollection<RectangleData>();
 
         ///
         /// The current scale at which the content is being viewed.
         /// 
-        private double contentScale = 1;
+        protected double contentScale = 1;
 
         ///
         /// The X coordinate of the offset of the viewport onto the content (in content coordinates).
         /// 
-        private double contentOffsetX = 0;
+        protected double contentOffsetX = 0;
 
         ///
         /// The Y coordinate of the offset of the viewport onto the content (in content coordinates).
         /// 
-        private double contentOffsetY = 0;
+        protected double contentOffsetY = 0;
 
         ///
         /// The width of the content (in content coordinates).
         /// 
-        private double contentWidth = 0;
+        protected double contentWidth = 0;
 
         ///
         /// The heigth of the content (in content coordinates).
         /// 
-        private double contentHeight = 0;
+        protected double contentHeight = 0;
 
         ///
         /// The width of the viewport onto the content (in content coordinates).
         /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
         /// data model so that the value can be shared with the overview window.
         /// 
-        private double contentViewportWidth = 0;
+        protected double contentViewportWidth = 0;
 
         ///
         /// The heigth of the viewport onto the content (in content coordinates).
         /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
         /// data model so that the value can be shared with the overview window.
         /// 
-        private double contentViewportHeight = 0;
+        protected double contentViewportHeight = 0;
 
         #endregion Data Members
 
@@ -80,6 +78,10 @@ namespace Verse3
             {
                 return instance;
             }
+            protected set
+            {
+                instance = value;
+            }
         }
 
         public DataModel()
@@ -87,10 +89,10 @@ namespace Verse3
             //
             // Populate the data model with some example data.
             //
-            rectangles.Add(new RectangleData(50, 50, 80, 150, Colors.Blue));
-            rectangles.Add(new RectangleData(550, 350, 80, 150, Colors.Green));
-            rectangles.Add(new RectangleData(850, 850, 30, 20, Colors.Purple));
-            rectangles.Add(new RectangleData(1200, 1200, 80, 150, Colors.Red));
+            //rectangles.Add(new RectangleData(50, 50, 80, 150, Colors.Blue));
+            //rectangles.Add(new RectangleData(550, 350, 80, 150, Colors.Green));
+            //rectangles.Add(new RectangleData(850, 850, 30, 20, Colors.Purple));
+            //rectangles.Add(new RectangleData(1200, 1200, 80, 150, Colors.Red));
         }
 
         public static double ContentCanvasMarginOffset = 200.0;
@@ -103,6 +105,10 @@ namespace Verse3
             get
             {
                 return rectangles;
+            }
+            protected set
+            {
+                rectangles = value;
             }
         }
 
@@ -234,7 +240,7 @@ namespace Verse3
         /// <summary>
         /// Raises the 'PropertyChanged' event when the value of a property of the data model has changed.
         /// </summary>
-        private void OnPropertyChanged(string name)
+        protected void OnPropertyChanged(string name)
         {
             if (PropertyChanged != null)
             {
@@ -280,7 +286,7 @@ namespace Verse3
         /// <summary>
         /// The color of the rectangle.
         /// </summary>
-        private Color color;
+        //private Color color;
 
         /// <summary>
         /// Set to 'true' when the rectangle is selected in the ListBox.
@@ -293,13 +299,15 @@ namespace Verse3
         {
         }
 
-        public RectangleData(double x, double y, double width, double height, Color color)
+        //public RectangleData(double x, double y, double width, double height, Color color)
+        public RectangleData(double x, double y, double width, double height)
+
         {
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
-            this.color = color;
+            //this.color = color;
         }
 
         /// <summary>
@@ -373,19 +381,19 @@ namespace Verse3
         /// <summary>
         /// The color of the rectangle.
         /// </summary>
-        public Color Color
-        {
-            get
-            {
-                return color;
-            }
-            set
-            {
-                color = value;
+        //public Color Color
+        //{
+        //    get
+        //    {
+        //        return color;
+        //    }
+        //    set
+        //    {
+        //        color = value;
 
-                OnPropertyChanged("Color");
-            }
-        }
+        //        OnPropertyChanged("Color");
+        //    }
+        //}
 
         /// <summary>
         /// Set to 'true' when the rectangle is selected in the ListBox.
@@ -425,20 +433,4 @@ namespace Verse3
         #endregion
     }
 
-    /// <summary>
-    /// Converts a color value to a brush.
-    /// </summary>
-    public class ColorToBrushConverter : IValueConverter
-    {
-        
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return new SolidColorBrush((Color)value);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

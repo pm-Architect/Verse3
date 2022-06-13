@@ -12,13 +12,29 @@ namespace Verse3
 {
     public partial class Form1 : Form
     {
+        private InfiniteCanvasWPFControl infiniteCanvasWPFControl;
+
+        public InfiniteCanvasWPFControl InfiniteCanvasWPFControl
+        {
+            get
+            {
+                return infiniteCanvasWPFControl;
+            }
+            private set
+            {
+                infiniteCanvasWPFControl = value;
+            }
+        }
         public Form1()
         {
             InitializeComponent();
-            elementHost1.Child = new InfiniteCanvasWPFControl();
-            elementHost1.Child.MouseDown += Canvas_MouseDown;
-            elementHost1.Child.MouseUp += Canvas_MouseUp;
-            elementHost1.Child.MouseMove += Canvas_MouseMove;
+            //TODO: Remove dev open here
+            DataViewModel.CreateDataViewModel("");
+            InfiniteCanvasWPFControl = new InfiniteCanvasWPFControl();
+            elementHost1.Child = InfiniteCanvasWPFControl;
+            InfiniteCanvasWPFControl.MouseDown += Canvas_MouseDown;
+            InfiniteCanvasWPFControl.MouseUp += Canvas_MouseUp;
+            InfiniteCanvasWPFControl.MouseMove += Canvas_MouseMove;
         }
 
         private void Canvas_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
