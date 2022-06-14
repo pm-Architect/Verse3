@@ -109,7 +109,7 @@ namespace Verse3
             double xOffset = 0;
             double yOffset = 0;
             Rect contentRect = new Rect(0, 0, 0, 0);
-            foreach (ElementData elementsData in DataViewModel.Instance.Elements)
+            foreach (IElement elementsData in DataViewModel.Instance.Elements)
             {
                 if (elementsData.X < xOffset)
                 {
@@ -130,10 +130,10 @@ namespace Verse3
             xOffset = Math.Abs(xOffset);
             yOffset = Math.Abs(yOffset);
 
-            foreach (ElementData rectangleData in DataViewModel.Instance.Elements)
+            foreach (IElement rectangleData in DataViewModel.Instance.Elements)
             {
-                rectangleData.X += xOffset;
-                rectangleData.Y += yOffset;
+                rectangleData.SetX(rectangleData.X + xOffset);
+                rectangleData.SetY(rectangleData.Y + yOffset);
             }
 
             DataViewModel.Instance.ContentWidth = contentRect.Width;
@@ -663,7 +663,7 @@ namespace Verse3
             Keyboard.Focus(LBcontent);
 
             Rectangle rectangle = (Rectangle)sender;
-            ElementData myRectangle = (ElementData)rectangle.DataContext;
+            Element myRectangle = (Element)rectangle.DataContext;
 
             //myRectangle.IsSelected = true;
 
@@ -737,9 +737,9 @@ namespace Verse3
             this.origContentMouseDownPoint = curContentPoint;
 
             Rectangle rectangle = (Rectangle)sender;
-            ElementData myRectangle = (ElementData)rectangle.DataContext;
-            myRectangle.X += rectangleDragVector.X;
-            myRectangle.Y += rectangleDragVector.Y;
+            IElement myRectangle = (IElement)rectangle.DataContext;
+            myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
+            myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
 
             this.ExpandContent();
 

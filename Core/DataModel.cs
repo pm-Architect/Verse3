@@ -46,7 +46,7 @@ namespace Core
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
-        protected ObservableCollection<ElementData> elements = new ObservableCollection<ElementData>();
+        protected ObservableCollection<Element> elements = new ObservableCollection<Element>();
 
         ///
         /// The current scale at which the content is being viewed.
@@ -112,10 +112,19 @@ namespace Core
             // Initialize the data model.
             //
             DataModel.Instance = this;
-            DataModel.Instance.Elements.Add(new ElementData(50, 50, 80, 150));
-            DataModel.Instance.Elements.Add(new ElementData(550, 350, 80, 150));
-            DataModel.Instance.Elements.Add(new ElementData(850, 850, 30, 20));
-            DataModel.Instance.Elements.Add(new ElementData(1200, 1200, 80, 150));
+
+            //IElement e1 = new Element(50, 50, 80, 150);
+            //DataModel.Instance.Elements.Add(e1);
+            //IElement e2 = new Element(550, 350, 80, 150);
+            //DataModel.Instance.Elements.Add(e2);
+            //IElement e3 = new Element(850, 850, 30, 20);
+            //DataModel.Instance.Elements.Add(e3);
+            //IElement e4 = new Element(1200, 1200, 80, 150);
+            //DataModel.Instance.Elements.Add(e4);
+            DataModel.Instance.Elements.Add(new Element(50, 50, 80, 150));
+            DataModel.Instance.Elements.Add(new Element(550, 350, 80, 150));
+            DataModel.Instance.Elements.Add(new Element(850, 850, 30, 20));
+            DataModel.Instance.Elements.Add(new Element(1200, 1200, 80, 150));
         }
 
         #region Properties
@@ -123,7 +132,7 @@ namespace Core
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
-        public ObservableCollection<ElementData> Elements
+        public ObservableCollection<Element> Elements
         {
             get
             {
@@ -263,195 +272,287 @@ namespace Core
 
     public interface IElement : INotifyPropertyChanged
     {
-        BoundingBox BoundingBox { get; set; }
-        double X { get => BoundingBox.Location.X; set => BoundingBox.Location.X = value; }
-        double Y { get; set; }
-        double Width { get; set; }
-        double Height { get; set; }
-    }
+        public abstract BoundingBox BoundingBox { get; }
+
+        /// <summary>
+        /// The X coordinate of the location of the rectangle (in content coordinates).
+        /// </summary>
+        double X { get; }
+        void SetX(double x) { BoundingBox.Location.X = x; OnPropertyChanged("X"); }
+
+        /// <summary>
+        /// The Y coordinate of the location of the rectangle (in content coordinates).
+        /// </summary>
+        double Y { get; }
+        void SetY(double x) { BoundingBox.Location.Y = x; OnPropertyChanged("Y"); }
+
+        /// <summary>
+        /// The width of the rectangle (in content coordinates).
+        /// </summary>
+        double Width { get; }
+        void SetWidth(double x) { BoundingBox.Size.Width = x; OnPropertyChanged("Width"); }
+
+        /// <summary>
+        /// The height of the rectangle (in content coordinates).
+        /// </summary>
+        double Height { get; }
+        void SetHeight(double x) { BoundingBox.Size.Height = x; OnPropertyChanged("Height"); }
 
 
-    /// <summary>
-    /// Defines the data-model for a simple displayable rectangle.
-    /// </summary>
-    public class ElementData<T> : ElementData
-    {
-        
-    }
-
-    /// <summary>
-    /// Defines the data-model for a simple displayable rectangle.
-    /// </summary>
-    public class ElementData : INotifyPropertyChanged
-    {
         #region INotifyPropertyChanged Members
+
 
         /// <summary>
         /// Raises the 'PropertyChanged' event when the value of a property of the data model has changed.
         /// </summary>
-        protected virtual void OnPropertyChanged(string name)
+        public abstract void OnPropertyChanged(string name);
+        //{
+            //if (PropertyChanged != null)
+            //{
+            //    PropertyChanged(this, new PropertyChangedEventArgs(name));
+            //}
+        //}
+
+        /// <summary>
+        /// 'PropertyChanged' event that is raised when the value of a property of the data model has changed.
+        /// </summary>
+        //public new abstract event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+    }
+
+    public class Element : IElement
+    {
+        private BoundingBox boundingBox = BoundingBox.Unset;
+
+        public bool IsSelected { get; set; }
+
+        public Element()
+        {
+        }
+
+        public Element(int x, int y, int width, int height)
+        {
+            this.boundingBox = new BoundingBox(x, y, width, height);
+        }
+
+        public BoundingBox BoundingBox { get => boundingBox; private set => boundingBox = value; }
+
+        public double X { get => boundingBox.Location.X; }
+
+        public double Y { get => boundingBox.Location.Y; }
+
+        public double Width { get => boundingBox.Size.Width; }
+
+        public double Height { get => boundingBox.Size.Height; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string name)
         {
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
-        }
-
-        /// <summary>
-        /// 'PropertyChanged' event that is raised when the value of a property of the data model has changed.
-        /// </summary>
-        public virtual event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion
-        #region Data Members
-
-        /// <summary>
-        /// The Bounding Box of the Element (in content coordinates).
-        /// </summary>
-        private BoundingBox boundingBox = BoundingBox.Unset;
-
-        /// <summary>
-        /// The color of the rectangle.
-        /// </summary>
-        //private Color color;
-
-        /// <summary>
-        /// Set to 'true' when the rectangle is selected in the ListBox.
-        /// </summary>
-        private bool isSelected = false;
-
-        #endregion Data Members
-
-        public ElementData()
-        {
-        }
-
-        //public RectangleData(double x, double y, double width, double height, Color color)
-        public ElementData(double x, double y, double width, double height)
-
-        {
-            this.boundingBox = new BoundingBox(x, y, width, height);
-            //this.color = color;
-        }
-
-        /// <summary>
-        /// The Bounding Box of the Element (in content coordinates).
-        /// </summary>
-        public BoundingBox BoundingBox
-        {
-            get
-            {
-                return boundingBox;
-            }
-            set
-            {
-                boundingBox = value;
-
-                OnPropertyChanged("BoundingBox");
-            }
-        }
-
-        /// <summary>
-        /// The X coordinate of the location of the rectangle (in content coordinates).
-        /// </summary>
-        public double X
-        {
-            get
-            {
-                return boundingBox.Location.X;
-            }
-            set
-            {
-                boundingBox.Location.X = value;
-
-                OnPropertyChanged("X");
-            }
-        }
-
-        /// <summary>
-        /// The Y coordinate of the location of the rectangle (in content coordinates).
-        /// </summary>
-        public double Y
-        {
-            get
-            {
-                return boundingBox.Location.Y;
-            }
-            set
-            {
-                boundingBox.Location.Y = value;
-                
-                OnPropertyChanged("Y");
-            }
-        }
-
-        /// <summary>
-        /// The width of the rectangle (in content coordinates).
-        /// </summary>
-        public double Width
-        {
-            get
-            {
-                return boundingBox.Size.Width;
-            }
-            set
-            {
-                boundingBox.Size.Width = value;
-
-                OnPropertyChanged("Width");
-            }
-        }
-
-        /// <summary>
-        /// The height of the rectangle (in content coordinates).
-        /// </summary>
-        public double Height
-        {
-            get
-            {
-                return boundingBox.Size.Height;
-            }
-            set
-            {
-                boundingBox.Size.Height = value;
-
-                OnPropertyChanged("Height");
-            }
-        }
-
-        ///// <summary>
-        ///// The color of the rectangle.
-        ///// </summary>
-        //public Color Color
-        //{
-        //    get
-        //    {
-        //        return color;
-        //    }
-        //    set
-        //    {
-        //        color = value;
-
-        //        OnPropertyChanged("Color");
-        //    }
-        //}
-
-        /// <summary>
-        /// Set to 'true' when the rectangle is selected in the ListBox.
-        /// </summary>
-        public bool IsSelected
-        {
-            get
-            {
-                return isSelected;
-            }
-            set
-            {
-                isSelected = value;
-
-                OnPropertyChanged("IsSelected");
-            }
-        }
+        }        
     }
+
+
+    ///// <summary>
+    ///// Defines the data-model for a simple displayable rectangle.
+    ///// </summary>
+    //public class ElementData<T> : ElementData
+    //{
+        
+    //}
+
+    ///// <summary>
+    ///// Defines the data-model for a simple displayable rectangle.
+    ///// </summary>
+    //public class ElementData : IElement
+    //{
+    //    #region IElement Members
+
+    //    private BoundingBox boundingBox = BoundingBox.Unset;
+
+    //    public BoundingBox BoundingBox
+    //    {
+    //        get
+    //        {
+    //            return boundingBox;
+    //        }
+    //        set
+    //        {
+    //            boundingBox = value;
+    //        }
+    //    }
+
+    //    /// <summary>
+    //    /// Raises the 'PropertyChanged' event when the value of a property of the data model has changed.
+    //    /// </summary>
+    //    public virtual void OnPropertyChanged(string name)
+    //    {
+    //        if (PropertyChanged != null)
+    //        {
+    //            PropertyChanged(this, new PropertyChangedEventArgs(name));
+    //        }
+    //    }
+
+    //    /// <summary>
+    //    /// 'PropertyChanged' event that is raised when the value of a property of the data model has changed.
+    //    /// </summary>
+    //    public virtual event PropertyChangedEventHandler PropertyChanged;
+
+    //    #endregion
+    //    #region Data Members
+
+    //    ///// <summary>
+    //    ///// The Bounding Box of the Element (in content coordinates).
+    //    ///// </summary>
+    //    //private BoundingBox boundingBox = BoundingBox.Unset;
+
+    //    /// <summary>
+    //    /// The color of the rectangle.
+    //    /// </summary>
+    //    //private Color color;
+
+    //    /// <summary>
+    //    /// Set to 'true' when the rectangle is selected in the ListBox.
+    //    /// </summary>
+    //    private bool isSelected = false;
+
+    //    #endregion Data Members
+
+    //    public ElementData()
+    //    {
+    //    }
+
+    //    //public RectangleData(double x, double y, double width, double height, Color color)
+    //    public ElementData(double x, double y, double width, double height)
+
+    //    {
+    //        this.boundingBox = new BoundingBox(x, y, width, height);
+    //        //this.color = color;
+    //    }
+
+    //    ///// <summary>
+    //    ///// The Bounding Box of the Element (in content coordinates).
+    //    ///// </summary>
+    //    //public BoundingBox BoundingBox
+    //    //{
+    //    //    get
+    //    //    {
+    //    //        return boundingBox;
+    //    //    }
+    //    //    set
+    //    //    {
+    //    //        boundingBox = value;
+
+    //    //        OnPropertyChanged("BoundingBox");
+    //    //    }
+    //    //}
+
+    //    ///// <summary>
+    //    ///// The X coordinate of the location of the rectangle (in content coordinates).
+    //    ///// </summary>
+    //    //public double X
+    //    //{
+    //    //    get
+    //    //    {
+    //    //        return boundingBox.Location.X;
+    //    //    }
+    //    //    set
+    //    //    {
+    //    //        boundingBox.Location.X = value;
+
+    //    //        OnPropertyChanged("X");
+    //    //    }
+    //    //}
+
+    //    ///// <summary>
+    //    ///// The Y coordinate of the location of the rectangle (in content coordinates).
+    //    ///// </summary>
+    //    //public double Y
+    //    //{
+    //    //    get
+    //    //    {
+    //    //        return boundingBox.Location.Y;
+    //    //    }
+    //    //    set
+    //    //    {
+    //    //        boundingBox.Location.Y = value;
+                
+    //    //        OnPropertyChanged("Y");
+    //    //    }
+    //    //}
+
+    //    ///// <summary>
+    //    ///// The width of the rectangle (in content coordinates).
+    //    ///// </summary>
+    //    //public double Width
+    //    //{
+    //    //    get
+    //    //    {
+    //    //        return boundingBox.Size.Width;
+    //    //    }
+    //    //    set
+    //    //    {
+    //    //        boundingBox.Size.Width = value;
+
+    //    //        OnPropertyChanged("Width");
+    //    //    }
+    //    //}
+
+    //    ///// <summary>
+    //    ///// The height of the rectangle (in content coordinates).
+    //    ///// </summary>
+    //    //public double Height
+    //    //{
+    //    //    get
+    //    //    {
+    //    //        return boundingBox.Size.Height;
+    //    //    }
+    //    //    set
+    //    //    {
+    //    //        boundingBox.Size.Height = value;
+
+    //    //        OnPropertyChanged("Height");
+    //    //    }
+    //    //}
+
+    //    ///// <summary>
+    //    ///// The color of the rectangle.
+    //    ///// </summary>
+    //    //public Color Color
+    //    //{
+    //    //    get
+    //    //    {
+    //    //        return color;
+    //    //    }
+    //    //    set
+    //    //    {
+    //    //        color = value;
+
+    //    //        OnPropertyChanged("Color");
+    //    //    }
+    //    //}
+
+    //    /// <summary>
+    //    /// Set to 'true' when the rectangle is selected in the ListBox.
+    //    /// </summary>
+    //    public bool IsSelected
+    //    {
+    //        get
+    //        {
+    //            return isSelected;
+    //        }
+    //        set
+    //        {
+    //            isSelected = value;
+
+    //            OnPropertyChanged("IsSelected");
+    //        }
+    //    }
+    //}
 
 }

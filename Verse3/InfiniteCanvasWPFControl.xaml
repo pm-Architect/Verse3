@@ -24,7 +24,7 @@
         Defines the UI for an instance of ElementData.
         -->
         <DataTemplate 
-            DataType="{x:Type core:ElementData}"
+            DataType="{x:Type core:Element}"
             >
             <Rectangle
                 Width="{Binding Width}"

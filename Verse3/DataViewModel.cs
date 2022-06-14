@@ -10,11 +10,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Xaml;
 using System.Xaml.Schema;
 using Core;
+using XamlReader = System.Windows.Markup.XamlReader;
 
 namespace Verse3
 {
@@ -32,10 +34,10 @@ namespace Verse3
             //
             // TODO: Populate the data model with file data
             //
-            DataViewModel.Instance.Elements.Add(new ElementData(50, 50, 80, 150));
-            DataViewModel.Instance.Elements.Add(new ElementData(550, 350, 80, 150));
-            DataViewModel.Instance.Elements.Add(new ElementData(850, 850, 30, 20));
-            DataViewModel.Instance.Elements.Add(new ElementData(1200, 1200, 80, 150));
+            DataViewModel.Instance.Elements.Add(new Element(50, 50, 80, 150));
+            DataViewModel.Instance.Elements.Add(new Element(550, 350, 80, 150));
+            DataViewModel.Instance.Elements.Add(new Element(850, 850, 30, 20));
+            DataViewModel.Instance.Elements.Add(new Element(1200, 1200, 80, 150));
         }
     }
 
@@ -46,13 +48,13 @@ namespace Verse3
     //        get;
     //        private set;
     //    }
-        
+
     //    public ElementDataViewWrapper() : base()
     //    {
     //        //this.Template = new ElementDataViewTemplate<ElementDataViewWrapper>();
     //        Instantiate();
     //    }
-        
+
     //    public ElementDataViewWrapper(double x, double y, double width, double height) : base(x, y, width, height)
     //    {
     //        //this.Template = new ElementDataViewTemplate<ElementDataViewWrapper>();
@@ -221,7 +223,7 @@ namespace Verse3
     //        binding.Mode = Mode;
     //        BindingOperations.SetBinding(BindTo, BindToProperty, binding);
     //    }
-        
+
     //    public static InfiniteCanvasWPFControl InfiniteCanvasWPFControl { get; internal set; }
     //}
 
@@ -260,10 +262,47 @@ namespace Verse3
     //            }
     //        }
     //    }
-        
+
 
 
     //}
+
+    #region DataTemplateManager
+    class DataTemplateManager
+    {
+        //public void RegisterDataTemplate<TViewModel, TView>() where TView : FrameworkElement
+        //{
+        //    RegisterDataTemplate(typeof(TViewModel), typeof(TView));
+        //}
+
+        public void RegisterDataTemplate(InfiniteCanvasWPFControl c, Type viewModelType, Type viewType)
+        {
+            var template = CreateTemplate(viewModelType, viewType);
+            var key = template.DataTemplateKey;
+            c.Resources.Add(key, template);
+        }
+
+        private DataTemplate CreateTemplate(Type viewModelType, Type viewType)
+        {
+            const string xamlTemplate = "<DataTemplate DataType=\"{{x:Type core:{0}}}\"><v:{1} /></DataTemplate>";
+            var xaml = String.Format(xamlTemplate, viewModelType.Name, viewType.Name, viewModelType.Namespace, viewType.Namespace);
+
+            var context = new ParserContext();
+
+            context.XamlTypeMapper = new XamlTypeMapper(new string[0]);
+            context.XamlTypeMapper.AddMappingProcessingInstruction("vm", viewModelType.Namespace, viewModelType.Assembly.FullName);
+            context.XamlTypeMapper.AddMappingProcessingInstruction("v", viewType.Namespace, viewType.Assembly.FullName);
+
+            //context.XmlnsDictionary.Add("", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
+            //context.XmlnsDictionary.Add("x", "http://schemas.microsoft.com/winfx/2006/xaml");
+            //context.XmlnsDictionary.Add("core", "clr-namespace");
+            //context.XmlnsDictionary.Add("v", "v");
+
+            var template = (DataTemplate)XamlReader.Parse(xaml, context);
+            return template;
+        }
+    }
+    #endregion
 
     #region Converters and Utilities
 
