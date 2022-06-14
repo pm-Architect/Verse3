@@ -14,8 +14,27 @@ namespace Core
     /// A simple example of a data-model.  
     /// The purpose of this data-model is to share display data between the main window and overview window.
     /// </summary>
-    public class DataModel : Observable
+    public class DataModel : INotifyPropertyChanged
     {
+        #region INotifyPropertyChanged Members
+
+        /// <summary>
+        /// Raises the 'PropertyChanged' event when the value of a property of the data model has changed.
+        /// </summary>
+        protected virtual void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        /// <summary>
+        /// 'PropertyChanged' event that is raised when the value of a property of the data model has changed.
+        /// </summary>
+        public virtual event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
         #region Data Members
 
         /// <summary>
@@ -84,6 +103,8 @@ namespace Core
                 instance = value;
             }
         }
+        
+        public static double ContentCanvasMarginOffset = 200.0;
 
         public DataModel() : base()
         {
@@ -97,7 +118,7 @@ namespace Core
             DataModel.Instance.Elements.Add(new ElementData(1200, 1200, 80, 150));
         }
 
-        public static double ContentCanvasMarginOffset = 200.0;
+        #region Properties
 
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
@@ -236,13 +257,52 @@ namespace Core
                 OnPropertyChanged("ContentViewportHeight");
             }
         }
+
+        #endregion
+    }
+
+    public interface IElement : INotifyPropertyChanged
+    {
+        BoundingBox BoundingBox { get; set; }
+        double X { get => BoundingBox.Location.X; set => BoundingBox.Location.X = value; }
+        double Y { get; set; }
+        double Width { get; set; }
+        double Height { get; set; }
+    }
+
+
+    /// <summary>
+    /// Defines the data-model for a simple displayable rectangle.
+    /// </summary>
+    public class ElementData<T> : ElementData
+    {
+        
     }
 
     /// <summary>
     /// Defines the data-model for a simple displayable rectangle.
     /// </summary>
-    public class ElementData : Observable
+    public class ElementData : INotifyPropertyChanged
     {
+        #region INotifyPropertyChanged Members
+
+        /// <summary>
+        /// Raises the 'PropertyChanged' event when the value of a property of the data model has changed.
+        /// </summary>
+        protected virtual void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        /// <summary>
+        /// 'PropertyChanged' event that is raised when the value of a property of the data model has changed.
+        /// </summary>
+        public virtual event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
         #region Data Members
 
         /// <summary>
