@@ -103,8 +103,8 @@ namespace Verse3
             //if (ElementDataViewTemplate<ElementDataViewWrapper>.InfiniteCanvasWPFControl == null)
             //{
             //    ElementDataViewTemplate<ElementDataViewWrapper>.InfiniteCanvasWPFControl = this;
-            //DataViewModel.CreateDataViewModel("");
-            //LBcontent.ItemsSource = DataViewModel.Instance.Elements;
+            DataViewModel.CreateDataViewModel(this);
+            LBcontent.ItemsSource = DataViewModel.Instance.Elements;
             //}
             double xOffset = 0;
             double yOffset = 0;

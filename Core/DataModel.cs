@@ -21,7 +21,7 @@ namespace Core
         /// <summary>
         /// Raises the 'PropertyChanged' event when the value of a property of the data model has changed.
         /// </summary>
-        protected virtual void OnPropertyChanged(string name)
+        protected void OnPropertyChanged(string name)
         {
             if (PropertyChanged != null)
             {
@@ -32,7 +32,7 @@ namespace Core
         /// <summary>
         /// 'PropertyChanged' event that is raised when the value of a property of the data model has changed.
         /// </summary>
-        public virtual event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
         #region Data Members
@@ -111,7 +111,7 @@ namespace Core
             //
             // Initialize the data model.
             //
-            DataModel.Instance = this;
+            DataModel.instance = this;
 
             //IElement e1 = new Element(50, 50, 80, 150);
             //DataModel.Instance.Elements.Add(e1);
@@ -121,10 +121,10 @@ namespace Core
             //DataModel.Instance.Elements.Add(e3);
             //IElement e4 = new Element(1200, 1200, 80, 150);
             //DataModel.Instance.Elements.Add(e4);
-            DataModel.Instance.Elements.Add(new Element(50, 50, 80, 150));
-            DataModel.Instance.Elements.Add(new Element(550, 350, 80, 150));
-            DataModel.Instance.Elements.Add(new Element(850, 850, 30, 20));
-            DataModel.Instance.Elements.Add(new Element(1200, 1200, 80, 150));
+            //DataModel.Instance.Elements.Add(new Element(50, 50, 80, 150));
+            //DataModel.Instance.Elements.Add(new Element(550, 350, 80, 150));
+            //DataModel.Instance.Elements.Add(new Element(850, 850, 30, 20));
+            //DataModel.Instance.Elements.Add(new Element(1200, 1200, 80, 150));
         }
 
         #region Properties
