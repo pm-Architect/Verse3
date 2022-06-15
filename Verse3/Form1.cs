@@ -83,11 +83,14 @@ namespace Verse3
                     
                     foreach (IElement el in elements)
                     {
-                        DataTemplateManager.RegisterDataTemplate(el);
-                        int x = 0;
-                        Type[] types = { x.GetType(), x.GetType(), x.GetType(), x.GetType() };
-                        IElement elInst = el.GetType().GetConstructor(types).Invoke(new object[] { 50, 50, 80, 150 }) as IElement;
-                        DataModel.Instance.Elements.Add(elInst);
+                        if (el is IRenderable)
+                        {
+                            DataTemplateManager.RegisterDataTemplate(el as IRenderable);
+                            int x = 0;
+                            Type[] types = { x.GetType(), x.GetType(), x.GetType(), x.GetType() };
+                            IElement elInst = el.GetType().GetConstructor(types).Invoke(new object[] { 50, 50, 80, 150 }) as IElement;
+                            DataModel.Instance.Elements.Add(elInst);
+                        }
                         //DataModel.Instance.Elements.Add(new TestElement(50, 50, 80, 150));
                         //DataModel.Instance.Elements.Add(new TestElement(550, 350, 80, 150));
                         //DataModel.Instance.Elements.Add(new TestElement(850, 850, 30, 20));

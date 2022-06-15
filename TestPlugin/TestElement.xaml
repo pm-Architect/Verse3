@@ -5,16 +5,21 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TestPlugin"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="250" d:DesignWidth="500">
     <Grid>
         <Rectangle
-                Width="{Binding Width}"
-                Height="{Binding Height}"
-                Fill="#408080"
-                Cursor="Hand"
-                MouseDown="TestElementView_MouseDown"
-                MouseUp="TestElementView_MouseUp"
-                MouseMove="TestElementView_MouseMove"
+            Width="{Binding Width}"
+            Height="{Binding Height}"
+            Fill="#408080"
+            Cursor="Hand"
+            RadiusX="5"
+            RadiusY="5"
+            Opacity="100"
+            Stroke="#000000"
+            StrokeThickness="1"
+            MouseDown="TestElementView_MouseDown"
+            MouseUp="TestElementView_MouseUp"
+            MouseMove="TestElementView_MouseMove"
                 />
     </Grid>
 </UserControl>

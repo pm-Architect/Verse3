@@ -20,22 +20,6 @@
         <local:CanvasSizeOffsetPseudoConverter 
             x:Key="canvasSizeOffsetPseudoConverter"
             />
-        <!--
-        Defines the UI for an instance of ElementData.
-        -->
-        <!--<DataTemplate 
-            DataType="{x:Type core:IElement}"
-            >
-            <Rectangle
-                Width="{Binding Width}"
-                Height="{Binding Height}"
-                Fill="#408080"
-                Cursor="Hand"
-                MouseDown="Rectangle_MouseDown"
-                MouseUp="Rectangle_MouseUp"
-                MouseMove="Rectangle_MouseMove"
-                />
-        </DataTemplate>-->
         <!-- 
         Override the style of the ListBox to remove the ScrollViewer.
         All we want is ListBox logic but based on a Canvas.

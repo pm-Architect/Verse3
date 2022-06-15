@@ -114,7 +114,7 @@ namespace TestPlugin
             DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
 
             Rectangle rectangle = (Rectangle)sender;
-            IElement myRectangle = (IElement)rectangle.DataContext;
+            IRenderable myRectangle = (IRenderable)rectangle.DataContext;
             myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
             myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
 
@@ -126,24 +126,23 @@ namespace TestPlugin
         #endregion
     }
 
-    public class TestElement : IElement
+    public class TestElement : IRenderable
     {
-        private BoundingBox boundingBox = BoundingBox.Unset;
+        #region Data Members
 
+        private BoundingBox boundingBox = BoundingBox.Unset;
+        private Guid _id = Guid.NewGuid();
         private static Type view = typeof(TestElementView);
+
+        #endregion
+
+        #region Properties
 
         public Type View { get { return view; } }
 
+        public Guid ID { get => _id; private set => _id = value; }
+
         public bool IsSelected { get; set; }
-
-        public TestElement()
-        {
-        }
-
-        public TestElement(int x, int y, int width, int height)
-        {
-            this.boundingBox = new BoundingBox(x, y, width, height);
-        }
 
         public BoundingBox BoundingBox { get => boundingBox; private set => boundingBox = value; }
 
@@ -155,6 +154,33 @@ namespace TestPlugin
 
         public double Height => boundingBox.Size.Height;
 
+        public Guid ZPrev => throw new NotImplementedException();
+
+        public Guid ZNext => throw new NotImplementedException();
+
+        public Guid Parent => throw new NotImplementedException();
+
+        public Guid[] Children => throw new NotImplementedException();
+
+        public ElementState State { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        #endregion
+
+        #region Constructors
+
+        public TestElement()
+        {
+        }
+
+        public TestElement(int x, int y, int width, int height)
+        {
+            this.boundingBox = new BoundingBox(x, y, width, height);
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged Members
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public void OnPropertyChanged(string name)
@@ -163,6 +189,8 @@ namespace TestPlugin
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
-        }        
+        }
+
+        #endregion
     }
 }

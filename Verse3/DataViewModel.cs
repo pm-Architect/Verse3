@@ -113,7 +113,7 @@ namespace Verse3
 
         }
 
-        internal static void RegisterDataTemplate(IElement el)
+        internal static void RegisterDataTemplate(IRenderable el)
         {
             if (el.View == null) return;
             var template = CreateTemplate(el.GetType(), el.View);

@@ -121,7 +121,7 @@ namespace Verse3
             double xOffset = 0;
             double yOffset = 0;
             Rect contentRect = new Rect(0, 0, 0, 0);
-            foreach (IElement elementsData in DataViewModel.Instance.Elements)
+            foreach (IRenderable elementsData in DataViewModel.Instance.Elements)
             {
                 if (elementsData.X < xOffset)
                 {
@@ -142,7 +142,7 @@ namespace Verse3
             xOffset = Math.Abs(xOffset);
             yOffset = Math.Abs(yOffset);
 
-            foreach (IElement el in DataViewModel.Instance.Elements)
+            foreach (IRenderable el in DataViewModel.Instance.Elements)
             {
                 el.SetX(el.X + xOffset);
                 el.SetY(el.Y + yOffset);
