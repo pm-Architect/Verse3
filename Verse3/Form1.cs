@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,6 +67,32 @@ namespace Verse3
                 if (infiniteCanvas.MouseHandlingMode == MouseHandlingMode.Panning)
                 {
                     this.Cursor = Cursors.SizeAll;
+                }
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    File.OpenRead(openFileDialog.FileName).CopyTo(ms);
+                    var elements = AssemblyLoaderService.Load(ms);
+                    
+                    foreach (IElement el in elements)
+                    {
+                        DataTemplateManager.RegisterDataTemplate(el);
+                        int x = 0;
+                        Type[] types = { x.GetType(), x.GetType(), x.GetType(), x.GetType() };
+                        IElement elInst = el.GetType().GetConstructor(types).Invoke(new object[] { 50, 50, 80, 150 }) as IElement;
+                        DataModel.Instance.Elements.Add(elInst);
+                        //DataModel.Instance.Elements.Add(new TestElement(50, 50, 80, 150));
+                        //DataModel.Instance.Elements.Add(new TestElement(550, 350, 80, 150));
+                        //DataModel.Instance.Elements.Add(new TestElement(850, 850, 30, 20));
+                        //DataModel.Instance.Elements.Add(new TestElement(1200, 1200, 80, 150));
+                    }
                 }
             }
         }

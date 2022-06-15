@@ -31,15 +31,20 @@ namespace Verse3
         public static void CreateDataViewModel(InfiniteCanvasWPFControl c)
         {
             DataViewModel.WPFControl = c;
+            
+            //TODO Properly Load all available plugins
+
+            
+
             //TODO: Open a file here!!!!
 
             //
             // TODO: Populate the data model with file data
             //
-            DataModel.Instance.Elements.Add(new ElementWrapper(50, 50, 80, 150));
-            DataModel.Instance.Elements.Add(new ElementWrapper(550, 350, 80, 150));
-            DataModel.Instance.Elements.Add(new ElementWrapper(850, 850, 30, 20));
-            DataModel.Instance.Elements.Add(new ElementWrapper(1200, 1200, 80, 150));
+            //DataModel.Instance.Elements.Add(new ElementWrapper(50, 50, 80, 150));
+            //DataModel.Instance.Elements.Add(new ElementWrapper(550, 350, 80, 150));
+            //DataModel.Instance.Elements.Add(new ElementWrapper(850, 850, 30, 20));
+            //DataModel.Instance.Elements.Add(new ElementWrapper(1200, 1200, 80, 150));
         }
     }
 
@@ -269,14 +274,81 @@ namespace Verse3
 
     //}
     
-    public class ElementWrapper : Element
+    public class ElementWrapper : FrameworkElement, IElement, IAddChild
     {
-        public ElementWrapper(int x, int y, int width, int height) : base(x, y, width, height)
-        {
+        private BoundingBox boundingBox = BoundingBox.Unset;
 
+        private static Type view = null;
+
+        public Type View { get { return view; } }
+
+        public bool IsSelected { get; set; }
+
+        public ElementWrapper()
+        {
+            ElementTemplate.CreateElementTemplate(this);
         }
 
-        public ElementTemplate Template { get; internal set; }
+        public ElementWrapper(int x, int y, int width, int height)
+        {
+            this.boundingBox = new BoundingBox(x, y, width, height);
+            ElementTemplate.CreateElementTemplate(this);
+        }
+
+        public BoundingBox BoundingBox { get => boundingBox; private set => boundingBox = value; }
+
+        public double X { get => boundingBox.Location.X; }
+
+        public double Y { get => boundingBox.Location.Y; }
+
+        public new double Width
+        {
+            get
+            {
+                base.Width = boundingBox.Size.Width;
+                return boundingBox.Size.Width;
+            }
+            set
+            {
+                boundingBox.Size.Width = value;
+                base.Width = boundingBox.Size.Width;
+            }
+        }
+
+        public new double Height
+        {
+            get
+            {
+                base.Height = boundingBox.Size.Height;
+                return boundingBox.Size.Height;
+            }
+            set
+            {
+                boundingBox.Size.Height = value;
+                base.Height = boundingBox.Size.Height;
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        public void AddChild(object value)
+        {
+            base.AddLogicalChild(value);
+        }
+
+        public void AddText(string text)
+        {
+        }
+
+        public DataTemplate Template { get; internal set; }
     }
 
     public class ElementTemplate : DataTemplate
@@ -287,41 +359,33 @@ namespace Verse3
         {
             ElementTemplate t = new ElementTemplate();
             t._owner = owner;
-            //t._owner.Template = (ElementTemplate)DataTemplateManager.CreateTemplate((DataViewModel.Instance as DataViewModel).WPFControl);
+            //t._owner.Template = DataTemplateManager.CreateTemplateCustom(DataViewModel.WPFControl);
+            DataTemplateManager.RegisterDataTemplate<ElementWrapper, Rectangle>();
         }
     }
 
     #region DataTemplateManager
-    class DataTemplateManager
+    public class DataTemplateManager
     {
-        //public void RegisterDataTemplate<TViewModel, TView>() where TView : FrameworkElement
-        //{
-        //    RegisterDataTemplate(typeof(TViewModel), typeof(TView));
-        //}
-
-        //public void RegisterDataTemplate(InfiniteCanvasWPFControl c, Type viewModelType, Type viewType)
-        //{
-        //    var template = CreateTemplate(viewModelType, viewType);
-        //    var key = template.DataTemplateKey;
-        //    c.Resources.Add(key, template);
-        //}
-
-        //private DataTemplate CreateTemplate(Type viewModelType, Type viewType)
-        public static DataTemplate CreateTemplate(InfiniteCanvasWPFControl c)
+        public static DataTemplate CreateTemplateCustom(InfiniteCanvasWPFControl c)
         {
             //string xaml = "<DataTemplate DataType=\"{x:Type core:IElement}\"></DataTemplate>";
-            string xaml = "<DataTemplate DataType=\"{x:Type local:ElementWrapper}\"></DataTemplate>";
-            
+            //string xaml = "<DataTemplate DataType=\"{x:Type local:ElementWrapper}\"></DataTemplate>";
+            string xaml = "<DataTemplate DataType=\"{x:Type local:ElementWrapper}\">" +
+                "<Rectangle Width = \"{Binding Width}\" Height = \"{Binding Height}\" Fill = \"#408080\" Cursor = \"Hand\"" +
+                //"MouseDown = \"Rectangle_MouseDown\" MouseUp = \"Rectangle_MouseUp\" MouseMove = \"Rectangle_MouseMove\"" +
+                "/></DataTemplate>";
+
 
             ParserContext context = new ParserContext();
 
             context.XamlTypeMapper = new XamlTypeMapper(Array.Empty<string>());
-            //context.XamlTypeMapper.AddMappingProcessingInstruction("core", "Core", "Core");
+            context.XamlTypeMapper.AddMappingProcessingInstruction("core", "Core", "Core");
             context.XamlTypeMapper.AddMappingProcessingInstruction("local", "Verse3", "Verse3");
 
             context.XmlnsDictionary.Add("", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
             context.XmlnsDictionary.Add("x", "http://schemas.microsoft.com/winfx/2006/xaml");
-            //context.XmlnsDictionary.Add("core", "core");
+            context.XmlnsDictionary.Add("core", "core");
             context.XmlnsDictionary.Add("local", "local");
             //context.XmlnsDictionary.Add("v", "v");
 
@@ -329,23 +393,27 @@ namespace Verse3
             template.VisualTree = new FrameworkElementFactory(typeof(ElementWrapper));
 
             //TODO: Create runtime data template
-            FrameworkElementFactory r = new FrameworkElementFactory(typeof(Rectangle));
-            DataTemplateManager.CreateBinding(r, Rectangle.WidthProperty, new PropertyPath("Width"), BindingMode.TwoWay);
-            DataTemplateManager.CreateBinding(r, Rectangle.HeightProperty, new PropertyPath("Height"), BindingMode.TwoWay);
-            r.SetValue(Rectangle.FillProperty, new SolidColorBrush(Colors.Teal));
-            r.SetValue(Rectangle.CursorProperty, Cursors.Hand);
-            //r.AddHandler(Rectangle.MouseMoveEvent, new MouseEventHandler(Rectangle_MouseMove));
-            //r.AddHandler(Rectangle.MouseDownEvent, new MouseButtonEventHandler(Rectangle_MouseDown));
-            //r.AddHandler(Rectangle.MouseUpEvent, new MouseButtonEventHandler(Rectangle_MouseUp));
-            template.VisualTree.AppendChild(r);
+            //FrameworkElementFactory r = new FrameworkElementFactory(typeof(Rectangle));
+            //DataTemplateManager.CreateBinding(r, Rectangle.WidthProperty, new PropertyPath("Width"), BindingMode.TwoWay);
+            //DataTemplateManager.CreateBinding(r, Rectangle.HeightProperty, new PropertyPath("Height"), BindingMode.TwoWay);
+            //r.SetValue(Rectangle.FillProperty, new SolidColorBrush(Colors.Teal));
+            //r.SetValue(Rectangle.CursorProperty, Cursors.Hand);
+            ////r.AddHandler(Rectangle.MouseMoveEvent, new MouseEventHandler(Rectangle_MouseMove));
+            ////r.AddHandler(Rectangle.MouseDownEvent, new MouseButtonEventHandler(Rectangle_MouseDown));
+            ////r.AddHandler(Rectangle.MouseUpEvent, new MouseButtonEventHandler(Rectangle_MouseUp));
+            //template.VisualTree.AppendChild(r);
 
             if (c.Resources[template.DataTemplateKey] != null)
             {
+                //template.Seal();
+                //template.LoadContent();
                 return c.Resources[template.DataTemplateKey] as DataTemplate;
             }
             else
             {
-                //c.Resources.Add(template.DataTemplateKey, template);
+                c.Resources.Add(template.DataTemplateKey, template);
+                //template.Seal();
+                //template.LoadContent();
                 return template;
             }
         }
@@ -365,6 +433,77 @@ namespace Verse3
             binding.Path = BindFromProperty;
             binding.Mode = Mode;
             BindingOperations.SetBinding(BindTo, BindToProperty, binding);
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TViewModel"></typeparam>
+        /// <typeparam name="TView"></typeparam>
+        public static void RegisterDataTemplate<TViewModel, TView>() where TView : FrameworkElement
+        {
+            RegisterDataTemplate(typeof(TViewModel), typeof(TView));
+        }
+
+        public static void RegisterDataTemplate(Type viewModelType, Type viewType)
+        {
+            var template = CreateTemplate(viewModelType, viewType);
+
+            if (DataViewModel.WPFControl.Resources[template.DataTemplateKey] != null)
+            {
+                //template.Seal();
+                //template.LoadContent();
+                //return DataViewModel.WPFControl.Resources[template.DataTemplateKey] as DataTemplate;
+            }
+            else
+            {
+                DataViewModel.WPFControl.Resources.Add(template.DataTemplateKey, template);
+                //template.Seal();
+                //template.LoadContent();
+                //return template;
+            }
+        }
+
+        public static DataTemplate CreateTemplate(Type viewModelType, Type viewType)
+        {
+            const string xamlTemplate = "<DataTemplate DataType=\"{{x:Type vm:{0}}}\"><v:{1} /></DataTemplate>";
+            var xaml = String.Format(xamlTemplate, viewModelType.Name, viewType.Name, viewModelType.Namespace, viewType.Namespace);
+
+            var context = new ParserContext();
+
+            context.XamlTypeMapper = new XamlTypeMapper(new string[0]);
+            context.XamlTypeMapper.AddMappingProcessingInstruction("vm", viewModelType.Namespace, viewModelType.Assembly.FullName);
+            context.XamlTypeMapper.AddMappingProcessingInstruction("v", viewType.Namespace, viewType.Assembly.FullName);
+
+            context.XmlnsDictionary.Add("", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
+            context.XmlnsDictionary.Add("x", "http://schemas.microsoft.com/winfx/2006/xaml");
+            context.XmlnsDictionary.Add("vm", "vm");
+            context.XmlnsDictionary.Add("v", "v");
+
+            var template = (DataTemplate)XamlReader.Parse(xaml, context);
+            return template;
+
+        }
+
+        internal static void RegisterDataTemplate(IElement el)
+        {
+            if (el.View == null) return;
+            var template = CreateTemplate(el.GetType(), el.View);
+
+            if (DataViewModel.WPFControl.Resources[template.DataTemplateKey] != null)
+            {
+                //template.Seal();
+                //template.LoadContent();
+                //return DataViewModel.WPFControl.Resources[template.DataTemplateKey] as DataTemplate;
+            }
+            else
+            {
+                DataViewModel.WPFControl.Resources.Add(template.DataTemplateKey, template);
+                //template.Seal();
+                //template.LoadContent();
+                //return template;
+            }
         }
     }
     #endregion

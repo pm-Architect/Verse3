@@ -24,7 +24,7 @@
         Defines the UI for an instance of ElementData.
         -->
         <DataTemplate 
-            DataType="{x:Type core:Element}"
+            DataType="{x:Type core:IElement}"
             >
             <Rectangle
                 Width="{Binding Width}"
@@ -106,11 +106,11 @@
     </UserControl.Resources>
     <DockPanel>
         <InfiniteCanvas:InfiniteCanvasControl x:Name="InfiniteCanvasControl1"
-                                              ContentScale="{Binding Source={x:Static local:DataViewModel.Instance}, Path=ContentScale, Mode=TwoWay}"
-                                              ContentOffsetX="{Binding Source={x:Static local:DataViewModel.Instance}, Path=ContentOffsetX, Mode=TwoWay}"
-                                              ContentOffsetY="{Binding Source={x:Static local:DataViewModel.Instance}, Path=ContentOffsetY, Mode=TwoWay}"
-                                              ContentViewportWidth="{Binding Source={x:Static local:DataViewModel.Instance}, Path=ContentViewportWidth, Mode=OneWayToSource}"
-                                              ContentViewportHeight="{Binding Source={x:Static local:DataViewModel.Instance}, Path=ContentViewportHeight, Mode=OneWayToSource}"
+                                              ContentScale="{Binding Source={x:Static core:DataModel.Instance}, Path=ContentScale, Mode=TwoWay}"
+                                              ContentOffsetX="{Binding Source={x:Static core:DataModel.Instance}, Path=ContentOffsetX, Mode=TwoWay}"
+                                              ContentOffsetY="{Binding Source={x:Static core:DataModel.Instance}, Path=ContentOffsetY, Mode=TwoWay}"
+                                              ContentViewportWidth="{Binding Source={x:Static core:DataModel.Instance}, Path=ContentViewportWidth, Mode=OneWayToSource}"
+                                              ContentViewportHeight="{Binding Source={x:Static core:DataModel.Instance}, Path=ContentViewportHeight, Mode=OneWayToSource}"
                                               Background="#FF292929"
                                               MouseDown="zoomAndPanControl_MouseDown"
                                               MouseUp="zoomAndPanControl_MouseUp"
@@ -118,13 +118,13 @@
                                               MouseWheel="zoomAndPanControl_MouseWheel"
                                               MouseDoubleClick="zoomAndPanControl_MouseDoubleClick" Foreground="White">
             <Grid
-                Width="{Binding Source={x:Static local:DataViewModel.Instance}, Path=ContentWidth}"
-                Height="{Binding Source={x:Static local:DataViewModel.Instance}, Path=ContentHeight}">
+                Width="{Binding Source={x:Static core:DataModel.Instance}, Path=ContentWidth}"
+                Height="{Binding Source={x:Static core:DataModel.Instance}, Path=ContentHeight}">
                 <ListBox
                     x:Name="LBcontent"
                     Background="#FF1D1D1D"
                     Foreground="White"
-                    ItemsSource="{Binding Source={x:Static local:DataViewModel.Instance}, Path=Elements}"
+                    ItemsSource="{Binding Source={x:Static core:DataModel.Instance}, Path=Elements}"
                     Style="{StaticResource noScrollViewerListBoxStyle}"
                     ItemContainerStyle="{StaticResource listBoxItemStyle}"
                     />

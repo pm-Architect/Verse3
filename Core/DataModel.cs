@@ -46,7 +46,7 @@ namespace Core
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
-        protected ObservableCollection<Element> elements = new ObservableCollection<Element>();
+        protected ObservableCollection<IElement> elements = new ObservableCollection<IElement>();
 
         ///
         /// The current scale at which the content is being viewed.
@@ -108,6 +108,7 @@ namespace Core
 
         public DataModel() : base()
         {
+            LoadPlugins();
             //
             // Initialize the data model.
             //
@@ -127,12 +128,17 @@ namespace Core
             //DataModel.Instance.Elements.Add(new Element(1200, 1200, 80, 150));
         }
 
+        public static void LoadPlugins()
+        {
+            
+        }
+
         #region Properties
 
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
-        public ObservableCollection<Element> Elements
+        public ObservableCollection<IElement> Elements
         {
             get
             {
@@ -274,6 +280,8 @@ namespace Core
     {
         public abstract BoundingBox BoundingBox { get; }
 
+        public abstract Type View { get; }
+
         /// <summary>
         /// The X coordinate of the location of the rectangle (in content coordinates).
         /// </summary>
@@ -324,6 +332,10 @@ namespace Core
     public class Element : IElement
     {
         private BoundingBox boundingBox = BoundingBox.Unset;
+
+        private static Type view = null;
+
+        public Type View { get { return view; } }
 
         public bool IsSelected { get; set; }
 

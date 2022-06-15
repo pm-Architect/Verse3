@@ -161,6 +161,8 @@ namespace InfiniteCanvas
 
         #endregion Dependency Property Definitions
 
+        #region Properties
+
         /// <summary>
         /// Get/set the X offset (in content coordinates) of the view on the content.
         /// </summary>
@@ -374,6 +376,23 @@ namespace InfiniteCanvas
             }
         }
 
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Instantly scale the content so that it fits completely in the control.
+        /// </summary>
+        public void ScaleToFit()
+        {
+            if (content == null)
+            {
+                throw new ApplicationException("PART_Content was not found in the ZoomAndPanControl visual template!");
+            }
+
+            ZoomTo(new Rect(0, 0, content.ActualWidth, content.ActualHeight));
+        }
+
         /// <summary>
         /// Do an animated zoom to view a specific scale and rectangle (in content coordinates).
         /// </summary>
@@ -526,6 +545,8 @@ namespace InfiniteCanvas
             ZoomAboutPoint(contentScale, zoomCenter);
         }
 
+        #endregion
+
         /// <summary>
         /// Do animation that scales the content so that it fits completely in the control.
         /// </summary>
@@ -537,19 +558,6 @@ namespace InfiniteCanvas
             }
 
             AnimatedZoomTo(new Rect(0, 0, content.ActualWidth, content.ActualHeight));
-        }
-
-        /// <summary>
-        /// Instantly scale the content so that it fits completely in the control.
-        /// </summary>
-        public void ScaleToFit()
-        {
-            if (content == null)
-            {
-                throw new ApplicationException("PART_Content was not found in the ZoomAndPanControl visual template!");
-            }
-
-            ZoomTo(new Rect(0, 0, content.ActualWidth, content.ActualHeight));
         }
 
         #region Internal Methods

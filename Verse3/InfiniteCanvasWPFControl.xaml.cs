@@ -25,6 +25,14 @@ namespace Verse3
     public partial class InfiniteCanvasWPFControl : UserControl
     {
         private System.Windows.Forms.Cursor winFormsCursor = System.Windows.Forms.Cursors.Default;
+
+        public ListBox ContentElements
+        {
+            get
+            {
+                return LBcontent;
+            }
+        }
         public System.Windows.Forms.Cursor WinFormsCursor
         {
             get
@@ -42,7 +50,7 @@ namespace Verse3
         /// </summary>
         private MouseHandlingMode mouseHandlingMode = MouseHandlingMode.None;
 
-        public MouseHandlingMode MouseHandlingMode { get { return mouseHandlingMode; } internal set { mouseHandlingMode = value; } }
+        public MouseHandlingMode MouseHandlingMode { get { return mouseHandlingMode; } set { mouseHandlingMode = value; } }
 
         /// <summary>
         /// The point that was clicked relative to the ZoomAndPanControl.
@@ -52,7 +60,7 @@ namespace Verse3
         /// <summary>
         /// The point that was clicked relative to the content that is contained within the ZoomAndPanControl.
         /// </summary>
-        internal Point origContentMouseDownPoint;
+        public Point origContentMouseDownPoint;
 
         /// <summary>
         /// Records which mouse button clicked during mouse dragging.
@@ -98,7 +106,7 @@ namespace Verse3
         /// <summary>
         /// Expand the content area to fit the rectangles.
         /// </summary>
-        internal void ExpandContent()
+        public void ExpandContent()
         {
             //if (ElementDataViewTemplate<ElementDataViewWrapper>.InfiniteCanvasWPFControl == null)
             //{
@@ -663,7 +671,7 @@ namespace Verse3
             Keyboard.Focus(LBcontent);
 
             Rectangle rectangle = (Rectangle)sender;
-            Element myRectangle = (Element)rectangle.DataContext;
+            IElement myRectangle = (IElement)rectangle.DataContext;
 
             //myRectangle.IsSelected = true;
 
