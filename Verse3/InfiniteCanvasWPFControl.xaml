@@ -23,7 +23,7 @@
         <!--
         Defines the UI for an instance of ElementData.
         -->
-        <DataTemplate 
+        <!--<DataTemplate 
             DataType="{x:Type core:IElement}"
             >
             <Rectangle
@@ -35,7 +35,7 @@
                 MouseUp="Rectangle_MouseUp"
                 MouseMove="Rectangle_MouseMove"
                 />
-        </DataTemplate>
+        </DataTemplate>-->
         <!-- 
         Override the style of the ListBox to remove the ScrollViewer.
         All we want is ListBox logic but based on a Canvas.

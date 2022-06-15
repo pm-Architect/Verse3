@@ -15,6 +15,8 @@ namespace Core
         /// </summary>
         public class BoundingBox : Observable, IEquatable<BoundingBox>
         {
+            #region Constructors
+
             public BoundingBox()
             {
                 this.Location = CanvasPoint.Unset;
@@ -38,7 +40,11 @@ namespace Core
             }
 
             public static BoundingBox Unset = new BoundingBox();
-            
+
+            #endregion
+
+            #region Properties
+
             public CanvasPoint Location { get; set; }
             public CanvasSize Size { get; set; }
             public double Left
@@ -69,6 +75,10 @@ namespace Core
                     return (this.Location.Y + this.Size.Height);
                 }
             }
+
+            #endregion
+
+            #region Methods
 
             public CanvasPoint this[int index]
             {
@@ -335,6 +345,8 @@ namespace Core
             {
                 return ((A.Size != B.Size) || (A.Location != B.Location));
             }
+
+            #endregion
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
@@ -342,6 +354,8 @@ namespace Core
         /// </summary>
         public class CanvasPoint : Observable, IEquatable<CanvasSize>, IEquatable<CanvasPoint>
         {
+            #region Constructors
+            
             public static readonly CanvasPoint Unset = new CanvasPoint(double.NaN, double.NaN);
 
             public CanvasPoint(double x, double y)
@@ -350,8 +364,16 @@ namespace Core
                 this.Y = y;
             }
 
+            #endregion
+
+            #region Properties
+
             public double X { get; set; }
             public double Y { get; set; }
+
+            #endregion
+
+            #region Methods
 
             public Vector2 ToVector()
             {
@@ -408,6 +430,8 @@ namespace Core
                 if (this.X != double.NaN && this.Y != double.NaN) return true;
                 else return false;
             }
+
+            #endregion
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
@@ -415,6 +439,8 @@ namespace Core
         /// </summary>
         public class CanvasSize : Observable, IEquatable<CanvasSize>, IEquatable<CanvasPoint>
         {
+            #region Constructors
+
             public static readonly CanvasSize Unset = new CanvasSize(double.NaN, double.NaN);
 
             public CanvasSize(double w, double h)
@@ -423,8 +449,16 @@ namespace Core
                 this.Height = h;
             }
 
+            #endregion
+
+            #region Properties
+
             public double Width { get; set; }
             public double Height { get; set; }
+
+            #endregion
+
+            #region Methods
 
             public Vector2 ToVector()
             {
@@ -485,6 +519,8 @@ namespace Core
                 if (this.Width != double.NaN && this.Height != double.NaN) return true;
                 else return false;
             }
+
+            #endregion
         }
     }
 }

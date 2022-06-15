@@ -12,10 +12,12 @@ using System.Threading.Tasks;
 
 namespace Verse3
 {
-    public class AssemblyCompilerService
+    public static class AssemblyCompiler
     {
+        #region Properties
         public static List<string> CompileLog { get; set; }
         private static List<MetadataReference> references { get; set; }
+        #endregion
 
         public static void Init()
         {
@@ -37,7 +39,7 @@ namespace Verse3
 
         public static Assembly Compile(string code)
         {
-            AssemblyCompilerService.Init();
+            AssemblyCompiler.Init();
 
             SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(code, new CSharpParseOptions(LanguageVersion.Preview));
             foreach (var diagnostic in syntaxTree.GetDiagnostics())
@@ -83,9 +85,9 @@ namespace Verse3
         
         public static Type CompileOnly(string code)
         {
-            AssemblyCompilerService.Init();
+            AssemblyCompiler.Init();
 
-            var assembly = AssemblyCompilerService.Compile(code);
+            var assembly = AssemblyCompiler.Compile(code);
             if (assembly != null)
             {
                 return assembly.GetExportedTypes().FirstOrDefault();

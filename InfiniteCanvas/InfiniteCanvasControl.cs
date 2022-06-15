@@ -545,8 +545,6 @@ namespace InfiniteCanvas
             ZoomAboutPoint(contentScale, zoomCenter);
         }
 
-        #endregion
-
         /// <summary>
         /// Do animation that scales the content so that it fits completely in the control.
         /// </summary>
@@ -559,6 +557,8 @@ namespace InfiniteCanvas
 
             AnimatedZoomTo(new Rect(0, 0, content.ActualWidth, content.ActualHeight));
         }
+
+        #endregion
 
         #region Internal Methods
 
@@ -1053,11 +1053,11 @@ namespace InfiniteCanvas
     }
 
     /// <summary>
-    /// This is an extension to the ZoomAndPanControol class that implements
+    /// This is an extension to the InfiniteCanvasControl class that implements
     /// the IScrollInfo interface properties and functions.
     /// 
-    /// IScrollInfo is implemented to allow ZoomAndPanControl to be wrapped (in XAML)
-    /// in a ScrollViewer.  IScrollInfo allows the ScrollViewer and ZoomAndPanControl to 
+    /// IScrollInfo is implemented to allow InfiniteCanvasControl to be wrapped (in XAML)
+    /// in a ScrollViewer.  IScrollInfo allows the ScrollViewer and InfiniteCanvasControl to 
     /// communicate important information such as the horizontal and vertical scrollbar offsets.
     /// 
     /// There is a good series of articles showing how to implement IScrollInfo starting here:
@@ -1066,6 +1066,8 @@ namespace InfiniteCanvas
     /// </summary>
     public partial class InfiniteCanvasControl
     {
+        #region Properties
+        
         /// <summary>
         /// Set to 'true' when the vertical scrollbar is enabled.
         /// </summary>
@@ -1177,6 +1179,10 @@ namespace InfiniteCanvas
                 return ContentOffsetY * ContentScale;
             }
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Called when the offset of the horizontal scrollbar has been set.
@@ -1383,6 +1389,7 @@ namespace InfiniteCanvas
             }
             return rectangle;
         }
-
+        
+        #endregion
     }
 }

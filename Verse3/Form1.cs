@@ -79,7 +79,7 @@ namespace Verse3
                 using (MemoryStream ms = new MemoryStream())
                 {
                     File.OpenRead(openFileDialog.FileName).CopyTo(ms);
-                    var elements = AssemblyLoaderService.Load(ms);
+                    var elements = AssemblyLoader.Load(ms);
                     
                     foreach (IElement el in elements)
                     {

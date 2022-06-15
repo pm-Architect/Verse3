@@ -29,7 +29,7 @@ namespace TestPlugin
             InitializeComponent();
         }
         
-        #region RectangleTEMP
+        #region MouseEvents
 
         /// <summary>
         /// Event raised when a mouse button is clicked down over a Rectangle.
@@ -138,7 +138,6 @@ namespace TestPlugin
 
         public TestElement()
         {
-            //ElementTemplate.CreateElementTemplate(this);
         }
 
         public TestElement(int x, int y, int width, int height)
@@ -152,33 +151,9 @@ namespace TestPlugin
 
         public double Y { get => boundingBox.Location.Y; }
 
-        public double Width
-        {
-            get
-            {
-                //base.Width = boundingBox.Size.Width;
-                return boundingBox.Size.Width;
-            }
-            //set
-            //{
-            //    boundingBox.Size.Width = value;
-            //    //base.Width = boundingBox.Size.Width;
-            //}
-        }
+        public double Width => boundingBox.Size.Width;
 
-        public double Height
-        {
-            get
-            {
-                //base.Height = boundingBox.Size.Height;
-                return boundingBox.Size.Height;
-            }
-            //set
-            //{
-            //    boundingBox.Size.Height = value;
-            //    //base.Height = boundingBox.Size.Height;
-            //}
-        }
+        public double Height => boundingBox.Size.Height;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

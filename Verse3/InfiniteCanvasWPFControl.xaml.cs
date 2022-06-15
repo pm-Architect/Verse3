@@ -24,34 +24,19 @@ namespace Verse3
     /// </summary>
     public partial class InfiniteCanvasWPFControl : UserControl
     {
+        public InfiniteCanvasWPFControl()
+        {
+            InitializeComponent();
+            //TODO Add different view templates
+        }
+        
+        #region Fields
+
         private System.Windows.Forms.Cursor winFormsCursor = System.Windows.Forms.Cursors.Default;
-
-        public ListBox ContentElements
-        {
-            get
-            {
-                return LBcontent;
-            }
-        }
-        public System.Windows.Forms.Cursor WinFormsCursor
-        {
-            get
-            {
-                return winFormsCursor;
-            }
-            set
-            {
-                winFormsCursor = value;
-            }
-        }
-
         /// <summary>
         /// Specifies the current state of the mouse handling logic.
         /// </summary>
         private MouseHandlingMode mouseHandlingMode = MouseHandlingMode.None;
-
-        public MouseHandlingMode MouseHandlingMode { get { return mouseHandlingMode; } set { mouseHandlingMode = value; } }
-
         /// <summary>
         /// The point that was clicked relative to the ZoomAndPanControl.
         /// </summary>
@@ -91,13 +76,32 @@ namespace Verse3
         ///// Saves the previous Select rectangle
         ///// </summary>
         //private Rect prevSelectRect;
-
-        public InfiniteCanvasWPFControl()
-        {
-            InitializeComponent();
-            //TODO Add different view templates
-        }
+        #endregion
         
+        #region Properties
+        
+        public ListBox ContentElements
+        {
+            get
+            {
+                return LBcontent;
+            }
+        }
+        public System.Windows.Forms.Cursor WinFormsCursor
+        {
+            get
+            {
+                return winFormsCursor;
+            }
+            set
+            {
+                winFormsCursor = value;
+            }
+        }
+        public MouseHandlingMode MouseHandlingMode { get { return mouseHandlingMode; } set { mouseHandlingMode = value; } }
+        #endregion
+        
+        #region Methods
         private void Control_Loaded(object sender, RoutedEventArgs e)
         {
             ExpandContent();
@@ -111,7 +115,7 @@ namespace Verse3
             //if (ElementDataViewTemplate<ElementDataViewWrapper>.InfiniteCanvasWPFControl == null)
             //{
             //    ElementDataViewTemplate<ElementDataViewWrapper>.InfiniteCanvasWPFControl = this;
-            DataViewModel.CreateDataViewModel(this);
+            DataViewModel.InitDataViewModel(this);
             LBcontent.ItemsSource = DataViewModel.Instance.Elements;
             //}
             double xOffset = 0;
@@ -138,15 +142,16 @@ namespace Verse3
             xOffset = Math.Abs(xOffset);
             yOffset = Math.Abs(yOffset);
 
-            foreach (IElement rectangleData in DataViewModel.Instance.Elements)
+            foreach (IElement el in DataViewModel.Instance.Elements)
             {
-                rectangleData.SetX(rectangleData.X + xOffset);
-                rectangleData.SetY(rectangleData.Y + yOffset);
+                el.SetX(el.X + xOffset);
+                el.SetY(el.Y + yOffset);
             }
 
             DataViewModel.Instance.ContentWidth = contentRect.Width;
             DataViewModel.Instance.ContentHeight = contentRect.Height;
         }
+        #endregion
 
         #region MouseEvents
 
@@ -659,147 +664,5 @@ namespace Verse3
         //}
 
         #endregion
-
-        #region RectangleTEMP
-
-        /// <summary>
-        /// Event raised when a mouse button is clicked down over a Rectangle.
-        /// </summary>
-        private void Rectangle_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            LBcontent.Focus();
-            Keyboard.Focus(LBcontent);
-
-            Rectangle rectangle = (Rectangle)sender;
-            IElement myRectangle = (IElement)rectangle.DataContext;
-
-            //myRectangle.IsSelected = true;
-
-            //mouseButtonDown = e.ChangedButton;
-
-            if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0)
-            {
-                //
-                // When the shift key is held down special zooming logic is executed in content_MouseDown,
-                // so don't handle mouse input here.
-                //
-                return;
-            }
-
-            if (this.MouseHandlingMode != MouseHandlingMode.None)
-            {
-                //
-                // We are in some other mouse handling mode, don't do anything.
-                return;
-            }
-
-            this.MouseHandlingMode = MouseHandlingMode.DraggingRectangles;
-            this.origContentMouseDownPoint = e.GetPosition(LBcontent);
-
-            rectangle.CaptureMouse();
-
-            e.Handled = true;
-        }
-
-        /// <summary>
-        /// Event raised when a mouse button is released over a Rectangle.
-        /// </summary>
-        private void Rectangle_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            if (this.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
-            {
-                //
-                // We are not in rectangle dragging mode.
-                //
-                return;
-            }
-
-            this.MouseHandlingMode = MouseHandlingMode.None;
-
-            Rectangle rectangle = (Rectangle)sender;
-            rectangle.ReleaseMouseCapture();
-
-            e.Handled = true;
-        }
-
-        /// <summary>
-        /// Event raised when the mouse cursor is moved when over a Rectangle.
-        /// </summary>
-        private void Rectangle_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (this.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
-            {
-                //
-                // We are not in rectangle dragging mode, so don't do anything.
-                //
-                return;
-            }
-
-            Point curContentPoint = e.GetPosition(LBcontent);
-            Vector rectangleDragVector = curContentPoint - this.origContentMouseDownPoint;
-
-            //
-            // When in 'dragging rectangles' mode update the position of the rectangle as the user drags it.
-            //
-
-            this.origContentMouseDownPoint = curContentPoint;
-
-            Rectangle rectangle = (Rectangle)sender;
-            IElement myRectangle = (IElement)rectangle.DataContext;
-            myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
-            myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
-
-            this.ExpandContent();
-
-            e.Handled = true;
-        }
-
-        #endregion
-    }
-
-    /// <summary>
-    /// Defines the current state of the mouse handling logic.
-    /// </summary>
-    public enum MouseHandlingMode
-    {
-        /// <summary>
-        /// Not in any special mode.
-        /// </summary>
-        None,
-
-        /// <summary>
-        /// The user is left-dragging rectangles with the mouse.
-        /// </summary>
-        DraggingRectangles,
-
-        /// <summary>
-        /// The user is left-mouse-button-dragging to pan the viewport.
-        /// </summary>
-        Panning,
-
-        /// <summary>
-        /// The user is holding down shift and left-clicking or right-clicking to zoom in or out.
-        /// </summary>
-        Zooming,
-
-        /// <summary>
-        /// The user is holding down shift and left-clicking or right-clicking to zoom in or out.
-        /// </summary>
-        Selecting,
-
-        /// <summary>
-        /// The user is holding down shift and left-mouse-button-dragging to select a region to zoom to.
-        /// </summary>
-        DragZooming,
-
-        /// <summary>
-        /// The user is holding down shift and left-mouse-button-dragging to select a region to zoom to.
-        /// </summary>
-        DragSelecting,
-
-        /// <summary>
-        /// The user is left-mouse-button-dragging on the viewport.
-        /// </summary>
-        Dragging
     }
 }

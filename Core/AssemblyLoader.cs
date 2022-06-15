@@ -8,15 +8,8 @@ using System.Threading.Tasks;
 
 namespace Verse3
 {
-    public class AssemblyLoaderService
-    {
-        //private static AssemblyCompilerService _compileService;
-
-        //public static void Init()
-        //{
-        //    //_compileService = compileService;
-        //}
-        
+    public static class AssemblyLoader
+    {        
         public static IEnumerable<IElement> Load(MemoryStream ms)
         {
             List<IElement> foundCommands = new List<IElement>();
@@ -31,7 +24,7 @@ namespace Verse3
                 if (typeof(IElement).IsAssignableFrom(type))
                 {
                     System.Diagnostics.Trace.WriteLine($"Loading {type.FullName}");
-                    var command = AssemblyCompilerService.CreateRunClass(type);
+                    var command = AssemblyCompiler.CreateRunClass(type);
                     foundCommands.Add(command);
                 }
             }

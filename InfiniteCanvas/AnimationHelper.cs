@@ -9,6 +9,8 @@ namespace InfiniteCanvas
     /// </summary>
     public static class AnimationHelper
     {
+        #region Methods
+        
         /// <summary>
         /// Starts an animation to a particular value on the specified dependency property.
         /// </summary>
@@ -57,5 +59,7 @@ namespace InfiniteCanvas
         {
             animatableElement.BeginAnimation(dependencyProperty, null);
         }
+
+        #endregion
     }
 }
