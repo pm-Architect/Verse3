@@ -89,7 +89,7 @@ namespace Verse3
                             DataTemplateManager.RegisterDataTemplate(el as IRenderable);
                             int x = 0;
                             Type[] types = { x.GetType(), x.GetType(), x.GetType(), x.GetType() };
-                            IElement elInst = el.GetType().GetConstructor(types).Invoke(new object[] { 50, 50, 80, 150 }) as IElement;
+                            IElement elInst = el.GetType().GetConstructor(types).Invoke(new object[] { 50, 50, 150, 150 }) as IElement;
                             DataModel.Instance.Elements.Add(elInst);
                             //ObservableCollection<string> o;
                         }

@@ -21,5 +21,11 @@
             MouseUp="TestElementView_MouseUp"
             MouseMove="TestElementView_MouseMove"
                 />
+        <TextBlock HorizontalAlignment="Center"
+                   TextWrapping="Wrap"
+                   Text="{Binding ElementText}"
+                   VerticalAlignment="Center"
+                   FontFamily="Maven Pro"
+                   FontSize="18"/>
     </Grid>
 </UserControl>

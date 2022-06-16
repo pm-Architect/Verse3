@@ -27,8 +27,7 @@ namespace TestPlugin
         public TestElementView()
         {
             InitializeComponent();
-            MessageBox.Show(this.DataContext.GetType().ToString());
-        }        
+        }
         
         #region MouseEvents
 
@@ -129,6 +128,17 @@ namespace TestPlugin
 
     public class TestElement : IRenderable
     {
+        public string? ElementText
+        {
+            get
+            {
+                string? name = this.GetType().FullName;
+                string? viewname = this.View.FullName;
+                return $"Name: {name}" +
+                    $" \n View: {viewname}";
+            }
+        }
+        
         #region Data Members
 
         private BoundingBox boundingBox = BoundingBox.Unset;
