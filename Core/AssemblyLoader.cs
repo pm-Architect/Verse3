@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Verse3
 {
-    internal static class AssemblyLoader
+    public static class AssemblyLoader
     {
-        internal static IEnumerable<IElement> LoadFile(string path)
+        public static IEnumerable<IElement> LoadFile(string path)
         {
             var assembly = Assembly.LoadFile(path);
             var types = assembly.GetTypes();
@@ -26,7 +26,7 @@ namespace Verse3
             }
             return elements;
         }
-        internal static IEnumerable<IElement> Load(MemoryStream ms)
+        public static IEnumerable<IElement> Load(MemoryStream ms)
         {
             List<IElement> foundCommands = new List<IElement>();
 

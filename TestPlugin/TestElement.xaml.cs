@@ -20,14 +20,15 @@ using static Core.Geometry2D;
 namespace TestPlugin
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Visual Interaction logic for TestElement.xaml
     /// </summary>
     public partial class TestElementView : UserControl
     {
         public TestElementView()
         {
             InitializeComponent();
-        }
+            MessageBox.Show(this.DataContext.GetType().ToString());
+        }        
         
         #region MouseEvents
 
