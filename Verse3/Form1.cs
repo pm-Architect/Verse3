@@ -1,6 +1,7 @@
 ﻿using Core;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -90,6 +91,7 @@ namespace Verse3
                             Type[] types = { x.GetType(), x.GetType(), x.GetType(), x.GetType() };
                             IElement elInst = el.GetType().GetConstructor(types).Invoke(new object[] { 50, 50, 80, 150 }) as IElement;
                             DataModel.Instance.Elements.Add(elInst);
+                            //ObservableCollection<string> o;
                         }
                         //DataModel.Instance.Elements.Add(new TestElement(50, 50, 80, 150));
                         //DataModel.Instance.Elements.Add(new TestElement(550, 350, 80, 150));

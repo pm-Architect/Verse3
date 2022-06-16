@@ -19,7 +19,7 @@ namespace Verse3
         private static List<MetadataReference> references { get; set; }
         #endregion
 
-        public static void Init()
+        internal static void Init()
         {
             if (references == null)
             {
@@ -37,7 +37,7 @@ namespace Verse3
             }
         }
 
-        public static Assembly Compile(string code)
+        internal static Assembly Compile(string code)
         {
             AssemblyCompiler.Init();
 
@@ -82,8 +82,8 @@ namespace Verse3
                 return assembly;
             }
         }
-        
-        public static Type CompileOnly(string code)
+
+        internal static Type CompileOnly(string code)
         {
             AssemblyCompiler.Init();
 
@@ -96,7 +96,7 @@ namespace Verse3
             return null;
         }
 
-        public static IElement CreateRunClass(Type type)
+        internal static IElement CreateRunClass(Type type)
         {
             var instance = Activator.CreateInstance(type) as IElement;
             return instance;
