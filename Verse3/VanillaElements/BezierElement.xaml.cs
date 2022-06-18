@@ -52,9 +52,18 @@ namespace Verse3.VanillaElements
         {
             if (this.Element != null)
             {
-                Point start = new Point(0.0, 0.0);
-                Point end = new Point(this.Element.BoundingBox.Size.Width, this.Element.BoundingBox.Size.Height);
-                DrawBezierCurve(MainGrid, start, end);
+                if (((BezierElement)this.Element).topToBottom)
+                {
+                    Point start = new Point(0.0, 0.0);
+                    Point end = new Point(this.Element.BoundingBox.Size.Width, this.Element.BoundingBox.Size.Height);
+                    DrawBezierCurve(MainGrid, start, end);
+                }
+                else
+                {
+                    Point start = new Point(0.0, this.Element.BoundingBox.Size.Height);
+                    Point end = new Point(this.Element.BoundingBox.Size.Width, 0.0);
+                    DrawBezierCurve(MainGrid, start, end);
+                }
                 //this.Element.BoundingBox.Size.Height = SliderBlock.ActualHeight;
                 //this.Element.BoundingBox.Size.Width = SliderBlock.ActualWidth;
                 //this.Element.OnPropertyChanged("Width");
@@ -303,10 +312,39 @@ namespace Verse3.VanillaElements
         {
         }
 
+        internal bool topToBottom = true;
+        internal bool leftToRight = true;
         public BezierElement(int x, int y, int width, int height)
         {
-            this.boundingBox = new BoundingBox(x, y, width, height);
-
+            if ((height < 0 && width > 0) || (width < 0 && height > 0))
+            {
+                topToBottom = false;                
+            }
+            else if ((height > 0 && width > 0) || (width < 0 && height < 0))
+            {
+                topToBottom = true;
+            }
+            leftToRight = (width > 0);
+            if (leftToRight && topToBottom)
+            {
+                //BottomRight
+                this.boundingBox = new BoundingBox(x, y, Math.Abs(width), Math.Abs(height));
+            }
+            else if (leftToRight && !topToBottom)
+            {
+                //TopRight
+                this.boundingBox = new BoundingBox(x, (y - Math.Abs(height)), Math.Abs(width), Math.Abs(height));
+            }
+            else if (!leftToRight && topToBottom)
+            {
+                //TopLeft
+                this.boundingBox = new BoundingBox((x - Math.Abs(width)), (y - Math.Abs(height)), Math.Abs(width), Math.Abs(height));
+            }
+            else if (!leftToRight && !topToBottom)
+            {
+                //BottomLeft
+                this.boundingBox = new BoundingBox((x - Math.Abs(width)), y, Math.Abs(width), Math.Abs(height));
+            }
         }
 
         #endregion
