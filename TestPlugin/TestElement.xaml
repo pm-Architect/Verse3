@@ -99,13 +99,13 @@
                 />
 
         <ListBox 
-            x:Name="ListBox"
+            x:Name="InputsList"
             Background="{Binding BackgroundTint}"
             Foreground="#FFFFFFFF"
             BorderBrush="#FF000000"
             ItemsSource="{Binding Children}"
             Style="{StaticResource noScrollViewerListBoxStyle}"
-            ItemContainerStyle="{StaticResource listBoxItemStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+            ItemContainerStyle="{StaticResource listBoxItemStyle}" HorizontalAlignment="Left" VerticalAlignment="Top"
             >
         </ListBox>
     </Grid>

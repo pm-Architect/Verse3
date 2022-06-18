@@ -19,12 +19,12 @@ using System.Windows.Shapes;
 using Verse3;
 using static Core.Geometry2D;
 
-namespace Verse3.Elements
+namespace Verse3.VanillaElements
 {
     /// <summary>
     /// Visual Interaction logic for TestElement.xaml
     /// </summary>
-    public partial class SliderElementView : UserControl, IRenderView
+    public partial class ButtonElementView : UserControl, IRenderView
     {
         private IRenderable _element;
         
@@ -42,7 +42,7 @@ namespace Verse3.Elements
             get { return _element?.ID; }
         }
 
-        public SliderElementView()
+        public ButtonElementView()
         {
             InitializeComponent();
         }
@@ -69,7 +69,7 @@ namespace Verse3.Elements
             //DataViewModel.WPFControl.ContentElements.Focus();
             //Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
 
-            //SliderElementView rectangle = (SliderElementView)sender;
+            //ButtonElementView rectangle = (ButtonElementView)sender;
             //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
 
             ////myRectangle.IsSelected = true;
@@ -116,7 +116,7 @@ namespace Verse3.Elements
 
             //DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
 
-            //SliderElementView rectangle = (SliderElementView)sender;
+            //ButtonElementView rectangle = (ButtonElementView)sender;
             //rectangle.ReleaseMouseCapture();
 
             //e.Handled = true;
@@ -145,7 +145,7 @@ namespace Verse3.Elements
 
             //DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
 
-            //SliderElementView rectangle = (SliderElementView)sender;
+            //ButtonElementView rectangle = (ButtonElementView)sender;
             //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
             //myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
             //myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
@@ -181,13 +181,13 @@ namespace Verse3.Elements
         #endregion
     }
 
-    public class SliderElement : IRenderable
+    public class ButtonElement : IRenderable
     {        
         #region Data Members
 
         private BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
-        private static Type view = typeof(SliderElementView);
+        private static Type view = typeof(ButtonElementView);
 
         #endregion
 
@@ -248,20 +248,16 @@ namespace Verse3.Elements
 
         #region Constructors
 
-        public SliderElement()
+        public ButtonElement()
         {
-            this.Minimum = 0;
-            this.Maximum = 100;
-            this.Value = 50;
+            this.DisplayedText = "Button";
         }
 
-        public SliderElement(int x, int y, int width, int height)
+        public ButtonElement(int x, int y, int width, int height)
         {
             this.boundingBox = new BoundingBox(x, y, width, height);
 
-            this.Minimum = 0;
-            this.Maximum = 100;
-            this.Value = 50;
+            this.DisplayedText = "Button";
         }
 
         #endregion
@@ -290,17 +286,9 @@ namespace Verse3.Elements
             return false;
         }
 
-        private double minimum;
+        private object displayedText;
 
-        public double Minimum { get => minimum; set => SetProperty(ref minimum, value); }
-
-        private double maximum;
-
-        public double Maximum { get => maximum; set => SetProperty(ref maximum, value); }
-
-        private double value1;
-
-        public double Value { get => value1; set => SetProperty(ref value1, value); }
+        public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
 
         #endregion
     }

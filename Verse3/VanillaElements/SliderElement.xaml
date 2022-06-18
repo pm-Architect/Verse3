@@ -1,9 +1,9 @@
-<UserControl x:Class="Verse3.Elements.SliderElementView"
+<UserControl x:Class="Verse3.VanillaElements.SliderElementView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Verse3.Elements" d:DataContext="{d:DesignInstance Type=local:SliderElement}"
+             xmlns:local="clr-namespace:Verse3.VanillaElements" d:DataContext="{d:DesignInstance Type=local:SliderElement}"
              mc:Ignorable="d" 
              d:DesignHeight="40"
              d:DesignWidth="120"
@@ -27,7 +27,7 @@
             Value="{Binding Value}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Margin="10,10,10,10"
+            Margin="10"
             />
     </Grid>
 </UserControl>

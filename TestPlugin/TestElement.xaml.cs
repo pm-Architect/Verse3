@@ -18,8 +18,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Verse3;
 using static Core.Geometry2D;
-using Verse3.Elements;
-using TextElement = Verse3.Elements.TextElement;
+using Verse3.VanillaElements;
+using TextElement = Verse3.VanillaElements.TextElement;
 
 namespace TestPlugin
 {
@@ -79,7 +79,7 @@ namespace TestPlugin
             if (Children == null)
             {
                 Children = new ObservableCollection<IRenderable>();
-                ListBox.ItemsSource = Children;
+                InputsList.ItemsSource = Children;
             }
 
             if (this.Element is TestElement)
@@ -99,6 +99,11 @@ namespace TestPlugin
                 sliderBlock.Value = 50;
                 DataTemplateManager.RegisterDataTemplate(sliderBlock);
                 Children.Add(sliderBlock);
+
+                var buttonBlock = new ButtonElement();
+                buttonBlock.DisplayedText = "Click me";
+                DataTemplateManager.RegisterDataTemplate(buttonBlock);
+                Children.Add(buttonBlock);
             }
 
         }

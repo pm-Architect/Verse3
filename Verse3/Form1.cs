@@ -113,10 +113,10 @@ namespace Verse3
                             Random rnd = new Random();
                             for (int i = 0; i < 10; i++)
                             {
-                                int x = (int)rnd.NextInt64((long)50, (long)1000);
-                                int y = (int)rnd.NextInt64((long)50, (long)1000);
-                                int w = (int)rnd.NextInt64((long)50, (long)350);
-                                int h = (int)rnd.NextInt64((long)50, (long)350);
+                                int x = (int)rnd.NextInt64((long)20, (long)1000);
+                                int y = (int)rnd.NextInt64((long)20, (long)1000);
+                                int w = (int)rnd.NextInt64((long)250, (long)350);
+                                int h = (int)rnd.NextInt64((long)250, (long)350);
                                 Type[] types = { i.GetType(), i.GetType(), i.GetType(), i.GetType() };
                                 IElement elInst = el.GetType().GetConstructor(types).Invoke(new object[] { x, y, w, h }) as IElement;
                                 DataModel.Instance.Elements.Add(elInst);
@@ -128,6 +128,8 @@ namespace Verse3
                         //DataModel.Instance.Elements.Add(new TestElement(850, 850, 30, 20));
                         //DataModel.Instance.Elements.Add(new TestElement(1200, 1200, 80, 150));
                     }
+                    
+                    DataViewModel.WPFControl.ExpandContent();
                 }
             }
         }

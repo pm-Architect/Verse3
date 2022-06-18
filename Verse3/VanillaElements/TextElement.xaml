@@ -1,9 +1,9 @@
-<UserControl x:Class="Verse3.Elements.TextElementView"
+<UserControl x:Class="Verse3.VanillaElements.TextElementView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Verse3.Elements" d:DataContext="{d:DesignInstance Type=local:TextElement}"
+             xmlns:local="clr-namespace:Verse3.VanillaElements" d:DataContext="{d:DesignInstance Type=local:TextElement}"
              mc:Ignorable="d" 
              d:DesignHeight="250"
              d:DesignWidth="500"
@@ -31,7 +31,7 @@
             Background="{Binding Background}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Margin="10,10,10,10"
+            Margin="10"
             />
     </Grid>
 </UserControl>
