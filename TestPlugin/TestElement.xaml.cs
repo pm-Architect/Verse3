@@ -104,6 +104,11 @@ namespace TestPlugin
                 buttonBlock.DisplayedText = "Click me";
                 DataTemplateManager.RegisterDataTemplate(buttonBlock);
                 Children.Add(buttonBlock);
+
+                var textBoxBlock = new TextBoxElement();
+                textBoxBlock.InputText = "Enter text";
+                DataTemplateManager.RegisterDataTemplate(textBoxBlock);
+                Children.Add(textBoxBlock);
             }
 
         }

@@ -1,0 +1,29 @@
+<UserControl x:Class="Verse3.VanillaElements.TextBoxElementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Verse3.VanillaElements" d:DataContext="{d:DesignInstance Type=local:TextBoxElement}"
+             mc:Ignorable="d" 
+             d:DesignHeight="40"
+             d:DesignWidth="120"
+             MouseDown="OnMouseDown"
+             MouseMove="OnMouseMove"
+             MouseUp="OnMouseUp"
+             MouseWheel="OnMouseWheel"
+             DataContextChanged="OnDataContextChanged"
+             Loaded="OnLoaded"
+             >
+    <Grid
+        Width="{Binding BoundingBox.Size.Width}"
+        Height="{Binding BoundingBox.Size.Height}"
+        MinWidth="100"
+        MinHeight="20"
+        >
+        <TextBox
+            Name="TextBoxBlock"
+            Text="{Binding InputText}"
+            Margin="10"
+            />
+    </Grid>
+</UserControl>
