@@ -336,48 +336,5 @@ namespace Verse3.VanillaElements
         }
 
         #endregion
-
-        private void DrawBezier()
-        {
-            //private void DrawSpline(Vector2 startPoint, Vector2 controlPoint1, Vector2 controlPoint2, Vector2 endPoint,
-            //    Color color)
-            //{
-            //    var strokeThickness = 2f;
-
-            //    // Draw the spline
-            //    using (var pathBuilder = new CanvasPathBuilder(sender))
-            
-            //    {
-            //        pathBuilder.BeginFigure(startPoint);
-            //        pathBuilder.AddCubicBezier(controlPoint1, controlPoint2, endPoint);
-            //        pathBuilder.EndFigure(CanvasFigureLoop.Open);
-
-            //        var geometry = CanvasGeometry.CreatePath(pathBuilder);
-            //        ds.DrawGeometry(geometry, Vector2.Zero, color, strokeThickness);
-            //    }
-
-            //    // Draw Control Points
-            //    if (_showControlPoints)
-            //    {
-            //        var strokeStyle = new CanvasStrokeStyle() { DashStyle = CanvasDashStyle.Dot };
-            //        ds.DrawLine(startPoint, controlPoint1, color, strokeThickness, strokeStyle);
-            //        var rect1 = new Rect(controlPoint1.X - 3, controlPoint1.Y - 3, 6, 6);
-            //        ds.FillRectangle(rect1, Colors.Beige);
-            //        ds.DrawRectangle(rect1, color, strokeThickness);
-
-            //        ds.DrawLine(endPoint, controlPoint2, color, strokeThickness, strokeStyle);
-            //        var rect2 = new Rect(controlPoint2.X - 3, controlPoint2.Y - 3, 6, 6);
-            //        ds.FillRectangle(rect2, Colors.Beige);
-            //        ds.DrawRectangle(rect2, color, strokeThickness);
-            //    }
-
-            //    // Draw EndPoints
-            //    ds.DrawCircle(startPoint, 5, color, strokeThickness);
-            //    ds.FillCircle(startPoint, 5, Colors.Beige);
-            //    ds.DrawCircle(endPoint, 5, color, strokeThickness);
-            //    ds.FillCircle(endPoint, 5, Colors.Beige);
-
-            //}
-        }
     }
 }

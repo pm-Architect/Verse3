@@ -61,6 +61,8 @@ namespace Verse3
             avgfps = Math.Round(avgfps, 3);
             lastFrameTime = frameTime;
             label1.Text = avgfps.ToString();
+            label1.Text += "     |     ";
+            label1.Text += InfiniteCanvasWPFControl.GetMouseRelPosition().ToString();
         }
 
         private void Canvas_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
@@ -82,8 +84,14 @@ namespace Verse3
                     this.Cursor = Cursors.Default;
                 }
             }
+            if (drawstart != Point.Empty && started)
+            {
+                DrawBezierCurve(drawstart, InfiniteCanvasWPFControl.GetMouseRelPosition());
+                started = false;
+            }
         }
 
+        Point drawstart = new Point();
         private void Canvas_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (sender is InfiniteCanvasWPFControl)
@@ -93,6 +101,10 @@ namespace Verse3
                 {
                     this.Cursor = Cursors.SizeAll;
                 }
+            }
+            if (started)
+            {
+                drawstart = InfiniteCanvasWPFControl.GetMouseRelPosition();
             }
         }
 
@@ -130,12 +142,28 @@ namespace Verse3
                         //DataModel.Instance.Elements.Add(new TestElement(1200, 1200, 80, 150));
                     }
 
-                    BezierElement bezier = new BezierElement(50, 50, 456, 565);
-                    DataTemplateManager.RegisterDataTemplate(bezier as IRenderable);
-                    DataModel.Instance.Elements.Add(bezier);
-
                     DataViewModel.WPFControl.ExpandContent();
                 }
+            }
+        }
+
+        private void DrawBezierCurve(Point start, Point end)
+        {
+            BezierElement bezier = new BezierElement((start.X - 200), (start.Y - 200), (end.X - start.X), (end.Y - start.Y));
+            DataTemplateManager.RegisterDataTemplate(bezier as IRenderable);
+            DataModel.Instance.Elements.Add(bezier);
+        }
+
+        bool started = false;
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (!started)
+            {
+                started = true;                
+            }
+            else if (started)
+            {
+                started = false;
             }
         }
     }

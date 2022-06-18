@@ -147,6 +147,12 @@ namespace Verse3
             DataViewModel.Instance.ContentWidth = contentRect.Width;
             DataViewModel.Instance.ContentHeight = contentRect.Height;
         }
+
+        private Point currCanvasMousePosition = new Point();
+        internal System.Drawing.Point GetMouseRelPosition()
+        {
+            return new System.Drawing.Point((int)currCanvasMousePosition.X, (int)currCanvasMousePosition.Y);
+        }
         #endregion
 
         #region MouseEvents
@@ -228,6 +234,8 @@ namespace Verse3
         /// </summary>
         private void zoomAndPanControl_MouseMove(object sender, MouseEventArgs e)
         {
+            currCanvasMousePosition = e.GetPosition(LBcontent);
+            
             if (mouseHandlingMode == MouseHandlingMode.Panning)
             {
                 //
