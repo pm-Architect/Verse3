@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media;
 
 namespace Verse3
 {
@@ -37,6 +38,28 @@ namespace Verse3
             InfiniteCanvasWPFControl.MouseDown += Canvas_MouseDown;
             InfiniteCanvasWPFControl.MouseUp += Canvas_MouseUp;
             InfiniteCanvasWPFControl.MouseMove += Canvas_MouseMove;
+            CompositionTarget.Rendering += CompositionTarget_Rendering;            
+        }
+
+        TimeOnly lastFrameTime = TimeOnly.FromDateTime(DateTime.Now);
+        double fps = 0.0;
+        double[] lfps = Array.Empty<double>();
+        private void CompositionTarget_Rendering(object sender, EventArgs e)
+        {
+            TimeOnly frameTime = TimeOnly.FromDateTime(DateTime.Now);
+            fps = 1 / (frameTime - lastFrameTime).TotalSeconds;
+            if (lfps.Length < 255)
+            {
+                lfps = lfps.Concat(new double[] { fps }).ToArray();
+            }
+            else
+            {
+                lfps = lfps.Skip(1).Concat(new double[] { fps }).ToArray();
+            }
+            double avgfps = lfps.Average();
+            avgfps = Math.Round(avgfps, 3);
+            lastFrameTime = frameTime;
+            label1.Text = avgfps.ToString();
         }
 
         private void Canvas_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)

@@ -8,8 +8,7 @@
              xmlns:core="clr-namespace:Core;assembly=Core"
              mc:Ignorable="d"
              d:DesignHeight="1490" d:DesignWidth="2528"
-             Loaded="Control_Loaded"
-             FocusManager.FocusedElement="{Binding ElementName=scroller}">
+             Loaded="Control_Loaded">
     <UserControl.Resources>
         <!-- 
         Converts a color value to a brush.
@@ -29,9 +28,56 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBox">
                         <Canvas x:Name="InfiniteCanvasBackground" 
-                            Background="{TemplateBinding Background}"
                             IsItemsHost="True" 
-                            />
+                            >
+                            <Canvas.Background>
+                                <DrawingBrush TileMode="Tile" Viewport="0,0,50,50" 
+                                     ViewportUnits="Absolute">
+                                    <DrawingBrush.Drawing>
+                                        <GeometryDrawing>
+                                            <GeometryDrawing.Brush>
+                                                <SolidColorBrush Color="#ff1a1a1a"/>
+                                            </GeometryDrawing.Brush>
+                                            <GeometryDrawing.Geometry>
+                                                <GeometryGroup>
+                                                    <GeometryGroup.Children>
+                                                        <RectangleGeometry Rect="00,00,50,50" />
+                                                        <RectangleGeometry Rect="00,00,10,10" />
+                                                        <RectangleGeometry Rect="00,10,10,10" />
+                                                        <RectangleGeometry Rect="00,20,10,10" />
+                                                        <RectangleGeometry Rect="00,30,10,10" />
+                                                        <RectangleGeometry Rect="00,40,10,10" />
+                                                        <RectangleGeometry Rect="10,00,10,10" />
+                                                        <RectangleGeometry Rect="10,10,10,10" />
+                                                        <RectangleGeometry Rect="10,20,10,10" />
+                                                        <RectangleGeometry Rect="10,30,10,10" />
+                                                        <RectangleGeometry Rect="10,40,10,10" />
+                                                        <RectangleGeometry Rect="20,00,10,10" />
+                                                        <RectangleGeometry Rect="20,10,10,10" />
+                                                        <RectangleGeometry Rect="20,20,10,10" />
+                                                        <RectangleGeometry Rect="20,30,10,10" />
+                                                        <RectangleGeometry Rect="20,40,10,10" />
+                                                        <RectangleGeometry Rect="30,00,10,10" />
+                                                        <RectangleGeometry Rect="30,10,10,10" />
+                                                        <RectangleGeometry Rect="30,20,10,10" />
+                                                        <RectangleGeometry Rect="30,30,10,10" />
+                                                        <RectangleGeometry Rect="30,40,10,10" />
+                                                        <RectangleGeometry Rect="40,00,10,10" />
+                                                        <RectangleGeometry Rect="40,10,10,10" />
+                                                        <RectangleGeometry Rect="40,20,10,10" />
+                                                        <RectangleGeometry Rect="40,30,10,10" />
+                                                        <RectangleGeometry Rect="40,40,10,10" />
+                                                    </GeometryGroup.Children>
+                                                </GeometryGroup>
+                                            </GeometryDrawing.Geometry>
+                                            <GeometryDrawing.Pen>
+                                                <Pen Brush="#1affffff" Thickness="0.5"/>
+                                            </GeometryDrawing.Pen>
+                                        </GeometryDrawing>
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </Canvas.Background>
+                        </Canvas>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -96,12 +142,40 @@
                                               ContentOffsetY="{Binding Source={x:Static core:DataModel.Instance}, Path=ContentOffsetY, Mode=TwoWay}"
                                               ContentViewportWidth="{Binding Source={x:Static core:DataModel.Instance}, Path=ContentViewportWidth, Mode=OneWayToSource}"
                                               ContentViewportHeight="{Binding Source={x:Static core:DataModel.Instance}, Path=ContentViewportHeight, Mode=OneWayToSource}"
-                                              Background="#FF1a1a1a"
+                                              Background="#ff1a1a1a"
                                               MouseDown="zoomAndPanControl_MouseDown"
                                               MouseUp="zoomAndPanControl_MouseUp"
                                               MouseMove="zoomAndPanControl_MouseMove"
                                               MouseWheel="zoomAndPanControl_MouseWheel"
                                               MouseDoubleClick="zoomAndPanControl_MouseDoubleClick" Foreground="White">
+            <!--<InfiniteCanvas:InfiniteCanvasControl.Background>
+                <DrawingBrush TileMode="Tile"
+                              Viewport="0,0,50,50" 
+                              ViewportUnits="Absolute"
+                              AlignmentX="{Binding X, Converter={StaticResource canvasSizeOffsetPseudoConverter}}"
+                              AlignmentY="{Binding Y, Converter={StaticResource canvasSizeOffsetPseudoConverter}}"
+                              >
+                    <DrawingBrush.Drawing>
+                        <DrawingGroup>
+                            <GeometryDrawing>
+                                <GeometryDrawing.Geometry>
+                                    <GeometryGroup>
+                                        <GeometryGroup.Children>
+                                            <RectangleGeometry Rect="00,00,50,50" />
+                                        </GeometryGroup.Children>
+                                    </GeometryGroup>
+                                </GeometryDrawing.Geometry>
+                                <GeometryDrawing.Pen>
+                                    <Pen Brush="#1affffff" Thickness="0.1"/>
+                                </GeometryDrawing.Pen>
+                                <GeometryDrawing.Brush>
+                                    <SolidColorBrush Color="#ff1a1a1a"/>
+                                </GeometryDrawing.Brush>
+                            </GeometryDrawing>
+                        </DrawingGroup>
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+            </InfiniteCanvas:InfiniteCanvasControl.Background>-->
             <Grid
                 Width="{Binding Source={x:Static core:DataModel.Instance}, Path=ContentWidth}"
                 Height="{Binding Source={x:Static core:DataModel.Instance}, Path=ContentHeight}">

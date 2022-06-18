@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,16 +26,7 @@ namespace Verse3.Elements
     /// </summary>
     public partial class TextElementView : UserControl, IRenderView
     {
-        //public string DisplayedText { get; set; }
-
-        //private ObservableCollection<IRenderable> _children;
         private IRenderable _element;
-        
-        //public ObservableCollection<IRenderable> Children
-        //{
-        //    get { return _children; }
-        //    private set { _children = value; }
-        //}
         
         public IRenderable Element
         {
@@ -60,33 +52,6 @@ namespace Verse3.Elements
 
         public void Render()
         {
-            //< TextBlock HorizontalAlignment = "Center"
-            //       TextWrapping = "Wrap"
-            //       Text = "{Binding ElementText}"
-            //       VerticalAlignment = "Center"
-            //       FontFamily = "Maven Pro"
-            //       FontSize = "18"
-            //       />
-
-            //var textBlock = new TextBlock();
-            //textBlock.HorizontalAlignment = HorizontalAlignment.Center;
-            //textBlock.TextWrapping = TextWrapping.Wrap;
-            //TestElement? element = _element as TestElement;
-            //if (element != null)
-            //{
-            //    textBlock.Text = element.ElementText;
-            //}
-            //textBlock.VerticalAlignment = VerticalAlignment.Center;
-            //textBlock.FontFamily = new FontFamily("Maven Pro");
-            //textBlock.FontSize = 18;
-
-            //if (Children == null)
-            //{
-            //    Children = new ObservableCollection<IRenderable>();
-            //    ListBox.ItemsSource = Children;
-            //}
-            //Children.Add(textBlock);
-
         }
 
         #region MouseEvents
@@ -96,39 +61,39 @@ namespace Verse3.Elements
         /// </summary>
         void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            //MouseButtonEventArgs
-            DataViewModel.WPFControl.ContentElements.Focus();
-            Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
+            ////MouseButtonEventArgs
+            //DataViewModel.WPFControl.ContentElements.Focus();
+            //Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
 
-            TextElementView rectangle = (TextElementView)sender;
-            IRenderable myRectangle = (IRenderable)rectangle.DataContext;
+            //TextElementView rectangle = (TextElementView)sender;
+            //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
 
-            //myRectangle.IsSelected = true;
+            ////myRectangle.IsSelected = true;
 
-            //mouseButtonDown = e.ChangedButton;
+            ////mouseButtonDown = e.ChangedButton;
 
-            if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0)
-            {
-                //
-                // When the shift key is held down special zooming logic is executed in content_MouseDown,
-                // so don't handle mouse input here.
-                //
-                return;
-            }
+            //if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0)
+            //{
+            //    //
+            //    // When the shift key is held down special zooming logic is executed in content_MouseDown,
+            //    // so don't handle mouse input here.
+            //    //
+            //    return;
+            //}
 
-            if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.None)
-            {
-                //
-                // We are in some other mouse handling mode, don't do anything.
-                return;
-            }
+            //if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.None)
+            //{
+            //    //
+            //    // We are in some other mouse handling mode, don't do anything.
+            //    return;
+            //}
 
-            DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.DraggingRectangles;
-            DataViewModel.WPFControl.origContentMouseDownPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
+            //DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.DraggingRectangles;
+            //DataViewModel.WPFControl.origContentMouseDownPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
 
-            rectangle.CaptureMouse();
+            //rectangle.CaptureMouse();
 
-            e.Handled = true;
+            //e.Handled = true;
         }
 
         /// <summary>
@@ -136,21 +101,21 @@ namespace Verse3.Elements
         /// </summary>
         void OnMouseUp(object sender, MouseButtonEventArgs e)
         {
-            //MouseButtonEventArgs
-            if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
-            {
-                //
-                // We are not in rectangle dragging mode.
-                //
-                return;
-            }
+            ////MouseButtonEventArgs
+            //if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
+            //{
+            //    //
+            //    // We are not in rectangle dragging mode.
+            //    //
+            //    return;
+            //}
 
-            DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
+            //DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
 
-            TextElementView rectangle = (TextElementView)sender;
-            rectangle.ReleaseMouseCapture();
+            //TextElementView rectangle = (TextElementView)sender;
+            //rectangle.ReleaseMouseCapture();
 
-            e.Handled = true;
+            //e.Handled = true;
         }
 
         /// <summary>
@@ -158,32 +123,32 @@ namespace Verse3.Elements
         /// </summary>
         void OnMouseMove(object sender, MouseEventArgs e)
         {
-            //MouseEventArgs
-            if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
-            {
-                //
-                // We are not in rectangle dragging mode, so don't do anything.
-                //
-                return;
-            }
+            ////MouseEventArgs
+            //if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
+            //{
+            //    //
+            //    // We are not in rectangle dragging mode, so don't do anything.
+            //    //
+            //    return;
+            //}
 
-            Point curContentPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
-            Vector rectangleDragVector = curContentPoint - DataViewModel.WPFControl.origContentMouseDownPoint;
+            //Point curContentPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
+            //Vector rectangleDragVector = curContentPoint - DataViewModel.WPFControl.origContentMouseDownPoint;
 
-            //
-            // When in 'dragging rectangles' mode update the position of the rectangle as the user drags it.
-            //
+            ////
+            //// When in 'dragging rectangles' mode update the position of the rectangle as the user drags it.
+            ////
 
-            DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
+            //DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
 
-            TextElementView rectangle = (TextElementView)sender;
-            IRenderable myRectangle = (IRenderable)rectangle.DataContext;
-            myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
-            myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
+            //TextElementView rectangle = (TextElementView)sender;
+            //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
+            //myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
+            //myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
 
-            DataViewModel.WPFControl.ExpandContent();
+            //DataViewModel.WPFControl.ExpandContent();
 
-            e.Handled = true;
+            //e.Handled = true;
         }
 
         void OnMouseWheel(object sender, MouseWheelEventArgs e)
@@ -210,9 +175,7 @@ namespace Verse3.Elements
     }
 
     public class TextElement : IRenderable
-    {
-        public string DisplayedText { get; set; }
-        
+    {        
         #region Data Members
 
         private BoundingBox boundingBox = BoundingBox.Unset;
@@ -260,11 +223,26 @@ namespace Verse3.Elements
 
         public TextElement()
         {
+            this.FontFamily = new FontFamily("Maven Pro");
+            this.FontSize = 12;
+            this.FontStyle = FontStyles.Normal;
+            this.FontWeight = FontWeights.Normal;
+            this.Foreground = Brushes.White;
+            this.Background = Brushes.Transparent;
+            this.TextAlignment = TextAlignment.Center;
         }
 
         public TextElement(int x, int y, int width, int height)
         {
             this.boundingBox = new BoundingBox(x, y, width, height);
+
+            this.FontFamily = new FontFamily("Maven Pro");
+            this.FontSize = 12;
+            this.FontStyle = FontStyles.Normal;
+            this.FontWeight = FontWeights.Normal;
+            this.Foreground = Brushes.White;
+            this.Background = Brushes.Transparent;
+            this.TextAlignment = TextAlignment.Center;
         }
 
         #endregion
@@ -280,6 +258,50 @@ namespace Verse3.Elements
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
         }
+
+        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        {
+            if (!Equals(field, newValue))
+            {
+                field = newValue;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                return true;
+            }
+
+            return false;
+        }
+
+        private TextAlignment textAlignment;
+
+        public TextAlignment TextAlignment { get => textAlignment; set => SetProperty(ref textAlignment, value); }
+
+        private string displayedText;
+
+        public string DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
+
+        private FontStyle fontStyle;
+
+        public FontStyle FontStyle { get => fontStyle; set => SetProperty(ref fontStyle, value); }
+
+        private FontFamily fontFamily;
+
+        public FontFamily FontFamily { get => fontFamily; set => SetProperty(ref fontFamily, value); }
+
+        private double fontSize;
+
+        public double FontSize { get => fontSize; set => SetProperty(ref fontSize, value); }
+
+        private FontWeight fontWeight;
+
+        public FontWeight FontWeight { get => fontWeight; set => SetProperty(ref fontWeight, value); }
+
+        private Brush foreground;
+
+        public Brush Foreground { get => foreground; set => SetProperty(ref foreground, value); }
+
+        private Brush background;
+
+        public Brush Background { get => background; set => SetProperty(ref background, value); }
 
         #endregion
     }

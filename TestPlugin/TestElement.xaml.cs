@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -38,21 +39,28 @@ namespace TestPlugin
         
         public IRenderable? Element
         {
-            get { return _element; }
+            get
+            {
+                if (this._element == null)
+                {
+                    _element = this.DataContext as IRenderable;
+                }
+                return _element;
+            }
             private set
             {
-                _element = value;
+                _element = value as IRenderable;
                 //Update();
             }
         }
         public Guid? ElementGuid
         {
-            get { return _element?.ID; }
+            get { return Element?.ID; }
         }
 
         public TestElementView()
         {
-            _element = this.DataContext as IRenderable;
+            this.Element = this.DataContext as IRenderable;
 
             InitializeComponent();
             Render();
@@ -68,16 +76,22 @@ namespace TestPlugin
             //       FontSize = "18"
             //       />
 
-            var textBlock = new TextElement();
-            DataTemplateManager.RegisterDataTemplate(textBlock);
-            textBlock.DisplayedText = "Hello World";
-
-            if (Children == null)
+            if (this.Element is TestElement)
             {
-                Children = new ObservableCollection<IRenderable>();
-                ListBox.ItemsSource = Children;
+                TestElement testelement = (TestElement)this.Element;
+                string? txt = testelement.ElementText;
+                var textBlock = new TextElement();
+                textBlock.DisplayedText = txt;
+                textBlock.TextAlignment = TextAlignment.Left;
+                DataTemplateManager.RegisterDataTemplate(textBlock);
+
+                if (Children == null)
+                {
+                    Children = new ObservableCollection<IRenderable>();
+                    ListBox.ItemsSource = Children;
+                }
+                Children.Add(textBlock);
             }
-            Children.Add(textBlock);
 
         }
 
@@ -210,7 +224,8 @@ namespace TestPlugin
                 string? name = this.GetType().FullName;
                 string? viewname = this.ViewType.FullName;
                 return $"Name: {name}" +
-                    $" \n View: {viewname}";
+                    $"\nView: {viewname}" +
+                    $"\nID: {this.ID}";
             }
         }
         
@@ -261,11 +276,20 @@ namespace TestPlugin
 
         public TestElement()
         {
+            this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
+            Random rng = new Random();
+            byte r = (byte)rng.Next(0, 255);
+            this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
         public TestElement(int x, int y, int width, int height)
         {
             this.boundingBox = new BoundingBox(x, y, width, height);
+
+            this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
+            Random rng = new Random();
+            byte r = (byte)rng.Next(0, 255);
+            this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
         #endregion
@@ -281,6 +305,26 @@ namespace TestPlugin
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
         }
+
+        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string? propertyName = null)
+        {
+            if (!Equals(field, newValue))
+            {
+                field = newValue;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                return true;
+            }
+
+            return false;
+        }
+
+        private Brush background;
+
+        public Brush Background { get => background; set => SetProperty(ref background, value); }
+
+        private Brush backgroundTint;
+
+        public Brush BackgroundTint { get => backgroundTint; set => SetProperty(ref backgroundTint, value); }
 
         #endregion
     }
