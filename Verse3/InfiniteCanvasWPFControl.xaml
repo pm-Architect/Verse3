@@ -38,7 +38,8 @@
         </Style>
 
         <!-- 
-        Override the style of each ListBoxItem to bind Canvas.Left, Canvas.Top and IsSelected.
+        Override the style of each ListBoxItem / ELEMENT to bind Canvas.Left, Canvas.Top and IsSelected.
+        TODO: Improve this
         -->
         <Style 
             x:Key="listBoxItemStyle" 
@@ -66,7 +67,7 @@
                         -->
                         <Border 
                             Name="Border"
-                            BorderThickness="1"
+                            BorderThickness="2"
                             Padding="2"
                             >
                             <ContentPresenter />
@@ -79,7 +80,7 @@
                                 <Setter 
                                     TargetName="Border" 
                                     Property="BorderBrush"
-                                    Value="Blue"
+                                    Value="#FF6700"
                                     />
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -95,7 +96,7 @@
                                               ContentOffsetY="{Binding Source={x:Static core:DataModel.Instance}, Path=ContentOffsetY, Mode=TwoWay}"
                                               ContentViewportWidth="{Binding Source={x:Static core:DataModel.Instance}, Path=ContentViewportWidth, Mode=OneWayToSource}"
                                               ContentViewportHeight="{Binding Source={x:Static core:DataModel.Instance}, Path=ContentViewportHeight, Mode=OneWayToSource}"
-                                              Background="#FF292929"
+                                              Background="#FF1a1a1a"
                                               MouseDown="zoomAndPanControl_MouseDown"
                                               MouseUp="zoomAndPanControl_MouseUp"
                                               MouseMove="zoomAndPanControl_MouseMove"
@@ -106,12 +107,17 @@
                 Height="{Binding Source={x:Static core:DataModel.Instance}, Path=ContentHeight}">
                 <ListBox
                     x:Name="LBcontent"
-                    Background="#FF1D1D1D"
+                    Background="#ff1a1a1a"
                     Foreground="White"
+                    BorderThickness="100"
+                    BorderBrush="Red"
                     ItemsSource="{Binding Source={x:Static core:DataModel.Instance}, Path=Elements}"
                     Style="{StaticResource noScrollViewerListBoxStyle}"
                     ItemContainerStyle="{StaticResource listBoxItemStyle}"
-                    />
+                    d:Width="600"
+                    d:Height="300"
+                    >
+                </ListBox>
                 <!--
                 This Canvas and Border are used as a very simple way to render a drag rectangle that the user
                 uses to specify an area to zoom in on.

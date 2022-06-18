@@ -87,10 +87,17 @@ namespace Verse3
                         if (el is IRenderable)
                         {
                             DataTemplateManager.RegisterDataTemplate(el as IRenderable);
-                            int x = 0;
-                            Type[] types = { x.GetType(), x.GetType(), x.GetType(), x.GetType() };
-                            IElement elInst = el.GetType().GetConstructor(types).Invoke(new object[] { 50, 50, 150, 150 }) as IElement;
-                            DataModel.Instance.Elements.Add(elInst);
+                            Random rnd = new Random();
+                            for (int i = 0; i < 1000; i++)
+                            {
+                                int x = (int)rnd.NextInt64((long)50, (long)10000);
+                                int y = (int)rnd.NextInt64((long)50, (long)10000);
+                                int w = (int)rnd.NextInt64((long)50, (long)350);
+                                int h = (int)rnd.NextInt64((long)50, (long)350);
+                                Type[] types = { i.GetType(), i.GetType(), i.GetType(), i.GetType() };
+                                IElement elInst = el.GetType().GetConstructor(types).Invoke(new object[] { x, y, w, h }) as IElement;
+                                DataModel.Instance.Elements.Add(elInst);
+                            }
                             //ObservableCollection<string> o;
                         }
                         //DataModel.Instance.Elements.Add(new TestElement(50, 50, 80, 150));

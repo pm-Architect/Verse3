@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using static Core.Geometry2D;
+using System.Windows.Input;
+using System.Collections.ObjectModel;
 
 namespace Core
 {
@@ -277,8 +270,10 @@ namespace Core
         /// </summary>
         public Guid ID { get; }
 
-        public ElementState State { get; set; }
-        
+        public ElementState ElementState { get; set; }
+
+        public ElementType ElementType { get; set; }
+
         #endregion
 
         #region INotifyPropertyChanged Members
@@ -299,13 +294,19 @@ namespace Core
         public Guid ZNext { get; }
         public Guid Parent { get; }
         public Guid[] Children { get; }
+        
+#nullable enable
+        public Type? ViewType { get; }
+#nullable restore
 
         /// <summary>
         /// Data View Type for the inheritor Element class.
         /// Can be a null value.
         /// Useful for defining the display properties of the element in the WPF UI Environment.
         /// </summary>
-        public abstract Type View { get; }
+        //public Type GetViewType();
+
+        public abstract IRenderView ElementView { get; }
 
         #region BoundingBox
 
@@ -353,6 +354,75 @@ namespace Core
         #endregion
     }
 
+    public interface IRenderView
+    {
+        IRenderable Element { get; }
+
+        //ObservableCollection<IRenderable> Children { get; }
+
+        void Render();
+
+        //        public delegate void MouseEventHandler();
+
+        //        MouseEventHandler MouseDown { get; set; }
+
+        //        MouseEventHandler MouseMove { get; set; }
+
+        //        MouseEventHandler MouseUp { get; set; }
+
+        //        MouseEventHandler MouseWheel { get; set; }
+
+        //        MouseEventHandler DataContextChanged { get; set; }
+
+        //        MouseEventHandler Loaded { get; set; }
+
+        //#nullable enable
+
+        //        public event MouseEventHandler? MouseDownEvent;
+
+        //        public event MouseEventHandler? MouseMoveEvent;
+
+        //        public event MouseEventHandler? MouseUpEvent;
+
+        //        public event MouseEventHandler? MouseWheelEvent;
+
+        //        public event MouseEventHandler? DataContextChangedEvent;
+
+        //        public event MouseEventHandler? LoadedEvent;
+
+        //#nullable restore
+
+        //void OnMouseDown(object sender, EventArgs e);
+        //{
+        //    MouseDown();
+        //}
+
+        //void OnMouseMove(object sender, EventArgs e);
+        //{
+        //    MouseMove();
+        //}
+
+        //void OnMouseUp(object sender, EventArgs e);
+        //{
+        //    MouseUp();
+        //}
+
+        //void OnMouseWheel(object sender, EventArgs e);
+        //{
+        //    MouseWheel();
+        //}
+
+        //void OnDataContextChanged(object sender, EventArgs e);
+        //{
+        //    DataContextChanged();
+        //}
+
+        //void OnLoaded(object sender, EventArgs e);
+        //{
+        //    Loaded();
+        //}
+    }
+
     public interface IComputable : IElement
     {
         public Guid[] DataDS { get; }
@@ -371,6 +441,17 @@ namespace Core
         Unset = -1,
         /// <summary>
         /// Default state.
+        /// </summary>
+        Default = 0
+    }
+    public enum ElementType
+    {
+        /// <summary>
+        /// No type.
+        /// </summary>
+        Unset = -1,
+        /// <summary>
+        /// Default type.
         /// </summary>
         Default = 0
     }

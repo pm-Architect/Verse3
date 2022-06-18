@@ -5,8 +5,68 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TestPlugin"
              mc:Ignorable="d" 
-             d:DesignHeight="250" d:DesignWidth="500">
-    <Grid>
+             d:DesignHeight="250"
+             d:DesignWidth="500"
+             MouseDown="OnMouseDown"
+             MouseMove="OnMouseMove"
+             MouseUp="OnMouseUp"
+             MouseWheel="OnMouseWheel"
+             DataContextChanged="OnDataContextChanged"
+             Loaded="OnLoaded"
+             >
+    <UserControl.Resources>
+        <!-- 
+        Override the style of the ListBox to remove the ScrollViewer.
+        All we want is ListBox logic but based on a Canvas.
+        -->
+        <Style x:Key="noScrollViewerListBoxStyle" TargetType="ListBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBox">
+                        <Canvas x:Name="InfiniteCanvasBackground" 
+                            Background="{TemplateBinding Background}"
+                            IsItemsHost="True" 
+                            />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style 
+            x:Key="listBoxItemStyle" 
+            TargetType="ListBoxItem"
+            >
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border 
+                            Name="Border"
+                            BorderThickness="0"
+                            Padding="0"
+                            >
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!--
+                            When the ListBoxItem is selected draw a simple blue border around it.
+                            -->
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter 
+                                    TargetName="Border" 
+                                    Property="BorderBrush"
+                                    Value="#00FF6700"
+                                    />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+    </UserControl.Resources>
+    <Grid
+        Width="{Binding Width}"
+        Height="{Binding Height}"
+        >                 
         <Rectangle
             Width="{Binding Width}"
             Height="{Binding Height}"
@@ -17,15 +77,16 @@
             Opacity="100"
             Stroke="#000000"
             StrokeThickness="1"
-            MouseDown="TestElementView_MouseDown"
-            MouseUp="TestElementView_MouseUp"
-            MouseMove="TestElementView_MouseMove"
                 />
-        <TextBlock HorizontalAlignment="Center"
-                   TextWrapping="Wrap"
-                   Text="{Binding ElementText}"
-                   VerticalAlignment="Center"
-                   FontFamily="Maven Pro"
-                   FontSize="18"/>
+        <ListBox 
+            x:Name="ListBox"
+            Background="#1a1a1a1a"
+            Foreground="#FFFFFFFF"
+            BorderBrush="#FF000000"
+            ItemsSource="{Binding Children}"
+            Style="{StaticResource noScrollViewerListBoxStyle}"
+            ItemContainerStyle="{StaticResource listBoxItemStyle}"
+            ></ListBox>
+        
     </Grid>
 </UserControl>

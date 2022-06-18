@@ -45,6 +45,9 @@ namespace Verse3
     #region DataTemplateManager
     public class DataTemplateManager
     {
+
+        #region Binding Management
+
         public static void CreateBinding(FrameworkElementFactory BindTo, DependencyProperty BindToProperty, PropertyPath BindFromProperty, BindingMode Mode)
         {
             Binding binding = new Binding();
@@ -61,38 +64,28 @@ namespace Verse3
             binding.Mode = Mode;
             BindingOperations.SetBinding(BindTo, BindToProperty, binding);
         }
-        ////////////////////////////////////////////////////////////////////////////////////////
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="TViewModel"></typeparam>
-        /// <typeparam name="TView"></typeparam>
-        public static void RegisterDataTemplate<TViewModel, TView>() where TView : FrameworkElement
+        #endregion
+
+        #region Private DataTemplate Management
+
+        private static void RegisterDataTemplate<TViewModel, TView>() where TView : FrameworkElement
         {
             RegisterDataTemplate(typeof(TViewModel), typeof(TView));
         }
 
-        public static void RegisterDataTemplate(Type viewModelType, Type viewType)
+        private static void RegisterDataTemplate(Type viewModelType, Type viewType)
         {
             var template = CreateTemplate(viewModelType, viewType);
 
-            if (DataViewModel.WPFControl.Resources[template.DataTemplateKey] != null)
-            {
-                //template.Seal();
-                //template.LoadContent();
-                //return DataViewModel.WPFControl.Resources[template.DataTemplateKey] as DataTemplate;
-            }
+            if (DataViewModel.WPFControl.Resources[template.DataTemplateKey] != null) return;
             else
             {
                 DataViewModel.WPFControl.Resources.Add(template.DataTemplateKey, template);
-                //template.Seal();
-                //template.LoadContent();
-                //return template;
             }
         }
 
-        public static DataTemplate CreateTemplate(Type viewModelType, Type viewType)
+        private static DataTemplate CreateTemplate(Type viewModelType, Type viewType)
         {
             const string xamlTemplate = "<DataTemplate DataType=\"{{x:Type vm:{0}}}\"><v:{1} /></DataTemplate>";
             var xaml = String.Format(xamlTemplate, viewModelType.Name, viewType.Name, viewModelType.Namespace, viewType.Namespace);
@@ -109,29 +102,30 @@ namespace Verse3
             context.XmlnsDictionary.Add("v", "v");
 
             var template = (DataTemplate)XamlReader.Parse(xaml, context);
+            //TODO: Inform template class about its owner
+
             return template;
 
         }
 
-        internal static void RegisterDataTemplate(IRenderable el)
-        {
-            if (el.View == null) return;
-            var template = CreateTemplate(el.GetType(), el.View);
+        #endregion
 
-            if (DataViewModel.WPFControl.Resources[template.DataTemplateKey] != null)
-            {
-                //template.Seal();
-                //template.LoadContent();
-                //return DataViewModel.WPFControl.Resources[template.DataTemplateKey] as DataTemplate;
-            }
+        #region Public DataTemplate Management
+
+        public static bool RegisterDataTemplate(IRenderable el)
+        {
+            if (el.ViewType == null) return false;
+            var template = CreateTemplate(el.GetType(), el.ViewType);
+
+            if (DataViewModel.WPFControl.Resources[template.DataTemplateKey] != null) return false;
             else
             {
                 DataViewModel.WPFControl.Resources.Add(template.DataTemplateKey, template);
-                //template.Seal();
-                //template.LoadContent();
-                //return template;
+                return true;
             }
         }
+
+        #endregion
     }
     #endregion
 

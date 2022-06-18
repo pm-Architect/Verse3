@@ -17,26 +17,26 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Verse3;
 using static Core.Geometry2D;
-using Verse3.Elements;
-using TextElement = Verse3.Elements.TextElement;
 
-namespace TestPlugin
+namespace Verse3.Elements
 {
     /// <summary>
     /// Visual Interaction logic for TestElement.xaml
     /// </summary>
-    public partial class TestElementView : UserControl, IRenderView
+    public partial class TextElementView : UserControl, IRenderView
     {
-        private ObservableCollection<IRenderable>? _children;
-        private IRenderable? _element;
+        //public string DisplayedText { get; set; }
+
+        //private ObservableCollection<IRenderable> _children;
+        private IRenderable _element;
         
-        public ObservableCollection<IRenderable>? Children
-        {
-            get { return _children; }
-            private set { _children = value; }
-        }
+        //public ObservableCollection<IRenderable> Children
+        //{
+        //    get { return _children; }
+        //    private set { _children = value; }
+        //}
         
-        public IRenderable? Element
+        public IRenderable Element
         {
             get { return _element; }
             private set
@@ -50,7 +50,7 @@ namespace TestPlugin
             get { return _element?.ID; }
         }
 
-        public TestElementView()
+        public TextElementView()
         {
             _element = this.DataContext as IRenderable;
 
@@ -68,16 +68,24 @@ namespace TestPlugin
             //       FontSize = "18"
             //       />
 
-            var textBlock = new TextElement();
-            DataTemplateManager.RegisterDataTemplate(textBlock);
-            textBlock.DisplayedText = "Hello World";
+            //var textBlock = new TextBlock();
+            //textBlock.HorizontalAlignment = HorizontalAlignment.Center;
+            //textBlock.TextWrapping = TextWrapping.Wrap;
+            //TestElement? element = _element as TestElement;
+            //if (element != null)
+            //{
+            //    textBlock.Text = element.ElementText;
+            //}
+            //textBlock.VerticalAlignment = VerticalAlignment.Center;
+            //textBlock.FontFamily = new FontFamily("Maven Pro");
+            //textBlock.FontSize = 18;
 
-            if (Children == null)
-            {
-                Children = new ObservableCollection<IRenderable>();
-                ListBox.ItemsSource = Children;
-            }
-            Children.Add(textBlock);
+            //if (Children == null)
+            //{
+            //    Children = new ObservableCollection<IRenderable>();
+            //    ListBox.ItemsSource = Children;
+            //}
+            //Children.Add(textBlock);
 
         }
 
@@ -92,7 +100,7 @@ namespace TestPlugin
             DataViewModel.WPFControl.ContentElements.Focus();
             Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
 
-            TestElementView rectangle = (TestElementView)sender;
+            TextElementView rectangle = (TextElementView)sender;
             IRenderable myRectangle = (IRenderable)rectangle.DataContext;
 
             //myRectangle.IsSelected = true;
@@ -139,7 +147,7 @@ namespace TestPlugin
 
             DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
 
-            TestElementView rectangle = (TestElementView)sender;
+            TextElementView rectangle = (TextElementView)sender;
             rectangle.ReleaseMouseCapture();
 
             e.Handled = true;
@@ -168,7 +176,7 @@ namespace TestPlugin
 
             DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
 
-            TestElementView rectangle = (TestElementView)sender;
+            TextElementView rectangle = (TextElementView)sender;
             IRenderable myRectangle = (IRenderable)rectangle.DataContext;
             myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
             myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
@@ -201,24 +209,15 @@ namespace TestPlugin
         #endregion
     }
 
-    public class TestElement : IRenderable
+    public class TextElement : IRenderable
     {
-        public string? ElementText
-        {
-            get
-            {
-                string? name = this.GetType().FullName;
-                string? viewname = this.ViewType.FullName;
-                return $"Name: {name}" +
-                    $" \n View: {viewname}";
-            }
-        }
+        public string DisplayedText { get; set; }
         
         #region Data Members
 
         private BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
-        private static Type view = typeof(TestElementView);
+        private static Type view = typeof(TextElementView);
 
         #endregion
 
@@ -246,11 +245,11 @@ namespace TestPlugin
 
         public Guid Parent { get; }
 
-        public Guid[]? Children { get; }
+        public Guid[] Children { get; }
 
         public ElementState State { get; set; }
 
-        public IRenderView? ElementView { get; }
+        public IRenderView ElementView { get; }
 
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get; set; }
@@ -259,11 +258,11 @@ namespace TestPlugin
 
         #region Constructors
 
-        public TestElement()
+        public TextElement()
         {
         }
 
-        public TestElement(int x, int y, int width, int height)
+        public TextElement(int x, int y, int width, int height)
         {
             this.boundingBox = new BoundingBox(x, y, width, height);
         }
@@ -272,7 +271,7 @@ namespace TestPlugin
 
         #region INotifyPropertyChanged Members
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged(string name)
         {

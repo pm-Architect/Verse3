@@ -112,12 +112,8 @@ namespace Verse3
         /// </summary>
         public void ExpandContent()
         {
-            //if (ElementDataViewTemplate<ElementDataViewWrapper>.InfiniteCanvasWPFControl == null)
-            //{
-            //    ElementDataViewTemplate<ElementDataViewWrapper>.InfiniteCanvasWPFControl = this;
             DataViewModel.InitDataViewModel(this);
             LBcontent.ItemsSource = DataViewModel.Instance.Elements;
-            //}
             double xOffset = 0;
             double yOffset = 0;
             Rect contentRect = new Rect(0, 0, 0, 0);
