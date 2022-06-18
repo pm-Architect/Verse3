@@ -336,7 +336,7 @@ namespace Core
         /// <summary>
         /// The width of the element Bounding Box (in content coordinates).
         /// </summary>
-        double Width { get; }
+        double Width { get; set; }
         /// <summary>
         /// Set the width of the element Bounding Box (in content coordinates).
         /// </summary>
@@ -345,7 +345,7 @@ namespace Core
         /// <summary>
         /// The height of the element Bounding Box (in content coordinates).
         /// </summary>
-        double Height { get; }
+        double Height { get; set; }
         /// <summary>
         /// Set the height of the element Bounding Box (in content coordinates).
         /// </summary>

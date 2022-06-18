@@ -24,7 +24,7 @@ namespace Verse3.Elements
     /// <summary>
     /// Visual Interaction logic for TestElement.xaml
     /// </summary>
-    public partial class TextElementView : UserControl, IRenderView
+    public partial class SliderElementView : UserControl, IRenderView
     {
         private IRenderable _element;
         
@@ -42,7 +42,7 @@ namespace Verse3.Elements
             get { return _element?.ID; }
         }
 
-        public TextElementView()
+        public SliderElementView()
         {
             InitializeComponent();
         }
@@ -51,8 +51,8 @@ namespace Verse3.Elements
         {
             if (this.Element != null)
             {
-                //this.Element.BoundingBox.Size.Height = DisplayedTextBlock.ActualHeight;
-                //this.Element.BoundingBox.Size.Width = DisplayedTextBlock.ActualWidth;
+                //this.Element.BoundingBox.Size.Height = SliderBlock.ActualHeight;
+                //this.Element.BoundingBox.Size.Width = SliderBlock.ActualWidth;
                 //this.Element.OnPropertyChanged("Width");
                 //this.Element.OnPropertyChanged("Height");
             }
@@ -69,7 +69,7 @@ namespace Verse3.Elements
             //DataViewModel.WPFControl.ContentElements.Focus();
             //Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
 
-            //TextElementView rectangle = (TextElementView)sender;
+            //SliderElementView rectangle = (SliderElementView)sender;
             //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
 
             ////myRectangle.IsSelected = true;
@@ -116,7 +116,7 @@ namespace Verse3.Elements
 
             //DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
 
-            //TextElementView rectangle = (TextElementView)sender;
+            //SliderElementView rectangle = (SliderElementView)sender;
             //rectangle.ReleaseMouseCapture();
 
             //e.Handled = true;
@@ -145,7 +145,7 @@ namespace Verse3.Elements
 
             //DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
 
-            //TextElementView rectangle = (TextElementView)sender;
+            //SliderElementView rectangle = (SliderElementView)sender;
             //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
             //myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
             //myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
@@ -181,13 +181,13 @@ namespace Verse3.Elements
         #endregion
     }
 
-    public class TextElement : IRenderable
+    public class SliderElement : IRenderable
     {        
         #region Data Members
 
         private BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
-        private static Type view = typeof(TextElementView);
+        private static Type view = typeof(SliderElementView);
 
         #endregion
 
@@ -207,14 +207,26 @@ namespace Verse3.Elements
 
         public double Width
         {
-            get => boundingBox.Size.Width;
-            set => boundingBox.Size.Width = value;
+            get
+            {
+                return boundingBox.Size.Width;
+            }
+            set
+            {
+                boundingBox.Size.Width = value;
+            }
         }
 
         public double Height
         {
-            get => boundingBox.Size.Height;
-            set => boundingBox.Size.Height = value;
+            get
+            {
+                return boundingBox.Size.Height;
+            }
+            set
+            {
+                boundingBox.Size.Height = value;
+            }
         }
 
         public Guid ZPrev { get; }
@@ -227,7 +239,7 @@ namespace Verse3.Elements
 
         public ElementState State { get; set; }
 
-        public IRenderView ElementView { get; internal set; }
+        public IRenderView ElementView { get; }
 
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get; set; }
@@ -236,28 +248,20 @@ namespace Verse3.Elements
 
         #region Constructors
 
-        public TextElement()
+        public SliderElement()
         {
-            this.FontFamily = new FontFamily("Maven Pro");
-            this.FontSize = 12;
-            this.FontStyle = FontStyles.Normal;
-            this.FontWeight = FontWeights.Normal;
-            this.Foreground = Brushes.White;
-            this.Background = Brushes.Transparent;
-            this.TextAlignment = TextAlignment.Center;
+            this.Minimum = 0;
+            this.Maximum = 100;
+            this.Value = 50;
         }
 
-        public TextElement(int x, int y, int width, int height)
+        public SliderElement(int x, int y, int width, int height)
         {
             this.boundingBox = new BoundingBox(x, y, width, height);
 
-            this.FontFamily = new FontFamily("Maven Pro");
-            this.FontSize = 12;
-            this.FontStyle = FontStyles.Normal;
-            this.FontWeight = FontWeights.Normal;
-            this.Foreground = Brushes.White;
-            this.Background = Brushes.Transparent;
-            this.TextAlignment = TextAlignment.Center;
+            this.Minimum = 0;
+            this.Maximum = 100;
+            this.Value = 50;
         }
 
         #endregion
@@ -286,37 +290,17 @@ namespace Verse3.Elements
             return false;
         }
 
-        private TextAlignment textAlignment;
+        private double minimum;
 
-        public TextAlignment TextAlignment { get => textAlignment; set => SetProperty(ref textAlignment, value); }
+        public double Minimum { get => minimum; set => SetProperty(ref minimum, value); }
 
-        private string displayedText;
+        private double maximum;
 
-        public string DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
+        public double Maximum { get => maximum; set => SetProperty(ref maximum, value); }
 
-        private FontStyle fontStyle;
+        private double value1;
 
-        public FontStyle FontStyle { get => fontStyle; set => SetProperty(ref fontStyle, value); }
-
-        private FontFamily fontFamily;
-
-        public FontFamily FontFamily { get => fontFamily; set => SetProperty(ref fontFamily, value); }
-
-        private double fontSize;
-
-        public double FontSize { get => fontSize; set => SetProperty(ref fontSize, value); }
-
-        private FontWeight fontWeight;
-
-        public FontWeight FontWeight { get => fontWeight; set => SetProperty(ref fontWeight, value); }
-
-        private Brush foreground;
-
-        public Brush Foreground { get => foreground; set => SetProperty(ref foreground, value); }
-
-        private Brush background;
-
-        public Brush Background { get => background; set => SetProperty(ref background, value); }
+        public double Value { get => value1; set => SetProperty(ref value1, value); }
 
         #endregion
     }

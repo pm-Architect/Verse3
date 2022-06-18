@@ -21,6 +21,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="SliderElement.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="TextElement.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>

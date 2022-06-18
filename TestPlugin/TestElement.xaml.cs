@@ -76,21 +76,29 @@ namespace TestPlugin
             //       FontSize = "18"
             //       />
 
+            if (Children == null)
+            {
+                Children = new ObservableCollection<IRenderable>();
+                ListBox.ItemsSource = Children;
+            }
+
             if (this.Element is TestElement)
             {
                 TestElement testelement = (TestElement)this.Element;
+                
                 string? txt = testelement.ElementText;
                 var textBlock = new TextElement();
                 textBlock.DisplayedText = txt;
                 textBlock.TextAlignment = TextAlignment.Left;
                 DataTemplateManager.RegisterDataTemplate(textBlock);
-
-                if (Children == null)
-                {
-                    Children = new ObservableCollection<IRenderable>();
-                    ListBox.ItemsSource = Children;
-                }
                 Children.Add(textBlock);
+
+                var sliderBlock = new SliderElement();
+                sliderBlock.Minimum = 0;
+                sliderBlock.Maximum = 100;
+                sliderBlock.Value = 50;
+                DataTemplateManager.RegisterDataTemplate(sliderBlock);
+                Children.Add(sliderBlock);
             }
 
         }
@@ -251,9 +259,17 @@ namespace TestPlugin
 
         public double Y { get => boundingBox.Location.Y; }
 
-        public double Width => boundingBox.Size.Width;
+        public double Width
+        {
+            get => boundingBox.Size.Width;
+            set => boundingBox.Size.Width = value;
+        }
 
-        public double Height => boundingBox.Size.Height;
+        public double Height
+        {
+            get => boundingBox.Size.Height;
+            set => boundingBox.Size.Height = value;
+        }
 
         public Guid ZPrev { get; }
 

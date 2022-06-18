@@ -111,10 +111,10 @@ namespace Verse3
                         {
                             DataTemplateManager.RegisterDataTemplate(el as IRenderable);
                             Random rnd = new Random();
-                            for (int i = 0; i < 1000; i++)
+                            for (int i = 0; i < 10; i++)
                             {
-                                int x = (int)rnd.NextInt64((long)50, (long)10000);
-                                int y = (int)rnd.NextInt64((long)50, (long)10000);
+                                int x = (int)rnd.NextInt64((long)50, (long)1000);
+                                int y = (int)rnd.NextInt64((long)50, (long)1000);
                                 int w = (int)rnd.NextInt64((long)50, (long)350);
                                 int h = (int)rnd.NextInt64((long)50, (long)350);
                                 Type[] types = { i.GetType(), i.GetType(), i.GetType(), i.GetType() };

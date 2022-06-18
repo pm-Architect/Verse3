@@ -15,6 +15,9 @@
              Loaded="OnLoaded"
              >
     <UserControl.Resources>
+        <!--<verse3:ElementHeightPseudoConverter 
+            x:Key="elementHeightPseudoConverter"
+            />-->
         <!-- 
         Override the style of the ListBox to remove the ScrollViewer.
         All we want is ListBox logic but based on a Canvas.
@@ -23,10 +26,19 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBox">
-                        <Canvas x:Name="InfiniteCanvasBackground" 
-                            Background="{TemplateBinding Background}"
-                            IsItemsHost="True" 
-                            />
+                        <!--<Canvas x:Name="CompCanvas" 
+                                Background="{TemplateBinding Background}"
+                                IsItemsHost="True"
+                            />-->
+                        <StackPanel x:Name="CompStackPanel"
+                                    Orientation="Vertical"
+                                    Margin="0,0,0,0"
+                                    Background="{TemplateBinding Background}"
+                                    IsItemsHost="True"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                    />
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -35,16 +47,36 @@
             x:Key="listBoxItemStyle" 
             TargetType="ListBoxItem"
             >
+            <!--<Setter 
+                Property="Canvas.Top"
+                Value="{Binding Y, Converter={StaticResource elementHeightPseudoConverter}, ConverterParameter={x:Reference Name=ListBox}}"
+                />-->
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
+                        <!--
+                        This border is used for indicating selection.
+                        Normally it is transparent, when the item is selected the border is set to blue.
+                        -->
                         <Border 
                             Name="Border"
                             BorderThickness="0"
                             Padding="0"
                             >
-                            <ContentPresenter/>
+                            <ContentPresenter />
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <!--
+                            When the ListBoxItem is selected draw a simple blue border around it.
+                            -->
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter 
+                                    TargetName="Border" 
+                                    Property="BorderBrush"
+                                    Value="#FF6700"
+                                    />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -65,6 +97,7 @@
             Stroke="#000000"
             StrokeThickness="1"
                 />
+
         <ListBox 
             x:Name="ListBox"
             Background="{Binding BackgroundTint}"
@@ -72,8 +105,8 @@
             BorderBrush="#FF000000"
             ItemsSource="{Binding Children}"
             Style="{StaticResource noScrollViewerListBoxStyle}"
-            ItemContainerStyle="{StaticResource listBoxItemStyle}"
-            />
-
+            ItemContainerStyle="{StaticResource listBoxItemStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+            >
+        </ListBox>
     </Grid>
 </UserControl>
