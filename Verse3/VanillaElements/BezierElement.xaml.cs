@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace Verse3.VanillaElements
     /// <summary>
     /// Visual Interaction logic for TestElement.xaml
     /// </summary>
-    public partial class SliderElementView : UserControl, IRenderView
+    public partial class BezierElementView : UserControl, IRenderView
     {
         private IRenderable _element;
         
@@ -42,7 +43,7 @@ namespace Verse3.VanillaElements
             get { return _element?.ID; }
         }
 
-        public SliderElementView()
+        public BezierElementView()
         {
             InitializeComponent();
         }
@@ -51,6 +52,9 @@ namespace Verse3.VanillaElements
         {
             if (this.Element != null)
             {
+                Point start = new Point(0.0, 0.0);
+                Point end = new Point(this.Element.BoundingBox.Size.Width, this.Element.BoundingBox.Size.Height);
+                DrawBezierCurve(MainGrid, start, end);
                 //this.Element.BoundingBox.Size.Height = SliderBlock.ActualHeight;
                 //this.Element.BoundingBox.Size.Width = SliderBlock.ActualWidth;
                 //this.Element.OnPropertyChanged("Width");
@@ -65,11 +69,11 @@ namespace Verse3.VanillaElements
         /// </summary>
         void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            ////MouseButtonEventArgs
-            //DataViewModel.WPFControl.ContentElements.Focus();
-            //Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
+            //MouseButtonEventArgs
+            DataViewModel.WPFControl.ContentElements.Focus();
+            Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
 
-            //SliderElementView rectangle = (SliderElementView)sender;
+            BezierElementView rectangle = (BezierElementView)sender;
             //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
 
             ////myRectangle.IsSelected = true;
@@ -95,9 +99,9 @@ namespace Verse3.VanillaElements
             //DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.DraggingRectangles;
             //DataViewModel.WPFControl.origContentMouseDownPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
 
-            //rectangle.CaptureMouse();
+            rectangle.CaptureMouse();
 
-            //e.Handled = true;
+            e.Handled = true;
         }
 
         /// <summary>
@@ -105,7 +109,7 @@ namespace Verse3.VanillaElements
         /// </summary>
         void OnMouseUp(object sender, MouseButtonEventArgs e)
         {
-            ////MouseButtonEventArgs
+            //MouseButtonEventArgs
             //if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
             //{
             //    //
@@ -114,12 +118,12 @@ namespace Verse3.VanillaElements
             //    return;
             //}
 
-            //DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
+            DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
 
-            //SliderElementView rectangle = (SliderElementView)sender;
-            //rectangle.ReleaseMouseCapture();
+            BezierElementView rectangle = (BezierElementView)sender;
+            rectangle.ReleaseMouseCapture();
 
-            //e.Handled = true;
+            e.Handled = true;
         }
 
         /// <summary>
@@ -127,7 +131,7 @@ namespace Verse3.VanillaElements
         /// </summary>
         void OnMouseMove(object sender, MouseEventArgs e)
         {
-            ////MouseEventArgs
+            //MouseEventArgs
             //if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
             //{
             //    //
@@ -137,7 +141,7 @@ namespace Verse3.VanillaElements
             //}
 
             //Point curContentPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
-            //Vector rectangleDragVector = curContentPoint - DataViewModel.WPFControl.origContentMouseDownPoint;
+            //System.Windows.Vector rectangleDragVector = curContentPoint - DataViewModel.WPFControl.origContentMouseDownPoint;
 
             ////
             //// When in 'dragging rectangles' mode update the position of the rectangle as the user drags it.
@@ -145,7 +149,7 @@ namespace Verse3.VanillaElements
 
             //DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
 
-            //SliderElementView rectangle = (SliderElementView)sender;
+            //BezierElementView rectangle = (BezierElementView)sender;
             //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
             //myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
             //myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
@@ -180,19 +184,61 @@ namespace Verse3.VanillaElements
 
         #endregion
 
-        private void SliderBlock_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        PolyLineSegment GetBezierApproximation(Point[] controlPoints, int outputSegmentCount)
         {
-            //((SliderElement)this.Element).Value = (double)e.NewValue;
+            Point[] points = new Point[outputSegmentCount + 1];
+            for (int i = 0; i <= outputSegmentCount; i++)
+            {
+                double t = (double)i / outputSegmentCount;
+                points[i] = GetBezierPoint(t, controlPoints, 0, controlPoints.Length);
+            }
+            return new PolyLineSegment(points, true);
+        }
+
+        Point GetBezierPoint(double t, Point[] controlPoints, int index, int count)
+        {
+            if (count == 1)
+                return controlPoints[index];
+            var P0 = GetBezierPoint(t, controlPoints, index, count - 1);
+            var P1 = GetBezierPoint(t, controlPoints, index + 1, count - 1);
+            return new Point((1 - t) * P0.X + t * P1.X, (1 - t) * P0.Y + t * P1.Y);
+        }
+
+        public void DrawBezierCurve(Grid grid, Point start, Point end)
+        {
+            double pull = 0.9;
+            Point[] points = new[] {
+                //new Point(0, 0),
+                start,
+                //new Point(190, 0),
+                new Point((((end.X + start.X) / 2) * pull), start.Y),
+                //new Point(200, 100),
+                new Point(((end.X + start.X) / 2), ((end.Y + start.Y) / 2)),
+                //new Point(210, 200),
+                new Point((end.X - (((end.X + start.X) / 2) * pull)), end.Y),
+                //new Point(400, 200)
+                end
+            };
+            var b = GetBezierApproximation(points, 256);
+            PathFigure pf = new PathFigure(b.Points[0], new[] { b }, false);
+            PathFigureCollection pfc = new PathFigureCollection();
+            pfc.Add(pf);
+            var pge = new PathGeometry();
+            pge.Figures = pfc;
+            Path p = new Path();
+            p.Data = pge;
+            p.Stroke = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+            grid.Children.Add(p);
         }
     }
 
-    public class SliderElement : IRenderable
+    public class BezierElement : IRenderable
     {        
         #region Data Members
 
         private BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
-        private static Type view = typeof(SliderElementView);
+        private static Type view = typeof(BezierElementView);
 
         #endregion
 
@@ -253,20 +299,14 @@ namespace Verse3.VanillaElements
 
         #region Constructors
 
-        public SliderElement()
+        public BezierElement()
         {
-            this.Minimum = 0;
-            this.Maximum = 100;
-            this.Value = 50;
         }
 
-        public SliderElement(int x, int y, int width, int height)
+        public BezierElement(int x, int y, int width, int height)
         {
             this.boundingBox = new BoundingBox(x, y, width, height);
 
-            this.Minimum = 0;
-            this.Maximum = 100;
-            this.Value = 50;
         }
 
         #endregion
@@ -295,18 +335,49 @@ namespace Verse3.VanillaElements
             return false;
         }
 
-        private double minimum;
-
-        public double Minimum { get => minimum; set => SetProperty(ref minimum, value); }
-
-        private double maximum;
-
-        public double Maximum { get => maximum; set => SetProperty(ref maximum, value); }
-
-        private double value1;
-
-        public double Value { get => value1; set => SetProperty(ref value1, value); }
-
         #endregion
+
+        private void DrawBezier()
+        {
+            //private void DrawSpline(Vector2 startPoint, Vector2 controlPoint1, Vector2 controlPoint2, Vector2 endPoint,
+            //    Color color)
+            //{
+            //    var strokeThickness = 2f;
+
+            //    // Draw the spline
+            //    using (var pathBuilder = new CanvasPathBuilder(sender))
+            
+            //    {
+            //        pathBuilder.BeginFigure(startPoint);
+            //        pathBuilder.AddCubicBezier(controlPoint1, controlPoint2, endPoint);
+            //        pathBuilder.EndFigure(CanvasFigureLoop.Open);
+
+            //        var geometry = CanvasGeometry.CreatePath(pathBuilder);
+            //        ds.DrawGeometry(geometry, Vector2.Zero, color, strokeThickness);
+            //    }
+
+            //    // Draw Control Points
+            //    if (_showControlPoints)
+            //    {
+            //        var strokeStyle = new CanvasStrokeStyle() { DashStyle = CanvasDashStyle.Dot };
+            //        ds.DrawLine(startPoint, controlPoint1, color, strokeThickness, strokeStyle);
+            //        var rect1 = new Rect(controlPoint1.X - 3, controlPoint1.Y - 3, 6, 6);
+            //        ds.FillRectangle(rect1, Colors.Beige);
+            //        ds.DrawRectangle(rect1, color, strokeThickness);
+
+            //        ds.DrawLine(endPoint, controlPoint2, color, strokeThickness, strokeStyle);
+            //        var rect2 = new Rect(controlPoint2.X - 3, controlPoint2.Y - 3, 6, 6);
+            //        ds.FillRectangle(rect2, Colors.Beige);
+            //        ds.DrawRectangle(rect2, color, strokeThickness);
+            //    }
+
+            //    // Draw EndPoints
+            //    ds.DrawCircle(startPoint, 5, color, strokeThickness);
+            //    ds.FillCircle(startPoint, 5, Colors.Beige);
+            //    ds.DrawCircle(endPoint, 5, color, strokeThickness);
+            //    ds.FillCircle(endPoint, 5, Colors.Beige);
+
+            //}
+        }
     }
 }

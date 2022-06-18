@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media;
+using Verse3.VanillaElements;
 
 namespace Verse3
 {
@@ -128,7 +129,11 @@ namespace Verse3
                         //DataModel.Instance.Elements.Add(new TestElement(850, 850, 30, 20));
                         //DataModel.Instance.Elements.Add(new TestElement(1200, 1200, 80, 150));
                     }
-                    
+
+                    BezierElement bezier = new BezierElement(50, 50, 456, 565);
+                    DataTemplateManager.RegisterDataTemplate(bezier as IRenderable);
+                    DataModel.Instance.Elements.Add(bezier);
+
                     DataViewModel.WPFControl.ExpandContent();
                 }
             }

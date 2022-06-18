@@ -32,6 +32,6 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Margin="10"
-            />
+            />        
     </Grid>
 </UserControl>
