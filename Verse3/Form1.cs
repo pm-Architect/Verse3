@@ -45,6 +45,7 @@ namespace Verse3
         TimeOnly lastFrameTime = TimeOnly.FromDateTime(DateTime.Now);
         double fps = 0.0;
         double[] lfps = Array.Empty<double>();
+        double avgfps = 0.0;
         private void CompositionTarget_Rendering(object sender, EventArgs e)
         {
             TimeOnly frameTime = TimeOnly.FromDateTime(DateTime.Now);
@@ -57,12 +58,9 @@ namespace Verse3
             {
                 lfps = lfps.Skip(1).Concat(new double[] { fps }).ToArray();
             }
-            double avgfps = lfps.Average();
+            avgfps = lfps.Average();
             avgfps = Math.Round(avgfps, 3);
             lastFrameTime = frameTime;
-            label1.Text = avgfps.ToString();
-            label1.Text += "     |     ";
-            label1.Text += InfiniteCanvasWPFControl.GetMouseRelPosition().ToString();
         }
 
         private void Canvas_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
@@ -180,6 +178,12 @@ namespace Verse3
             {
                 started = false;
             }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            label1.Text = avgfps.ToString();
+            label2.Text = InfiniteCanvasWPFControl.GetMouseRelPosition().ToString();
         }
     }
 }

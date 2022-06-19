@@ -173,7 +173,6 @@ namespace Verse3.VanillaElements
         {
             //RoutedEventArgs
             Element = this.DataContext as IRenderable;
-            //Render();
         }
 
         #endregion
