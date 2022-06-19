@@ -86,7 +86,7 @@ namespace Verse3
             }
             if (drawstart != Point.Empty && started)
             {
-                DrawBezierCurve(drawstart, InfiniteCanvasWPFControl.GetMouseRelPosition());
+                DrawBezierCurve(drawstart, InfiniteCanvasWPFControl.GetMouseRelPosition(), rtl);
                 started = false;
             }
         }
@@ -147,19 +147,34 @@ namespace Verse3
             }
         }
 
-        private void DrawBezierCurve(Point start, Point end)
+        private void DrawBezierCurve(Point start, Point end, bool rtl)
         {
-            BezierElement bezier = new BezierElement((start.X - 200), (start.Y - 200), (end.X - start.X), (end.Y - start.Y));
+            BezierElement bezier = new BezierElement((start.X - 200), (start.Y - 200), (end.X - start.X), (end.Y - start.Y), rtl);
             DataTemplateManager.RegisterDataTemplate(bezier as IRenderable);
             DataModel.Instance.Elements.Add(bezier);
         }
 
         bool started = false;
+        bool rtl = false;
         private void button2_Click(object sender, EventArgs e)
         {
             if (!started)
             {
-                started = true;                
+                started = true;
+                rtl = false;
+            }
+            else if (started)
+            {
+                started = false;
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (!started)
+            {
+                started = true;
+                rtl = true;
             }
             else if (started)
             {
