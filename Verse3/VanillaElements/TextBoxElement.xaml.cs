@@ -179,6 +179,11 @@ namespace Verse3.VanillaElements
         }
 
         #endregion
+
+        private void TextBoxBlock_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 
     public class TextBoxElement : IRenderable

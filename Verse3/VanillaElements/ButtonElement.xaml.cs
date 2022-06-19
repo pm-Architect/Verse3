@@ -179,6 +179,11 @@ namespace Verse3.VanillaElements
         }
 
         #endregion
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 
     public class ButtonElement : IRenderable

@@ -24,7 +24,7 @@ namespace Verse3.VanillaElements
     /// <summary>
     /// Visual Interaction logic for TestElement.xaml
     /// </summary>
-    public partial class SliderElementView : UserControl, IRenderView
+    public partial class ColorPickerElementView : UserControl, IRenderView
     {
         private IRenderable _element;
         
@@ -42,7 +42,7 @@ namespace Verse3.VanillaElements
             get { return _element?.ID; }
         }
 
-        public SliderElementView()
+        public ColorPickerElementView()
         {
             InitializeComponent();
 
@@ -71,7 +71,7 @@ namespace Verse3.VanillaElements
             //DataViewModel.WPFControl.ContentElements.Focus();
             //Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
 
-            //SliderElementView rectangle = (SliderElementView)sender;
+            //ColorPickerElementView rectangle = (ColorPickerElementView)sender;
             //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
 
             ////myRectangle.IsSelected = true;
@@ -118,7 +118,7 @@ namespace Verse3.VanillaElements
 
             //DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
 
-            //SliderElementView rectangle = (SliderElementView)sender;
+            //ColorPickerElementView rectangle = (ColorPickerElementView)sender;
             //rectangle.ReleaseMouseCapture();
 
             //e.Handled = true;
@@ -147,7 +147,7 @@ namespace Verse3.VanillaElements
 
             //DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
 
-            //SliderElementView rectangle = (SliderElementView)sender;
+            //ColorPickerElementView rectangle = (ColorPickerElementView)sender;
             //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
             //myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
             //myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
@@ -181,20 +181,15 @@ namespace Verse3.VanillaElements
         }
 
         #endregion
-
-        private void SliderBlock_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            //((SliderElement)this.Element).Value = (double)e.NewValue;
-        }
     }
 
-    public class SliderElement : IRenderable
+    public class ColorPickerElement : IRenderable
     {        
         #region Data Members
 
         private BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
-        private static Type view = typeof(SliderElementView);
+        private static Type view = typeof(ColorPickerElementView);
 
         #endregion
 
@@ -255,14 +250,14 @@ namespace Verse3.VanillaElements
 
         #region Constructors
 
-        public SliderElement()
+        public ColorPickerElement()
         {
             this.Minimum = 0;
             this.Maximum = 100;
             this.Value = 50;
         }
 
-        public SliderElement(int x, int y, int width, int height)
+        public ColorPickerElement(int x, int y, int width, int height)
         {
             this.boundingBox = new BoundingBox(x, y, width, height);
 
@@ -308,10 +303,6 @@ namespace Verse3.VanillaElements
         private double value1;
 
         public double Value { get => value1; set => SetProperty(ref value1, value); }
-
-        private int interval;
-
-        public int Interval { get => interval; set => SetProperty(ref interval, value); }
 
         #endregion
     }

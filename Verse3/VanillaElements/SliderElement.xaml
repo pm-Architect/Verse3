@@ -3,10 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Verse3.VanillaElements" xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="Verse3.VanillaElements.SliderElementView"
+             xmlns:local="clr-namespace:Verse3.VanillaElements"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             x:Class="Verse3.VanillaElements.SliderElementView"
              d:DataContext="{d:DesignInstance Type={x:Type local:SliderElement}}"
              mc:Ignorable="d" 
-             d:DesignHeight="60"
+             d:DesignHeight="40"
              d:DesignWidth="120"
              MouseDown="OnMouseDown"
              MouseMove="OnMouseMove"
@@ -15,13 +17,21 @@
              DataContextChanged="OnDataContextChanged"
              Loaded="OnLoaded"
              >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDark.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid
         Width="{Binding BoundingBox.Size.Width}"
         Height="{Binding BoundingBox.Size.Height}"
         MinWidth="100"
         MinHeight="20"
         >
-        <Slider
+        <hc:PreviewSlider
             x:Name="SliderBlock"
             Minimum="{Binding Minimum}"
             Maximum="{Binding Maximum}"
@@ -29,14 +39,19 @@
             Value="{Binding Value, Mode=TwoWay}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Margin="10,10,10,30"
-            />
-        <TextBlock
-            x:Name="ValueDisplay"
-            Text="{Binding Value}"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Margin="10,30,10,10"
-            />
+            Margin="10"
+            Interval="{Binding Interval}"
+            >
+            <hc:PreviewSlider.PreviewContent>
+                <Label
+                    Style="{StaticResource LabelPrimary}"
+                    Content="{Binding Path=(hc:PreviewSlider.PreviewPosition),RelativeSource={RelativeSource Self}}"
+                    Background="#ff6700"
+                    Foreground="#ffffff"
+                    FontFamily="Maven Pro"
+                    ContentStringFormat="#0.00"
+                    />
+            </hc:PreviewSlider.PreviewContent>
+        </hc:PreviewSlider>
     </Grid>
 </UserControl>
