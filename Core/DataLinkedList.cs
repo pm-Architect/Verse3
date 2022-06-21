@@ -15,7 +15,7 @@ namespace Core
 	[Serializable]
 	[ComVisible(false)]
 	[DebuggerDisplay("Count = {Count}")]
-	public class CustomLinkedList<T> : ObservableCollection<T>, ICollection<T>, IEnumerable<T>, IEnumerable, ICollection, IReadOnlyCollection<T>, ISerializable, IDeserializationCallback where T : IElement
+	public class DataLinkedList<T> : ObservableCollection<T>, ICollection<T>, IEnumerable<T>, IEnumerable, ICollection, IReadOnlyCollection<T>, ISerializable, IDeserializationCallback where T : IDataGoo
 	{
         #region Enumerator
 
@@ -24,9 +24,9 @@ namespace Core
         [Serializable]
 		public struct Enumerator : IEnumerator<T>, IDisposable, IEnumerator, ISerializable, IDeserializationCallback
 		{
-			private CustomLinkedList<T> enumlist;
+			private DataLinkedList<T> enumlist;
 
-			private CustomLinkedListNode<T> enumhead;
+			private DataLinkedListNode<T> enumhead;
 
 			private int version;
 
@@ -73,7 +73,7 @@ namespace Core
 				}
 			}
 
-			internal Enumerator(CustomLinkedList<T> list)
+			internal Enumerator(DataLinkedList<T> list)
 			{
 				this.enumlist = list;
 				version = list.version;
@@ -174,7 +174,7 @@ namespace Core
 				{
 					throw new SerializationException("Serialization_InvalidOnDeser");
 				}
-				enumlist = (CustomLinkedList<T>)siInfo.GetValue("CustomLinkedList", typeof(CustomLinkedList<T>));
+				enumlist = (DataLinkedList<T>)siInfo.GetValue("CustomLinkedList", typeof(DataLinkedList<T>));
 				version = siInfo.GetInt32("Version");
 				current = (T)siInfo.GetValue("Current", typeof(T));
                 currentid = (Guid)siInfo.GetValue("CurrentID", typeof(Guid));
@@ -288,7 +288,7 @@ namespace Core
 
 		#region DataMembers
 
-		internal CustomLinkedListNode<T> head;
+		internal DataLinkedListNode<T> head;
 
 		internal int count;
 
@@ -323,9 +323,9 @@ namespace Core
         }
 
         /// <summary>Gets the first node of the <see cref="T:Core.CustomLinkedList<T>" />.</summary>
-        /// <returns>The first <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> of the <see cref="T:Core.CustomLinkedList<T>" />.</returns>
+        /// <returns>The first <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> of the <see cref="T:Core.CustomLinkedList<T>" />.</returns>
 
-        public CustomLinkedListNode<T> First
+        public DataLinkedListNode<T> First
 		{
 			
 			get
@@ -335,9 +335,9 @@ namespace Core
 		}
 
 		/// <summary>Gets the last node of the <see cref="T:Core.CustomLinkedList<T>" />.</summary>
-		/// <returns>The last <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> of the <see cref="T:Core.CustomLinkedList<T>" />.</returns>
+		/// <returns>The last <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> of the <see cref="T:Core.CustomLinkedList<T>" />.</returns>
 		
-		public CustomLinkedListNode<T> Last
+		public DataLinkedListNode<T> Last
 		{
 			
 			get
@@ -398,7 +398,7 @@ namespace Core
 
         /// <summary>Initializes a new instance of the <see cref="T:Core.CustomLinkedList<T>" /> class that is empty.</summary>
 
-        public CustomLinkedList() : base()
+        public DataLinkedList() : base()
 		{
 		}
 
@@ -407,7 +407,7 @@ namespace Core
 		/// <exception cref="T:System.ArgumentNullException">
 		///   <paramref name="collection" /> is <see langword="null" />.</exception>
 		
-		public CustomLinkedList(IEnumerable<T> collection) : base(collection)
+		public DataLinkedList(IEnumerable<T> collection) : base(collection)
 		{
 			if (collection == null)
 			{
@@ -423,7 +423,7 @@ namespace Core
 		/// <summary>Initializes a new instance of the <see cref="T:Core.CustomLinkedList<T>" /> class that is serializable with the specified <see cref="T:System.Runtime.Serialization.SerializationInfo" /> and <see cref="T:System.Runtime.Serialization.StreamingContext" />.</summary>
 		/// <param name="info">A <see cref="T:System.Runtime.Serialization.SerializationInfo" /> object containing the information required to serialize the <see cref="T:Core.CustomLinkedList<T>" />.</param>
 		/// <param name="context">A <see cref="T:System.Runtime.Serialization.StreamingContext" /> object containing the source and destination of the serialized stream associated with the <see cref="T:Core.CustomLinkedList<T>" />.</param>
-		protected CustomLinkedList(SerializationInfo info, StreamingContext context) : base()
+		protected DataLinkedList(SerializationInfo info, StreamingContext context) : base()
 		{
 			siInfo = info;
 		}
@@ -433,25 +433,25 @@ namespace Core
         #region Add* Methods
 
         /// <summary>Adds a new node containing the specified value after the specified existing node in the <see cref="T:Core.CustomLinkedList<T>" />.</summary>
-        /// <param name="node">The <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> after which to insert a new <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> containing <paramref name="value" />.</param>
+        /// <param name="node">The <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> after which to insert a new <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> containing <paramref name="value" />.</param>
         /// <param name="value">The value to add to the <see cref="T:Core.CustomLinkedList<T>" />.</param>
-        /// <returns>The new <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> containing <paramref name="value" />.</returns>
+        /// <returns>The new <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> containing <paramref name="value" />.</returns>
         /// <exception cref="T:System.ArgumentNullException">
         ///   <paramref name="node" /> is <see langword="null" />.</exception>
         /// <exception cref="T:System.InvalidOperationException">
         ///   <paramref name="node" /> is not in the current <see cref="T:Core.CustomLinkedList<T>" />.</exception>
 
-        private CustomLinkedListNode<T> AddAfter(CustomLinkedListNode<T> node, T value)
+        private DataLinkedListNode<T> AddAfter(DataLinkedListNode<T> node, T value)
 		{
 			ValidateNode(node);
-			CustomLinkedListNode<T> CustomLinkedListNode = new CustomLinkedListNode<T>(node.list, value);
-			InternalInsertNodeBefore(node.next, CustomLinkedListNode);
-			return CustomLinkedListNode;
+			DataLinkedListNode<T> DataLinkedListNode = new DataLinkedListNode<T>(node.list, value);
+			InternalInsertNodeBefore(node.next, DataLinkedListNode);
+			return DataLinkedListNode;
 		}
 
 		/// <summary>Adds the specified new node after the specified existing node in the <see cref="T:Core.CustomLinkedList<T>" />.</summary>
-		/// <param name="node">The <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> after which to insert <paramref name="newNode" />.</param>
-		/// <param name="newNode">The new <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> to add to the <see cref="T:Core.CustomLinkedList<T>" />.</param>
+		/// <param name="node">The <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> after which to insert <paramref name="newNode" />.</param>
+		/// <param name="newNode">The new <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> to add to the <see cref="T:Core.CustomLinkedList<T>" />.</param>
 		/// <exception cref="T:System.ArgumentNullException">
 		///   <paramref name="node" /> is <see langword="null" />.  
 		/// -or-  
@@ -461,7 +461,7 @@ namespace Core
 		/// -or-  
 		/// <paramref name="newNode" /> belongs to another <see cref="T:Core.CustomLinkedList<T>" />.</exception>
 
-		private void AddAfter(CustomLinkedListNode<T> node, CustomLinkedListNode<T> newNode)
+		private void AddAfter(DataLinkedListNode<T> node, DataLinkedListNode<T> newNode)
 		{
 			ValidateNode(node);
 			ValidateNewNode(newNode);
@@ -470,29 +470,29 @@ namespace Core
 		}
 
 		/// <summary>Adds a new node containing the specified value before the specified existing node in the <see cref="T:Core.CustomLinkedList<T>" />.</summary>
-		/// <param name="node">The <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> before which to insert a new <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> containing <paramref name="value" />.</param>
+		/// <param name="node">The <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> before which to insert a new <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> containing <paramref name="value" />.</param>
 		/// <param name="value">The value to add to the <see cref="T:Core.CustomLinkedList<T>" />.</param>
-		/// <returns>The new <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> containing <paramref name="value" />.</returns>
+		/// <returns>The new <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> containing <paramref name="value" />.</returns>
 		/// <exception cref="T:System.ArgumentNullException">
 		///   <paramref name="node" /> is <see langword="null" />.</exception>
 		/// <exception cref="T:System.InvalidOperationException">
 		///   <paramref name="node" /> is not in the current <see cref="T:Core.CustomLinkedList<T>" />.</exception>
 
-		private CustomLinkedListNode<T> AddBefore(CustomLinkedListNode<T> node, T value)
+		private DataLinkedListNode<T> AddBefore(DataLinkedListNode<T> node, T value)
 		{
 			ValidateNode(node);
-			CustomLinkedListNode<T> CustomLinkedListNode = new CustomLinkedListNode<T>(node.list, value);
-			InternalInsertNodeBefore(node, CustomLinkedListNode);
+			DataLinkedListNode<T> DataLinkedListNode = new DataLinkedListNode<T>(node.list, value);
+			InternalInsertNodeBefore(node, DataLinkedListNode);
 			if (node == head)
 			{
-				head = CustomLinkedListNode;
+				head = DataLinkedListNode;
 			}
-			return CustomLinkedListNode;
+			return DataLinkedListNode;
 		}
 
 		/// <summary>Adds the specified new node before the specified existing node in the <see cref="T:Core.CustomLinkedList<T>" />.</summary>
-		/// <param name="node">The <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> before which to insert <paramref name="newNode" />.</param>
-		/// <param name="newNode">The new <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> to add to the <see cref="T:Core.CustomLinkedList<T>" />.</param>
+		/// <param name="node">The <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> before which to insert <paramref name="newNode" />.</param>
+		/// <param name="newNode">The new <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> to add to the <see cref="T:Core.CustomLinkedList<T>" />.</param>
 		/// <exception cref="T:System.ArgumentNullException">
 		///   <paramref name="node" /> is <see langword="null" />.  
 		/// -or-  
@@ -502,7 +502,7 @@ namespace Core
 		/// -or-  
 		/// <paramref name="newNode" /> belongs to another <see cref="T:Core.CustomLinkedList<T>" />.</exception>
 
-		private void AddBefore(CustomLinkedListNode<T> node, CustomLinkedListNode<T> newNode)
+		private void AddBefore(DataLinkedListNode<T> node, DataLinkedListNode<T> newNode)
 		{
 			ValidateNode(node);
 			ValidateNewNode(newNode);
@@ -516,31 +516,31 @@ namespace Core
 
 		/// <summary>Adds a new node containing the specified value at the start of the <see cref="T:Core.CustomLinkedList<T>" />.</summary>
 		/// <param name="value">The value to add at the start of the <see cref="T:Core.CustomLinkedList<T>" />.</param>
-		/// <returns>The new <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> containing <paramref name="value" />.</returns>
+		/// <returns>The new <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> containing <paramref name="value" />.</returns>
 
-		private CustomLinkedListNode<T> AddFirst(T value)
+		private DataLinkedListNode<T> AddFirst(T value)
 		{
-			CustomLinkedListNode<T> CustomLinkedListNode = new CustomLinkedListNode<T>(this, value);
+			DataLinkedListNode<T> DataLinkedListNode = new DataLinkedListNode<T>(this, value);
 			if (head == null)
 			{
-				InternalInsertNodeToEmptyList(CustomLinkedListNode);
+				InternalInsertNodeToEmptyList(DataLinkedListNode);
 			}
 			else
 			{
-				InternalInsertNodeBefore(head, CustomLinkedListNode);
-				head = CustomLinkedListNode;
+				InternalInsertNodeBefore(head, DataLinkedListNode);
+				head = DataLinkedListNode;
 			}
-			return CustomLinkedListNode;
+			return DataLinkedListNode;
 		}
 
 		/// <summary>Adds the specified new node at the start of the <see cref="T:Core.CustomLinkedList<T>" />.</summary>
-		/// <param name="node">The new <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> to add at the start of the <see cref="T:Core.CustomLinkedList<T>" />.</param>
+		/// <param name="node">The new <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> to add at the start of the <see cref="T:Core.CustomLinkedList<T>" />.</param>
 		/// <exception cref="T:System.ArgumentNullException">
 		///   <paramref name="node" /> is <see langword="null" />.</exception>
 		/// <exception cref="T:System.InvalidOperationException">
 		///   <paramref name="node" /> belongs to another <see cref="T:Core.CustomLinkedList<T>" />.</exception>
 
-		private void AddFirst(CustomLinkedListNode<T> node)
+		private void AddFirst(DataLinkedListNode<T> node)
 		{
 			ValidateNewNode(node);
 			if (head == null)
@@ -557,30 +557,30 @@ namespace Core
 
 		/// <summary>Adds a new node containing the specified value at the end of the <see cref="T:Core.CustomLinkedList<T>" />.</summary>
 		/// <param name="value">The value to add at the end of the <see cref="T:Core.CustomLinkedList<T>" />.</param>
-		/// <returns>The new <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> containing <paramref name="value" />.</returns>
+		/// <returns>The new <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> containing <paramref name="value" />.</returns>
 
-		private CustomLinkedListNode<T> AddLast(T value)
+		private DataLinkedListNode<T> AddLast(T value)
 		{
-			CustomLinkedListNode<T> CustomLinkedListNode = new CustomLinkedListNode<T>(this, value);
+			DataLinkedListNode<T> DataLinkedListNode = new DataLinkedListNode<T>(this, value);
 			if (head == null)
 			{
-				InternalInsertNodeToEmptyList(CustomLinkedListNode);
+				InternalInsertNodeToEmptyList(DataLinkedListNode);
 			}
 			else
 			{
-				InternalInsertNodeBefore(head, CustomLinkedListNode);
+				InternalInsertNodeBefore(head, DataLinkedListNode);
 			}
-			return CustomLinkedListNode;
+			return DataLinkedListNode;
 		}
 
 		/// <summary>Adds the specified new node at the end of the <see cref="T:Core.CustomLinkedList<T>" />.</summary>
-		/// <param name="node">The new <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> to add at the end of the <see cref="T:Core.CustomLinkedList<T>" />.</param>
+		/// <param name="node">The new <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> to add at the end of the <see cref="T:Core.CustomLinkedList<T>" />.</param>
 		/// <exception cref="T:System.ArgumentNullException">
 		///   <paramref name="node" /> is <see langword="null" />.</exception>
 		/// <exception cref="T:System.InvalidOperationException">
 		///   <paramref name="node" /> belongs to another <see cref="T:Core.CustomLinkedList<T>" />.</exception>
 
-		private void AddLast(CustomLinkedListNode<T> node)
+		private void AddLast(DataLinkedListNode<T> node)
 		{
 			ValidateNewNode(node);
 			if (head == null)
@@ -599,13 +599,13 @@ namespace Core
 		#region Remove*
 
 		/// <summary>Removes the specified node from the <see cref="T:Core.CustomLinkedList<T>" />.</summary>
-		/// <param name="node">The <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> to remove from the <see cref="T:Core.CustomLinkedList<T>" />.</param>
+		/// <param name="node">The <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> to remove from the <see cref="T:Core.CustomLinkedList<T>" />.</param>
 		/// <exception cref="T:System.ArgumentNullException">
 		///   <paramref name="node" /> is <see langword="null" />.</exception>
 		/// <exception cref="T:System.InvalidOperationException">
 		///   <paramref name="node" /> is not in the current <see cref="T:Core.CustomLinkedList<T>" />.</exception>
 
-		private void Remove(CustomLinkedListNode<T> node)
+		private void Remove(DataLinkedListNode<T> node)
 		{
 			ValidateNode(node);
 			InternalRemoveNode(node);
@@ -643,12 +643,12 @@ namespace Core
 		//DONE
 		public new void Clear()
 		{
-            CustomLinkedListNode<T> next = head;
+            DataLinkedListNode<T> next = head;
 			while (next != null)
 			{
-				CustomLinkedListNode<T> CustomLinkedListNode = next;
+				DataLinkedListNode<T> DataLinkedListNode = next;
 				next = next.Next;
-				CustomLinkedListNode.Invalidate();
+				DataLinkedListNode.Invalidate();
 			}
 			head = null;
 			count = 0;
@@ -699,7 +699,7 @@ namespace Core
             //{
             //	throw new ArgumentException("Arg_InsufficientSpace");
             //}
-            //CustomLinkedListNode<T> next = head;
+            //DataLinkedListNode<T> next = head;
             //if (next != null)
             //{
             //	do
@@ -796,10 +796,10 @@ namespace Core
 		//DONE
 		public new bool Remove(T value)
 		{
-			CustomLinkedListNode<T> CustomLinkedListNode = Find(value);
-			if (CustomLinkedListNode != null)
+			DataLinkedListNode<T> DataLinkedListNode = Find(value);
+			if (DataLinkedListNode != null)
 			{
-				InternalRemoveNode(CustomLinkedListNode);				
+				InternalRemoveNode(DataLinkedListNode);				
 				return true && base.Remove(value);
 			}
 			return false;
@@ -814,10 +814,10 @@ namespace Core
 		//DONE
 		public new void RemoveAt(int index)
         {
-            CustomLinkedListNode<T> CustomLinkedListNode = Find(base.Items[index]);
-			if (CustomLinkedListNode != null)
+            DataLinkedListNode<T> DataLinkedListNode = Find(base.Items[index]);
+			if (DataLinkedListNode != null)
 			{
-				InternalRemoveNode(CustomLinkedListNode);
+				InternalRemoveNode(DataLinkedListNode);
 				base.RemoveAt(index);
 			}
 			else throw new NullReferenceException();
@@ -828,10 +828,10 @@ namespace Core
 		//DONE
 		public new void RemoveItem(int index)
 		{
-			CustomLinkedListNode<T> CustomLinkedListNode = Find(base.Items[index]);
-			if (CustomLinkedListNode != null)
+			DataLinkedListNode<T> DataLinkedListNode = Find(base.Items[index]);
+			if (DataLinkedListNode != null)
 			{
-				InternalRemoveNode(CustomLinkedListNode);
+				InternalRemoveNode(DataLinkedListNode);
 				base.RemoveItem(index);
 			}
 			else throw new NullReferenceException();
@@ -842,12 +842,12 @@ namespace Core
 		#region Lookup Methods
 
 		/// <summary>
-		/// Gets the <see cref="T:Core.CustomLinkedListNode<T>"/> at the given Index.
+		/// Gets the <see cref="T:Core.DataLinkedListNode<T>"/> at the given Index.
 		/// </summary>
 		/// <param name="index"></param>
 		/// <returns></returns>
 
-		public CustomLinkedListNode<T> NodeAtIndex(int index)
+		public DataLinkedListNode<T> NodeAtIndex(int index)
 		{
 			return this.Find(base.Items[index]);
 		}
@@ -886,20 +886,20 @@ namespace Core
 
 		/// <summary>Finds the first node that contains the specified value.</summary>
 		/// <param name="value">The value to locate in the <see cref="T:Core.CustomLinkedList<T>" />.</param>
-		/// <returns>The first <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> that contains the specified value, if found; otherwise, <see langword="null" />.</returns>
+		/// <returns>The first <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> that contains the specified value, if found; otherwise, <see langword="null" />.</returns>
 
-		public CustomLinkedListNode<T> Find(T value)
+		public DataLinkedListNode<T> Find(T value)
 		{
 			return this.Find(value.ID);
 		}
         
 		/// <summary>Finds the first node that contains the specified value.</summary>
 		/// <param name="value">The value to locate in the <see cref="T:Core.CustomLinkedList<T>" />.</param>
-		/// <returns>The first <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> that contains the specified value, if found; otherwise, <see langword="null" />.</returns>
+		/// <returns>The first <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> that contains the specified value, if found; otherwise, <see langword="null" />.</returns>
 		
-		public CustomLinkedListNode<T> Find(Guid id)
+		public DataLinkedListNode<T> Find(Guid id)
 		{
-			CustomLinkedListNode<T> next = head;
+			DataLinkedListNode<T> next = head;
 			if (next != null)
 			{
 				if (id != Guid.Empty)
@@ -935,50 +935,50 @@ namespace Core
 
 		/// <summary>Finds the last node that contains the specified value.</summary>
 		/// <param name="value">The value to locate in the <see cref="T:Core.CustomLinkedList<T>" />.</param>
-		/// <returns>The last <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> that contains the specified value, if found; otherwise, <see langword="null" />.</returns>
+		/// <returns>The last <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> that contains the specified value, if found; otherwise, <see langword="null" />.</returns>
 
-		public CustomLinkedListNode<T> FindLast(T value)
+		public DataLinkedListNode<T> FindLast(T value)
 		{
 			return this.FindLast(value.ID);
 		}
 
 		/// <summary>Finds the last node that contains the specified value.</summary>
 		/// <param name="value">The value to locate in the <see cref="T:Core.CustomLinkedList<T>" />.</param>
-		/// <returns>The last <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> that contains the specified value, if found; otherwise, <see langword="null" />.</returns>
+		/// <returns>The last <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> that contains the specified value, if found; otherwise, <see langword="null" />.</returns>
 
-		public CustomLinkedListNode<T> FindLast(Guid id)
+		public DataLinkedListNode<T> FindLast(Guid id)
 		{
 			if (head == null)
 			{
 				return null;
 			}
-			CustomLinkedListNode<T> prev = head.prev;
-			CustomLinkedListNode<T> CustomLinkedListNode = prev;
-			if (CustomLinkedListNode != null)
+			DataLinkedListNode<T> prev = head.prev;
+			DataLinkedListNode<T> DataLinkedListNode = prev;
+			if (DataLinkedListNode != null)
 			{
 				if (id != Guid.Empty)
 				{
 					do
 					{
-						if (Guid.Equals(CustomLinkedListNode.item.ID, id))
+						if (Guid.Equals(DataLinkedListNode.item.ID, id))
 						{
-							return CustomLinkedListNode;
+							return DataLinkedListNode;
 						}
-						CustomLinkedListNode = CustomLinkedListNode.prev;
+						DataLinkedListNode = DataLinkedListNode.prev;
 					}
-					while (CustomLinkedListNode != prev);
+					while (DataLinkedListNode != prev);
 				}
 				else
 				{
 					do
 					{
-						if (CustomLinkedListNode.item == null)
+						if (DataLinkedListNode.item == null)
 						{
-							return CustomLinkedListNode;
+							return DataLinkedListNode;
 						}
-						CustomLinkedListNode = CustomLinkedListNode.prev;
+						DataLinkedListNode = DataLinkedListNode.prev;
 					}
-					while (CustomLinkedListNode != prev);
+					while (DataLinkedListNode != prev);
 				}
 			}
 			return null;
@@ -988,7 +988,7 @@ namespace Core
 
         #region Internal Methods
 
-        private void InternalInsertNodeBefore(CustomLinkedListNode<T> node, CustomLinkedListNode<T> newNode)
+        private void InternalInsertNodeBefore(DataLinkedListNode<T> node, DataLinkedListNode<T> newNode)
 		{
 			newNode.next = node;
 			newNode.prev = node.prev;
@@ -998,7 +998,7 @@ namespace Core
 			count++;
 		}
 
-		private void InternalInsertNodeToEmptyList(CustomLinkedListNode<T> newNode)
+		private void InternalInsertNodeToEmptyList(DataLinkedListNode<T> newNode)
 		{
 			newNode.next = newNode;
 			newNode.prev = newNode;
@@ -1007,7 +1007,7 @@ namespace Core
 			count++;
 		}
 
-		internal void InternalRemoveNode(CustomLinkedListNode<T> node)
+		internal void InternalRemoveNode(DataLinkedListNode<T> node)
 		{
 			if (node.next == node)
 			{
@@ -1027,7 +1027,7 @@ namespace Core
 			version++;
 		}
 
-		internal void ValidateNewNode(CustomLinkedListNode<T> node)
+		internal void ValidateNewNode(DataLinkedListNode<T> node)
 		{
 			if (node == null)
 			{
@@ -1039,7 +1039,7 @@ namespace Core
 			}
 		}
 
-		internal void ValidateNode(CustomLinkedListNode<T> node)
+		internal void ValidateNode(DataLinkedListNode<T> node)
 		{
 			if (node == null)
 			{
@@ -1110,7 +1110,7 @@ namespace Core
 			{
 				throw new ArgumentException("Invalid_Array_Type");
 			}
-			CustomLinkedListNode<T> next = head;
+			DataLinkedListNode<T> next = head;
 			try
 			{
 				if (next != null)
@@ -1152,20 +1152,20 @@ namespace Core
     /// <summary>Represents a node in a <see cref="T:Core.CustomLinkedList<T>" />. This class cannot be inherited.</summary>
     /// <typeparam name="T">Specifies the element type of the linked list.</typeparam>
     [ComVisible(false)]
-	public sealed class CustomLinkedListNode<T> where T : IElement
+	public sealed class DataLinkedListNode<T> where T : IDataGoo
 	{
-		internal CustomLinkedList<T> list;
+		internal DataLinkedList<T> list;
 
-		internal CustomLinkedListNode<T> next;
+		internal DataLinkedListNode<T> next;
 
-		internal CustomLinkedListNode<T> prev;
+		internal DataLinkedListNode<T> prev;
 
 		internal T item;
 
-		/// <summary>Gets the <see cref="T:Core.CustomLinkedList<T>" /> that the <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> belongs to.</summary>
-		/// <returns>A reference to the <see cref="T:Core.CustomLinkedList<T>" /> that the <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> belongs to, or <see langword="null" /> if the <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> is not linked.</returns>
+		/// <summary>Gets the <see cref="T:Core.CustomLinkedList<T>" /> that the <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> belongs to.</summary>
+		/// <returns>A reference to the <see cref="T:Core.CustomLinkedList<T>" /> that the <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> belongs to, or <see langword="null" /> if the <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> is not linked.</returns>
 		
-		public CustomLinkedList<T> List
+		public DataLinkedList<T> List
 		{
 			
 			get
@@ -1177,7 +1177,7 @@ namespace Core
 		/// <summary>Gets the next node in the <see cref="T:Core.CustomLinkedList<T>" />.</summary>
 		/// <returns>A reference to the next node in the <see cref="T:Core.CustomLinkedList<T>" />, or <see langword="null" /> if the current node is the last element (<see cref="P:Core.CustomLinkedList<T>.Last" />) of the <see cref="T:Core.CustomLinkedList<T>" />.</returns>
 		
-		public CustomLinkedListNode<T> Next
+		public DataLinkedListNode<T> Next
 		{
 			
 			get
@@ -1193,7 +1193,7 @@ namespace Core
 		/// <summary>Gets the previous node in the <see cref="T:Core.CustomLinkedList<T>" />.</summary>
 		/// <returns>A reference to the previous node in the <see cref="T:Core.CustomLinkedList<T>" />, or <see langword="null" /> if the current node is the first element (<see cref="P:Core.CustomLinkedList<T>.First" />) of the <see cref="T:Core.CustomLinkedList<T>" />.</returns>
 		
-		public CustomLinkedListNode<T> Previous
+		public DataLinkedListNode<T> Previous
 		{
 			
 			get
@@ -1223,15 +1223,15 @@ namespace Core
 			}
 		}
 
-		/// <summary>Initializes a new instance of the <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" /> class, containing the specified value.</summary>
-		/// <param name="value">The value to contain in the <see cref="T:System.Collections.Generic.CustomLinkedListNode`1" />.</param>
+		/// <summary>Initializes a new instance of the <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> class, containing the specified value.</summary>
+		/// <param name="value">The value to contain in the <see cref="T:System.Collections.Generic.DataLinkedListNode`1" />.</param>
 		
-		public CustomLinkedListNode(T value)
+		public DataLinkedListNode(T value)
 		{
 			item = value;
 		}
 
-		internal CustomLinkedListNode(CustomLinkedList<T> list, T value)
+		internal DataLinkedListNode(DataLinkedList<T> list, T value)
 		{
 			this.list = list;
 			item = value;

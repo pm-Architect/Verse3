@@ -42,7 +42,7 @@ namespace Core
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
-        protected CustomLinkedList<IElement> elements = new CustomLinkedList<IElement>();
+        protected ElementsLinkedList<IElement> elements = new ElementsLinkedList<IElement>();
 
         ///
         /// The current scale at which the content is being viewed.
@@ -123,7 +123,7 @@ namespace Core
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
-        public CustomLinkedList<IElement> Elements
+        public ElementsLinkedList<IElement> Elements
         {
             get
             {
@@ -299,14 +299,7 @@ namespace Core
         public Type? ViewType { get; }
 #nullable restore
 
-        /// <summary>
-        /// Data View Type for the inheritor Element class.
-        /// Can be a null value.
-        /// Useful for defining the display properties of the element in the WPF UI Environment.
-        /// </summary>
-        //public Type GetViewType();
-
-        public abstract IRenderView ElementView { get; }
+        public bool Visible { get; set; }
 
         #region BoundingBox
 
@@ -357,70 +350,7 @@ namespace Core
     public interface IRenderView
     {
         IRenderable Element { get; }
-
-        //ObservableCollection<IRenderable> Children { get; }
-
         void Render();
-
-        //        public delegate void MouseEventHandler();
-
-        //        MouseEventHandler MouseDown { get; set; }
-
-        //        MouseEventHandler MouseMove { get; set; }
-
-        //        MouseEventHandler MouseUp { get; set; }
-
-        //        MouseEventHandler MouseWheel { get; set; }
-
-        //        MouseEventHandler DataContextChanged { get; set; }
-
-        //        MouseEventHandler Loaded { get; set; }
-
-        //#nullable enable
-
-        //        public event MouseEventHandler? MouseDownEvent;
-
-        //        public event MouseEventHandler? MouseMoveEvent;
-
-        //        public event MouseEventHandler? MouseUpEvent;
-
-        //        public event MouseEventHandler? MouseWheelEvent;
-
-        //        public event MouseEventHandler? DataContextChangedEvent;
-
-        //        public event MouseEventHandler? LoadedEvent;
-
-        //#nullable restore
-
-        //void OnMouseDown(object sender, EventArgs e);
-        //{
-        //    MouseDown();
-        //}
-
-        //void OnMouseMove(object sender, EventArgs e);
-        //{
-        //    MouseMove();
-        //}
-
-        //void OnMouseUp(object sender, EventArgs e);
-        //{
-        //    MouseUp();
-        //}
-
-        //void OnMouseWheel(object sender, EventArgs e);
-        //{
-        //    MouseWheel();
-        //}
-
-        //void OnDataContextChanged(object sender, EventArgs e);
-        //{
-        //    DataContextChanged();
-        //}
-
-        //void OnLoaded(object sender, EventArgs e);
-        //{
-        //    Loaded();
-        //}
     }
 
     public interface IComputable : IElement
@@ -430,9 +360,16 @@ namespace Core
         public Guid[] EventDS { get; }
         public Guid[] EventUS { get; }
 
-        public abstract void Compute();
+        public ComputableElementState ComputableElementState { get; set; }
+        public ElementConsole Console { get; }
+        public bool Enabled { get; set; }
+        void ClearData();
+        void CollectData();
+        void ComputeData();
     }
-        
+
+    
+    
     public enum ElementState
     {
         /// <summary>
@@ -443,6 +380,20 @@ namespace Core
         /// Default state.
         /// </summary>
         Default = 0
+    }
+    public enum ComputableElementState
+    {
+        /// <summary>
+        /// No state.
+        /// </summary>
+        Unset = -1,
+        /// <summary>
+        /// Default state.
+        /// </summary>
+        Default = 0,
+        Computing = 1,
+        Computed = 2,
+        Failed = 3
     }
     public enum ElementType
     {

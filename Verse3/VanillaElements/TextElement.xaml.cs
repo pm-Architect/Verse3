@@ -227,10 +227,11 @@ namespace Verse3.VanillaElements
 
         public ElementState State { get; set; }
 
-        public IRenderView ElementView { get; internal set; }
+        //public IRenderView ElementView { get; internal set; }
 
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get; set; }
+        bool IRenderable.Visible { get; set; }
 
         #endregion
 
