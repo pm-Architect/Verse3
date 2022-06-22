@@ -15,6 +15,8 @@ namespace Core
         object Data { get; set; }
         bool IsValid { get; }
         string IsValidReason { get; }
+        public DataAddress Address { get; }
+        public Type DataType { get; }
 
         #region INotifyPropertyChanged Members
 
@@ -50,9 +52,6 @@ namespace Core
         void ReplaceSource(IDataGooContainer oldSource, IDataGooContainer newSource);
         void ReplaceSource(Guid oldSourceID, IDataGooContainer newSource);
         DataStructure DataGoos { get; set; }
-
-        //TODO:
-        //VOLATILE DATA
     }
 
     public class DataStructure<D> : DataStructure
@@ -85,12 +84,13 @@ namespace Core
         public Guid Parent { get; }
         public Guid[] Children { get; }
         public bool IsEmpty { get; }
+        public DataAddress Address { get; }
+        public Type DataType { get; }
+
         public void OnPropertyChanged(string name)
         {
 
         }
-
-        //TODO : Type?, if any
     }
 
     public class DataAddress
