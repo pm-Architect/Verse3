@@ -182,7 +182,7 @@ namespace Verse3.VanillaElements
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            ((ButtonElement)this.Element).ButtonClicked(sender, e);
         }
     }
 
@@ -292,9 +292,15 @@ namespace Verse3.VanillaElements
             return false;
         }
 
+        internal void ButtonClicked(object sender, RoutedEventArgs e)
+        {
+            OnButtonClicked.Invoke(sender, e);
+        }
+
         private object displayedText;
 
         public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
+        public event EventHandler<RoutedEventArgs> OnButtonClicked;
 
         #endregion
     }

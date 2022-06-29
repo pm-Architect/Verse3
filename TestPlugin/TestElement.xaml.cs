@@ -103,6 +103,7 @@ namespace TestPlugin
                 var buttonBlock = new ButtonElement();
                 buttonBlock.DisplayedText = "Click me";
                 DataTemplateManager.RegisterDataTemplate(buttonBlock);
+                buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
                 Children.Add(buttonBlock);
 
                 var textBoxBlock = new TextBoxElement();
@@ -111,6 +112,13 @@ namespace TestPlugin
                 Children.Add(textBoxBlock);
             }
 
+        }
+
+        private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
+        {
+            if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.BezierPenDown)
+            DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.BezierPenDown;
+            else DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
         }
 
         #region MouseEvents

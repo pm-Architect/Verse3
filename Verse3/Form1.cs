@@ -82,14 +82,14 @@ namespace Verse3
                     this.Cursor = Cursors.Default;
                 }
             }
-            if (drawstart != Point.Empty && started)
-            {
-                DrawBezierCurve(drawstart, InfiniteCanvasWPFControl.GetMouseRelPosition(), rtl);
-                started = false;
-            }
+            //if (drawstart != Point.Empty && started)
+            //{
+            //    DrawBezierCurve(drawstart, InfiniteCanvasWPFControl.GetMouseRelPosition(), rtl);
+            //    started = false;
+            //}
         }
 
-        Point drawstart = new Point();
+        //Point drawstart = new Point();
         private void Canvas_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (sender is InfiniteCanvasWPFControl)
@@ -100,10 +100,10 @@ namespace Verse3
                     this.Cursor = Cursors.SizeAll;
                 }
             }
-            if (started)
-            {
-                drawstart = InfiniteCanvasWPFControl.GetMouseRelPosition();
-            }
+            //if (started)
+            //{
+            //    drawstart = InfiniteCanvasWPFControl.GetMouseRelPosition();
+            //}
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -145,40 +145,34 @@ namespace Verse3
             }
         }
 
-        private void DrawBezierCurve(Point start, Point end, bool rtl)
-        {
-            BezierElement bezier = new BezierElement((start.X - 200), (start.Y - 200), (end.X - start.X), (end.Y - start.Y), rtl);
-            DataTemplateManager.RegisterDataTemplate(bezier as IRenderable);
-            DataModel.Instance.Elements.Add(bezier);
-        }
 
-        bool started = false;
-        bool rtl = false;
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (!started)
-            {
-                started = true;
-                rtl = false;
-            }
-            else if (started)
-            {
-                started = false;
-            }
-        }
+        //bool started = false;
+        //bool rtl = false;
+        //private void button2_Click(object sender, EventArgs e)
+        //{
+        //    if (!started)
+        //    {
+        //        started = true;
+        //        rtl = false;
+        //    }
+        //    else if (started)
+        //    {
+        //        started = false;
+        //    }
+        //}
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            if (!started)
-            {
-                started = true;
-                rtl = true;
-            }
-            else if (started)
-            {
-                started = false;
-            }
-        }
+        //private void button3_Click(object sender, EventArgs e)
+        //{
+        //    if (!started)
+        //    {
+        //        started = true;
+        //        rtl = true;
+        //    }
+        //    else if (started)
+        //    {
+        //        started = false;
+        //    }
+        //}
 
         private void timer1_Tick(object sender, EventArgs e)
         {
