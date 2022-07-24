@@ -116,6 +116,10 @@ namespace Verse3
         public static bool RegisterDataTemplate(IRenderable el)
         {
             if (el.ViewType == null) return false;
+            if (!el.BoundingBox.IsValid())
+            {
+                //TODO: Log to console!
+            }
             var template = CreateTemplate(el.GetType(), el.ViewType);
 
             if (DataViewModel.WPFControl.Resources[template.DataTemplateKey] != null) return false;

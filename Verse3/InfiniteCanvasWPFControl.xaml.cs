@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 using System.Windows.Markup;
 using Verse3.VanillaElements;
 using System.Runtime.InteropServices;
+using Verse3.CanvasElements;
 
 namespace Verse3
 {
@@ -34,7 +35,7 @@ namespace Verse3
 
         #region Fields
 
-        internal static BezierElement currentBezierCurve = null;
+        internal static ConnectionElement currentBezierCurve = null;
         private System.Windows.Forms.Cursor winFormsCursor = System.Windows.Forms.Cursors.Default;
         /// <summary>
         /// Specifies the current state of the mouse handling logic.
@@ -350,18 +351,18 @@ namespace Verse3
                 Point curContentMousePoint = e.GetPosition(LBcontent);
                 InitDragSelectRect(origContentMouseDownPoint, curContentMousePoint);
             }
-            else if (mouseHandlingMode == MouseHandlingMode.BezierPenDown)
-            {
-                if (currentBezierCurve != null)
-                {
-                    currentBezierCurve.End = this.GetMouseRelPosition();
-                }
-                else
-                {
-                    //currentBezierCurve = new BezierElement(this.GetMouseRelPosition(), this.GetMouseRelPosition(), false);
-                    currentBezierCurve = new BezierElement(this.GetMouseRelPosition(), this.GetMouseRelPosition(), false);
-                }
-            }
+            //else if (mouseHandlingMode == MouseHandlingMode.BezierPenDown)
+            //{
+            //    if (currentBezierCurve != null)
+            //    {
+            //        currentBezierCurve.End = this.GetMouseRelPosition();
+            //    }
+            //    else
+            //    {
+            //        //currentBezierCurve = new ConnectionElement(this.GetMouseRelPosition(), this.GetMouseRelPosition(), false);
+            //        currentBezierCurve = new ConnectionElement(this.GetMouseRelPosition(), this.GetMouseRelPosition(), false);
+            //    }
+            //}
             else
             {
                 currentBezierCurve = null;

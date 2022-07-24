@@ -19,22 +19,25 @@ using System.Windows.Shapes;
 using Verse3;
 using static Core.Geometry2D;
 
-namespace Verse3.VanillaElements
+namespace Verse3.CanvasElements
 {
     /// <summary>
     /// Visual Interaction logic for TestElement.xaml
     /// </summary>
-    public partial class SliderElementView : UserControl, IRenderView
+    public partial class NodeElementView : UserControl, IRenderView
     {
-        private IRenderable _element;
+        private NodeElement _element;
         
         public IRenderable Element
         {
             get { return _element; }
             private set
             {
-                _element = value;
-                //Update();
+                if (value is NodeElement)
+                {
+                    _element = (NodeElement)value;
+                    //Update();
+                }
             }
         }
         public Guid? ElementGuid
@@ -42,19 +45,21 @@ namespace Verse3.VanillaElements
             get { return _element?.ID; }
         }
 
-        public SliderElementView()
+        public NodeElementView()
         {
             InitializeComponent();
-
-            Resources["PrimaryBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ff6700"));
         }
 
         public void Render()
         {
             if (this.Element != null)
             {
-                //this.Element.BoundingBox.Size.Height = SliderBlock.ActualHeight;
-                //this.Element.BoundingBox.Size.Width = SliderBlock.ActualWidth;
+                if (!this.Element.BoundingBox.IsValid())
+                {
+                    this._element.BoundingBox = new BoundingBox(0, 0, this.ActualWidth, this.ActualHeight);
+                }
+                //this.Element.BoundingBox.Size.Height = NodeButton.ActualHeight;
+                //this.Element.BoundingBox.Size.Width = NodeButton.ActualWidth;)
                 //this.Element.OnPropertyChanged("Width");
                 //this.Element.OnPropertyChanged("Height");
             }
@@ -71,7 +76,7 @@ namespace Verse3.VanillaElements
             //DataViewModel.WPFControl.ContentElements.Focus();
             //Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
 
-            //SliderElementView rectangle = (SliderElementView)sender;
+            //NodeElementView rectangle = (NodeElementView)sender;
             //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
 
             ////myRectangle.IsSelected = true;
@@ -118,7 +123,7 @@ namespace Verse3.VanillaElements
 
             //DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
 
-            //SliderElementView rectangle = (SliderElementView)sender;
+            //NodeElementView rectangle = (NodeElementView)sender;
             //rectangle.ReleaseMouseCapture();
 
             //e.Handled = true;
@@ -147,7 +152,7 @@ namespace Verse3.VanillaElements
 
             //DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
 
-            //SliderElementView rectangle = (SliderElementView)sender;
+            //NodeElementView rectangle = (NodeElementView)sender;
             //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
             //myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
             //myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
@@ -169,32 +174,34 @@ namespace Verse3.VanillaElements
         void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             //DependencyPropertyChangedEventArgs
-            Element = this.DataContext as IRenderable;
-            Render();
+            //Element = this.DataContext as IRenderable;
+            //Render();
+            //BEFORE Registration
         }
 
         void OnLoaded(object sender, RoutedEventArgs e)
         {
             //RoutedEventArgs
+            //AFTER Registration
             Element = this.DataContext as IRenderable;
             Render();
         }
 
         #endregion
 
-        private void SliderBlock_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //((SliderElement)this.Element).Value = (double)e.NewValue;
+            ((NodeElement)this.Element).ButtonClicked(sender, e);
         }
     }
 
-    public class SliderElement : IRenderable
+    public class NodeElement : IRenderable, INode
     {        
         #region Data Members
 
         private BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
-        private static Type view = typeof(SliderElementView);
+        private static Type view = typeof(NodeElementView);
 
         #endregion
 
@@ -205,8 +212,8 @@ namespace Verse3.VanillaElements
         public Guid ID { get => _id; private set => _id = value; }
 
         public bool IsSelected { get; set; }
-
-        public BoundingBox BoundingBox { get => boundingBox; private set => boundingBox = value; }
+        public List<ConnectionElement> Connections { get; private set; }
+        public BoundingBox BoundingBox { get => boundingBox; internal set => boundingBox = value; }
 
         public double X { get => boundingBox.Location.X; }
 
@@ -256,20 +263,18 @@ namespace Verse3.VanillaElements
 
         #region Constructors
 
-        public SliderElement()
+        public NodeElement()
         {
-            this.Minimum = 0;
-            this.Maximum = 100;
-            this.Value = 50;
+            //this.DisplayedText = "Button";
+            this.Connections = new List<ConnectionElement>();
         }
 
-        public SliderElement(int x, int y, int width, int height)
+        public NodeElement(int x, int y, int width, int height)
         {
             this.boundingBox = new BoundingBox(x, y, width, height);
 
-            this.Minimum = 0;
-            this.Maximum = 100;
-            this.Value = 50;
+            //this.DisplayedText = "Button";
+            this.Connections = new List<ConnectionElement>();
         }
 
         #endregion
@@ -298,22 +303,32 @@ namespace Verse3.VanillaElements
             return false;
         }
 
-        private double minimum;
-
-        public double Minimum { get => minimum; set => SetProperty(ref minimum, value); }
-
-        private double maximum;
-
-        public double Maximum { get => maximum; set => SetProperty(ref maximum, value); }
-
-        private double value1;
-
-        public double Value { get => value1; set => SetProperty(ref value1, value); }
-
-        private int interval;
-
-        public int Interval { get => interval; set => SetProperty(ref interval, value); }
+        internal void ButtonClicked(object sender, RoutedEventArgs e)
+        {
+            OnButtonClicked.Invoke(sender, e);
+            this.IsSelected = true;
+            ConnectionElement connection = new ConnectionElement(this);
+            DataTemplateManager.RegisterDataTemplate(connection);
+            this.Connections.Add(connection);
+            if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.ConnectionStarted)
+                DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.ConnectionStarted;
+            else DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
+        }
 
         #endregion
+
+        private object displayedText;
+
+        public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
+
+        IElement INode.Parent => throw new NotImplementedException();
+
+        public NodeType NodeType => throw new NotImplementedException();
+
+        public CanvasPoint Hotspot => this.BoundingBox.Center;
+
+        public double HotspotThresholdRadius => throw new NotImplementedException();
+
+        public event EventHandler<RoutedEventArgs> OnButtonClicked;
     }
 }

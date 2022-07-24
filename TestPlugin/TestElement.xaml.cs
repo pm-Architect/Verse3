@@ -20,6 +20,7 @@ using Verse3;
 using static Core.Geometry2D;
 using Verse3.VanillaElements;
 using TextElement = Verse3.VanillaElements.TextElement;
+using Verse3.CanvasElements;
 
 namespace TestPlugin
 {
@@ -28,28 +29,28 @@ namespace TestPlugin
     /// </summary>
     public partial class TestElementView : UserControl, IRenderView
     {
-        private ObservableCollection<IRenderable>? _children;
-        private IRenderable? _element;
-        
-        public ObservableCollection<IRenderable>? Children
-        {
-            get { return _children; }
-            private set { _children = value; }
-        }
-        
+        private TestElement? _element;
+        //private ObservableCollection<IRenderable>? _children;
+
+        //public ObservableCollection<IRenderable>? Children
+        //{
+        //    get { return _children; }
+        //    private set { _children = value; }
+        //}
+
         public IRenderable? Element
         {
             get
             {
                 if (this._element == null)
                 {
-                    _element = this.DataContext as IRenderable;
+                    _element = this.DataContext as TestElement;
                 }
                 return _element;
             }
             private set
             {
-                _element = value as IRenderable;
+                _element = value as TestElement;
                 //Update();
             }
         }
@@ -60,65 +61,36 @@ namespace TestPlugin
 
         public TestElementView()
         {
-            this.Element = this.DataContext as IRenderable;
+            //this.Element = this.DataContext as IRenderable;
 
             InitializeComponent();
-            Render();
+            //Render();
         }
 
         public void Render()
         {
-            //< TextBlock HorizontalAlignment = "Center"
-            //       TextWrapping = "Wrap"
-            //       Text = "{Binding ElementText}"
-            //       VerticalAlignment = "Center"
-            //       FontFamily = "Maven Pro"
-            //       FontSize = "18"
-            //       />
 
-            if (Children == null)
-            {
-                Children = new ObservableCollection<IRenderable>();
-                InputsList.ItemsSource = Children;
-            }
+            //if (_children == null)
+            //{
+            //    _children = new ObservableCollection<IRenderable>();
+            //}
 
             if (this.Element is TestElement)
             {
-                TestElement testelement = (TestElement)this.Element;
-                
-                string? txt = testelement.ElementText;
-                var textBlock = new TextElement();
-                textBlock.DisplayedText = txt;
-                textBlock.TextAlignment = TextAlignment.Left;
-                DataTemplateManager.RegisterDataTemplate(textBlock);
-                Children.Add(textBlock);
-
-                var sliderBlock = new SliderElement();
-                sliderBlock.Minimum = 0;
-                sliderBlock.Maximum = 100;
-                sliderBlock.Value = 50;
-                DataTemplateManager.RegisterDataTemplate(sliderBlock);
-                Children.Add(sliderBlock);
-
-                var buttonBlock = new ButtonElement();
-                buttonBlock.DisplayedText = "Click me";
-                DataTemplateManager.RegisterDataTemplate(buttonBlock);
-                buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
-                Children.Add(buttonBlock);
-
-                var textBoxBlock = new TextBoxElement();
-                textBoxBlock.InputText = "Enter text";
-                DataTemplateManager.RegisterDataTemplate(textBoxBlock);
-                Children.Add(textBoxBlock);
+                TestElement testelement = (TestElement)this.Element;                
+                InputsList.ItemsSource = testelement.ChildrenElements;
             }
 
         }
 
+        private void NodeBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
+        {
+            Console.Beep();
+        }
+
         private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
         {
-            if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.BezierPenDown)
-            DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.BezierPenDown;
-            else DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
+            Console.Beep();
         }
 
         #region MouseEvents
@@ -262,6 +234,18 @@ namespace TestPlugin
         private static Type view = typeof(TestElementView);
 
         #endregion
+        
+        public ObservableCollection<IRenderable>? ChildrenElements { get; set; }
+        
+        public void AddChild(IRenderable child)
+        {
+            if (ChildrenElements == null)
+            {
+                ChildrenElements = new ObservableCollection<IRenderable>();
+            }
+            ChildrenElements.Add(child);
+            Children?.Append(child.ID);
+        }
 
         #region Properties
 
@@ -303,7 +287,7 @@ namespace TestPlugin
 
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get; set; }
-        bool IRenderable.Visible { get; set; }
+        //bool IRenderable.Visible { get; set; }
 
         #endregion
 

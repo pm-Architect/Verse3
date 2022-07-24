@@ -299,7 +299,7 @@ namespace Core
         public Type? ViewType { get; }
 #nullable restore
 
-        public bool Visible { get; set; }
+        //public bool Visible { get; set; }
 
         #region BoundingBox
 
@@ -368,6 +368,24 @@ namespace Core
         void ComputeData();
     }
 
+    public interface INode : IElement
+    {
+        public IElement Parent { get; }
+        public NodeType NodeType { get; }
+        public CanvasPoint Hotspot { get; }
+        public double HotspotThresholdRadius { get; }
+        public new ElementType ElementType { get => ElementType.Node; }
+
+    }
+
+    public interface IConnection : IElement
+    {
+        public INode Origin { get; }
+        public INode Destination { get; }
+        public ConnectionType ConnectionType { get; }
+        public new ElementType ElementType { get => ElementType.Connection; }
+    }
+
     
     
     public enum ElementState
@@ -379,7 +397,15 @@ namespace Core
         /// <summary>
         /// Default state.
         /// </summary>
-        Default = 0
+        Default = 0,
+        /// <summary>
+        /// Hidden state.
+        /// </summary>
+        Hidden = 1,
+        /// <summary>
+        /// Disabled state.
+        /// </summary>
+        Disabled = 2
     }
     public enum ComputableElementState
     {
@@ -404,7 +430,28 @@ namespace Core
         /// <summary>
         /// Default type.
         /// </summary>
-        Default = 0
+        Default = 0,
+        /// <summary>
+        /// Default type.
+        /// </summary>
+        Connection = 1,
+        /// <summary>
+        /// Default type.
+        /// </summary>
+        Node = 2
     }
-
+    public enum NodeType
+    {
+        Unset = -1,
+        Default = 0,
+        Input = 1,
+        Output = 2
+    }
+    public enum ConnectionType
+    {
+        Unset = -1,
+        Default = 0,
+        Data = 1,
+        Event = 2
+    }
 }

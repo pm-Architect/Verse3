@@ -8,7 +8,8 @@ namespace Core
 {
     internal static class Core
     {
-        
+        //TODO:
+        //LOOP LIMITING THRESHOLD : ENV_VAR
     }
 
     internal static class AssemblyManager
