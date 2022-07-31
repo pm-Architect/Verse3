@@ -196,6 +196,7 @@ namespace Verse3.VanillaElements
         #region Properties
 
         public Type ViewType { get { return view; } }
+        public object ViewKey { get; set; }
 
         public Guid ID { get => _id; private set => _id = value; }
 

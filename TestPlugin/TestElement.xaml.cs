@@ -29,7 +29,7 @@ namespace TestPlugin
     public partial class TestElementView : UserControl, IRenderView
     {
         private ObservableCollection<IRenderable>? _children;
-        private IRenderable? _element;
+        private TestElement? _element;
         
         public ObservableCollection<IRenderable>? Children
         {
@@ -43,13 +43,13 @@ namespace TestPlugin
             {
                 if (this._element == null)
                 {
-                    _element = this.DataContext as IRenderable;
+                    _element = this.DataContext as TestElement;
                 }
                 return _element;
             }
             private set
             {
-                _element = value as IRenderable;
+                _element = value as TestElement;
                 //Update();
             }
         }
@@ -60,11 +60,11 @@ namespace TestPlugin
 
         public TestElementView()
         {
-            this.Element = this.DataContext as IRenderable;
-
             InitializeComponent();
             Render();
         }
+
+        TextElement textBlock = new TextElement();
 
         public void Render()
         {
@@ -85,9 +85,14 @@ namespace TestPlugin
             if (this.Element is TestElement)
             {
                 TestElement testelement = (TestElement)this.Element;
-                
+
+                var nodeBlock = new NodeElement(testelement);
+                DataTemplateManager.RegisterDataTemplate(nodeBlock);                
+                Children.Add(nodeBlock);
+
+
                 string? txt = testelement.ElementText;
-                var textBlock = new TextElement();
+                textBlock = new TextElement();
                 textBlock.DisplayedText = txt;
                 textBlock.TextAlignment = TextAlignment.Left;
                 DataTemplateManager.RegisterDataTemplate(textBlock);
@@ -102,6 +107,7 @@ namespace TestPlugin
 
                 var buttonBlock = new ButtonElement();
                 buttonBlock.DisplayedText = "Click me";
+                buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
                 DataTemplateManager.RegisterDataTemplate(buttonBlock);
                 Children.Add(buttonBlock);
 
@@ -111,6 +117,16 @@ namespace TestPlugin
                 Children.Add(textBoxBlock);
             }
 
+        }
+
+        private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
+        {
+            TestElement? testelement = this.Element as TestElement;
+            if (testelement != null)
+            {
+                string? txt = testelement.ElementText;
+                textBlock.DisplayedText = txt;
+            }
         }
 
         #region MouseEvents
@@ -241,9 +257,13 @@ namespace TestPlugin
             {
                 string? name = this.GetType().FullName;
                 string? viewname = this.ViewType.FullName;
+                //string? zindex = DataViewModel.WPFControl.Content.
+                //TODO: Z Index control for IRenderable
                 return $"Name: {name}" +
                     $"\nView: {viewname}" +
-                    $"\nID: {this.ID}";
+                    $"\nID: {this.ID}" +
+                    $"\nX: {this.X}" +
+                    $"\nY: {this.Y}";
             }
         }
         
@@ -258,12 +278,17 @@ namespace TestPlugin
         #region Properties
 
         public Type ViewType { get { return view; } }
+        public object ViewKey { get; set; }
 
         public Guid ID { get => _id; private set => _id = value; }
 
         public bool IsSelected { get; set; }
 
-        public BoundingBox BoundingBox { get => boundingBox; private set => boundingBox = value; }
+        public BoundingBox BoundingBox
+        {
+            get => boundingBox;
+            private set => SetProperty(ref boundingBox, value);
+        }
 
         public double X { get => boundingBox.Location.X; }
 
@@ -301,23 +326,27 @@ namespace TestPlugin
 
         #region Constructors
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        
         public TestElement()
         {
-            this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
-            Random rng = new Random();
-            byte r = (byte)rng.Next(0, 255);
-            this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
+            //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
+            //Random rng = new Random();
+            //byte r = (byte)rng.Next(0, 255);
+            //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
         public TestElement(int x, int y, int width, int height)
         {
-            this.boundingBox = new BoundingBox(x, y, width, height);
+            this.BoundingBox = new BoundingBox(x, y, width, height);
 
             this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             Random rng = new Random();
             byte r = (byte)rng.Next(0, 255);
             this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
+        
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         #endregion
 

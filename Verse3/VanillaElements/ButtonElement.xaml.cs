@@ -182,7 +182,7 @@ namespace Verse3.VanillaElements
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            ((ButtonElement)this.Element).ButtonClicked(sender, e);
         }
     }
 
@@ -193,12 +193,14 @@ namespace Verse3.VanillaElements
         private BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
         private static Type view = typeof(ButtonElementView);
+        public event EventHandler<RoutedEventArgs> OnButtonClicked;
 
         #endregion
 
         #region Properties
 
         public Type ViewType { get { return view; } }
+        public object ViewKey { get; set; }
 
         public Guid ID { get => _id; private set => _id = value; }
 
@@ -267,6 +269,14 @@ namespace Verse3.VanillaElements
         }
 
         #endregion
+        internal void ButtonClicked(object sender, RoutedEventArgs e)
+        {
+            OnButtonClicked.Invoke(sender, e);
+        }
+
+        private object displayedText;
+
+        public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
 
         #region INotifyPropertyChanged Members
 
@@ -291,10 +301,6 @@ namespace Verse3.VanillaElements
 
             return false;
         }
-
-        private object displayedText;
-
-        public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
 
         #endregion
     }

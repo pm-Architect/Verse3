@@ -106,7 +106,7 @@ namespace Core
             }
         }
         
-        public static double ContentCanvasMarginOffset = 200.0;
+        public static double ContentCanvasMarginOffset = 0.0;
 
         public DataModel() : base()
         {
@@ -135,6 +135,11 @@ namespace Core
             }
         }
 
+        public IElement GetElementWithGuid(Guid guid)
+        {
+            return this.Elements.Find(guid).Value;
+        }
+
         ///
         /// The current scale at which the content is being viewed.
         /// 
@@ -149,6 +154,19 @@ namespace Core
                 contentScale = value;
 
                 OnPropertyChanged("ContentScale");
+            }
+        }
+
+        public CanvasPoint ContentOffset
+        {
+            get
+            {
+                return new CanvasPoint(ContentOffsetX, ContentOffsetY);
+            }
+            set
+            {
+                ContentOffsetX = value.X;
+                ContentOffsetY = value.Y;
             }
         }
 
@@ -186,6 +204,19 @@ namespace Core
             }
         }
 
+        public CanvasSize ContentSize
+        {
+            get
+            {
+                return new CanvasSize(ContentWidth, ContentHeight);
+            }
+            set
+            {
+                ContentWidth = value.Width;
+                ContentHeight = value.Height;
+            }
+        }
+
         ///
         /// The width of the content (in content coordinates).
         /// 
@@ -217,6 +248,20 @@ namespace Core
                 contentHeight = value + (ContentCanvasMarginOffset * 2);
 
                 OnPropertyChanged("ContentHeight");
+            }
+        }
+
+
+        public CanvasSize ContentViewportSize
+        {
+            get
+            {
+                return new CanvasPoint(ContentViewportWidth, ContentViewportHeight);
+            }
+            set
+            {
+                ContentViewportWidth = value.Width;
+                ContentViewportHeight = value.Height;
             }
         }
 
@@ -290,6 +335,7 @@ namespace Core
 
     public interface IRenderable : IElement
     {
+        //TODO: GUID Lookup in DataModel Instance
         public Guid ZPrev { get; }
         public Guid ZNext { get; }
         public Guid Parent { get; }
@@ -315,7 +361,11 @@ namespace Core
         /// <summary>
         /// Set the X coordinate of the location of the element Bounding Box (in content coordinates).
         /// </summary>
-        void SetX(double x) { BoundingBox.Location.X = x; OnPropertyChanged("X"); }
+        void SetX(double x)
+        {
+            BoundingBox.Location.X = x;
+            OnPropertyChanged("X");
+        }
 
         /// <summary>
         /// The Y coordinate of the location of the element Bounding Box (in content coordinates).
@@ -324,7 +374,11 @@ namespace Core
         /// <summary>
         /// Set the Y coordinate of the location of the element Bounding Box (in content coordinates).
         /// </summary>
-        void SetY(double x) { BoundingBox.Location.Y = x; OnPropertyChanged("Y"); }
+        void SetY(double x)
+        {
+            BoundingBox.Location.Y = x;
+            OnPropertyChanged("Y");
+        }
 
         /// <summary>
         /// The width of the element Bounding Box (in content coordinates).
@@ -339,6 +393,8 @@ namespace Core
         /// The height of the element Bounding Box (in content coordinates).
         /// </summary>
         double Height { get; set; }
+        object ViewKey { get; set; }
+
         /// <summary>
         /// Set the height of the element Bounding Box (in content coordinates).
         /// </summary>
@@ -360,6 +416,7 @@ namespace Core
         public Guid[] EventDS { get; }
         public Guid[] EventUS { get; }
 
+        public ElementsLinkedList<INode> Nodes { get; }
         public ComputableElementState ComputableElementState { get; set; }
         public ElementConsole Console { get; }
         public bool Enabled { get; set; }
@@ -368,8 +425,25 @@ namespace Core
         void ComputeData();
     }
 
-    
-    
+    public interface INode : IElement
+    {
+        public IElement Parent { get; }
+        public ElementsLinkedList<IConnection> Connections { get; }
+        public NodeType NodeType { get; }
+        public CanvasPoint Hotspot { get; }
+        public double HotspotThresholdRadius { get; }
+        public new ElementType ElementType { get => ElementType.Node; }
+
+    }
+
+    public interface IConnection : IElement
+    {
+        public INode Origin { get; }
+        public INode Destination { get; }
+        public ConnectionType ConnectionType { get; }
+        public new ElementType ElementType { get => ElementType.Connection; }
+    }
+
     public enum ElementState
     {
         /// <summary>
@@ -404,7 +478,29 @@ namespace Core
         /// <summary>
         /// Default type.
         /// </summary>
-        Default = 0
+        Default = 0,
+        /// <summary>
+        /// Default type.
+        /// </summary>
+        Connection = 1,
+        /// <summary>
+        /// Default type.
+        /// </summary>
+        Node = 2
+    }
+    public enum NodeType
+    {
+        Unset = -1,
+        Default = 0,
+        Input = 1,
+        Output = 2
+    }
+    public enum ConnectionType
+    {
+        Unset = -1,
+        Default = 0,
+        Data = 1,
+        Event = 2
     }
 
 }

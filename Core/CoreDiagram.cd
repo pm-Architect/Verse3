@@ -1,0 +1,291 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Core.DataModel" BaseTypeListCollapsed="true">
+    <Position X="19.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAsAAAAAAAABABAEIIAQBAAAgABBAQAIQAAASAAKAEA=</HashCode>
+      <FileName>DataModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.153" Collapsed="true" />
+  </Class>
+  <Class Name="Core.DataStructure&lt;D&gt;" Collapsed="true">
+    <Position X="3.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataGoo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.DataStructure" Collapsed="true">
+    <Position X="3.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataGoo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.DataBranch&lt;D&gt;" Collapsed="true">
+    <Position X="1" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataGoo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.DataBranch" Collapsed="true">
+    <Position X="2" Y="4" Width="1.5" />
+    <InheritanceLine Type="Core.DataLinkedList&lt;T&gt;" ManuallyRouted="true">
+      <Path>
+        <Point X="3.875" Y="6.75" />
+        <Point X="3.875" Y="6.389" />
+        <Point X="2.75" Y="6.389" />
+        <Point X="2.75" Y="4.691" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAIAgAAAIAgEQAAgAAAAABACAAAAAAAAAAA=</HashCode>
+      <FileName>DataGoo.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Core.DataAddress" Collapsed="true">
+    <Position X="8" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>DataGoo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Verse3.AssemblyCompiler" Collapsed="true">
+    <Position X="11" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgEAAAAAAAAAAAAAEEACAAAAAEA=</HashCode>
+      <FileName>AssemblyCompiler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Verse3.AssemblyLoader" Collapsed="true">
+    <Position X="11" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>AssemblyLoader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.Core" Collapsed="true">
+    <Position X="12.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.AssemblyManager" Collapsed="true">
+    <Position X="11" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.CoreConsole" Collapsed="true">
+    <Position X="11" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CoreConsole.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.ElementConsole" Collapsed="true">
+    <Position X="12.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAgAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CoreConsole.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.DataLinkedList&lt;T&gt;" Collapsed="true">
+    <Position X="3" Y="6.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AMKIEHBArIAEBZgIBAAAJARkYAAYAgAECAECAAhQIQI=</HashCode>
+      <FileName>DataLinkedList.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Core.DataLinkedListNode&lt;T&gt;" Collapsed="true">
+    <Position X="4.75" Y="7" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AgAAAgAEAAAAAgAAAAQAAAAAAAAAAAAAAABgAAIAAAI=</HashCode>
+      <FileName>DataLinkedList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.ElementsLinkedList&lt;T&gt;" Collapsed="true">
+    <Position X="13.25" Y="4.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AMKIEHBArIAEBZgIBAAAJARkYAAYAgAECAECAAhQIQI=</HashCode>
+      <FileName>ElementsLinkedList.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Core.ElementsLinkedListNode&lt;T&gt;" Collapsed="true">
+    <Position X="15.25" Y="4.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AgAAAgAEAAAAAgAAAAQAAAAAAAAAAAAAAABgAAIAAAI=</HashCode>
+      <FileName>ElementsLinkedList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.Geometry2D" Collapsed="true">
+    <Position X="8" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry2D.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.Observable" Collapsed="true">
+    <Position X="14.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utilities.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="Core.IElement" Collapsed="true">
+    <Position X="7.75" Y="1" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAgAAAIAAAAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Core.IRenderable" Collapsed="true">
+    <Position X="9" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAgYAAAAEQEQAACQAAAAAAAAACAAAYAQ=</HashCode>
+      <FileName>DataModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Core.IRenderView" Collapsed="true">
+    <Position X="13.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>DataModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Core.IComputable" Collapsed="true">
+    <Position X="4.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAEAAAAAAIAAAAMAAAAAAAABAAAAEIAAAAAIAAA=</HashCode>
+      <FileName>DataModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Core.INode" Collapsed="true">
+    <Position X="6.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABCAAAAAAAAAAAAAAQAAAAAAAAABAAAAAAAAQAAA=</HashCode>
+      <FileName>DataModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Core.IConnection" Collapsed="true">
+    <Position X="11.25" Y="2.5" Width="1.5" />
+    <InheritanceLine Type="Core.IElement" FixedToPoint="true">
+      <Path>
+        <Point X="8.875" Y="1.691" />
+        <Point X="8.875" Y="2.125" />
+        <Point X="11.938" Y="2.125" />
+        <Point X="11.938" Y="2.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAIAAAAAAAEAAAAAAgAAAA=</HashCode>
+      <FileName>DataModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Core.IDataGoo" Collapsed="true">
+    <Position X="6.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAgAAAIAgEQAAgAAAAABACAAAAAAAAAAA=</HashCode>
+      <FileName>DataGoo.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Core.IDataGoo&lt;D&gt;" Collapsed="true">
+    <Position X="6.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAABA=</HashCode>
+      <FileName>DataGoo.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Core.IDataGooContainer" Collapsed="true">
+    <Position X="4.25" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAACAAAAAAAgAAASAAEIAABAAABAAAA=</HashCode>
+      <FileName>DataGoo.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Core.IEventGoo&lt;E&gt;" Collapsed="true">
+    <Position X="8.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>EventGoo.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="Core.ElementState" Collapsed="true">
+    <Position X="2.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAACAIAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>DataModel.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Core.ComputableElementState" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAQAAAAAAAAAIAAAAAAAEAAAABAAAAAAAAA=</HashCode>
+      <FileName>DataModel.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Core.ElementType" Collapsed="true">
+    <Position X="2.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAEAAAAAIAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>DataModel.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Core.NodeType" Collapsed="true">
+    <Position X="4" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAIIAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataModel.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Core.ConnectionType" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAIAAAAgAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataModel.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Core.DataState" Collapsed="true">
+    <Position X="9.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAIAAAAAAAACBg=</HashCode>
+      <FileName>DataGoo.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Core.DataStructureType" Collapsed="true">
+    <Position X="8" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAgAAAAAAAEAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>DataGoo.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Core.ContainerState" Collapsed="true">
+    <Position X="8" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAgAAAAEAAAAAAAAAAAEADA=</HashCode>
+      <FileName>DataGoo.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Core.LogMessageSeverity" Collapsed="true">
+    <Position X="11.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAAAAAABAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>CoreConsole.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Core.MouseHandlingMode" Collapsed="true">
+    <Position X="9.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAACAAAAAAABAAYAAAACAAAAAAAAACAAAAAAAEAAAA=</HashCode>
+      <FileName>Utilities.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

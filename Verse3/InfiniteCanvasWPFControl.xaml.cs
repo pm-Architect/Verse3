@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Markup;
+using static Core.Geometry2D;
 
 namespace Verse3
 {
@@ -140,8 +141,11 @@ namespace Verse3
 
             foreach (IRenderable el in DataViewModel.Instance.Elements)
             {
-                el.SetX(el.X + xOffset);
-                el.SetY(el.Y + yOffset);
+                if (el != null)
+                {
+                    el.SetX(el.X + xOffset);
+                    el.SetY(el.Y + yOffset);
+                }
             }
 
             DataViewModel.Instance.ContentWidth = contentRect.Width;
@@ -153,6 +157,15 @@ namespace Verse3
         {
             return new System.Drawing.Point((int)currCanvasMousePosition.X, (int)currCanvasMousePosition.Y);
         }
+
+        public System.Drawing.Point GetRelPosition(CanvasPoint pos)
+        {
+            //Canvas c = LBcontent.Style.Resources.FindName("InfiniteCanvasBackground") as Canvas;
+            //pos = LBcontent.PointToScreen(pos);
+            return new System.Drawing.Point((int)pos.X, (int)pos.Y);
+        }
+
+        //TODO: LBcontent.Items and LBcontent.HitTest
         #endregion
 
         #region MouseEvents

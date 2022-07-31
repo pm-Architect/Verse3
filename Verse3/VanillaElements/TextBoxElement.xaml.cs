@@ -199,6 +199,7 @@ namespace Verse3.VanillaElements
         #region Properties
 
         public Type ViewType { get { return view; } }
+        public object ViewKey { get; set; }
 
         public Guid ID { get => _id; private set => _id = value; }
 
@@ -206,9 +207,9 @@ namespace Verse3.VanillaElements
 
         public BoundingBox BoundingBox { get => boundingBox; private set => boundingBox = value; }
 
-        public double X { get => boundingBox.Location.X; }
+        public double X { get => boundingBox.Location.X + DataViewModel.ContentCanvasMarginOffset; }
 
-        public double Y { get => boundingBox.Location.Y; }
+        public double Y { get => boundingBox.Location.Y + DataViewModel.ContentCanvasMarginOffset; }
 
         public double Width
         {

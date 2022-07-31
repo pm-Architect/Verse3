@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -70,6 +71,10 @@ namespace Verse3
                 InfiniteCanvasWPFControl infiniteCanvas = (InfiniteCanvasWPFControl)sender;
                 this.Cursor = infiniteCanvas.WinFormsCursor;
             }
+            if (DataViewModel.ActiveConnection != default)
+            {
+                //DataViewModel.ActiveConnection.Destination.
+            }
         }
 
         private void Canvas_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -82,14 +87,25 @@ namespace Verse3
                     this.Cursor = Cursors.Default;
                 }
             }
-            if (drawstart != Point.Empty && started)
-            {
-                DrawBezierCurve(drawstart, InfiniteCanvasWPFControl.GetMouseRelPosition(), rtl);
-                started = false;
-            }
+            //if (DataViewModel.ActiveNode != default /*&& started*/)
+            //{
+            //    //DrawBezierCurve(drawstart, InfiniteCanvasWPFControl.GetMouseRelPosition(), rtl);
+
+            //    if (DataViewModel.ActiveConnection == default)
+            //    {
+            //        DataViewModel.ActiveConnection = CreateConnection(DataViewModel.ActiveNode);
+            //    }
+            //    else
+            //    {
+            //        ((BezierElement)DataViewModel.ActiveConnection).SetDestination(DataViewModel.ActiveNode);
+            //        DataViewModel.ActiveConnection = default;
+            //        DataViewModel.ActiveNode = default;
+            //    }
+            //    //started = false;
+            //}
         }
 
-        Point drawstart = new Point();
+        //public INode drawstart = default;
         private void Canvas_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (sender is InfiniteCanvasWPFControl)
@@ -99,10 +115,9 @@ namespace Verse3
                 {
                     this.Cursor = Cursors.SizeAll;
                 }
-            }
-            if (started)
-            {
-                drawstart = InfiniteCanvasWPFControl.GetMouseRelPosition();
+                //if (started)
+                //{
+                //}
             }
         }
 
@@ -129,8 +144,16 @@ namespace Verse3
                                 int w = (int)rnd.NextInt64((long)250, (long)350);
                                 int h = (int)rnd.NextInt64((long)250, (long)350);
                                 Type[] types = { i.GetType(), i.GetType(), i.GetType(), i.GetType() };
-                                IElement elInst = el.GetType().GetConstructor(types).Invoke(new object[] { x, y, w, h }) as IElement;
-                                DataModel.Instance.Elements.Add(elInst);
+
+                                //TODO: Check for other types of constructors
+                                
+                                ConstructorInfo ci = el.GetType().GetConstructor(types);
+                                
+                                if (ci != null)
+                                {
+                                    IElement elInst = ci.Invoke(new object[] { x, y, w, h }) as IElement;
+                                    DataModel.Instance.Elements.Add(elInst);
+                                }
                             }
                             //ObservableCollection<string> o;
                         }
@@ -145,39 +168,40 @@ namespace Verse3
             }
         }
 
-        private void DrawBezierCurve(Point start, Point end, bool rtl)
-        {
-            BezierElement bezier = new BezierElement((start.X - 200), (start.Y - 200), (end.X - start.X), (end.Y - start.Y), rtl);
-            DataTemplateManager.RegisterDataTemplate(bezier as IRenderable);
-            DataModel.Instance.Elements.Add(bezier);
-        }
+        //private void DrawBezierCurve(Point start, Point end, bool rtl)
+        //{
+        //    BezierElement bezier = new BezierElement((start.X - 200), (start.Y - 200), (end.X - start.X), (end.Y - start.Y), rtl);
+        //    DataTemplateManager.RegisterDataTemplate(bezier as IRenderable);
+        //    DataModel.Instance.Elements.Add(bezier);
+        //}
 
-        bool started = false;
-        bool rtl = false;
+
+        //bool started = false;
+        //bool rtl = false;
         private void button2_Click(object sender, EventArgs e)
         {
-            if (!started)
-            {
-                started = true;
-                rtl = false;
-            }
-            else if (started)
-            {
-                started = false;
-            }
+            //if (!started)
+            //{
+            //    started = true;
+            //    rtl = false;
+            //}
+            //else if (started)
+            //{
+            //    started = false;
+            //}
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (!started)
-            {
-                started = true;
-                rtl = true;
-            }
-            else if (started)
-            {
-                started = false;
-            }
+            //if (!started)
+            //{
+            //    started = true;
+            //    rtl = true;
+            //}
+            //else if (started)
+            //{
+            //    started = false;
+            //}
         }
 
         private void timer1_Tick(object sender, EventArgs e)

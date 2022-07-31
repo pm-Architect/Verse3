@@ -76,6 +76,14 @@ namespace Core
                 }
             }
 
+            public CanvasPoint Center
+            {
+                get
+                {
+                    return new CanvasPoint((this.Location.X + (this.Size.Width / 2.0)), (this.Location.Y + (this.Size.Height / 2.0)));
+                }
+            }
+
             #endregion
 
             #region Methods

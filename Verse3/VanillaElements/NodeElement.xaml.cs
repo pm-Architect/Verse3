@@ -24,16 +24,16 @@ namespace Verse3.VanillaElements
     /// <summary>
     /// Visual Interaction logic for TestElement.xaml
     /// </summary>
-    public partial class TextElementView : UserControl, IRenderView
+    public partial class NodeElementView : UserControl, IRenderView
     {
-        private IRenderable _element;
+        private NodeElement _element;
         
         public IRenderable Element
         {
             get { return _element; }
             private set
             {
-                _element = value;
+                _element = value as NodeElement;
                 //Update();
             }
         }
@@ -42,7 +42,7 @@ namespace Verse3.VanillaElements
             get { return _element?.ID; }
         }
 
-        public TextElementView()
+        public NodeElementView()
         {
             InitializeComponent();
         }
@@ -51,10 +51,24 @@ namespace Verse3.VanillaElements
         {
             if (this.Element != null)
             {
-                //this.Element.BoundingBox.Size.Height = DisplayedTextBlock.ActualHeight;
-                //this.Element.BoundingBox.Size.Width = DisplayedTextBlock.ActualWidth;
-                //this.Element.OnPropertyChanged("Width");
-                //this.Element.OnPropertyChanged("Height");
+                //this._element.BoundingBox = new BoundingBox(this._element.X, this._element.Y, this._element.Width, this._element.Height);
+                //if ((NodeButton.DataContext != null) && (this._element.parentElement != null))
+                //{
+                    //this.Element.SetWidth(NodeButton.ActualWidth);
+                    //this.Element.SetHeight(NodeButton.ActualHeight);
+                    ////this.Element.SetX(NodeButton.PointToScreen(new Point(0.0, 0.0)).X);
+                    ////System.Drawing.Point p = DataViewModel.WPFControl.GetRelPosition(NodeButton.PointToScreen(new Point(0.0, 0.0)));
+                    ////this.Element.SetX(DataViewModel.WPFControl.GetRelPosition(this.poly.Points[0]).X);
+                    ////Point p = NodeButton.PointToScreen(new Point(0.0, 0.0));
+                    //System.Drawing.Point p = DataViewModel.WPFControl.GetRelPosition(NodeButton.PointToScreen(new Point(0.0, 0.0)));
+                    //this.Element.SetX(p.X);
+                    ////this.Element.SetY(NodeButton.PointToScreen(new Point(0.0, 0.0)).Y);
+                    ////this.Element.SetY(Canvas.GetTop(NodeButton));
+                    ////this.Element.SetY(DataViewModel.WPFControl.GetRelPosition(this.poly.Points[0]).Y);
+                    //this.Element.SetY(p.Y);
+                    //System.Drawing.Point p = DataViewModel.WPFControl.GetRelPosition((this._element.parentElement as IRenderable).BoundingBox.Location);
+                    //DataViewModel.WPFControl.LBcontent.PointToScreen()
+                //}
             }
         }
 
@@ -69,7 +83,7 @@ namespace Verse3.VanillaElements
             //DataViewModel.WPFControl.ContentElements.Focus();
             //Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
 
-            //TextElementView rectangle = (TextElementView)sender;
+            //NodeElementView rectangle = (NodeElementView)sender;
             //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
 
             ////myRectangle.IsSelected = true;
@@ -116,7 +130,7 @@ namespace Verse3.VanillaElements
 
             //DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
 
-            //TextElementView rectangle = (TextElementView)sender;
+            //NodeElementView rectangle = (NodeElementView)sender;
             //rectangle.ReleaseMouseCapture();
 
             //e.Handled = true;
@@ -145,7 +159,7 @@ namespace Verse3.VanillaElements
 
             //DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
 
-            //TextElementView rectangle = (TextElementView)sender;
+            //NodeElementView rectangle = (NodeElementView)sender;
             //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
             //myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
             //myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
@@ -167,40 +181,69 @@ namespace Verse3.VanillaElements
         void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             //DependencyPropertyChangedEventArgs
-            Element = this.DataContext as IRenderable;
-            Render();
+            if (this.DataContext != null)
+            {
+                this._element = this.DataContext as NodeElement;
+                Render();
+            }
         }
 
         void OnLoaded(object sender, RoutedEventArgs e)
         {
             //RoutedEventArgs
-            Element = this.DataContext as IRenderable;
-            Render();
+            if (this.DataContext != null)
+            {
+                //this._element = this.DataContext as NodeElement;
+                //Render();
+            }
         }
 
         #endregion
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //Set as active Node
+            DataViewModel.ActiveNode = this._element as INode;
+            BezierElement b = (BezierElement)DataViewModel.ActiveConnection;
+            if (DataViewModel.ActiveConnection == default)
+            {
+                DataViewModel.ActiveConnection = DataViewModel.CreateConnection(DataViewModel.ActiveNode);
+            }
+            else
+            {
+                b.SetDestination(DataViewModel.ActiveNode);
+                DataViewModel.ActiveConnection = default;
+                DataViewModel.ActiveNode = default;
+            }
+            this._element.Connections.Add(DataViewModel.ActiveConnection);
+        }
     }
 
-    public class TextElement : IRenderable
+    public class NodeElement : IRenderable, INode
     {        
         #region Data Members
 
         private BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
-        private static Type view = typeof(TextElementView);
+        private static Type view = typeof(NodeElementView);
+        private ElementsLinkedList<IConnection> connections = new ElementsLinkedList<IConnection>();
+        internal IRenderable parentElement = default;
 
         #endregion
 
         #region Properties
 
         public Type ViewType { get { return view; } }
-        public object ViewKey { get; set; }
 
         public Guid ID { get => _id; private set => _id = value; }
 
         public bool IsSelected { get; set; }
 
-        public BoundingBox BoundingBox { get => boundingBox; private set => boundingBox = value; }
+        public BoundingBox BoundingBox
+        {
+            get => boundingBox;
+            internal set => SetProperty(ref boundingBox, value);
+        }
 
         public double X { get => boundingBox.Location.X; }
 
@@ -208,14 +251,26 @@ namespace Verse3.VanillaElements
 
         public double Width
         {
-            get => boundingBox.Size.Width;
-            set => boundingBox.Size.Width = value;
+            get
+            {
+                return boundingBox.Size.Width;
+            }
+            set
+            {
+                boundingBox.Size.Width = value;
+            }
         }
 
         public double Height
         {
-            get => boundingBox.Size.Height;
-            set => boundingBox.Size.Height = value;
+            get
+            {
+                return boundingBox.Size.Height;
+            }
+            set
+            {
+                boundingBox.Size.Height = value;
+            }
         }
 
         public Guid ZPrev { get; }
@@ -228,7 +283,7 @@ namespace Verse3.VanillaElements
 
         public ElementState State { get; set; }
 
-        //public IRenderView ElementView { get; internal set; }
+        //public IRenderView ElementView { get; }
 
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get; set; }
@@ -238,29 +293,22 @@ namespace Verse3.VanillaElements
 
         #region Constructors
 
-        public TextElement()
+        public NodeElement(IElement parent)
         {
-            this.FontFamily = new FontFamily("Maven Pro");
-            this.FontSize = 12;
-            this.FontStyle = FontStyles.Normal;
-            this.FontWeight = FontWeights.Normal;
-            this.Foreground = Brushes.White;
-            this.Background = Brushes.Transparent;
-            this.TextAlignment = TextAlignment.Center;
+            parentElement = parent as IRenderable;
+            double x = DataViewModel.ContentCanvasMarginOffset + parentElement.X;
+            double y = DataViewModel.ContentCanvasMarginOffset + parentElement.Y;
+            this.BoundingBox = new BoundingBox(x, y, parentElement.Width, 50);
+            Parent = parent.ID;
+            this.DisplayedText = "Node";
         }
 
-        public TextElement(int x, int y, int width, int height)
-        {
-            this.boundingBox = new BoundingBox(x, y, width, height);
+        //public NodeElement(int x, int y, int width, int height)
+        //{
+        //    this.boundingBox = new BoundingBox(x, y, width, height);
 
-            this.FontFamily = new FontFamily("Maven Pro");
-            this.FontSize = 12;
-            this.FontStyle = FontStyles.Normal;
-            this.FontWeight = FontWeights.Normal;
-            this.Foreground = Brushes.White;
-            this.Background = Brushes.Transparent;
-            this.TextAlignment = TextAlignment.Center;
-        }
+        //    this.DisplayedText = "Button";
+        //}
 
         #endregion
 
@@ -288,38 +336,83 @@ namespace Verse3.VanillaElements
             return false;
         }
 
-        private TextAlignment textAlignment;
-
-        public TextAlignment TextAlignment { get => textAlignment; set => SetProperty(ref textAlignment, value); }
-
-        private string displayedText;
-
-        public string DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
-
-        private FontStyle fontStyle;
-
-        public FontStyle FontStyle { get => fontStyle; set => SetProperty(ref fontStyle, value); }
-
-        private FontFamily fontFamily;
-
-        public FontFamily FontFamily { get => fontFamily; set => SetProperty(ref fontFamily, value); }
-
-        private double fontSize;
-
-        public double FontSize { get => fontSize; set => SetProperty(ref fontSize, value); }
-
-        private FontWeight fontWeight;
-
-        public FontWeight FontWeight { get => fontWeight; set => SetProperty(ref fontWeight, value); }
-
-        private Brush foreground;
-
-        public Brush Foreground { get => foreground; set => SetProperty(ref foreground, value); }
-
-        private Brush background;
-
-        public Brush Background { get => background; set => SetProperty(ref background, value); }
-
         #endregion
+
+        private object displayedText;
+
+        public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
+
+        IElement INode.Parent { get; }
+
+        public ElementsLinkedList<IConnection> Connections => connections;
+
+        public NodeType NodeType { get => NodeType.Output; }
+
+        public CanvasPoint Hotspot
+        {
+            get
+            {
+                CanvasPoint center = this.BoundingBox.Location;
+                //center.X += (this.BoundingBox.Size.Width / 2);
+                //center.Y -= (this.BoundingBox.Size.Height / 2);
+                return center;
+            }
+        }
+
+        public double HotspotThresholdRadius { get; }
+        public object ViewKey { get; set; }
+    }
+
+    public class MousePositionNode : INode
+    {
+        public static readonly MousePositionNode Instance = new MousePositionNode();
+        
+        private MousePositionNode()
+        {
+
+        }
+        public IElement Parent { get; }
+
+        public ElementsLinkedList<IConnection> Connections { get; }
+
+        public NodeType NodeType => NodeType.Unset;
+
+        public CanvasPoint Hotspot
+        {
+            get
+            {
+                System.Drawing.Point p = DataViewModel.WPFControl.GetMouseRelPosition();
+                return new CanvasPoint(p.X, p.Y);
+            }
+        }
+
+        public double HotspotThresholdRadius { get; }
+
+        public Guid ID { get; }
+
+        public ElementState ElementState { get; set; }
+        public ElementType ElementType { get => ElementType.Node; set => ElementType = ElementType.Node; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        {
+            if (!Equals(field, newValue))
+            {
+                field = newValue;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                return true;
+            }
+
+            return false;
+        }
     }
 }
