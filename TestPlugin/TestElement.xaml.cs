@@ -266,10 +266,10 @@ namespace TestPlugin
                     $"\nY: {this.Y}";
             }
         }
-        
+
         #region Data Members
 
-        private BoundingBox boundingBox = BoundingBox.Unset;
+        private BoundingBox boundingBox;
         private Guid _id = Guid.NewGuid();
         private static Type view = typeof(TestElementView);
         internal TestElementView elView;

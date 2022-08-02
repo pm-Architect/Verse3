@@ -42,11 +42,35 @@ namespace Core
             public static BoundingBox Unset = new BoundingBox();
 
             #endregion
-
+            
             #region Properties
 
-            public CanvasPoint Location { get; set; }
-            public CanvasSize Size { get; set; }
+            private CanvasPoint _location = CanvasPoint.Unset;
+            private CanvasSize _size = CanvasSize.Unset;
+            public CanvasPoint Location
+            {
+                get { return _location; }
+                set
+                {
+                    if (value != _location)
+                    {
+                        _location = value;
+                        OnPropertyChanged("Location");
+                    }
+                }
+            }
+            public CanvasSize Size
+            {
+                get { return _size; }
+                set
+                {
+                    if (value != _size)
+                    {
+                        _size = value;
+                        OnPropertyChanged("Size");
+                    }
+                }
+            }
             public double Left
             {
                 get
@@ -375,9 +399,32 @@ namespace Core
             #endregion
 
             #region Properties
-
-            public double X { get; set; }
-            public double Y { get; set; }
+            private double _x;
+            private double _y;
+            public double X
+            {
+                get { return _x; }
+                set
+                {
+                    if (value != _x)
+                    {
+                        _x = value;
+                        OnPropertyChanged("X");
+                    }
+                }
+            }
+            public double Y
+            {
+                get { return _y; }
+                set
+                {
+                    if (value != _y)
+                    {
+                        _y = value;
+                        OnPropertyChanged("Y");
+                    }
+                }
+            }
 
             #endregion
 
@@ -460,9 +507,32 @@ namespace Core
             #endregion
 
             #region Properties
-
-            public double Width { get; set; }
-            public double Height { get; set; }
+            private double _width;
+            private double _height;
+            public double Width
+            {
+                get { return _width; }
+                set
+                {
+                    if (value != _width)
+                    {
+                        _width = value;
+                        OnPropertyChanged("Width");
+                    }
+                }
+            }
+            public double Height
+            {
+                get { return _height; }
+                set
+                {
+                    if (value != _height)
+                    {
+                        _height = value;
+                        OnPropertyChanged("Height");
+                    }
+                }
+            }
 
             #endregion
 
