@@ -28,7 +28,11 @@ namespace Verse3.VanillaElements
     public partial class BezierElementView : UserControl, IRenderView
     {
         private BezierElement _element;
-        
+        private double _boundx = 0.0;
+        private double _expBoundx = 0.0;
+        //private double _boundy = 0.0;
+        //private double _expBoundy = 0.0;
+
         public IRenderable Element
         {
             get { return _element; }
@@ -58,6 +62,10 @@ namespace Verse3.VanillaElements
             {
                 //++
                 this._element.bezView = this;
+                //if (!this._element.requestedRedraw)
+                //{
+                //    this._element.RedrawBezier(this._element.Origin, this._element.Destination);
+                //}
                 DrawBezierCurve(MainGrid, (this._element).Direction);
             }
 
@@ -312,7 +320,43 @@ namespace Verse3.VanillaElements
                 //new Point(400, 200) END
                 end
             };
-            var b = GetBezierApproximation(ExpandBounds(points), 256);
+
+            //EXPAND BOUNDING BOX------------------------------------------------
+            double minx = default, maxx = default, miny = default, maxy = default;
+            foreach (Point pt in points)
+            {
+                if (minx == default) minx = pt.X;
+                if (maxx == default) maxx = pt.X;
+                if (miny == default) miny = pt.Y;
+                if (maxy == default) maxy = pt.Y;
+                if (pt.X < minx) minx = pt.X;
+                if (pt.X > maxx) maxx = pt.X;
+                if (pt.Y < miny) miny = pt.Y;
+                if (pt.Y > maxy) maxy = pt.Y;
+            }
+            if (minx < points[0].X)
+            {
+                _boundx = this.Element.BoundingBox.Size.Width;
+                _expBoundx = Math.Abs(this.Element.BoundingBox.Size.Width - Math.Abs(maxx - minx)) / 4.0;
+                this.Element.BoundingBox.Inflate(new CanvasSize((_expBoundx * 2), 0.0));
+                //TODO:Inflate along Y axis to account for curve thickness
+
+                //this._element.bezView = this;
+                for (int i = 0; i < points.Length; i++)
+                {
+                    points[i].X += _expBoundx;
+                }
+                this.Element.SetX(this.Element.X - _expBoundx);
+            }
+
+
+            //++++
+            this.Element.OnPropertyChanged("BoundingBox");
+            DataViewModel.WPFControl.ExpandContent();
+
+
+
+            var b = GetBezierApproximation(points, 256);
             PathFigure pf = new PathFigure(b.Points[0], new[] { b }, false);
             PathFigureCollection pfc = new PathFigureCollection();
             pfc.Add(pf);
@@ -328,51 +372,6 @@ namespace Verse3.VanillaElements
             p.StrokeThickness = 3.0;
             grid.Children.Clear();
             grid.Children.Add(p);
-        }
-
-        public Point[] ExpandBounds(Point[] points)
-        {
-            double minx = default, maxx = default, miny = default, maxy = default;
-            foreach (Point p in points)
-            {
-                if (minx == default) minx = p.X;
-                if (maxx == default) maxx = p.X;
-                if (miny == default) miny = p.Y;
-                if (maxy == default) maxy = p.Y;
-                if (p.X < minx) minx = p.X;
-                if (p.X > maxx) maxx = p.X;
-                if (p.Y < miny) miny = p.Y;
-                if (p.Y > maxy) maxy = p.Y;
-            }
-            if (minx < points[0].X)
-            {
-                double dx = Math.Abs(this.Element.BoundingBox.Size.Width - Math.Abs(maxx - minx)) / 4.0;
-                this.Element.BoundingBox.Inflate(new CanvasSize((dx * 2), 0.0));
-                //TODO:Inflate along Y axis to account for curve thickness
-
-                //this._element.bezView = this;
-                for (int i = 0; i < points.Length; i++)
-                {
-                    points[i].X += dx;
-                }
-                this.Element.SetX(this.Element.X - dx);
-            }
-            if (miny < points[0].Y)
-            {
-                //double dy = Math.Abs(this.Element.BoundingBox.Size.Height - Math.Abs(maxy - miny)) / 4.0;
-                //this.Element.BoundingBox.Inflate(new CanvasSize((dy * 2), 0.0));
-                ////TODO:Inflate along Y axis to account for curve thickness
-
-                ////this._element.bezView = this;
-                //for (int i = 0; i < points.Length; i++)
-                //{
-                //    points[i].X += dx;
-                //}
-                //this.Element.SetX(this.Element.X - dx);
-            }
-            this.Element.OnPropertyChanged("BoundingBox");
-            DataViewModel.WPFControl.ExpandContent();
-            return points;
         }
     }
 
@@ -393,6 +392,20 @@ namespace Verse3.VanillaElements
 
         public Type ViewType { get { return view; } }
         public object ViewKey { get; set; }
+        public IRenderView RenderView
+        {
+            get
+            {
+                return bezView;
+            }
+            set
+            {
+                if (value is BezierElementView)
+                {
+                    bezView = (BezierElementView)value;
+                }
+            }
+        }
 
         public Guid ID { get => _id; private set => _id = value; }
 
@@ -488,6 +501,7 @@ namespace Verse3.VanillaElements
 
         public void RedrawBezier(double x, double y, double width, double height)
         {
+            //requestedRedraw = true;
             if (this.bezView == null || !this.bezView._rendering)
             {
                 if ((height < 0.0 && width > 0.0) || (width < 0 && height > 0.0))
@@ -523,6 +537,8 @@ namespace Verse3.VanillaElements
 
                 if (bezView != null)
                     bezView.Render();
+
+                //requestedRedraw = false;
             }
         }
 
@@ -543,6 +559,7 @@ namespace Verse3.VanillaElements
         //    else this.Direction = BezierDirection.ForceLeftToRight;
         //}
 
+        //internal bool requestedRedraw = false;
         public BezierElement(INode start, INode end)
         {
             this.origin = start;
@@ -563,6 +580,7 @@ namespace Verse3.VanillaElements
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
+                //this.boundingBox.PropertyChanged += this.PropertyChanged;
             }
         }
 

@@ -190,6 +190,21 @@ namespace Verse3.VanillaElements
         private BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
         private static Type view = typeof(ColorPickerElementView);
+        internal ColorPickerElementView elView;
+        public IRenderView RenderView
+        {
+            get
+            {
+                return elView;
+            }
+            set
+            {
+                if (value is ColorPickerElementView)
+                {
+                    elView = (ColorPickerElementView)value;
+                }
+            }
+        }
 
         #endregion
 

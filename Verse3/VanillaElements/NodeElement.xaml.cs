@@ -228,6 +228,21 @@ namespace Verse3.VanillaElements
         private static Type view = typeof(NodeElementView);
         private ElementsLinkedList<IConnection> connections = new ElementsLinkedList<IConnection>();
         internal IRenderable parentElement = default;
+        internal NodeElementView elView;
+        public IRenderView RenderView
+        {
+            get
+            {
+                return elView;
+            }
+            set
+            {
+                if (value is NodeElementView)
+                {
+                    elView = (NodeElementView)value;
+                }
+            }
+        }
 
         #endregion
 
@@ -321,6 +336,7 @@ namespace Verse3.VanillaElements
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
+                //this.boundingBox.PropertyChanged += this.PropertyChanged;
             }
         }
 

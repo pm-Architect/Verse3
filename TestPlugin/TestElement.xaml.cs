@@ -272,6 +272,21 @@ namespace TestPlugin
         private BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
         private static Type view = typeof(TestElementView);
+        internal TestElementView elView;
+        public IRenderView RenderView
+        {
+            get
+            {
+                return elView;
+            }
+            set
+            {
+                if (value is TestElementView)
+                {
+                    elView = (TestElementView)value;
+                }
+            }
+        }
 
         #endregion
 
@@ -340,10 +355,12 @@ namespace TestPlugin
         {
             this.BoundingBox = new BoundingBox(x, y, width, height);
 
-            this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
-            Random rng = new Random();
-            byte r = (byte)rng.Next(0, 255);
-            this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
+            //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
+            Random rnd = new Random();
+            byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
+            byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
+            byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
+            this.backgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
         }
         
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -359,6 +376,7 @@ namespace TestPlugin
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
+                //this.boundingBox.PropertyChanged += this.PropertyChanged;
             }
         }
 

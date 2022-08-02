@@ -343,6 +343,8 @@ namespace Core
         
 #nullable enable
         public Type? ViewType { get; }
+        object ViewKey { get; set; }
+        IRenderView RenderView { get; set; }
 #nullable restore
 
         public bool Visible { get; set; }
@@ -393,12 +395,17 @@ namespace Core
         /// The height of the element Bounding Box (in content coordinates).
         /// </summary>
         double Height { get; set; }
-        object ViewKey { get; set; }
 
         /// <summary>
         /// Set the height of the element Bounding Box (in content coordinates).
         /// </summary>
         void SetHeight(double x) { BoundingBox.Size.Height = x; OnPropertyChanged("Height"); }
+
+        void Render()
+        {
+            //if (RenderView != null)
+            //RenderView.Render();
+        }
 
         #endregion
     }

@@ -194,6 +194,21 @@ namespace Verse3.VanillaElements
         private Guid _id = Guid.NewGuid();
         private static Type view = typeof(ButtonElementView);
         public event EventHandler<RoutedEventArgs> OnButtonClicked;
+        internal ButtonElementView elView;
+        public IRenderView RenderView
+        {
+            get
+            {
+                return elView;
+            }
+            set
+            {
+                if (value is ButtonElementView)
+                {
+                    elView = (ButtonElementView)value;
+                }
+            }
+        }
 
         #endregion
 

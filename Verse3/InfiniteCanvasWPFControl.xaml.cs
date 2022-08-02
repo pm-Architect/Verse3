@@ -28,6 +28,7 @@ namespace Verse3
         public InfiniteCanvasWPFControl()
         {
             InitializeComponent();
+            CompositionTarget.Rendering += BeforeFrameRender;
             //TODO Add different view templates
         }
         
@@ -100,9 +101,24 @@ namespace Verse3
             }
         }
         public MouseHandlingMode MouseHandlingMode { get { return mouseHandlingMode; } set { mouseHandlingMode = value; } }
+
+        public double AverageFPS
+        {
+            get
+            {
+                return avgfps;
+            }
+        }
+        
         #endregion
         
         #region Methods
+        
+        private void BeforeFrameRender(object sender, EventArgs e)
+        {
+            UpdateFrameStats(sender, e);
+        }
+
         private void Control_Loaded(object sender, RoutedEventArgs e)
         {
             ExpandContent();
@@ -145,6 +161,7 @@ namespace Verse3
                 {
                     el.SetX(el.X + xOffset);
                     el.SetY(el.Y + yOffset);
+                    //el.OnPropertyChanged("BoundingBox");
                 }
             }
 
@@ -153,10 +170,15 @@ namespace Verse3
         }
 
         private Point currCanvasMousePosition = new Point();
-        internal System.Drawing.Point GetMouseRelPosition()
+        internal System.Drawing.Point GetMouseRelPosition(object sender = null)
         {
-            return new System.Drawing.Point((int)currCanvasMousePosition.X, (int)currCanvasMousePosition.Y);
+            System.Drawing.Point p = new System.Drawing.Point((int)currCanvasMousePosition.X, (int)currCanvasMousePosition.Y);
+            MousePositionChanged?.Invoke(sender, p);
+            return p;
         }
+        
+        //Event for mouse position update
+        public event EventHandler<System.Drawing.Point> MousePositionChanged;
 
         public System.Drawing.Point GetRelPosition(CanvasPoint pos)
         {
@@ -242,13 +264,39 @@ namespace Verse3
             }
         }
 
+
+
         /// <summary>
         /// Event raised on mouse move in the ZoomAndPanControl.
         /// </summary>
         private void zoomAndPanControl_MouseMove(object sender, MouseEventArgs e)
         {
             currCanvasMousePosition = e.GetPosition(LBcontent);
-            
+            //TODO: Re-render every IRenderable
+            foreach (IRenderable renderable in DataViewModel.Instance.Elements)
+            {
+                if (renderable != null)
+                {
+                    //renderable.Render();
+                    //if (renderable.Children != null)
+                    //{
+                    //    if (renderable.Children.Count() > 0)
+                    //    {
+                    //        foreach (Guid childGuid in renderable.Children)
+                    //        {
+                    //            IRenderable r = DataViewModel.Instance.GetElementWithGuid(childGuid) as IRenderable;
+                    //            if (r != null)
+                    //            {
+                    //                r.Render();
+                    //            }
+                    //        }
+                    //    }
+                    //}
+                }
+            }
+
+            //DataViewModel.WPFControl.ExpandContent();
+
             if (mouseHandlingMode == MouseHandlingMode.Panning)
             {
                 //
@@ -325,34 +373,33 @@ namespace Verse3
                 Point curContentMousePoint = e.GetPosition(LBcontent);
                 InitDragSelectRect(origContentMouseDownPoint, curContentMousePoint);
             }
-            else
+            else if (this.WinFormsCursor != System.Windows.Forms.Cursors.Default)
             {
-                if (this.WinFormsCursor != System.Windows.Forms.Cursors.Default)
-                {
-                    this.Cursor = Cursors.Arrow;
-                    this.WinFormsCursor = System.Windows.Forms.Cursors.Default;
-                }
-                else if (mouseHandlingMode == MouseHandlingMode.DragZooming)
-                {
-                    //
-                    // When in drag zooming mode continously update the position of the rectangle
-                    // that the user is dragging out.
-                    //
-                    Point curContentMousePoint = e.GetPosition(LBcontent);
-                    SetDragZoomRect(origContentMouseDownPoint, curContentMousePoint);
-
-                    e.Handled = true;
-                }
-                else if (mouseHandlingMode == MouseHandlingMode.DragSelecting)
-                {
-                    //
-                    // When in drag zooming mode continously update the position of the rectangle
-                    // that the user is dragging out.
-                    //
-                    Point curContentMousePoint = e.GetPosition(LBcontent);
-                    SetDragSelectRect(origContentMouseDownPoint, curContentMousePoint);
-                }
+                this.Cursor = Cursors.Arrow;
+                this.WinFormsCursor = System.Windows.Forms.Cursors.Default;
             }
+                //else if (mouseHandlingMode == MouseHandlingMode.DragZooming)
+                //{
+                //    //
+                //    // When in drag zooming mode continously update the position of the rectangle
+                //    // that the user is dragging out.
+                //    //
+                //    Point curContentMousePoint = e.GetPosition(LBcontent);
+                //    SetDragZoomRect(origContentMouseDownPoint, curContentMousePoint);
+
+                //    e.Handled = true;
+                //}
+                //else if (mouseHandlingMode == MouseHandlingMode.DragSelecting)
+                //{
+                //    //
+                //    // When in drag zooming mode continously update the position of the rectangle
+                //    // that the user is dragging out.
+                //    //
+                //    Point curContentMousePoint = e.GetPosition(LBcontent);
+                //    SetDragSelectRect(origContentMouseDownPoint, curContentMousePoint);
+                //}
+            //}
+
             
         }
 
@@ -681,5 +728,28 @@ namespace Verse3
         //}
 
         #endregion
+
+
+        TimeOnly lastFrameTime = TimeOnly.FromDateTime(DateTime.Now);
+        double fps = 0.0;
+        double[] lfps = Array.Empty<double>();
+        double avgfps = 0.0;
+        private void UpdateFrameStats(object sender, EventArgs e)
+        {
+            TimeOnly frameTime = TimeOnly.FromDateTime(DateTime.Now);
+            fps = 1 / (frameTime - lastFrameTime).TotalSeconds;
+            if (lfps.Length < 255)
+            {
+                lfps = lfps.Concat(new double[] { fps }).ToArray();
+            }
+            else
+            {
+                lfps = lfps.Skip(1).Concat(new double[] { fps }).ToArray();
+            }
+            avgfps = lfps.Average();
+            avgfps = Math.Round(avgfps, 3);
+            lastFrameTime = frameTime;
+        }
+
     }
 }

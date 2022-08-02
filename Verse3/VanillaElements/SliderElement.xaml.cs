@@ -195,6 +195,21 @@ namespace Verse3.VanillaElements
         private BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
         private static Type view = typeof(SliderElementView);
+        internal SliderElementView elView;
+        public IRenderView RenderView
+        {
+            get
+            {
+                return elView;
+            }
+            set
+            {
+                if (value is SliderElementView)
+                {
+                    elView = (SliderElementView)value;
+                }
+            }
+        }
 
         #endregion
 

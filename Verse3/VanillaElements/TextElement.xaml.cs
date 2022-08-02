@@ -188,6 +188,21 @@ namespace Verse3.VanillaElements
         private BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
         private static Type view = typeof(TextElementView);
+        internal TextElementView elView;
+        public IRenderView RenderView
+        {
+            get
+            {
+                return elView;
+            }
+            set
+            {
+                if (value is TextElementView)
+                {
+                    elView = (TextElementView)value;
+                }
+            }
+        }
 
         #endregion
 
