@@ -112,14 +112,18 @@ namespace Core
 					return false;
 				}
 				index++;
-				current = enumhead.item;
-                currentid = enumhead.item.ID;
-                enumhead = enumhead.next;
-				if (enumhead == enumlist.head)
+				if (enumhead.item != null)
 				{
-					enumhead = null;
+					current = enumhead.item;
+					currentid = enumhead.item.ID;
+					enumhead = enumhead.next;
+					if (enumhead == enumlist.head)
+					{
+						enumhead = null;
+					}
+					return true;
 				}
-				return true;
+				return false;
 			}
 
 			/// <summary>Sets the enumerator to its initial position, which is before the first element in the collection. This class cannot be inherited.</summary>

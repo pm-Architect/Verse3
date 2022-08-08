@@ -51,24 +51,24 @@ namespace Verse3.VanillaElements
         {
             if (this.Element != null)
             {
-                //this._element.BoundingBox = new BoundingBox(this._element.X, this._element.Y, this._element.Width, this._element.Height);
-                //if ((NodeButton.DataContext != null) && (this._element.parentElement != null))
-                //{
-                    //this.Element.SetWidth(NodeButton.ActualWidth);
-                    //this.Element.SetHeight(NodeButton.ActualHeight);
-                    ////this.Element.SetX(NodeButton.PointToScreen(new Point(0.0, 0.0)).X);
-                    ////System.Drawing.Point p = DataViewModel.WPFControl.GetRelPosition(NodeButton.PointToScreen(new Point(0.0, 0.0)));
-                    ////this.Element.SetX(DataViewModel.WPFControl.GetRelPosition(this.poly.Points[0]).X);
-                    ////Point p = NodeButton.PointToScreen(new Point(0.0, 0.0));
-                    //System.Drawing.Point p = DataViewModel.WPFControl.GetRelPosition(NodeButton.PointToScreen(new Point(0.0, 0.0)));
-                    //this.Element.SetX(p.X);
-                    ////this.Element.SetY(NodeButton.PointToScreen(new Point(0.0, 0.0)).Y);
-                    ////this.Element.SetY(Canvas.GetTop(NodeButton));
-                    ////this.Element.SetY(DataViewModel.WPFControl.GetRelPosition(this.poly.Points[0]).Y);
-                    //this.Element.SetY(p.Y);
-                    //System.Drawing.Point p = DataViewModel.WPFControl.GetRelPosition((this._element.parentElement as IRenderable).BoundingBox.Location);
-                    //DataViewModel.WPFControl.LBcontent.PointToScreen()
-                //}
+                if (this._element.Connections != null)
+                {
+                    foreach (BezierElement bezier in this._element.Connections)
+                    {
+                        if (bezier != null)
+                        {
+                            if (bezier.Origin == this._element)
+                            {
+
+                            }
+                            else if (bezier.Destination == this._element)
+                            {
+
+                            }
+                            bezier.RedrawBezier(bezier.Origin, bezier.Destination);
+                        }
+                    }
+                }
             }
         }
 
@@ -316,6 +316,15 @@ namespace Verse3.VanillaElements
             this.BoundingBox = new BoundingBox(x, y, parentElement.Width, 50);
             Parent = parent.ID;
             this.DisplayedText = "Node";
+            this.PropertyChanged += NodeElement_PropertyChanged;
+        }
+
+        private void NodeElement_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            foreach (IRenderable renderable in this.Connections)
+            {
+                //renderable.Render();
+            }
         }
 
         //public NodeElement(int x, int y, int width, int height)
@@ -389,7 +398,7 @@ namespace Verse3.VanillaElements
         }
         public IElement Parent { get; }
 
-        public ElementsLinkedList<IConnection> Connections { get; }
+        public ElementsLinkedList<IConnection> Connections { get; } = new ElementsLinkedList<IConnection>();
 
         public NodeType NodeType => NodeType.Unset;
 
@@ -398,6 +407,16 @@ namespace Verse3.VanillaElements
             get
             {
                 System.Drawing.Point p = DataViewModel.WPFControl.GetMouseRelPosition();
+                //if (this.Connections != null)
+                //{
+                //    if (this.Connections.Count > 0)
+                //    {
+                //        foreach (BezierElement bezier in this.Connections)
+                //        {
+                //            bezier.RedrawBezier(bezier.Origin, bezier.Destination);
+                //        }
+                //    }
+                //}
                 return new CanvasPoint(p.X, p.Y);
             }
         }

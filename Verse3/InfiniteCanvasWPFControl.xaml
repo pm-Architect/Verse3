@@ -7,7 +7,7 @@
              xmlns:InfiniteCanvas="clr-namespace:InfiniteCanvas;assembly=InfiniteCanvas"
              xmlns:core="clr-namespace:Core;assembly=Core"
              mc:Ignorable="d"
-             d:DesignHeight="1490" d:DesignWidth="2528"
+             d:DesignHeight="1920" d:DesignWidth="1080"
              Loaded="Control_Loaded">
     <UserControl.Resources>
         <!-- 

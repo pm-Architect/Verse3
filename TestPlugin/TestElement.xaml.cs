@@ -221,6 +221,29 @@ namespace TestPlugin
             myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
             myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
 
+            if (this.Children != null)
+            {
+                foreach (IRenderable renderable in this.Children)
+                {
+                    if (renderable != null)
+                    {
+                        renderable.SetX(renderable.X + rectangleDragVector.X);
+                        renderable.SetY(renderable.Y + rectangleDragVector.Y);
+                    }
+                }
+                for (int i = 0; i < this.Children.Count; i++)
+                {
+                    if (this.Children[i] is NodeElement)
+                    {
+                        NodeElement node = (NodeElement)this.Children[i];
+                        if (node != null && node.RenderView != null)
+                        {
+                            node.RenderView.Render();
+                        }
+                    }
+                }
+            }
+
             DataViewModel.WPFControl.ExpandContent();
 
             e.Handled = true;

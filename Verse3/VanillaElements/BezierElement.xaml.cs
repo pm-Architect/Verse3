@@ -352,7 +352,7 @@ namespace Verse3.VanillaElements
 
             //++++
             this.Element.OnPropertyChanged("BoundingBox");
-            DataViewModel.WPFControl.ExpandContent();
+            //DataViewModel.WPFControl.ExpandContent();
 
 
 

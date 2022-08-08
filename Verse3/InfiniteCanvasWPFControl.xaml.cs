@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Markup;
 using static Core.Geometry2D;
+using Verse3.VanillaElements;
 
 namespace Verse3
 {
@@ -272,28 +273,32 @@ namespace Verse3
         private void zoomAndPanControl_MouseMove(object sender, MouseEventArgs e)
         {
             currCanvasMousePosition = e.GetPosition(LBcontent);
+
+            //MousePositionNode.Instance.OnPropertyChanged("X");
+            //MousePositionNode.Instance.OnPropertyChanged("Y");
+
             //TODO: Re-render every IRenderable
-            foreach (IRenderable renderable in DataViewModel.Instance.Elements)
-            {
-                if (renderable != null)
-                {
-                    //renderable.Render();
-                    //if (renderable.Children != null)
-                    //{
-                    //    if (renderable.Children.Count() > 0)
-                    //    {
-                    //        foreach (Guid childGuid in renderable.Children)
-                    //        {
-                    //            IRenderable r = DataViewModel.Instance.GetElementWithGuid(childGuid) as IRenderable;
-                    //            if (r != null)
-                    //            {
-                    //                r.Render();
-                    //            }
-                    //        }
-                    //    }
-                    //}
-                }
-            }
+            //foreach (IRenderable renderable in DataViewModel.Instance.Elements)
+            //{
+            //    if (renderable != null)
+            //    {
+            //        renderable.Render();
+            //        if (renderable.Children != null)
+            //        {
+            //            if (renderable.Children.Count() > 0)
+            //            {
+            //                foreach (Guid childGuid in renderable.Children)
+            //                {
+            //                    IRenderable r = DataViewModel.Instance.GetElementWithGuid(childGuid) as IRenderable;
+            //                    if (r != null)
+            //                    {
+            //                        r.Render();
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             //DataViewModel.WPFControl.ExpandContent();
 
