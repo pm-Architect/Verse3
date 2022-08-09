@@ -43,7 +43,7 @@ namespace Core
         /// <summary>
         /// The user is left-dragging rectangles with the mouse.
         /// </summary>
-        DraggingRectangles,
+        DraggingElements,
 
         /// <summary>
         /// The user is left-mouse-button-dragging to pan the viewport.

@@ -288,13 +288,28 @@ namespace Verse3.VanillaElements
             }
         }
 
-        public Guid ZPrev { get; }
+        private IRenderable _zPrev;
+        public IRenderable ZPrev => _zPrev;
+        private IRenderable _zNext;
+        public IRenderable ZNext => _zNext;
+        private IRenderable _parent;
+        public IRenderable Parent => _parent;
+        private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
+        public ElementsLinkedList<IRenderable> Children => _children;
 
-        public Guid ZNext { get; }
+        public void AddChild(IRenderable child)
+        {
+            if (!this.Children.Contains(child))
+            {
+                this.Children.Add(child);
+                child.SetParent(this);
+            }
+        }
 
-        public Guid Parent { get; }
-
-        public Guid[] Children { get; }
+        public void SetParent(IRenderable parent)
+        {
+            this._parent = parent;
+        }
 
         public ElementState State { get; set; }
 
@@ -314,7 +329,7 @@ namespace Verse3.VanillaElements
             double x = DataViewModel.ContentCanvasMarginOffset + parentElement.X;
             double y = DataViewModel.ContentCanvasMarginOffset + parentElement.Y;
             this.BoundingBox = new BoundingBox(x, y, parentElement.Width, 50);
-            Parent = parent.ID;
+            this.SetParent(parentElement);
             this.DisplayedText = "Node";
             this.PropertyChanged += NodeElement_PropertyChanged;
         }

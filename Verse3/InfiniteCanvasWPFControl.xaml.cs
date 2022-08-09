@@ -278,27 +278,26 @@ namespace Verse3
             //MousePositionNode.Instance.OnPropertyChanged("Y");
 
             //TODO: Re-render every IRenderable
-            //foreach (IRenderable renderable in DataViewModel.Instance.Elements)
-            //{
-            //    if (renderable != null)
-            //    {
-            //        renderable.Render();
-            //        if (renderable.Children != null)
-            //        {
-            //            if (renderable.Children.Count() > 0)
-            //            {
-            //                foreach (Guid childGuid in renderable.Children)
-            //                {
-            //                    IRenderable r = DataViewModel.Instance.GetElementWithGuid(childGuid) as IRenderable;
-            //                    if (r != null)
-            //                    {
-            //                        r.Render();
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
+            foreach (IRenderable renderable in DataViewModel.Instance.Elements)
+            {
+                if (renderable != null)
+                {
+                    renderable.Render();
+                    if (renderable.Children != null)
+                    {
+                        if (renderable.Children.Count() > 0)
+                        {
+                            foreach (IRenderable r in renderable.Children)
+                            {
+                                if (r != null)
+                                {
+                                    r.Render();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             //DataViewModel.WPFControl.ExpandContent();
 

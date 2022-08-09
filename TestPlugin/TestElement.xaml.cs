@@ -28,14 +28,7 @@ namespace TestPlugin
     /// </summary>
     public partial class TestElementView : UserControl, IRenderView
     {
-        private ObservableCollection<IRenderable>? _children;
-        private TestElement? _element;
-        
-        public ObservableCollection<IRenderable>? Children
-        {
-            get { return _children; }
-            private set { _children = value; }
-        }
+        private TestElement? _element;        
         
         public IRenderable? Element
         {
@@ -76,19 +69,15 @@ namespace TestPlugin
             //       FontSize = "18"
             //       />
 
-            if (Children == null)
-            {
-                Children = new ObservableCollection<IRenderable>();
-                InputsList.ItemsSource = Children;
-            }
 
             if (this.Element is TestElement)
             {
                 TestElement testelement = (TestElement)this.Element;
+                InputsList.ItemsSource = testelement.Children;
 
                 var nodeBlock = new NodeElement(testelement);
                 DataTemplateManager.RegisterDataTemplate(nodeBlock);                
-                Children.Add(nodeBlock);
+                testelement.AddChild(nodeBlock);
 
 
                 string? txt = testelement.ElementText;
@@ -96,25 +85,25 @@ namespace TestPlugin
                 textBlock.DisplayedText = txt;
                 textBlock.TextAlignment = TextAlignment.Left;
                 DataTemplateManager.RegisterDataTemplate(textBlock);
-                Children.Add(textBlock);
+                testelement.AddChild(textBlock);
 
                 var sliderBlock = new SliderElement();
                 sliderBlock.Minimum = 0;
                 sliderBlock.Maximum = 100;
                 sliderBlock.Value = 50;
                 DataTemplateManager.RegisterDataTemplate(sliderBlock);
-                Children.Add(sliderBlock);
+                testelement.AddChild(sliderBlock);
 
                 var buttonBlock = new ButtonElement();
                 buttonBlock.DisplayedText = "Click me";
                 buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
                 DataTemplateManager.RegisterDataTemplate(buttonBlock);
-                Children.Add(buttonBlock);
+                testelement.AddChild(buttonBlock);
 
                 var textBoxBlock = new TextBoxElement();
                 textBoxBlock.InputText = "Enter text";
                 DataTemplateManager.RegisterDataTemplate(textBoxBlock);
-                Children.Add(textBoxBlock);
+                testelement.AddChild(textBoxBlock);
             }
 
         }
@@ -163,7 +152,7 @@ namespace TestPlugin
                 return;
             }
 
-            DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.DraggingRectangles;
+            DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.DraggingElements;
             DataViewModel.WPFControl.origContentMouseDownPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
 
             rectangle.CaptureMouse();
@@ -177,7 +166,7 @@ namespace TestPlugin
         void OnMouseUp(object sender, MouseButtonEventArgs e)
         {
             //MouseButtonEventArgs
-            if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
+            if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingElements)
             {
                 //
                 // We are not in rectangle dragging mode.
@@ -199,7 +188,7 @@ namespace TestPlugin
         void OnMouseMove(object sender, MouseEventArgs e)
         {
             //MouseEventArgs
-            if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
+            if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingElements)
             {
                 //
                 // We are not in rectangle dragging mode, so don't do anything.
@@ -221,24 +210,27 @@ namespace TestPlugin
             myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
             myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
 
-            if (this.Children != null)
+            if (this._element != null)
             {
-                foreach (IRenderable renderable in this.Children)
+                if (this._element.Children != null)
                 {
-                    if (renderable != null)
+                    foreach (IRenderable renderable in this._element.Children)
                     {
-                        renderable.SetX(renderable.X + rectangleDragVector.X);
-                        renderable.SetY(renderable.Y + rectangleDragVector.Y);
-                    }
-                }
-                for (int i = 0; i < this.Children.Count; i++)
-                {
-                    if (this.Children[i] is NodeElement)
-                    {
-                        NodeElement node = (NodeElement)this.Children[i];
-                        if (node != null && node.RenderView != null)
+                        if (renderable != null)
                         {
-                            node.RenderView.Render();
+                            renderable.SetX(renderable.X + rectangleDragVector.X);
+                            renderable.SetY(renderable.Y + rectangleDragVector.Y);
+                        }
+                    }
+                    for (int i = 0; i < this._element.Children.Count; i++)
+                    {
+                        if (this._element.Children[i] is NodeElement)
+                        {
+                            NodeElement node = (NodeElement)this._element.Children[i];
+                            if (node != null && node.RenderView != null)
+                            {
+                                node.RenderView.Render();
+                            }
                         }
                     }
                 }
@@ -344,14 +336,6 @@ namespace TestPlugin
             set => boundingBox.Size.Height = value;
         }
 
-        public Guid ZPrev { get; }
-
-        public Guid ZNext { get; }
-
-        public Guid Parent { get; }
-
-        public Guid[]? Children { get; }
-
         public ElementState State { get; set; }
 
         //public IRenderView? ElementView { get; }
@@ -415,6 +399,8 @@ namespace TestPlugin
             return false;
         }
 
+        #endregion
+
         private Brush background;
 
         public Brush Background { get => background; set => SetProperty(ref background, value); }
@@ -423,6 +409,27 @@ namespace TestPlugin
 
         public Brush BackgroundTint { get => backgroundTint; set => SetProperty(ref backgroundTint, value); }
 
-        #endregion
+        private IRenderable _zPrev;
+        public IRenderable ZPrev => _zPrev;
+        private IRenderable _zNext;
+        public IRenderable ZNext => _zNext;
+        private IRenderable _parent;
+        public IRenderable Parent => _parent;
+        private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
+        public ElementsLinkedList<IRenderable> Children => _children;
+
+        public void AddChild(IRenderable child)
+        {
+            if (!this.Children.Contains(child))
+            {
+                this.Children.Add(child);
+                child.SetParent(this);
+            }
+        }
+
+        public void SetParent(IRenderable parent)
+        {
+            this._parent = parent;
+        }
     }
 }

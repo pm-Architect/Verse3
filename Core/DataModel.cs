@@ -336,11 +336,17 @@ namespace Core
     public interface IRenderable : IElement
     {
         //TODO: GUID Lookup in DataModel Instance
-        public Guid ZPrev { get; }
-        public Guid ZNext { get; }
-        public Guid Parent { get; }
-        public Guid[] Children { get; }
-        
+        //public Guid ZPrev { get; }
+        //public Guid ZNext { get; }
+        //public Guid Parent { get; }
+        //public Guid[] Children { get; }
+        public IRenderable ZPrev { get; }
+        public IRenderable ZNext { get; }
+        public IRenderable Parent { get; }
+        public ElementsLinkedList<IRenderable> Children { get; }
+        void AddChild(IRenderable child);
+        void SetParent(IRenderable parent);
+
 #nullable enable
         public Type? ViewType { get; }
         object ViewKey { get; set; }
@@ -414,6 +420,32 @@ namespace Core
     {
         IRenderable Element { get; }
         void Render();
+    }
+
+    public class RenderPipeline
+    {
+        private static RenderPipeline instance = new RenderPipeline();
+        public static RenderPipeline Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new RenderPipeline();
+                }
+                return RenderPipeline.instance;
+            }
+            protected set
+            {
+                instance = value;
+            }
+        }
+        internal IRenderable _current;
+        public IRenderable Current => _current;
+        private RenderPipeline()
+        {
+            this._current = default;
+        }
     }
 
     public interface IComputable : IElement
