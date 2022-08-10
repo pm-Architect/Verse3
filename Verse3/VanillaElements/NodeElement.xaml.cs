@@ -34,6 +34,7 @@ namespace Verse3.VanillaElements
             private set
             {
                 _element = value as NodeElement;
+                _element.RenderView = this;
                 //Update();
             }
         }
@@ -51,6 +52,7 @@ namespace Verse3.VanillaElements
         {
             if (this.Element != null)
             {
+                if (_element.RenderView != this) _element.RenderView = this;
                 if (this._element.Connections != null)
                 {
                     foreach (BezierElement bezier in this._element.Connections)
@@ -208,14 +210,24 @@ namespace Verse3.VanillaElements
             if (DataViewModel.ActiveConnection == default)
             {
                 DataViewModel.ActiveConnection = DataViewModel.CreateConnection(DataViewModel.ActiveNode);
+                b = (BezierElement)DataViewModel.ActiveConnection;
+                if (b != null)
+                {
+                    this._element.AddChild(b);
+                    this._element.Connections.Add(b);
+                }
             }
             else
             {
-                b.SetDestination(DataViewModel.ActiveNode);
-                DataViewModel.ActiveConnection = default;
-                DataViewModel.ActiveNode = default;
+                if (b != null)
+                {
+                    b.SetDestination(DataViewModel.ActiveNode);
+                    this._element.AddChild(b);
+                    this._element.Connections.Add(b);
+                    DataViewModel.ActiveConnection = default;
+                    DataViewModel.ActiveNode = default;
+                }
             }
-            this._element.Connections.Add(DataViewModel.ActiveConnection);
         }
     }
 
@@ -338,7 +350,7 @@ namespace Verse3.VanillaElements
         {
             foreach (IRenderable renderable in this.Connections)
             {
-                //renderable.Render();
+                renderable.Render();
             }
         }
 

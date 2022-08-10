@@ -371,10 +371,14 @@ namespace Core
             }
             public static bool operator ==(BoundingBox A, BoundingBox B)
             {
+                if (A is null || B is null) return false;
+                if (!A.IsValid() || !B.IsValid()) return false;
                 return ((A.Size == B.Size) && (A.Location == B.Location));
             }
             public static bool operator !=(BoundingBox A, BoundingBox B)
             {
+                if (A is null || B is null) return false;
+                if (!A.IsValid() || !B.IsValid()) return false;
                 return ((A.Size != B.Size) || (A.Location != B.Location));
             }
 

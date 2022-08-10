@@ -118,6 +118,7 @@ namespace Verse3
         private void BeforeFrameRender(object sender, EventArgs e)
         {
             UpdateFrameStats(sender, e);
+            RenderPipeline.Render();
         }
 
         private void Control_Loaded(object sender, RoutedEventArgs e)

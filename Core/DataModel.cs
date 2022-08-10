@@ -409,8 +409,8 @@ namespace Core
 
         void Render()
         {
-            //if (RenderView != null)
-            //    RenderView.Render();
+            if (RenderView != null)
+                RenderView.Render();
         }
 
         #endregion
@@ -446,7 +446,70 @@ namespace Core
         {
             this._current = default;
         }
+        public static int Render()
+        {
+            int count = 0;
+            try
+            {
+                foreach (IElement e in DataModel.Instance.Elements)
+                {
+                    if (e != null && e is IRenderable)
+                    {
+                        IRenderable renderable = e as IRenderable;
+                        //if (RenderPipeline.Instance._current != default)
+                        //{
+                        //    RenderPipeline.Instance._current.ZNext = renderable;
+                        //}
+                        RenderPipeline.Instance._current = renderable;
+                        if (RenderRenderable(renderable))
+                        {
+                            count++;
+                        }
+                        //renderable.Render();
+                        //count++;
+                        //if (renderable.Children.Count > 0)
+                        //{
+                        //    foreach (IRenderable child in renderable.Children)
+                        //    {
+                        //        child.Render();
+                        //        count++;
+                        //    }
+                        //}
+                    }
+                }
+            }
+            catch /*(Exception e)*/
+            {
+                //TODO: Log to console
+            }
+            return count;
+        }
+        public static bool RenderRenderable(IRenderable renderable, bool recursive = true)
+        {
+            bool renderSuccess = true;
+            try
+            {
+                renderable.Render();
+            }
+            catch /*(Exception e)*/
+            {
+                //TODO: Log to console
+                return false;
+            }
+            if (renderable.Children.Count > 0)
+            {
+                if (recursive)
+                {
+                    foreach (IRenderable child in renderable.Children)
+                    {
+                        renderSuccess = renderSuccess && RenderRenderable(child);
+                    }
+                }
+            }
+            return renderSuccess;
+        }
     }
+
 
     public interface IComputable : IElement
     {

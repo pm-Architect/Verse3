@@ -28,8 +28,9 @@ namespace Verse3.VanillaElements
     public partial class BezierElementView : UserControl, IRenderView
     {
         private BezierElement _element;
-        private double _boundx = 0.0;
-        private double _expBoundx = 0.0;
+        //BoundingBox innerBounds = default;
+        //private double _boundx = 0.0;
+        //private double _expBoundx = 0.0;
         //private double _boundy = 0.0;
         //private double _expBoundy = 0.0;
 
@@ -61,7 +62,7 @@ namespace Verse3.VanillaElements
             if (this.Element != null)
             {
                 //++
-                this._element.bezView = this;
+                if (this._element.bezView != this) this._element.bezView = this;
                 //if (!this._element.requestedRedraw)
                 //{
                 //    this._element.RedrawBezier(this._element.Origin, this._element.Destination);
@@ -70,6 +71,170 @@ namespace Verse3.VanillaElements
             }
 
             this._rendering = false;
+        }
+
+        Point start = default;
+        Point end = default;
+        //double _expBoundx = 0.0;
+        public void DrawBezierCurve(Grid grid, BezierDirection dir = BezierDirection.Default)
+        {
+            double sx = 0.0, sy = 0.0, ex = 0.0, ey = 0.0;
+            if (this._element.LeftToRight) ex = this._element.InnerBoundingBox.Size.Width;
+            else sx = this._element.InnerBoundingBox.Size.Width;
+            if (this._element.TopToBottom) ey = this._element.InnerBoundingBox.Size.Height;
+            else sy = this._element.InnerBoundingBox.Size.Height;
+
+            start = new Point(sx, sy);
+            end = new Point(ex, ey);
+
+            //TODO: Check the following if statement for correctness
+            //if (dir == BezierDirection.ForceLeftToRight)
+            //{
+            //    start = new Point(sx, sy);
+            //    end = new Point(ex, ey);
+            //}
+            //else
+            //{
+            //    end = new Point(sx, sy);
+            //    start = new Point(ex, ey);
+            //}
+
+            double pull = 0.5 * Math.Abs(end.Y - start.Y);
+            pull = Math.Max(pull, (Math.Abs(0.5 * (end.X - start.X))));
+            Point[] points = new[] {
+                //new Point(0, 0), START
+                start,
+                //new Point(190, 0), TANGENT START
+                new Point((start.X + pull), start.Y),
+                //new Point(200, 100), MID
+                new Point(((end.X + start.X) / 2), ((end.Y + start.Y) / 2)),
+                //new Point(210, 200), TANGENT END
+                new Point((end.X - pull), end.Y),
+                //new Point(400, 200) END
+                end
+            };
+            Point[] curvePoints = GetBezierApproximation(points, 256);
+
+            double minx = default, maxx = default, miny = default, maxy = default;
+            int left = -1, right = -1, top = -1, bottom = -1;
+            int j = 0;
+            foreach (Point pt in curvePoints)
+            {
+                if ((minx == default) || (pt.X < minx))
+                {
+                    minx = pt.X;
+                    left = j;
+                }
+                if ((maxx == default) || (pt.X > maxx))
+                {
+                    maxx = pt.X;
+                    right = j;
+                }
+                if ((miny == default) || (pt.Y < miny))
+                {
+                    miny = pt.Y;
+                    top = j;
+                }
+                if ((maxy == default) || (pt.Y > maxy))
+                {
+                    maxy = pt.Y;
+                    bottom = j;
+                }
+                j++;
+            }
+
+            if (!this._element.inflated)
+            {
+                if (minx < 0.0)
+                {
+                    //this.Element.SetX(this._element.InnerBoundingBox.Location.X - (Math.Abs(maxx - minx) / 4.0));
+                    this.Element.SetX(this._element.InnerBoundingBox.Location.X + minx);
+                    for (int i = 0; i < curvePoints.Length; i++)
+                    {
+                        curvePoints[i].X -= minx;
+                    }
+                }
+                if (miny < 0.0)
+                {
+                    //this.Element.SetY(this._element.InnerBoundingBox.Location.Y - (Math.Abs(maxy - miny) / 4.0));
+                    this.Element.SetY(this._element.InnerBoundingBox.Location.Y + miny);
+                    for (int i = 0; i < curvePoints.Length; i++)
+                    {
+                        curvePoints[i].Y -= miny;
+                    }
+                }
+                if (Math.Abs(maxx - minx) > this._element.InnerBoundingBox.Size.Width)
+                {
+                    this.Element.SetWidth(Math.Abs(maxx - minx));
+                    //this.Element.BoundingBox.Inflate(new CanvasSize((Math.Abs(maxx - minx) - this._element.InnerBoundingBox.Size.Width), 0.0));
+                    this._element.inflated = true;
+                }
+                if (Math.Abs(maxy - miny) > this._element.InnerBoundingBox.Size.Height)
+                {
+                    this.Element.SetHeight(Math.Abs(maxy - miny));
+                    //this.Element.BoundingBox.Inflate(new CanvasSize(0.0, (Math.Abs(maxy - miny) - this._element.InnerBoundingBox.Size.Height)));
+                    this._element.inflated = true;
+                }
+                //this._element.OnPropertyChanged("BoundingBox");
+            }
+            //_boundx = this.Element.BoundingBox.Size.Width;
+            //this._element.InnerBoundingBox = this._element.BoundingBox;
+            //_expBoundx = Math.Abs(this._element.InnerBoundingBox.Size.Width - Math.Abs(maxx - minx)) / 4.0;
+            //if (_expBoundx != 0.0)
+            //{
+            //    this._element.BoundingBox.Inflate(new CanvasSize(Math.Abs(_expBoundx * 2), 0.0));
+            //    //TODO:Inflate along Y axis to account for curve thickness
+
+            //    this.Element.SetX(this._element.InnerBoundingBox.Left + _expBoundx);
+            //    //if (minx < points[0].X)
+            //    //{
+            //    for (int i = 0; i < points.Length; i++)
+            //    {
+            //        points[i].X += minx;
+            //    }
+            //    //}
+            //    //++++
+            //    this._element.OnPropertyChanged("BoundingBox");
+            //    //DataViewModel.WPFControl.ExpandContent();
+            //}
+            //}
+
+            PolyLineSegment segment = new PolyLineSegment(curvePoints, true);
+            PathFigure pf = new PathFigure(segment.Points[0], new[] { segment }, false);
+            PathFigureCollection pfc = new PathFigureCollection();
+            pfc.Add(pf);
+            var pge = new PathGeometry();
+            pge.Figures = pfc;
+            Path p = new Path();
+            p.Data = pge;
+            Random rnd = new Random();
+            byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
+            byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
+            byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
+            p.Stroke = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
+            p.StrokeThickness = 3.0;
+            grid.Children.Clear();
+            grid.Children.Add(p);
+        }
+
+        Point[] GetBezierApproximation(Point[] controlPoints, int outputSegmentCount)
+        {
+            Point[] points = new Point[outputSegmentCount + 1];
+            for (int i = 0; i <= outputSegmentCount; i++)
+            {
+                double t = (double)i / outputSegmentCount;
+                points[i] = GetBezierPoint(t, controlPoints, 0, controlPoints.Length);
+            }
+            return points;
+        }
+
+        Point GetBezierPoint(double t, Point[] controlPoints, int index, int count)
+        {
+            if (count == 1)
+                return controlPoints[index];
+            var P0 = GetBezierPoint(t, controlPoints, index, count - 1);
+            var P1 = GetBezierPoint(t, controlPoints, index + 1, count - 1);
+            return new Point((1 - t) * P0.X + t * P1.X, (1 - t) * P0.Y + t * P1.Y);
         }
 
         #region MouseEvents
@@ -185,7 +350,7 @@ namespace Verse3.VanillaElements
             {
                 this._element = this.DataContext as BezierElement;
                 this._element.bezView = this;
-                Render();
+                //Render();
             }
         }
 
@@ -202,177 +367,6 @@ namespace Verse3.VanillaElements
 
         #endregion
 
-        PolyLineSegment GetBezierApproximation(Point[] controlPoints, int outputSegmentCount)
-        {
-            Point[] points = new Point[outputSegmentCount + 1];
-            for (int i = 0; i <= outputSegmentCount; i++)
-            {
-                double t = (double)i / outputSegmentCount;
-                points[i] = GetBezierPoint(t, controlPoints, 0, controlPoints.Length);
-            }
-            return new PolyLineSegment(points, true);
-        }
-
-        Point GetBezierPoint(double t, Point[] controlPoints, int index, int count)
-        {
-            if (count == 1)
-                return controlPoints[index];
-            var P0 = GetBezierPoint(t, controlPoints, index, count - 1);
-            var P1 = GetBezierPoint(t, controlPoints, index + 1, count - 1);
-            return new Point((1 - t) * P0.X + t * P1.X, (1 - t) * P0.Y + t * P1.Y);
-        }
-
-        Point start = default;
-        Point end = default;
-        public void DrawBezierCurve(Grid grid, BezierDirection dir = BezierDirection.Default)
-        {
-            if (this._element.topToBottom)
-            {
-                if (dir == BezierDirection.ForceRightToLeft)
-                {
-                    if (this._element.leftToRight)
-                    {
-                        start = new Point(this.Element.BoundingBox.Size.Width, this.Element.BoundingBox.Size.Height);
-                        end = new Point(0.0, 0.0);
-                        //top left to bottom right (RTL)
-                    }
-                    else
-                    {
-                        start = new Point(0.0, 0.0);
-                        end = new Point(this.Element.BoundingBox.Size.Width, this.Element.BoundingBox.Size.Height);
-                        //bottom right to top left (RTL)
-                    }
-                }
-                else if (dir == BezierDirection.ForceLeftToRight)
-                {
-                    if (this._element.leftToRight)
-                    {
-                        start = new Point(0.0, 0.0);
-                        end = new Point(this.Element.BoundingBox.Size.Width, this.Element.BoundingBox.Size.Height);
-                        //top left to bottom right (LTR)
-                    }
-                    else
-                    {
-                        start = new Point(this.Element.BoundingBox.Size.Width, this.Element.BoundingBox.Size.Height);
-                        end = new Point(0.0, 0.0);
-                        //bottom right to top left (LTR)
-                    }
-                }
-                else
-                {
-                    start = new Point(0.0, 0.0);
-                    end = new Point(this.Element.BoundingBox.Size.Width, this.Element.BoundingBox.Size.Height);
-                    //top left to bottom right (DEF)
-                    //bottom right to top left (DEF)
-                }
-            }
-            else
-            {
-                if (dir == BezierDirection.ForceRightToLeft)
-                {
-                    if (this._element.leftToRight)
-                    {
-                        start = new Point(this.Element.BoundingBox.Size.Width, 0.0);
-                        end = new Point(0.0, this.Element.BoundingBox.Size.Height);
-                        //bottom left to top right (RTL)
-                    }
-                    else
-                    {
-                        start = new Point(0.0, this.Element.BoundingBox.Size.Height);
-                        end = new Point(this.Element.BoundingBox.Size.Width, 0.0);
-                        //top right to bottom left (RTL)
-                    }
-                }
-                else if (dir == BezierDirection.ForceLeftToRight)
-                {
-                    if (this._element.leftToRight)
-                    {
-                        start = new Point(0.0, this.Element.BoundingBox.Size.Height);
-                        end = new Point(this.Element.BoundingBox.Size.Width, 0.0);
-                        //bottom left to top right (LTR)
-                    }
-                    else
-                    {
-                        start = new Point(this.Element.BoundingBox.Size.Width, 0.0);
-                        end = new Point(0.0, this.Element.BoundingBox.Size.Height);
-                        //top right to bottom left (LTR)
-                    }
-                }
-                else
-                {
-                    start = new Point(0.0, this.Element.BoundingBox.Size.Height);
-                    end = new Point(this.Element.BoundingBox.Size.Width, 0.0);
-                    //bottom left to top right (DEF)
-                    //top right to bottom left (DEF)
-                }
-            }
-            double pull = 0.75 * Math.Abs(end.Y - start.Y);
-            pull = Math.Max(pull, (Math.Abs(0.5 * (end.X - start.X))));
-            Point[] points = new[] {
-                //new Point(0, 0), START
-                start,
-                //new Point(190, 0), TANGENT START
-                new Point((start.X + pull), start.Y),
-                //new Point(200, 100), MID
-                new Point(((end.X + start.X) / 2), ((end.Y + start.Y) / 2)),
-                //new Point(210, 200), TANGENT END
-                new Point((end.X - pull), end.Y),
-                //new Point(400, 200) END
-                end
-            };
-
-            //EXPAND BOUNDING BOX------------------------------------------------
-            double minx = default, maxx = default, miny = default, maxy = default;
-            foreach (Point pt in points)
-            {
-                if (minx == default) minx = pt.X;
-                if (maxx == default) maxx = pt.X;
-                if (miny == default) miny = pt.Y;
-                if (maxy == default) maxy = pt.Y;
-                if (pt.X < minx) minx = pt.X;
-                if (pt.X > maxx) maxx = pt.X;
-                if (pt.Y < miny) miny = pt.Y;
-                if (pt.Y > maxy) maxy = pt.Y;
-            }
-            if (minx < points[0].X)
-            {
-                _boundx = this.Element.BoundingBox.Size.Width;
-                _expBoundx = Math.Abs(this.Element.BoundingBox.Size.Width - Math.Abs(maxx - minx)) / 4.0;
-                this.Element.BoundingBox.Inflate(new CanvasSize((_expBoundx * 2), 0.0));
-                //TODO:Inflate along Y axis to account for curve thickness
-
-                //this._element.bezView = this;
-                for (int i = 0; i < points.Length; i++)
-                {
-                    points[i].X += _expBoundx;
-                }
-                this.Element.SetX(this.Element.X - _expBoundx);
-            }
-
-
-            //++++
-            this.Element.OnPropertyChanged("BoundingBox");
-            //DataViewModel.WPFControl.ExpandContent();
-
-
-
-            var b = GetBezierApproximation(points, 256);
-            PathFigure pf = new PathFigure(b.Points[0], new[] { b }, false);
-            PathFigureCollection pfc = new PathFigureCollection();
-            pfc.Add(pf);
-            var pge = new PathGeometry();
-            pge.Figures = pfc;
-            Path p = new Path();
-            p.Data = pge;
-            Random rnd = new Random();
-            byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            p.Stroke = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
-            p.StrokeThickness = 3.0;
-            grid.Children.Clear();
-            grid.Children.Add(p);
-        }
     }
 
     public class BezierElement : IRenderable, IConnection
@@ -380,6 +374,7 @@ namespace Verse3.VanillaElements
         #region Data Members
 
         private BoundingBox boundingBox = BoundingBox.Unset;
+        private BoundingBox innerBoundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
         private static Type view = typeof(BezierElementView);
         private INode origin;
@@ -426,6 +421,20 @@ namespace Verse3.VanillaElements
                 //    bezView.Render();
             }
         }
+
+        public BoundingBox InnerBoundingBox
+        {
+            get
+            {
+                return innerBoundingBox;
+            }
+            internal set
+            {
+                innerBoundingBox = value;
+            }
+        }
+
+        public bool inflated = false;
 
         public double X { get => BoundingBox.Location.X; }
 
@@ -519,47 +528,68 @@ namespace Verse3.VanillaElements
         //{
         //}
 
-        internal bool topToBottom = true;
-        internal bool leftToRight = true;
+        //internal bool topToBottom = true;
+        //internal bool leftToRight = true;
+
+        public bool TopToBottom => (this.origin.Hotspot.Y < this.destination.Hotspot.Y);
+        public bool LeftToRight => (this.origin.Hotspot.X < this.destination.Hotspot.X);
 
         public void RedrawBezier(double x, double y, double width, double height)
         {
             //requestedRedraw = true;
             if (this.bezView == null || !this.bezView._rendering)
             {
-                if ((height < 0.0 && width > 0.0) || (width < 0 && height > 0.0))
-                {
-                    topToBottom = false;
-                }
-                else if ((height > 0.0 && width > 0.0) || (width < 0.0 && height < 0.0))
-                {
-                    topToBottom = true;
-                }
-                leftToRight = (width > 0.0);
-                if (leftToRight && topToBottom)
+                //if ((height < 0.0 && width > 0.0) || (width < 0 && height > 0.0))
+                //{
+                //    topToBottom = false;
+                //}
+                //else if ((height > 0.0 && width > 0.0) || (width < 0.0 && height < 0.0))
+                //{
+                //    topToBottom = true;
+                //}
+                //leftToRight = (width > 0.0);
+                if (LeftToRight && TopToBottom)
                 {
                     //BottomRight
                     this.BoundingBox = new BoundingBox(x, y, Math.Abs(width), Math.Abs(height));
                 }
-                else if (!leftToRight && !topToBottom)
+                else if (!LeftToRight && !TopToBottom)
                 {
                     //BottomLeft
                     this.BoundingBox = new BoundingBox((x - Math.Abs(width)), y, Math.Abs(width), Math.Abs(height));
                 }
-                else if (leftToRight && !topToBottom)
+                else if (LeftToRight && !TopToBottom)
                 {
                     //TopRight
                     this.BoundingBox = new BoundingBox(x, (y - Math.Abs(height)), Math.Abs(width), Math.Abs(height));
                 }
-                else if (!leftToRight && topToBottom)
+                else if (!LeftToRight && TopToBottom)
                 {
                     //TopLeft
                     this.BoundingBox = new BoundingBox((x - Math.Abs(width)), (y - Math.Abs(height)), Math.Abs(width), Math.Abs(height));
                 }
-                OnPropertyChanged("BoundingBox");
+                //OnPropertyChanged("BoundingBox");
 
-                if (bezView != null)
-                    bezView.Render();
+                if (!this.inflated)
+                {
+                    this.InnerBoundingBox = this.BoundingBox;
+                    if (bezView != null)
+                        bezView.Render();
+                }
+                else
+                {
+                    if (this.InnerBoundingBox != null)
+                    {
+                        if (this.BoundingBox != this.InnerBoundingBox)
+                        {
+                            this.inflated = false;
+                            this.InnerBoundingBox = this.BoundingBox;
+                            if (bezView != null)
+                                bezView.Render();
+                        }
+                    }
+                }
+
 
                 //requestedRedraw = false;
             }
@@ -567,8 +597,34 @@ namespace Verse3.VanillaElements
 
         public void RedrawBezier(INode start, INode end)
         {
+            if (this.origin != start) this.origin = start;
+            if (this.destination != end) this.destination = end;
             //RedrawBezier(((start.Hotspot.X) - 200), ((start.Hotspot.Y) - 200), ((end.Hotspot.X) - (start.Hotspot.X)), ((end.Hotspot.Y) - (start.Hotspot.Y)));
-            RedrawBezier(start.Hotspot.X, start.Hotspot.Y, ((end.Hotspot.X) - (start.Hotspot.X)), ((end.Hotspot.Y) - (start.Hotspot.Y)));
+            //RedrawBezier(start.Hotspot.X, start.Hotspot.Y, ((end.Hotspot.X) - (start.Hotspot.X)), ((end.Hotspot.Y) - (start.Hotspot.Y)));
+            if (LeftToRight && TopToBottom)
+            {
+                //BottomRight
+                this.BoundingBox = new BoundingBox(start.Hotspot.X, start.Hotspot.Y, Math.Abs((end.Hotspot.X) - (start.Hotspot.X)), Math.Abs((end.Hotspot.Y) - (start.Hotspot.Y)));
+            }
+            else if (!LeftToRight && !TopToBottom)
+            {
+                //TopLeft
+                this.BoundingBox = new BoundingBox(end.Hotspot.X, end.Hotspot.Y, Math.Abs((end.Hotspot.X) - (start.Hotspot.X)), Math.Abs((end.Hotspot.Y) - (start.Hotspot.Y)));
+            }
+            else if (LeftToRight && !TopToBottom)
+            {
+                //TopRight
+                this.BoundingBox = new BoundingBox(start.Hotspot.X, end.Hotspot.Y, Math.Abs((end.Hotspot.X) - (start.Hotspot.X)), Math.Abs((end.Hotspot.Y) - (start.Hotspot.Y)));
+            }
+            else if (!LeftToRight && TopToBottom)
+            {
+                //BottomLeft
+                this.BoundingBox = new BoundingBox(end.Hotspot.X, start.Hotspot.Y, Math.Abs((end.Hotspot.X) - (start.Hotspot.X)), Math.Abs((end.Hotspot.Y) - (start.Hotspot.Y)));
+            }
+            this.InnerBoundingBox = this.BoundingBox;
+            this.inflated = false;
+            if (bezView != null)
+                bezView.Render();
         }
 
 
@@ -585,8 +641,8 @@ namespace Verse3.VanillaElements
         //internal bool requestedRedraw = false;
         public BezierElement(INode start, INode end)
         {
-            this.origin = start;
-            this.destination = end;
+            if (this.origin != start) this.origin = start;
+            if (this.destination != end) this.destination = end;
             if (this.origin.NodeType == NodeType.Input) this.Direction = BezierDirection.ForceRightToLeft;
             else this.Direction = BezierDirection.ForceLeftToRight;
             RedrawBezier(start, end);

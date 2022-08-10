@@ -73,7 +73,14 @@ namespace TestPlugin
             if (this.Element is TestElement)
             {
                 TestElement testelement = (TestElement)this.Element;
+                if (testelement.RenderView != this) testelement.RenderView = this;
                 InputsList.ItemsSource = testelement.Children;
+
+                if (testelement.Children.Count > 0)
+                {
+                    textBlock.DisplayedText = testelement.ElementText;
+                    return;
+                }
 
                 var nodeBlock = new NodeElement(testelement);
                 DataTemplateManager.RegisterDataTemplate(nodeBlock);                
@@ -113,8 +120,9 @@ namespace TestPlugin
             TestElement? testelement = this.Element as TestElement;
             if (testelement != null)
             {
-                string? txt = testelement.ElementText;
-                textBlock.DisplayedText = txt;
+                this.Render();
+                //string? txt = testelement.ElementText;
+                //textBlock.DisplayedText = txt;
             }
         }
 
@@ -205,10 +213,12 @@ namespace TestPlugin
 
             DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
 
-            TestElementView rectangle = (TestElementView)sender;
-            IRenderable myRectangle = (IRenderable)rectangle.DataContext;
-            myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
-            myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
+            if (this.Element != null)
+            {
+                this.Element.SetX(this.Element.X + rectangleDragVector.X);
+                this.Element.SetY(this.Element.Y + rectangleDragVector.Y);
+                RenderPipeline.RenderRenderable(this.Element);
+            }
 
             if (this._element != null)
             {
@@ -222,17 +232,17 @@ namespace TestPlugin
                             renderable.SetY(renderable.Y + rectangleDragVector.Y);
                         }
                     }
-                    for (int i = 0; i < this._element.Children.Count; i++)
-                    {
-                        if (this._element.Children[i] is NodeElement)
-                        {
-                            NodeElement node = (NodeElement)this._element.Children[i];
-                            if (node != null && node.RenderView != null)
-                            {
-                                node.RenderView.Render();
-                            }
-                        }
-                    }
+                    //for (int i = 0; i < this._element.Children.Count; i++)
+                    //{
+                    //    if (this._element.Children[i] is NodeElement)
+                    //    {
+                    //        NodeElement node = (NodeElement)this._element.Children[i];
+                    //        if (node != null && node.RenderView != null)
+                    //        {
+                    //            node.RenderView.Render();
+                    //        }
+                    //    }
+                    //}
                 }
             }
 
