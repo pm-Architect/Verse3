@@ -103,7 +103,7 @@
             this.button3.TabIndex = 4;
             this.button3.Text = "RTL";
             this.button3.UseVisualStyleBackColor = true;
-            //this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button1
             // 
@@ -125,7 +125,7 @@
             this.button2.TabIndex = 3;
             this.button2.Text = "LTR";
             this.button2.UseVisualStyleBackColor = true;
-            //this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // timer1
             // 

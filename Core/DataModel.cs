@@ -354,7 +354,7 @@ namespace Core
         IRenderView RenderView { get; set; }
 #nullable restore
 
-        //public bool Visible { get; set; }
+        public bool Visible { get; set; }
 
         #region BoundingBox
 
@@ -557,15 +557,7 @@ namespace Core
         /// <summary>
         /// Default state.
         /// </summary>
-        Default = 0,
-        /// <summary>
-        /// Hidden state.
-        /// </summary>
-        Hidden = 1,
-        /// <summary>
-        /// Disabled state.
-        /// </summary>
-        Disabled = 2
+        Default = 0
     }
     public enum ComputableElementState
     {
@@ -614,4 +606,5 @@ namespace Core
         Data = 1,
         Event = 2
     }
+
 }

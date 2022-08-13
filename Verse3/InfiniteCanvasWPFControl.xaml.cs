@@ -17,8 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Markup;
 using static Core.Geometry2D;
-using System.Runtime.InteropServices;
-using Verse3.CanvasElements;
+using Verse3.VanillaElements;
 
 namespace Verse3
 {
@@ -33,10 +32,9 @@ namespace Verse3
             CompositionTarget.Rendering += BeforeFrameRender;
             //TODO Add different view templates
         }
-
+        
         #region Fields
 
-        internal static ConnectionElement currentBezierCurve = null;
         private System.Windows.Forms.Cursor winFormsCursor = System.Windows.Forms.Cursors.Default;
         /// <summary>
         /// Specifies the current state of the mouse handling logic.
@@ -268,9 +266,7 @@ namespace Verse3
             }
         }
 
-        [DllImport("User32.dll")]
-        private static extern bool SetCursorPos(int X, int Y);
-        bool cursorWrapped = false;
+
 
         /// <summary>
         /// Event raised on mouse move in the ZoomAndPanControl.
@@ -308,46 +304,15 @@ namespace Verse3
 
             if (mouseHandlingMode == MouseHandlingMode.Panning)
             {
+                //
+                // The user is left-dragging the mouse.
+                // Pan the viewport by the appropriate amount.
+                //
+                Point curContentMousePoint = e.GetPosition(LBcontent);
+                Vector dragOffset = curContentMousePoint - origContentMouseDownPoint;
 
-                Point controlMousePos = e.GetPosition(InfiniteCanvasControl1);
-
-                //get mouse distance from edge of screen
-                double xOffset = controlMousePos.X;
-                double yOffset = controlMousePos.Y;
-                double threshold = 0.01;
-                if ((xOffset < threshold) ||
-                    ((InfiniteCanvasControl1.ActualWidth - xOffset) < threshold) ||
-                    (yOffset < threshold) ||
-                    ((InfiniteCanvasControl1.ActualHeight - yOffset) < threshold))
-                {
-                    Point ScreenCenter = new Point(InfiniteCanvasControl1.ActualWidth / 2, InfiniteCanvasControl1.ActualHeight / 2);
-                    ScreenCenter = InfiniteCanvasControl1.PointToScreen(ScreenCenter);
-                    Vector Offset = origContentMouseDownPoint - LBcontent.PointFromScreen(ScreenCenter);
-                    //TODO: Fix edge conditions
-                    if (InfiniteCanvasControl1.ContentOffsetX > Offset.X && InfiniteCanvasControl1.ContentOffsetY > Offset.Y
-                        && (InfiniteCanvasControl1.ContentOffsetX - Offset.X) < (LBcontent.ActualWidth - (InfiniteCanvasControl1.ActualWidth / 2))
-                        && (InfiniteCanvasControl1.ContentOffsetY - Offset.Y) < (LBcontent.ActualHeight - (InfiniteCanvasControl1.ActualHeight / 2)))
-                    {
-                        SetCursor(ScreenCenter.X, ScreenCenter.Y, InfiniteCanvasControl1);
-                        InfiniteCanvasControl1.ContentOffsetX -= Offset.X;
-                        InfiniteCanvasControl1.ContentOffsetY -= Offset.Y;
-                        origContentMouseDownPoint = e.GetPosition(LBcontent);
-                        cursorWrapped = true;
-                    }
-                }
-
-                if (!cursorWrapped)
-                {
-                    //
-                    // The user is left-dragging the mouse.
-                    // Pan the viewport by the appropriate amount.
-                    //
-                    Vector dragOffset = currCanvasMousePosition - origContentMouseDownPoint;
-
-                    InfiniteCanvasControl1.ContentOffsetX -= dragOffset.X;
-                    InfiniteCanvasControl1.ContentOffsetY -= dragOffset.Y;
-                }
-                else cursorWrapped = false;
+                InfiniteCanvasControl1.ContentOffsetX -= dragOffset.X;
+                InfiniteCanvasControl1.ContentOffsetY -= dragOffset.Y;
 
                 this.Cursor = Cursors.SizeAll;
                 this.WinFormsCursor = System.Windows.Forms.Cursors.SizeAll;
@@ -440,14 +405,7 @@ namespace Verse3
                 //}
             //}
 
-        private static void SetCursor(double x, double y, InfiniteCanvasControl c)
-        {
-            // Left boundary
-            var xL = (int)c.PointToScreen(new Point(x, y)).X;
-            // Top boundary
-            var yT = (int)c.PointToScreen(new Point(x, y)).Y;
             
-            SetCursorPos((int)x, (int)y);
         }
 
         /// <summary>
