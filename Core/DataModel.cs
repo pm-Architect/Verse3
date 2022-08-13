@@ -557,7 +557,15 @@ namespace Core
         /// <summary>
         /// Default state.
         /// </summary>
-        Default = 0
+        Default = 0,
+        /// <summary>
+        /// Hidden state.
+        /// </summary>
+        Hidden = 1,
+        /// <summary>
+        /// Disabled state.
+        /// </summary>
+        Disabled = 2
     }
     public enum ComputableElementState
     {

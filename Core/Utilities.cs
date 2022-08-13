@@ -73,6 +73,7 @@ namespace Core
         /// <summary>
         /// The user is left-mouse-button-dragging on the viewport.
         /// </summary>
-        Dragging
+        Dragging,
+        ConnectionStarted
     }
 }

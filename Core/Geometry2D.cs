@@ -445,13 +445,25 @@ namespace Core
                 return ($"CanvasPoint({this.X.ToString()}, {this.Y.ToString()})");
             }
 
-            public static CanvasSize operator +(CanvasPoint A, CanvasPoint B)
+            public static CanvasPoint operator +(CanvasPoint A, CanvasPoint B)
             {
-                return new CanvasSize((A.X + B.X), (A.Y + B.Y));
+                return new CanvasPoint((A.X + B.X), (A.Y + B.Y));
             }
-            public static CanvasSize operator -(CanvasPoint A, CanvasPoint B)
+            public static CanvasPoint operator -(CanvasPoint A, CanvasPoint B)
             {
                 return new CanvasSize((A.X - B.X), (A.Y - B.Y));
+            }
+            public static CanvasPoint operator /(CanvasPoint A, CanvasPoint B)
+            {
+                return new CanvasPoint((A.X / B.X), (A.Y / B.Y));
+            }
+            public static CanvasPoint operator /(CanvasPoint A, int B)
+            {
+                return new CanvasPoint((A.X / B), (A.Y / B));
+            }
+            public static CanvasPoint operator /(CanvasPoint A, double B)
+            {
+                return new CanvasPoint((A.X / B), (A.Y / B));
             }
             public static bool operator ==(CanvasPoint A, CanvasPoint B)
             {
