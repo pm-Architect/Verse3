@@ -20,6 +20,7 @@ using Verse3;
 using static Core.Geometry2D;
 using Verse3.VanillaElements;
 using TextElement = Verse3.VanillaElements.TextElement;
+using Verse3.CanvasElements;
 
 namespace TestPlugin
 {
@@ -29,7 +30,6 @@ namespace TestPlugin
     public partial class TestElementView : UserControl, IRenderView
     {
         private TestElement? _element;        
-        
         public IRenderable? Element
         {
             get
@@ -54,7 +54,7 @@ namespace TestPlugin
         public TestElementView()
         {
             InitializeComponent();
-            Render();
+            //Render();
         }
 
         TextElement textBlock = new TextElement();
@@ -314,6 +314,18 @@ namespace TestPlugin
         }
 
         #endregion
+        
+        public ObservableCollection<IRenderable>? ChildrenElements { get; set; }
+        
+        public void AddChild(IRenderable child)
+        {
+            if (ChildrenElements == null)
+            {
+                ChildrenElements = new ObservableCollection<IRenderable>();
+            }
+            ChildrenElements.Add(child);
+            Children?.Append(child.ID);
+        }
 
         #region Properties
 
@@ -352,7 +364,7 @@ namespace TestPlugin
 
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get; set; }
-        bool IRenderable.Visible { get; set; }
+        //bool IRenderable.Visible { get; set; }
 
         #endregion
 

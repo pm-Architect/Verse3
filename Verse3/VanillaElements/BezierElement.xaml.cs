@@ -18,6 +18,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Verse3;
+using Verse3.CanvasElements;
+using Verse3.VanillaElements;
+using Verse3.VanillaElements.Utilities;
 using static Core.Geometry2D;
 
 namespace Verse3.VanillaElements
@@ -33,7 +36,6 @@ namespace Verse3.VanillaElements
         //private double _expBoundx = 0.0;
         //private double _boundy = 0.0;
         //private double _expBoundy = 0.0;
-
         public IRenderable Element
         {
             get { return _element; }
@@ -53,6 +55,15 @@ namespace Verse3.VanillaElements
         {
             InitializeComponent();
         }
+        
+        private void BezierElementView_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (!rendering)
+            Render();
+        }
+        
+        internal bool rendering = false;
+        internal bool expanded = false;
 
         internal bool _rendering = false;
         public void Render()
@@ -693,27 +704,25 @@ namespace Verse3.VanillaElements
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
                 //this.boundingBox.PropertyChanged += this.PropertyChanged;
             }
-        }
-
-        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
-        {
-            if (!Equals(field, newValue))
+            if (minx < points[0].X)
             {
-                field = newValue;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-                return true;
+                double dx = (element.InnerBoundingBox.Size.Width - (minx - maxx)) / 4.0;
+                if (elementView.expanded)
+                {
+                    element.BoundingBox = element.InnerBoundingBox;
+                }
+                else
+                {
+                    element.InnerBoundingBox = element.BoundingBox;
+                }
+                element.BoundingBox.Inflate(new CanvasSize((dx * 2), 0.0));
+                for (int i = 0; i < points.Length; i++)
+                {
+                    points[i].X += dx;
+                }
+                ((IRenderable)element).SetX(element.InnerBoundingBox.Location.X - dx);
             }
-
-            return false;
-        }
-
-        #endregion
-    }
-
-    public enum BezierDirection
-    {
-        Default = 0,
-        ForceLeftToRight = 1,
-        ForceRightToLeft = 2
+            return points;
+        }        
     }
 }

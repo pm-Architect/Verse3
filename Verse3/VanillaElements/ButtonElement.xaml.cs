@@ -280,7 +280,7 @@ namespace Verse3.VanillaElements
 
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get; set; }
-        bool IRenderable.Visible { get; set; }
+        //bool IRenderable.Visible { get; set; }
 
         #endregion
 
@@ -331,6 +331,16 @@ namespace Verse3.VanillaElements
 
             return false;
         }
+
+        //internal void ButtonClicked(object sender, RoutedEventArgs e)
+        //{
+        //    OnButtonClicked.Invoke(sender, e);
+        //}
+
+        //private object displayedText;
+
+        //public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
+        //public event EventHandler<RoutedEventArgs> OnButtonClicked;
 
         #endregion
     }

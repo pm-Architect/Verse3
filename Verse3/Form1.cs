@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media;
+using Verse3.CanvasElements;
 using Verse3.VanillaElements;
 
 namespace Verse3
@@ -47,6 +48,25 @@ namespace Verse3
             if (sender is InfiniteCanvasWPFControl)
             {
                 InfiniteCanvasWPFControl infiniteCanvas = (InfiniteCanvasWPFControl)sender;
+                if (infiniteCanvas.MouseHandlingMode == MouseHandlingMode.ConnectionStarted)
+                {
+                    foreach (IElement n in DataViewModel.Instance.Elements)
+                    {
+                        if (n is NodeElement)
+                        {
+                            NodeElement node = (NodeElement)n;
+                            if (node.IsSelected)
+                            {
+                                if (node.Connections.Count > 0)
+                                {
+                                    foreach (ConnectionElement connection in node.Connections)
+                                    {
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 this.Cursor = infiniteCanvas.WinFormsCursor;
             }
             if (DataViewModel.ActiveConnection != default)

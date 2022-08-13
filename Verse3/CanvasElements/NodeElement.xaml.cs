@@ -19,22 +19,25 @@ using System.Windows.Shapes;
 using Verse3;
 using static Core.Geometry2D;
 
-namespace Verse3.VanillaElements
+namespace Verse3.CanvasElements
 {
     /// <summary>
     /// Visual Interaction logic for TestElement.xaml
     /// </summary>
-    public partial class TextElementView : UserControl, IRenderView
+    public partial class NodeElementView : UserControl, IRenderView
     {
-        private IRenderable _element;
+        private NodeElement _element;
         
         public IRenderable Element
         {
             get { return _element; }
             private set
             {
-                _element = value;
-                //Update();
+                if (value is NodeElement)
+                {
+                    _element = (NodeElement)value;
+                    //Update();
+                }
             }
         }
         public Guid? ElementGuid
@@ -42,7 +45,7 @@ namespace Verse3.VanillaElements
             get { return _element?.ID; }
         }
 
-        public TextElementView()
+        public NodeElementView()
         {
             InitializeComponent();
         }
@@ -51,8 +54,12 @@ namespace Verse3.VanillaElements
         {
             if (this.Element != null)
             {
-                //this.Element.BoundingBox.Size.Height = DisplayedTextBlock.ActualHeight;
-                //this.Element.BoundingBox.Size.Width = DisplayedTextBlock.ActualWidth;
+                if (!this.Element.BoundingBox.IsValid())
+                {
+                    this._element.BoundingBox = new BoundingBox(0, 0, this.ActualWidth, this.ActualHeight);
+                }
+                //this.Element.BoundingBox.Size.Height = NodeButton.ActualHeight;
+                //this.Element.BoundingBox.Size.Width = NodeButton.ActualWidth;)
                 //this.Element.OnPropertyChanged("Width");
                 //this.Element.OnPropertyChanged("Height");
             }
@@ -69,7 +76,7 @@ namespace Verse3.VanillaElements
             //DataViewModel.WPFControl.ContentElements.Focus();
             //Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
 
-            //TextElementView rectangle = (TextElementView)sender;
+            //NodeElementView rectangle = (NodeElementView)sender;
             //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
 
             ////myRectangle.IsSelected = true;
@@ -116,7 +123,7 @@ namespace Verse3.VanillaElements
 
             //DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
 
-            //TextElementView rectangle = (TextElementView)sender;
+            //NodeElementView rectangle = (NodeElementView)sender;
             //rectangle.ReleaseMouseCapture();
 
             //e.Handled = true;
@@ -145,7 +152,7 @@ namespace Verse3.VanillaElements
 
             //DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
 
-            //TextElementView rectangle = (TextElementView)sender;
+            //NodeElementView rectangle = (NodeElementView)sender;
             //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
             //myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
             //myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
@@ -167,55 +174,46 @@ namespace Verse3.VanillaElements
         void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             //DependencyPropertyChangedEventArgs
-            Element = this.DataContext as IRenderable;
-            Render();
+            //Element = this.DataContext as IRenderable;
+            //Render();
+            //BEFORE Registration
         }
 
         void OnLoaded(object sender, RoutedEventArgs e)
         {
             //RoutedEventArgs
+            //AFTER Registration
             Element = this.DataContext as IRenderable;
             Render();
         }
 
         #endregion
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ((NodeElement)this.Element).ButtonClicked(sender, e);
+        }
     }
 
-    public class TextElement : IRenderable
+    public class NodeElement : IRenderable, INode
     {        
         #region Data Members
 
         private BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
-        private static Type view = typeof(TextElementView);
-        internal TextElementView elView;
-        public IRenderView RenderView
-        {
-            get
-            {
-                return elView;
-            }
-            set
-            {
-                if (value is TextElementView)
-                {
-                    elView = (TextElementView)value;
-                }
-            }
-        }
+        private static Type view = typeof(NodeElementView);
 
         #endregion
 
         #region Properties
 
         public Type ViewType { get { return view; } }
-        public object ViewKey { get; set; }
 
         public Guid ID { get => _id; private set => _id = value; }
 
         public bool IsSelected { get; set; }
-
-        public BoundingBox BoundingBox { get => boundingBox; private set => boundingBox = value; }
+        public List<ConnectionElement> Connections { get; private set; }
+        public BoundingBox BoundingBox { get => boundingBox; internal set => boundingBox = value; }
 
         public double X { get => boundingBox.Location.X; }
 
@@ -223,42 +221,39 @@ namespace Verse3.VanillaElements
 
         public double Width
         {
-            get => boundingBox.Size.Width;
-            set => boundingBox.Size.Width = value;
+            get
+            {
+                return boundingBox.Size.Width;
+            }
+            set
+            {
+                boundingBox.Size.Width = value;
+            }
         }
 
         public double Height
         {
-            get => boundingBox.Size.Height;
-            set => boundingBox.Size.Height = value;
-        }
-
-        private IRenderable _zPrev;
-        public IRenderable ZPrev => _zPrev;
-        private IRenderable _zNext;
-        public IRenderable ZNext => _zNext;
-        private IRenderable _parent;
-        public IRenderable Parent => _parent;
-        private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
-        public ElementsLinkedList<IRenderable> Children => _children;
-
-        public void AddChild(IRenderable child)
-        {
-            if (!this.Children.Contains(child))
+            get
             {
-                this.Children.Add(child);
-                child.SetParent(this);
+                return boundingBox.Size.Height;
+            }
+            set
+            {
+                boundingBox.Size.Height = value;
             }
         }
 
-        public void SetParent(IRenderable parent)
-        {
-            this._parent = parent;
-        }
+        public Guid ZPrev { get; }
+
+        public Guid ZNext { get; }
+
+        public Guid Parent { get; }
+
+        public Guid[] Children { get; }
 
         public ElementState State { get; set; }
 
-        //public IRenderView ElementView { get; internal set; }
+        //public IRenderView ElementView { get; }
 
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get; set; }
@@ -268,28 +263,18 @@ namespace Verse3.VanillaElements
 
         #region Constructors
 
-        public TextElement()
+        public NodeElement()
         {
-            this.FontFamily = new FontFamily("Maven Pro");
-            this.FontSize = 12;
-            this.FontStyle = FontStyles.Normal;
-            this.FontWeight = FontWeights.Normal;
-            this.Foreground = Brushes.White;
-            this.Background = Brushes.Transparent;
-            this.TextAlignment = TextAlignment.Center;
+            //this.DisplayedText = "Button";
+            this.Connections = new List<ConnectionElement>();
         }
 
-        public TextElement(int x, int y, int width, int height)
+        public NodeElement(int x, int y, int width, int height)
         {
             this.boundingBox = new BoundingBox(x, y, width, height);
 
-            this.FontFamily = new FontFamily("Maven Pro");
-            this.FontSize = 12;
-            this.FontStyle = FontStyles.Normal;
-            this.FontWeight = FontWeights.Normal;
-            this.Foreground = Brushes.White;
-            this.Background = Brushes.Transparent;
-            this.TextAlignment = TextAlignment.Center;
+            //this.DisplayedText = "Button";
+            this.Connections = new List<ConnectionElement>();
         }
 
         #endregion
@@ -318,38 +303,32 @@ namespace Verse3.VanillaElements
             return false;
         }
 
-        private TextAlignment textAlignment;
-
-        public TextAlignment TextAlignment { get => textAlignment; set => SetProperty(ref textAlignment, value); }
-
-        private string displayedText;
-
-        public string DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
-
-        private FontStyle fontStyle;
-
-        public FontStyle FontStyle { get => fontStyle; set => SetProperty(ref fontStyle, value); }
-
-        private FontFamily fontFamily;
-
-        public FontFamily FontFamily { get => fontFamily; set => SetProperty(ref fontFamily, value); }
-
-        private double fontSize;
-
-        public double FontSize { get => fontSize; set => SetProperty(ref fontSize, value); }
-
-        private FontWeight fontWeight;
-
-        public FontWeight FontWeight { get => fontWeight; set => SetProperty(ref fontWeight, value); }
-
-        private Brush foreground;
-
-        public Brush Foreground { get => foreground; set => SetProperty(ref foreground, value); }
-
-        private Brush background;
-
-        public Brush Background { get => background; set => SetProperty(ref background, value); }
+        internal void ButtonClicked(object sender, RoutedEventArgs e)
+        {
+            OnButtonClicked.Invoke(sender, e);
+            this.IsSelected = true;
+            ConnectionElement connection = new ConnectionElement(this);
+            DataTemplateManager.RegisterDataTemplate(connection);
+            this.Connections.Add(connection);
+            if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.ConnectionStarted)
+                DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.ConnectionStarted;
+            else DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
+        }
 
         #endregion
+
+        private object displayedText;
+
+        public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
+
+        IElement INode.Parent => throw new NotImplementedException();
+
+        public NodeType NodeType => throw new NotImplementedException();
+
+        public CanvasPoint Hotspot => this.BoundingBox.Center;
+
+        public double HotspotThresholdRadius => throw new NotImplementedException();
+
+        public event EventHandler<RoutedEventArgs> OnButtonClicked;
     }
 }
