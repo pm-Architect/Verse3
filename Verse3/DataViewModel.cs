@@ -133,10 +133,6 @@ namespace Verse3
         public static bool RegisterDataTemplate(IRenderable el)
         {
             if (el.ViewType == null) return false;
-            if (!el.BoundingBox.IsValid())
-            {
-                //TODO: Log to console!
-            }
             var template = CreateTemplate(el.GetType(), el.ViewType);
             //el.BoundingBox = new BoundingBox();
             //Element needs to know DataTemplateKey in order to make a reference to it
@@ -190,6 +186,43 @@ namespace Verse3
             throw new NotImplementedException();
         }
     }
+
+    //public class ElementHeightPseudoConverter : IValueConverter
+    //{
+    //    public static double Padding { get; set; } = 2.5;
+    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        double h = 0.0;
+    //        if (parameter is ListBox)
+    //        {
+    //            ListBox listBox = parameter as ListBox;
+    //            foreach (object o in listBox.ItemsSource)
+    //            {
+    //                if (o is IRenderable)
+    //                {
+    //                    IRenderable r = o as IRenderable;
+    //                    if (r.BoundingBox.IsValid())
+    //                    {
+    //                        h += Padding;
+    //                        h += r.Height;
+    //                        h += Padding;
+    //                    }
+    //                }
+    //            }
+    //            //object o = listBox.Template.FindName("CompCanvas", listBox);
+    //            //if (o is Canvas)
+    //            //{
+    //            //    Canvas canvas = o as Canvas;
+    //            //    return canvas.ActualHeight;
+    //            //}
+    //        }
+    //        return h;
+    //    }
+    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 
     #endregion
 }
