@@ -3,6 +3,7 @@ using System.ComponentModel;
 using static Core.Geometry2D;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace Core
 {
@@ -451,6 +452,7 @@ namespace Core
             int count = 0;
             try
             {
+                //Parallel.ForEach(DataModel.Instance.Elements, e => { });
                 foreach (IElement e in DataModel.Instance.Elements)
                 {
                     if (e != null && e is IRenderable)

@@ -390,6 +390,7 @@ namespace Core
         /// </summary>
         public class CanvasPoint : Observable, IEquatable<CanvasSize>, IEquatable<CanvasPoint>
         {
+            //TODO: MAKE IMPLICIT CASTS TO OTHER POINT TYPES
             #region Constructors
             
             public static readonly CanvasPoint Unset = new CanvasPoint(double.NaN, double.NaN);

@@ -129,6 +129,7 @@ namespace Verse3
                                 
                                 if (ci != null)
                                 {
+                                    //TODO: Invoke constructor based on <PluginName>.cfg json file
                                     IElement elInst = ci.Invoke(new object[] { x, y, w, h }) as IElement;
                                     DataModel.Instance.Elements.Add(elInst);
                                 }

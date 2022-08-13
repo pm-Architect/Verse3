@@ -418,14 +418,16 @@ namespace Verse3.VanillaElements
     public class MousePositionNode : INode
     {
         public static readonly MousePositionNode Instance = new MousePositionNode();
-        
+        private ElementsLinkedList<IConnection> connections = new ElementsLinkedList<IConnection>();
+
         private MousePositionNode()
         {
 
         }
+        
         public IElement Parent { get; }
 
-        public ElementsLinkedList<IConnection> Connections { get; } = new ElementsLinkedList<IConnection>();
+        public ElementsLinkedList<IConnection> Connections => connections;
 
         public NodeType NodeType => NodeType.Unset;
 
@@ -434,16 +436,17 @@ namespace Verse3.VanillaElements
             get
             {
                 System.Drawing.Point p = DataViewModel.WPFControl.GetMouseRelPosition();
-                //if (this.Connections != null)
-                //{
-                //    if (this.Connections.Count > 0)
-                //    {
-                //        foreach (BezierElement bezier in this.Connections)
-                //        {
-                //            bezier.RedrawBezier(bezier.Origin, bezier.Destination);
-                //        }
-                //    }
-                //}
+                if (this.Connections != null)
+                {
+                    if (this.Connections.Count > 0)
+                    {
+                        foreach (BezierElement bezier in this.Connections)
+                        {
+                            bezier.RedrawBezier(bezier.Origin, bezier.Destination);
+                        }
+                    }
+                }
+
                 return new CanvasPoint(p.X, p.Y);
             }
         }

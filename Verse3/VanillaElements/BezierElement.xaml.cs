@@ -78,6 +78,7 @@ namespace Verse3.VanillaElements
         //double _expBoundx = 0.0;
         public void DrawBezierCurve(Grid grid, BezierDirection dir = BezierDirection.Default)
         {
+            grid.UpdateLayout();
             double sx = 0.0, sy = 0.0, ex = 0.0, ey = 0.0;
             if (this._element.LeftToRight) ex = this._element.InnerBoundingBox.Size.Width;
             else sx = this._element.InnerBoundingBox.Size.Width;
@@ -86,6 +87,13 @@ namespace Verse3.VanillaElements
 
             start = new Point(sx, sy);
             end = new Point(ex, ey);
+
+            //NOTE TO DEV: PointToScreen DOES NOT WORK WELL - VERY JANKY. DO NOT USE!!!
+            //start = DataViewModel.WPFControl.PointToScreen(new Point(this._element.Origin.Hotspot.X, this._element.Origin.Hotspot.Y));
+            //end = DataViewModel.WPFControl.PointToScreen(new Point(this._element.Destination.Hotspot.X, this._element.Destination.Hotspot.Y));
+
+            //start = this.PointFromScreen(start);
+            //end = this.PointFromScreen(end);
 
             //TODO: Check the following if statement for correctness
             //if (dir == BezierDirection.ForceLeftToRight)
@@ -143,40 +151,59 @@ namespace Verse3.VanillaElements
                 j++;
             }
 
-            if (!this._element.inflated)
+            //TODO: FIX BEZIER BUG
+            //if (!this._element.inflatedX || this._element.inflatedY)
+            //{
+            if (!this._element.inflatedX)
             {
-                if (minx < 0.0)
+                if (Math.Abs(maxx - minx) != this._element.InnerBoundingBox.Size.Width)
                 {
-                    //this.Element.SetX(this._element.InnerBoundingBox.Location.X - (Math.Abs(maxx - minx) / 4.0));
+                    this.Element.SetWidth(Math.Abs(maxx - minx));
+                    //this.Element.BoundingBox.Inflate(new CanvasSize((Math.Abs(maxx - minx) - this._element.InnerBoundingBox.Size.Width), 0.0));
+                    this._element.inflatedX = true;
                     this.Element.SetX(this._element.InnerBoundingBox.Location.X + minx);
+                    //this.Element.SetX(this._element.InnerBoundingBox.Location.X - ((Math.Abs(maxx - minx) - this._element.InnerBoundingBox.Size.Width) / 4));
                     for (int i = 0; i < curvePoints.Length; i++)
                     {
                         curvePoints[i].X -= minx;
                     }
                 }
-                if (miny < 0.0)
+            }
+            if (!this._element.inflatedY)
+            {
+                if (Math.Abs(maxy - miny) != this._element.InnerBoundingBox.Size.Height)
                 {
-                    //this.Element.SetY(this._element.InnerBoundingBox.Location.Y - (Math.Abs(maxy - miny) / 4.0));
+                    this.Element.SetHeight(Math.Abs(maxy - miny));
+                    //this.Element.BoundingBox.Inflate(new CanvasSize(0.0, (Math.Abs(maxy - miny) - this._element.InnerBoundingBox.Size.Height)));
+                    this._element.inflatedY = true;
                     this.Element.SetY(this._element.InnerBoundingBox.Location.Y + miny);
+                    //this.Element.SetY(this._element.InnerBoundingBox.Location.Y - (Math.Abs(maxy - miny) - this._element.InnerBoundingBox.Size.Height));
                     for (int i = 0; i < curvePoints.Length; i++)
                     {
                         curvePoints[i].Y -= miny;
                     }
                 }
-                if (Math.Abs(maxx - minx) > this._element.InnerBoundingBox.Size.Width)
-                {
-                    this.Element.SetWidth(Math.Abs(maxx - minx));
-                    //this.Element.BoundingBox.Inflate(new CanvasSize((Math.Abs(maxx - minx) - this._element.InnerBoundingBox.Size.Width), 0.0));
-                    this._element.inflated = true;
-                }
-                if (Math.Abs(maxy - miny) > this._element.InnerBoundingBox.Size.Height)
-                {
-                    this.Element.SetHeight(Math.Abs(maxy - miny));
-                    //this.Element.BoundingBox.Inflate(new CanvasSize(0.0, (Math.Abs(maxy - miny) - this._element.InnerBoundingBox.Size.Height)));
-                    this._element.inflated = true;
-                }
-                //this._element.OnPropertyChanged("BoundingBox");
             }
+            //if (this._element.inflatedX)
+            //{
+            //    //this.Element.SetX(this._element.InnerBoundingBox.Location.X - (Math.Abs(maxx - minx) / 4.0));
+            //    this.Element.SetX(this._element.InnerBoundingBox.Location.X + minx);
+            //    for (int i = 0; i < curvePoints.Length; i++)
+            //    {
+            //        curvePoints[i].X -= minx;
+            //    }
+            //}
+            //if (this._element.inflatedY)
+            //{
+            //    //this.Element.SetY(this._element.InnerBoundingBox.Location.Y - (Math.Abs(maxy - miny) / 4.0));
+            //    this.Element.SetY(this._element.InnerBoundingBox.Location.Y + miny);
+            //    for (int i = 0; i < curvePoints.Length; i++)
+            //    {
+            //        curvePoints[i].Y -= miny;
+            //    }
+            //}
+            //this._element.OnPropertyChanged("BoundingBox");
+            //}
             //_boundx = this.Element.BoundingBox.Size.Width;
             //this._element.InnerBoundingBox = this._element.BoundingBox;
             //_expBoundx = Math.Abs(this._element.InnerBoundingBox.Size.Width - Math.Abs(maxx - minx)) / 4.0;
@@ -434,7 +461,8 @@ namespace Verse3.VanillaElements
             }
         }
 
-        public bool inflated = false;
+        public bool inflatedX = false;
+        public bool inflatedY = false;
 
         public double X { get => BoundingBox.Location.X; }
 
@@ -518,7 +546,9 @@ namespace Verse3.VanillaElements
 
         public void SetDestination(INode destination)
         {
+            //this.destination.Connections.Remove(this);
             this.destination = destination;
+            //this.destination.Connections.Add(this);
             RedrawBezier(this.origin, this.destination);
         }
 
@@ -570,7 +600,7 @@ namespace Verse3.VanillaElements
                 }
                 //OnPropertyChanged("BoundingBox");
 
-                if (!this.inflated)
+                if (!this.inflatedX || this.inflatedY)
                 {
                     this.InnerBoundingBox = this.BoundingBox;
                     if (bezView != null)
@@ -582,7 +612,8 @@ namespace Verse3.VanillaElements
                     {
                         if (this.BoundingBox != this.InnerBoundingBox)
                         {
-                            this.inflated = false;
+                            this.inflatedX = false;
+                            this.inflatedY = false;
                             this.InnerBoundingBox = this.BoundingBox;
                             if (bezView != null)
                                 bezView.Render();
@@ -622,7 +653,8 @@ namespace Verse3.VanillaElements
                 this.BoundingBox = new BoundingBox(end.Hotspot.X, start.Hotspot.Y, Math.Abs((end.Hotspot.X) - (start.Hotspot.X)), Math.Abs((end.Hotspot.Y) - (start.Hotspot.Y)));
             }
             this.InnerBoundingBox = this.BoundingBox;
-            this.inflated = false;
+            this.inflatedX = false;
+            this.inflatedY = false;
             if (bezView != null)
                 bezView.Render();
         }

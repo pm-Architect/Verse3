@@ -732,6 +732,8 @@ namespace Core
 			base.Add(value);
 		}
 
+		//TODO: Function to add as child of existing element
+
 		/// <summary>Adds an item at the given index (Before the existing item) <see cref="T:System.Collections.Generic.ICollection" />.</summary>
 		/// <param name="value">The value to add at the specified index in the <see cref="T:System.Collections.Generic.ICollection" />.</param>
 		//DONE

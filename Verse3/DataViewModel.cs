@@ -55,6 +55,8 @@ namespace Verse3
             BezierElement bezier = new BezierElement(start, end);
             DataTemplateManager.RegisterDataTemplate(bezier as IRenderable);
             DataViewModel.Instance.Elements.Add(bezier);
+            //start.Connections.Add(bezier);
+            //end.Connections.Add(bezier);
             return bezier;
         }
     }
@@ -118,8 +120,7 @@ namespace Verse3
             context.XmlnsDictionary.Add("vm", "vm");
             context.XmlnsDictionary.Add("v", "v");
 
-            var template = (DataTemplate)XamlReader.Parse(xaml, context);
-            //TODO: Inform template class about its owner
+            DataTemplate template = (DataTemplate)XamlReader.Parse(xaml, context);
 
             return template;
 

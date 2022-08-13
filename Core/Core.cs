@@ -8,7 +8,7 @@ namespace Core
 {
     internal static class Core
     {
-        
+        //TODO: LOAD SETTINGS from settings.cfg json file
     }
 
     internal static class AssemblyManager
