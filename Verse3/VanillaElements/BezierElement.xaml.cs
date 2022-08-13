@@ -152,6 +152,7 @@ namespace Verse3.VanillaElements
             }
 
             //TODO: FIX BEZIER BUG
+            //TODO: Add canvas expansion offset
             //if (!this._element.inflatedX || this._element.inflatedY)
             //{
             if (!this._element.inflatedX)
