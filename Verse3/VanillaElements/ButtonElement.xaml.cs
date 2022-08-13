@@ -193,12 +193,29 @@ namespace Verse3.VanillaElements
         private BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
         private static Type view = typeof(ButtonElementView);
+        public event EventHandler<RoutedEventArgs> OnButtonClicked;
+        internal ButtonElementView elView;
+        public IRenderView RenderView
+        {
+            get
+            {
+                return elView;
+            }
+            set
+            {
+                if (value is ButtonElementView)
+                {
+                    elView = (ButtonElementView)value;
+                }
+            }
+        }
 
         #endregion
 
         #region Properties
 
         public Type ViewType { get { return view; } }
+        public object ViewKey { get; set; }
 
         public Guid ID { get => _id; private set => _id = value; }
 
@@ -234,13 +251,28 @@ namespace Verse3.VanillaElements
             }
         }
 
-        public Guid ZPrev { get; }
+        private IRenderable _zPrev;
+        public IRenderable ZPrev => _zPrev;
+        private IRenderable _zNext;
+        public IRenderable ZNext => _zNext;
+        private IRenderable _parent;
+        public IRenderable Parent => _parent;
+        private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
+        public ElementsLinkedList<IRenderable> Children => _children;
 
-        public Guid ZNext { get; }
+        public void AddChild(IRenderable child)
+        {
+            if (!this.Children.Contains(child))
+            {
+                this.Children.Add(child);
+                child.SetParent(this);
+            }
+        }
 
-        public Guid Parent { get; }
-
-        public Guid[] Children { get; }
+        public void SetParent(IRenderable parent)
+        {
+            this._parent = parent;
+        }
 
         public ElementState State { get; set; }
 
@@ -267,6 +299,14 @@ namespace Verse3.VanillaElements
         }
 
         #endregion
+        internal void ButtonClicked(object sender, RoutedEventArgs e)
+        {
+            OnButtonClicked.Invoke(sender, e);
+        }
+
+        private object displayedText;
+
+        public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
 
         #region INotifyPropertyChanged Members
 
@@ -292,15 +332,15 @@ namespace Verse3.VanillaElements
             return false;
         }
 
-        internal void ButtonClicked(object sender, RoutedEventArgs e)
-        {
-            OnButtonClicked.Invoke(sender, e);
-        }
+        //internal void ButtonClicked(object sender, RoutedEventArgs e)
+        //{
+        //    OnButtonClicked.Invoke(sender, e);
+        //}
 
-        private object displayedText;
+        //private object displayedText;
 
-        public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
-        public event EventHandler<RoutedEventArgs> OnButtonClicked;
+        //public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
+        //public event EventHandler<RoutedEventArgs> OnButtonClicked;
 
         #endregion
     }

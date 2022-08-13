@@ -29,10 +29,14 @@ namespace Verse3
     public class DataViewModel : DataModel
     {
         public static InfiniteCanvasWPFControl WPFControl { get; private set; }
+        public static INode ActiveNode { get; internal set; }
+        public static IConnection ActiveConnection { get; internal set; }
         public static void InitDataViewModel(InfiniteCanvasWPFControl c)
         {
             DataViewModel.WPFControl = c;
-            
+
+
+
             //TODO Properly Load all available plugins            
 
             //TODO: Open a file here!!!!
@@ -40,6 +44,20 @@ namespace Verse3
             //
             // TODO: Populate the data model with file data
             //
+        }
+        public static IConnection CreateConnection(INode start, INode end = default)
+        {
+            if (end == default)
+            {
+                end = MousePositionNode.Instance;
+            }
+            bool rtl = (start.NodeType == NodeType.Input);
+            BezierElement bezier = new BezierElement(start, end);
+            DataTemplateManager.RegisterDataTemplate(bezier as IRenderable);
+            DataViewModel.Instance.Elements.Add(bezier);
+            //start.Connections.Add(bezier);
+            //end.Connections.Add(bezier);
+            return bezier;
         }
     }
 
@@ -102,8 +120,7 @@ namespace Verse3
             context.XmlnsDictionary.Add("vm", "vm");
             context.XmlnsDictionary.Add("v", "v");
 
-            var template = (DataTemplate)XamlReader.Parse(xaml, context);
-            //TODO: Inform template class about its owner
+            DataTemplate template = (DataTemplate)XamlReader.Parse(xaml, context);
 
             return template;
 
@@ -121,11 +138,13 @@ namespace Verse3
                 //TODO: Log to console!
             }
             var template = CreateTemplate(el.GetType(), el.ViewType);
-
-            if (DataViewModel.WPFControl.Resources[template.DataTemplateKey] != null) return false;
+            //el.BoundingBox = new BoundingBox();
+            //Element needs to know DataTemplateKey in order to make a reference to it
+            el.ViewKey = template.DataTemplateKey;
+            if (DataViewModel.WPFControl.Resources[el.ViewKey] != null) return false;
             else
             {
-                DataViewModel.WPFControl.Resources.Add(template.DataTemplateKey, template);
+                DataViewModel.WPFControl.Resources.Add(el.ViewKey, template);
                 return true;
             }
         }

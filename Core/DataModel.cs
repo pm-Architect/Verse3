@@ -3,6 +3,7 @@ using System.ComponentModel;
 using static Core.Geometry2D;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace Core
 {
@@ -106,7 +107,7 @@ namespace Core
             }
         }
         
-        public static double ContentCanvasMarginOffset = 200.0;
+        public static double ContentCanvasMarginOffset = 0.0;
 
         public DataModel() : base()
         {
@@ -135,6 +136,11 @@ namespace Core
             }
         }
 
+        public IElement GetElementWithGuid(Guid guid)
+        {
+            return this.Elements.Find(guid).Value;
+        }
+
         ///
         /// The current scale at which the content is being viewed.
         /// 
@@ -149,6 +155,19 @@ namespace Core
                 contentScale = value;
 
                 OnPropertyChanged("ContentScale");
+            }
+        }
+
+        public CanvasPoint ContentOffset
+        {
+            get
+            {
+                return new CanvasPoint(ContentOffsetX, ContentOffsetY);
+            }
+            set
+            {
+                ContentOffsetX = value.X;
+                ContentOffsetY = value.Y;
             }
         }
 
@@ -186,6 +205,19 @@ namespace Core
             }
         }
 
+        public CanvasSize ContentSize
+        {
+            get
+            {
+                return new CanvasSize(ContentWidth, ContentHeight);
+            }
+            set
+            {
+                ContentWidth = value.Width;
+                ContentHeight = value.Height;
+            }
+        }
+
         ///
         /// The width of the content (in content coordinates).
         /// 
@@ -217,6 +249,20 @@ namespace Core
                 contentHeight = value + (ContentCanvasMarginOffset * 2);
 
                 OnPropertyChanged("ContentHeight");
+            }
+        }
+
+
+        public CanvasSize ContentViewportSize
+        {
+            get
+            {
+                return new CanvasPoint(ContentViewportWidth, ContentViewportHeight);
+            }
+            set
+            {
+                ContentViewportWidth = value.Width;
+                ContentViewportHeight = value.Height;
             }
         }
 
@@ -290,13 +336,22 @@ namespace Core
 
     public interface IRenderable : IElement
     {
-        public Guid ZPrev { get; }
-        public Guid ZNext { get; }
-        public Guid Parent { get; }
-        public Guid[] Children { get; }
-        
+        //TODO: GUID Lookup in DataModel Instance
+        //public Guid ZPrev { get; }
+        //public Guid ZNext { get; }
+        //public Guid Parent { get; }
+        //public Guid[] Children { get; }
+        public IRenderable ZPrev { get; }
+        public IRenderable ZNext { get; }
+        public IRenderable Parent { get; }
+        public ElementsLinkedList<IRenderable> Children { get; }
+        void AddChild(IRenderable child);
+        void SetParent(IRenderable parent);
+
 #nullable enable
         public Type? ViewType { get; }
+        object ViewKey { get; set; }
+        IRenderView RenderView { get; set; }
 #nullable restore
 
         //public bool Visible { get; set; }
@@ -315,7 +370,11 @@ namespace Core
         /// <summary>
         /// Set the X coordinate of the location of the element Bounding Box (in content coordinates).
         /// </summary>
-        void SetX(double x) { BoundingBox.Location.X = x; OnPropertyChanged("X"); }
+        void SetX(double x)
+        {
+            BoundingBox.Location.X = x;
+            OnPropertyChanged("X");
+        }
 
         /// <summary>
         /// The Y coordinate of the location of the element Bounding Box (in content coordinates).
@@ -324,7 +383,11 @@ namespace Core
         /// <summary>
         /// Set the Y coordinate of the location of the element Bounding Box (in content coordinates).
         /// </summary>
-        void SetY(double x) { BoundingBox.Location.Y = x; OnPropertyChanged("Y"); }
+        void SetY(double x)
+        {
+            BoundingBox.Location.Y = x;
+            OnPropertyChanged("Y");
+        }
 
         /// <summary>
         /// The width of the element Bounding Box (in content coordinates).
@@ -339,10 +402,17 @@ namespace Core
         /// The height of the element Bounding Box (in content coordinates).
         /// </summary>
         double Height { get; set; }
+
         /// <summary>
         /// Set the height of the element Bounding Box (in content coordinates).
         /// </summary>
         void SetHeight(double x) { BoundingBox.Size.Height = x; OnPropertyChanged("Height"); }
+
+        void Render()
+        {
+            if (RenderView != null)
+                RenderView.Render();
+        }
 
         #endregion
     }
@@ -353,6 +423,96 @@ namespace Core
         void Render();
     }
 
+    public class RenderPipeline
+    {
+        private static RenderPipeline instance = new RenderPipeline();
+        public static RenderPipeline Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new RenderPipeline();
+                }
+                return RenderPipeline.instance;
+            }
+            protected set
+            {
+                instance = value;
+            }
+        }
+        internal IRenderable _current;
+        public IRenderable Current => _current;
+        private RenderPipeline()
+        {
+            this._current = default;
+        }
+        public static int Render()
+        {
+            int count = 0;
+            try
+            {
+                //Parallel.ForEach(DataModel.Instance.Elements, e => { });
+                foreach (IElement e in DataModel.Instance.Elements)
+                {
+                    if (e != null && e is IRenderable)
+                    {
+                        IRenderable renderable = e as IRenderable;
+                        //if (RenderPipeline.Instance._current != default)
+                        //{
+                        //    RenderPipeline.Instance._current.ZNext = renderable;
+                        //}
+                        RenderPipeline.Instance._current = renderable;
+                        if (RenderRenderable(renderable))
+                        {
+                            count++;
+                        }
+                        //renderable.Render();
+                        //count++;
+                        //if (renderable.Children.Count > 0)
+                        //{
+                        //    foreach (IRenderable child in renderable.Children)
+                        //    {
+                        //        child.Render();
+                        //        count++;
+                        //    }
+                        //}
+                    }
+                }
+            }
+            catch /*(Exception e)*/
+            {
+                //TODO: Log to console
+            }
+            return count;
+        }
+        public static bool RenderRenderable(IRenderable renderable, bool recursive = true)
+        {
+            bool renderSuccess = true;
+            try
+            {
+                renderable.Render();
+            }
+            catch /*(Exception e)*/
+            {
+                //TODO: Log to console
+                return false;
+            }
+            if (renderable.Children.Count > 0)
+            {
+                if (recursive)
+                {
+                    foreach (IRenderable child in renderable.Children)
+                    {
+                        renderSuccess = renderSuccess && RenderRenderable(child);
+                    }
+                }
+            }
+            return renderSuccess;
+        }
+    }
+
+
     public interface IComputable : IElement
     {
         public Guid[] DataDS { get; }
@@ -360,6 +520,7 @@ namespace Core
         public Guid[] EventDS { get; }
         public Guid[] EventUS { get; }
 
+        public ElementsLinkedList<INode> Nodes { get; }
         public ComputableElementState ComputableElementState { get; set; }
         public ElementConsole Console { get; }
         public bool Enabled { get; set; }
@@ -371,6 +532,7 @@ namespace Core
     public interface INode : IElement
     {
         public IElement Parent { get; }
+        public ElementsLinkedList<IConnection> Connections { get; }
         public NodeType NodeType { get; }
         public CanvasPoint Hotspot { get; }
         public double HotspotThresholdRadius { get; }
@@ -386,8 +548,6 @@ namespace Core
         public new ElementType ElementType { get => ElementType.Connection; }
     }
 
-    
-    
     public enum ElementState
     {
         /// <summary>

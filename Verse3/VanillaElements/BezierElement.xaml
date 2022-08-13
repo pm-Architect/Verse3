@@ -16,8 +16,8 @@
              >
     <Grid
         x:Name="MainGrid"
-        Width="{Binding Width}"
-        Height="{Binding Height}"
+        Width="{Binding BoundingBox.Size.Width}"
+        Height="{Binding BoundingBox.Size.Height}"
         Loaded="OnLoaded"
         >
     </Grid>

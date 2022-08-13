@@ -190,12 +190,28 @@ namespace Verse3.VanillaElements
         private BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
         private static Type view = typeof(ColorPickerElementView);
+        internal ColorPickerElementView elView;
+        public IRenderView RenderView
+        {
+            get
+            {
+                return elView;
+            }
+            set
+            {
+                if (value is ColorPickerElementView)
+                {
+                    elView = (ColorPickerElementView)value;
+                }
+            }
+        }
 
         #endregion
 
         #region Properties
 
         public Type ViewType { get { return view; } }
+        public object ViewKey { get; set; }
 
         public Guid ID { get => _id; private set => _id = value; }
 
@@ -231,13 +247,28 @@ namespace Verse3.VanillaElements
             }
         }
 
-        public Guid ZPrev { get; }
+        private IRenderable _zPrev;
+        public IRenderable ZPrev => _zPrev;
+        private IRenderable _zNext;
+        public IRenderable ZNext => _zNext;
+        private IRenderable _parent;
+        public IRenderable Parent => _parent;
+        private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
+        public ElementsLinkedList<IRenderable> Children => _children;
 
-        public Guid ZNext { get; }
+        public void AddChild(IRenderable child)
+        {
+            if (!this.Children.Contains(child))
+            {
+                this.Children.Add(child);
+                child.SetParent(this);
+            }
+        }
 
-        public Guid Parent { get; }
-
-        public Guid[] Children { get; }
+        public void SetParent(IRenderable parent)
+        {
+            this._parent = parent;
+        }
 
         public ElementState State { get; set; }
 

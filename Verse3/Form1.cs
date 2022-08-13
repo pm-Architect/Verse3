@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -39,29 +40,7 @@ namespace Verse3
             elementHost1.Child = InfiniteCanvasWPFControl;
             InfiniteCanvasWPFControl.MouseDown += Canvas_MouseDown;
             InfiniteCanvasWPFControl.MouseUp += Canvas_MouseUp;
-            InfiniteCanvasWPFControl.MouseMove += Canvas_MouseMove;
-            CompositionTarget.Rendering += CompositionTarget_Rendering;            
-        }
-
-        TimeOnly lastFrameTime = TimeOnly.FromDateTime(DateTime.Now);
-        double fps = 0.0;
-        double[] lfps = Array.Empty<double>();
-        double avgfps = 0.0;
-        private void CompositionTarget_Rendering(object sender, EventArgs e)
-        {
-            TimeOnly frameTime = TimeOnly.FromDateTime(DateTime.Now);
-            fps = 1 / (frameTime - lastFrameTime).TotalSeconds;
-            if (lfps.Length < 255)
-            {
-                lfps = lfps.Concat(new double[] { fps }).ToArray();
-            }
-            else
-            {
-                lfps = lfps.Skip(1).Concat(new double[] { fps }).ToArray();
-            }
-            avgfps = lfps.Average();
-            avgfps = Math.Round(avgfps, 3);
-            lastFrameTime = frameTime;
+            InfiniteCanvasWPFControl.MouseMove += Canvas_MouseMove;          
         }
 
         private void Canvas_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
@@ -90,6 +69,10 @@ namespace Verse3
                 }
                 this.Cursor = infiniteCanvas.WinFormsCursor;
             }
+            if (DataViewModel.ActiveConnection != default)
+            {
+                //DataViewModel.ActiveConnection.Destination.
+            }
         }
 
         private void Canvas_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -102,14 +85,25 @@ namespace Verse3
                     this.Cursor = Cursors.Default;
                 }
             }
-            //if (drawstart != Point.Empty && started)
+            //if (DataViewModel.ActiveNode != default /*&& started*/)
             //{
-            //    DrawBezierCurve(drawstart, InfiniteCanvasWPFControl.GetMouseRelPosition(), rtl);
-            //    started = false;
+            //    //DrawBezierCurve(drawstart, InfiniteCanvasWPFControl.GetMouseRelPosition(), rtl);
+
+            //    if (DataViewModel.ActiveConnection == default)
+            //    {
+            //        DataViewModel.ActiveConnection = CreateConnection(DataViewModel.ActiveNode);
+            //    }
+            //    else
+            //    {
+            //        ((BezierElement)DataViewModel.ActiveConnection).SetDestination(DataViewModel.ActiveNode);
+            //        DataViewModel.ActiveConnection = default;
+            //        DataViewModel.ActiveNode = default;
+            //    }
+            //    //started = false;
             //}
         }
 
-        //Point drawstart = new Point();
+        //public INode drawstart = default;
         private void Canvas_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (sender is InfiniteCanvasWPFControl)
@@ -119,11 +113,10 @@ namespace Verse3
                 {
                     this.Cursor = Cursors.SizeAll;
                 }
+                //if (started)
+                //{
+                //}
             }
-            //if (started)
-            //{
-            //    drawstart = InfiniteCanvasWPFControl.GetMouseRelPosition();
-            //}
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -149,8 +142,17 @@ namespace Verse3
                                 int w = (int)rnd.NextInt64((long)250, (long)350);
                                 int h = (int)rnd.NextInt64((long)250, (long)350);
                                 Type[] types = { i.GetType(), i.GetType(), i.GetType(), i.GetType() };
-                                IElement elInst = el.GetType().GetConstructor(types).Invoke(new object[] { x, y, w, h }) as IElement;
-                                DataModel.Instance.Elements.Add(elInst);
+
+                                //TODO: Check for other types of constructors
+                                
+                                ConstructorInfo ci = el.GetType().GetConstructor(types);
+                                
+                                if (ci != null)
+                                {
+                                    //TODO: Invoke constructor based on <PluginName>.cfg json file
+                                    IElement elInst = ci.Invoke(new object[] { x, y, w, h }) as IElement;
+                                    DataModel.Instance.Elements.Add(elInst);
+                                }
                             }
                             //ObservableCollection<string> o;
                         }
@@ -165,38 +167,45 @@ namespace Verse3
             }
         }
 
+        //private void DrawBezierCurve(Point start, Point end, bool rtl)
+        //{
+        //    BezierElement bezier = new BezierElement((start.X - 200), (start.Y - 200), (end.X - start.X), (end.Y - start.Y), rtl);
+        //    DataTemplateManager.RegisterDataTemplate(bezier as IRenderable);
+        //    DataModel.Instance.Elements.Add(bezier);
+        //}
+
 
         //bool started = false;
         //bool rtl = false;
-        //private void button2_Click(object sender, EventArgs e)
-        //{
-        //    if (!started)
-        //    {
-        //        started = true;
-        //        rtl = false;
-        //    }
-        //    else if (started)
-        //    {
-        //        started = false;
-        //    }
-        //}
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //if (!started)
+            //{
+            //    started = true;
+            //    rtl = false;
+            //}
+            //else if (started)
+            //{
+            //    started = false;
+            //}
+        }
 
-        //private void button3_Click(object sender, EventArgs e)
-        //{
-        //    if (!started)
-        //    {
-        //        started = true;
-        //        rtl = true;
-        //    }
-        //    else if (started)
-        //    {
-        //        started = false;
-        //    }
-        //}
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //if (!started)
+            //{
+            //    started = true;
+            //    rtl = true;
+            //}
+            //else if (started)
+            //{
+            //    started = false;
+            //}
+        }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            label1.Text = avgfps.ToString();
+            label1.Text = InfiniteCanvasWPFControl.AverageFPS.ToString();
             label2.Text = InfiniteCanvasWPFControl.GetMouseRelPosition().ToString();
         }
     }

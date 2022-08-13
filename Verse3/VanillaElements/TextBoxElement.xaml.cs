@@ -193,12 +193,28 @@ namespace Verse3.VanillaElements
         private BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
         private static Type view = typeof(TextBoxElementView);
+        internal TextBoxElementView elView;
+        public IRenderView RenderView
+        {
+            get
+            {
+                return elView;
+            }
+            set
+            {
+                if (value is TextBoxElementView)
+                {
+                    elView = (TextBoxElementView)value;
+                }
+            }
+        }
 
         #endregion
 
         #region Properties
 
         public Type ViewType { get { return view; } }
+        public object ViewKey { get; set; }
 
         public Guid ID { get => _id; private set => _id = value; }
 
@@ -206,9 +222,9 @@ namespace Verse3.VanillaElements
 
         public BoundingBox BoundingBox { get => boundingBox; private set => boundingBox = value; }
 
-        public double X { get => boundingBox.Location.X; }
+        public double X { get => boundingBox.Location.X + DataViewModel.ContentCanvasMarginOffset; }
 
-        public double Y { get => boundingBox.Location.Y; }
+        public double Y { get => boundingBox.Location.Y + DataViewModel.ContentCanvasMarginOffset; }
 
         public double Width
         {
@@ -234,13 +250,28 @@ namespace Verse3.VanillaElements
             }
         }
 
-        public Guid ZPrev { get; }
+        private IRenderable _zPrev;
+        public IRenderable ZPrev => _zPrev;
+        private IRenderable _zNext;
+        public IRenderable ZNext => _zNext;
+        private IRenderable _parent;
+        public IRenderable Parent => _parent;
+        private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
+        public ElementsLinkedList<IRenderable> Children => _children;
 
-        public Guid ZNext { get; }
+        public void AddChild(IRenderable child)
+        {
+            if (!this.Children.Contains(child))
+            {
+                this.Children.Add(child);
+                child.SetParent(this);
+            }
+        }
 
-        public Guid Parent { get; }
-
-        public Guid[] Children { get; }
+        public void SetParent(IRenderable parent)
+        {
+            this._parent = parent;
+        }
 
         public ElementState State { get; set; }
 

@@ -112,14 +112,18 @@ namespace Core
 					return false;
 				}
 				index++;
-				current = enumhead.item;
-                currentid = enumhead.item.ID;
-                enumhead = enumhead.next;
-				if (enumhead == enumlist.head)
+				if (enumhead.item != null)
 				{
-					enumhead = null;
+					current = enumhead.item;
+					currentid = enumhead.item.ID;
+					enumhead = enumhead.next;
+					if (enumhead == enumlist.head)
+					{
+						enumhead = null;
+					}
+					return true;
 				}
-				return true;
+				return false;
 			}
 
 			/// <summary>Sets the enumerator to its initial position, which is before the first element in the collection. This class cannot be inherited.</summary>
@@ -727,6 +731,8 @@ namespace Core
 			this.AddLast(value);
 			base.Add(value);
 		}
+
+		//TODO: Function to add as child of existing element
 
 		/// <summary>Adds an item at the given index (Before the existing item) <see cref="T:System.Collections.Generic.ICollection" />.</summary>
 		/// <param name="value">The value to add at the specified index in the <see cref="T:System.Collections.Generic.ICollection" />.</param>

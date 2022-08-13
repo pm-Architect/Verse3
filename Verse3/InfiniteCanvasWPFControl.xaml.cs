@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Markup;
-using Verse3.VanillaElements;
+using static Core.Geometry2D;
 using System.Runtime.InteropServices;
 using Verse3.CanvasElements;
 
@@ -30,6 +30,7 @@ namespace Verse3
         public InfiniteCanvasWPFControl()
         {
             InitializeComponent();
+            CompositionTarget.Rendering += BeforeFrameRender;
             //TODO Add different view templates
         }
 
@@ -103,9 +104,25 @@ namespace Verse3
             }
         }
         public MouseHandlingMode MouseHandlingMode { get { return mouseHandlingMode; } set { mouseHandlingMode = value; } }
+
+        public double AverageFPS
+        {
+            get
+            {
+                return avgfps;
+            }
+        }
+        
         #endregion
         
         #region Methods
+        
+        private void BeforeFrameRender(object sender, EventArgs e)
+        {
+            UpdateFrameStats(sender, e);
+            RenderPipeline.Render();
+        }
+
         private void Control_Loaded(object sender, RoutedEventArgs e)
         {
             ExpandContent();
@@ -144,8 +161,12 @@ namespace Verse3
 
             foreach (IRenderable el in DataViewModel.Instance.Elements)
             {
-                el.SetX(el.X + xOffset);
-                el.SetY(el.Y + yOffset);
+                if (el != null)
+                {
+                    el.SetX(el.X + xOffset);
+                    el.SetY(el.Y + yOffset);
+                    //el.OnPropertyChanged("BoundingBox");
+                }
             }
 
             DataViewModel.Instance.ContentWidth = contentRect.Width;
@@ -153,10 +174,24 @@ namespace Verse3
         }
 
         private Point currCanvasMousePosition = new Point();
-        internal System.Drawing.Point GetMouseRelPosition()
+        internal System.Drawing.Point GetMouseRelPosition(object sender = null)
         {
-            return new System.Drawing.Point((int)currCanvasMousePosition.X, (int)currCanvasMousePosition.Y);
+            System.Drawing.Point p = new System.Drawing.Point((int)currCanvasMousePosition.X, (int)currCanvasMousePosition.Y);
+            MousePositionChanged?.Invoke(sender, p);
+            return p;
         }
+        
+        //Event for mouse position update
+        public event EventHandler<System.Drawing.Point> MousePositionChanged;
+
+        public System.Drawing.Point GetRelPosition(CanvasPoint pos)
+        {
+            //Canvas c = LBcontent.Style.Resources.FindName("InfiniteCanvasBackground") as Canvas;
+            //pos = LBcontent.PointToScreen(pos);
+            return new System.Drawing.Point((int)pos.X, (int)pos.Y);
+        }
+
+        //TODO: LBcontent.Items and LBcontent.HitTest
         #endregion
 
         #region MouseEvents
@@ -243,7 +278,34 @@ namespace Verse3
         private void zoomAndPanControl_MouseMove(object sender, MouseEventArgs e)
         {
             currCanvasMousePosition = e.GetPosition(LBcontent);
-            
+
+            //MousePositionNode.Instance.OnPropertyChanged("X");
+            //MousePositionNode.Instance.OnPropertyChanged("Y");
+
+            //TODO: Re-render every IRenderable
+            foreach (IRenderable renderable in DataViewModel.Instance.Elements)
+            {
+                if (renderable != null)
+                {
+                    renderable.Render();
+                    if (renderable.Children != null)
+                    {
+                        if (renderable.Children.Count() > 0)
+                        {
+                            foreach (IRenderable r in renderable.Children)
+                            {
+                                if (r != null)
+                                {
+                                    r.Render();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            //DataViewModel.WPFControl.ExpandContent();
+
             if (mouseHandlingMode == MouseHandlingMode.Panning)
             {
 
@@ -351,49 +413,32 @@ namespace Verse3
                 Point curContentMousePoint = e.GetPosition(LBcontent);
                 InitDragSelectRect(origContentMouseDownPoint, curContentMousePoint);
             }
-            //else if (mouseHandlingMode == MouseHandlingMode.BezierPenDown)
-            //{
-            //    if (currentBezierCurve != null)
-            //    {
-            //        currentBezierCurve.End = this.GetMouseRelPosition();
-            //    }
-            //    else
-            //    {
-            //        //currentBezierCurve = new ConnectionElement(this.GetMouseRelPosition(), this.GetMouseRelPosition(), false);
-            //        currentBezierCurve = new ConnectionElement(this.GetMouseRelPosition(), this.GetMouseRelPosition(), false);
-            //    }
-            //}
-            else
+            else if (this.WinFormsCursor != System.Windows.Forms.Cursors.Default)
             {
-                currentBezierCurve = null;
-                if (this.WinFormsCursor != System.Windows.Forms.Cursors.Default)
-                {
-                    this.Cursor = Cursors.Arrow;
-                    this.WinFormsCursor = System.Windows.Forms.Cursors.Default;
-                }
-                else if (mouseHandlingMode == MouseHandlingMode.DragZooming)
-                {
-                    //
-                    // When in drag zooming mode continously update the position of the rectangle
-                    // that the user is dragging out.
-                    //
-                    Point curContentMousePoint = e.GetPosition(LBcontent);
-                    SetDragZoomRect(origContentMouseDownPoint, curContentMousePoint);
-
-                    e.Handled = true;
-                }
-                else if (mouseHandlingMode == MouseHandlingMode.DragSelecting)
-                {
-                    //
-                    // When in drag zooming mode continously update the position of the rectangle
-                    // that the user is dragging out.
-                    //
-                    Point curContentMousePoint = e.GetPosition(LBcontent);
-                    SetDragSelectRect(origContentMouseDownPoint, curContentMousePoint);
-                }
+                this.Cursor = Cursors.Arrow;
+                this.WinFormsCursor = System.Windows.Forms.Cursors.Default;
             }
+                //else if (mouseHandlingMode == MouseHandlingMode.DragZooming)
+                //{
+                //    //
+                //    // When in drag zooming mode continously update the position of the rectangle
+                //    // that the user is dragging out.
+                //    //
+                //    Point curContentMousePoint = e.GetPosition(LBcontent);
+                //    SetDragZoomRect(origContentMouseDownPoint, curContentMousePoint);
 
-        }
+                //    e.Handled = true;
+                //}
+                //else if (mouseHandlingMode == MouseHandlingMode.DragSelecting)
+                //{
+                //    //
+                //    // When in drag zooming mode continously update the position of the rectangle
+                //    // that the user is dragging out.
+                //    //
+                //    Point curContentMousePoint = e.GetPosition(LBcontent);
+                //    SetDragSelectRect(origContentMouseDownPoint, curContentMousePoint);
+                //}
+            //}
 
         private static void SetCursor(double x, double y, InfiniteCanvasControl c)
         {
@@ -730,5 +775,28 @@ namespace Verse3
         //}
 
         #endregion
+
+
+        TimeOnly lastFrameTime = TimeOnly.FromDateTime(DateTime.Now);
+        double fps = 0.0;
+        double[] lfps = Array.Empty<double>();
+        double avgfps = 0.0;
+        private void UpdateFrameStats(object sender, EventArgs e)
+        {
+            TimeOnly frameTime = TimeOnly.FromDateTime(DateTime.Now);
+            fps = 1 / (frameTime - lastFrameTime).TotalSeconds;
+            if (lfps.Length < 255)
+            {
+                lfps = lfps.Concat(new double[] { fps }).ToArray();
+            }
+            else
+            {
+                lfps = lfps.Skip(1).Concat(new double[] { fps }).ToArray();
+            }
+            avgfps = lfps.Average();
+            avgfps = Math.Round(avgfps, 3);
+            lastFrameTime = frameTime;
+        }
+
     }
 }
