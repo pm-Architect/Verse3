@@ -118,7 +118,8 @@ namespace Verse3
         private void BeforeFrameRender(object sender, EventArgs e)
         {
             UpdateFrameStats(sender, e);
-            RenderPipeline.Render();
+            //TODO: Perform other tasks here before each frame render
+            //RenderPipeline.Render();
         }
 
         private void Control_Loaded(object sender, RoutedEventArgs e)
@@ -163,7 +164,19 @@ namespace Verse3
                 {
                     el.SetX(el.X + xOffset);
                     el.SetY(el.Y + yOffset);
-                    //el.OnPropertyChanged("BoundingBox");
+                    el.Render();
+                    if (el.Children != null)
+                    {
+                        if (el.Children.Count > 0)
+                        {
+                            foreach (IRenderable c in el.Children)
+                            {
+                                c.SetX(c.X + xOffset);
+                                c.SetY(c.Y + yOffset);
+                                c.Render();
+                            }
+                        }
+                    }
                 }
             }
 
@@ -279,26 +292,26 @@ namespace Verse3
             //MousePositionNode.Instance.OnPropertyChanged("Y");
 
             //TODO: Re-render every IRenderable
-            foreach (IRenderable renderable in DataViewModel.Instance.Elements)
-            {
-                if (renderable != null)
-                {
-                    renderable.Render();
-                    if (renderable.Children != null)
-                    {
-                        if (renderable.Children.Count() > 0)
-                        {
-                            foreach (IRenderable r in renderable.Children)
-                            {
-                                if (r != null)
-                                {
-                                    r.Render();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            //foreach (IRenderable renderable in DataViewModel.Instance.Elements)
+            //{
+            //    if (renderable != null)
+            //    {
+            //        renderable.Render();
+            //        if (renderable.Children != null)
+            //        {
+            //            if (renderable.Children.Count() > 0)
+            //            {
+            //                foreach (IRenderable r in renderable.Children)
+            //                {
+            //                    if (r != null)
+            //                    {
+            //                        r.Render();
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             //DataViewModel.WPFControl.ExpandContent();
 
@@ -733,7 +746,6 @@ namespace Verse3
         //}
 
         #endregion
-
 
         TimeOnly lastFrameTime = TimeOnly.FromDateTime(DateTime.Now);
         double fps = 0.0;

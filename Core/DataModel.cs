@@ -408,6 +408,36 @@ namespace Core
         /// </summary>
         void SetHeight(double x) { BoundingBox.Size.Height = x; OnPropertyChanged("Height"); }
 
+        void TransformBoundsTo(BoundingBox targetBBox)
+        {
+            if (this.BoundingBox.Location != targetBBox.Location)
+            {
+                if (BoundingBox.Location.X != targetBBox.Location.X)
+                {
+                    BoundingBox.Location.X = targetBBox.Location.X;
+                    //OnPropertyChanged("X");
+                }
+                if (BoundingBox.Location.Y != targetBBox.Location.Y)
+                {
+                    BoundingBox.Location.Y = targetBBox.Location.Y;
+                    //OnPropertyChanged("Y");
+                }
+            }
+            if (this.BoundingBox.Size != targetBBox.Size)
+            {
+                if (BoundingBox.Size.Width != targetBBox.Size.Width)
+                {
+                    BoundingBox.Size.Width = targetBBox.Size.Width;
+                    //OnPropertyChanged("Width");
+                }
+                if (BoundingBox.Size.Height != targetBBox.Size.Height)
+                {
+                    BoundingBox.Size.Height = targetBBox.Size.Height;
+                    //OnPropertyChanged("Height");
+                }
+            }
+        }
+
         void Render()
         {
             if (RenderView != null)

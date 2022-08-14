@@ -117,13 +117,14 @@ namespace TestPlugin
 
         private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
         {
-            TestElement? testelement = this.Element as TestElement;
-            if (testelement != null)
-            {
-                this.Render();
-                //string? txt = testelement.ElementText;
-                //textBlock.DisplayedText = txt;
-            }
+            RenderPipeline.Render();
+            //TestElement? testelement = this.Element as TestElement;
+            //if (testelement != null)
+            //{
+            //    this.Render();
+            //    //string? txt = testelement.ElementText;
+            //    //textBlock.DisplayedText = txt;
+            //}
         }
 
         #region MouseEvents

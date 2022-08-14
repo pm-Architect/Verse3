@@ -337,6 +337,22 @@ namespace Core
                 }
                 else return null;
             }
+            public static BoundingBox GetBounds(CanvasPoint[] points)
+            {
+                BoundingBox bbOut = BoundingBox.Unset;
+                for (int i = 0; i < points.Length; i++)
+                {
+                    if (bbOut == BoundingBox.Unset) bbOut = new BoundingBox(points[i], new CanvasSize(0.0, 0.0));
+                    else
+                    {
+                        if (points[i].X < bbOut.Left) bbOut.Location.X = points[i].X;
+                        if (points[i].Y < bbOut.Top) bbOut.Location.Y = points[i].Y;
+                        if (points[i].X > bbOut.Right) bbOut.Size.Width = points[i].X;
+                        if (points[i].Y > bbOut.Bottom) bbOut.Size.Height = points[i].Y;
+                    }
+                }
+                return bbOut;
+            }
             public bool Equals(BoundingBox other)
             {
                 return ((this.Size == other.Size) && (this.Location == other.Location));
@@ -497,6 +513,7 @@ namespace Core
                 CanvasPoint s = new CanvasPoint(v.Width, v.Height);
                 return s;
             }
+
             public bool IsValid()
             {
                 if (this.X != double.NaN && this.Y != double.NaN) return true;
