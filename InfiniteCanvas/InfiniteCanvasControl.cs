@@ -1067,7 +1067,7 @@ namespace InfiniteCanvas
     public partial class InfiniteCanvasControl
     {
         #region Properties
-        
+
         /// <summary>
         /// Set to 'true' when the vertical scrollbar is enabled.
         /// </summary>
@@ -1389,7 +1389,7 @@ namespace InfiniteCanvas
             }
             return rectangle;
         }
-        
+
         #endregion
     }
 }

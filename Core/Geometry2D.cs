@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core
 {
@@ -42,7 +39,7 @@ namespace Core
             public static BoundingBox Unset = new BoundingBox();
 
             #endregion
-            
+
             #region Properties
 
             private CanvasPoint _location = CanvasPoint.Unset;
@@ -408,7 +405,7 @@ namespace Core
         {
             //TODO: MAKE IMPLICIT CASTS TO OTHER POINT TYPES
             #region Constructors
-            
+
             public static readonly CanvasPoint Unset = new CanvasPoint(double.NaN, double.NaN);
 
             public CanvasPoint(double x, double y)

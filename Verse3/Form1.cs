@@ -1,18 +1,8 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Media;
-using Verse3.VanillaElements;
 
 namespace Verse3
 {
@@ -39,7 +29,7 @@ namespace Verse3
             elementHost1.Child = InfiniteCanvasWPFControl;
             InfiniteCanvasWPFControl.MouseDown += Canvas_MouseDown;
             InfiniteCanvasWPFControl.MouseUp += Canvas_MouseUp;
-            InfiniteCanvasWPFControl.MouseMove += Canvas_MouseMove;          
+            InfiniteCanvasWPFControl.MouseMove += Canvas_MouseMove;
         }
 
         private void Canvas_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
@@ -108,7 +98,7 @@ namespace Verse3
                 {
                     File.OpenRead(openFileDialog.FileName).CopyTo(ms);
                     var elements = AssemblyLoader.Load(ms);
-                    
+
                     foreach (IElement el in elements)
                     {
                         if (el is IRenderable)
@@ -124,9 +114,9 @@ namespace Verse3
                                 Type[] types = { i.GetType(), i.GetType(), i.GetType(), i.GetType() };
 
                                 //TODO: Check for other types of constructors
-                                
+
                                 ConstructorInfo ci = el.GetType().GetConstructor(types);
-                                
+
                                 if (ci != null)
                                 {
                                     //TODO: Invoke constructor based on <PluginName>.cfg json file

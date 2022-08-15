@@ -10,7 +10,7 @@ namespace InfiniteCanvas
     public static class AnimationHelper
     {
         #region Methods
-        
+
         /// <summary>
         /// Starts an animation to a particular value on the specified dependency property.
         /// </summary>

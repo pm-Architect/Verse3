@@ -1,23 +1,12 @@
 ﻿using Core;
 using InfiniteCanvas;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Markup;
 using static Core.Geometry2D;
-using Verse3.VanillaElements;
 
 namespace Verse3
 {
@@ -32,7 +21,7 @@ namespace Verse3
             CompositionTarget.Rendering += BeforeFrameRender;
             //TODO Add different view templates
         }
-        
+
         #region Fields
 
         private System.Windows.Forms.Cursor winFormsCursor = System.Windows.Forms.Cursors.Default;
@@ -80,9 +69,9 @@ namespace Verse3
         ///// </summary>
         //private Rect prevSelectRect;
         #endregion
-        
+
         #region Properties
-        
+
         public ListBox ContentElements
         {
             get
@@ -110,11 +99,11 @@ namespace Verse3
                 return avgfps;
             }
         }
-        
+
         #endregion
-        
+
         #region Methods
-        
+
         private void BeforeFrameRender(object sender, EventArgs e)
         {
             UpdateFrameStats(sender, e);
@@ -191,7 +180,7 @@ namespace Verse3
             MousePositionChanged?.Invoke(sender, p);
             return p;
         }
-        
+
         //Event for mouse position update
         public event EventHandler<System.Drawing.Point> MousePositionChanged;
 
@@ -396,29 +385,29 @@ namespace Verse3
                 this.Cursor = Cursors.Arrow;
                 this.WinFormsCursor = System.Windows.Forms.Cursors.Default;
             }
-                //else if (mouseHandlingMode == MouseHandlingMode.DragZooming)
-                //{
-                //    //
-                //    // When in drag zooming mode continously update the position of the rectangle
-                //    // that the user is dragging out.
-                //    //
-                //    Point curContentMousePoint = e.GetPosition(LBcontent);
-                //    SetDragZoomRect(origContentMouseDownPoint, curContentMousePoint);
+            //else if (mouseHandlingMode == MouseHandlingMode.DragZooming)
+            //{
+            //    //
+            //    // When in drag zooming mode continously update the position of the rectangle
+            //    // that the user is dragging out.
+            //    //
+            //    Point curContentMousePoint = e.GetPosition(LBcontent);
+            //    SetDragZoomRect(origContentMouseDownPoint, curContentMousePoint);
 
-                //    e.Handled = true;
-                //}
-                //else if (mouseHandlingMode == MouseHandlingMode.DragSelecting)
-                //{
-                //    //
-                //    // When in drag zooming mode continously update the position of the rectangle
-                //    // that the user is dragging out.
-                //    //
-                //    Point curContentMousePoint = e.GetPosition(LBcontent);
-                //    SetDragSelectRect(origContentMouseDownPoint, curContentMousePoint);
-                //}
+            //    e.Handled = true;
+            //}
+            //else if (mouseHandlingMode == MouseHandlingMode.DragSelecting)
+            //{
+            //    //
+            //    // When in drag zooming mode continously update the position of the rectangle
+            //    // that the user is dragging out.
+            //    //
+            //    Point curContentMousePoint = e.GetPosition(LBcontent);
+            //    SetDragSelectRect(origContentMouseDownPoint, curContentMousePoint);
+            //}
             //}
 
-            
+
         }
 
         /// <summary>
@@ -468,7 +457,7 @@ namespace Verse3
         {
             InfiniteCanvasControl1.ZoomAboutPoint(InfiniteCanvasControl1.ContentScale + 0.1, contentZoomCenter);
         }
-        
+
         /// <summary>
         /// The 'ZoomIn' command (bound to the plus key) was executed.
         /// </summary>
@@ -584,7 +573,7 @@ namespace Verse3
             dragZoomBorder.Width = width;
             dragZoomBorder.Height = height;
         }
-        
+
         /// <summary>
         /// When the user has finished dragging out the rectangle the zoom operation is applied.
         /// </summary>

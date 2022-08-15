@@ -7,8 +7,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Verse3
 {
@@ -92,7 +90,7 @@ namespace Verse3
             {
                 return assembly.GetExportedTypes().FirstOrDefault();
             }
-            
+
             return null;
         }
 

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace Core
 {
@@ -29,7 +24,7 @@ namespace Core
 
         #endregion
     }
-    
+
     /// <summary>
     /// Defines the current state of the mouse handling logic.
     /// </summary>

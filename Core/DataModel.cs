@@ -1,9 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using static Core.Geometry2D;
-using System.Windows.Input;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 
 namespace Core
 {
@@ -106,7 +103,7 @@ namespace Core
                 instance = value;
             }
         }
-        
+
         public static double ContentCanvasMarginOffset = 0.0;
 
         public DataModel() : base()
@@ -306,153 +303,6 @@ namespace Core
 
         #endregion
     }
-
-    public interface IElement : INotifyPropertyChanged
-    {
-        #region Properties
-
-        /// <summary>
-        /// GUID of the element.
-        /// </summary>
-        public Guid ID { get; }
-
-        public ElementState ElementState { get; set; }
-
-        public ElementType ElementType { get; set; }
-
-        #endregion
-
-        #region INotifyPropertyChanged Members
-
-        /// <summary>
-        /// Raises the 'PropertyChanged' event when the value of a property of the data model has changed.
-        /// Be sure to Define a 'PropertyChanged' event that is raised when the value of a property of the data model has changed.
-        /// eg. <code>public new abstract event PropertyChangedEventHandler PropertyChanged;</code>
-        /// </summary>
-        public abstract void OnPropertyChanged(string name);
-
-        #endregion
-    }
-
-    public interface IRenderable : IElement
-    {
-        //TODO: GUID Lookup in DataModel Instance
-        //public Guid ZPrev { get; }
-        //public Guid ZNext { get; }
-        //public Guid Parent { get; }
-        //public Guid[] Children { get; }
-        public IRenderable ZPrev { get; }
-        public IRenderable ZNext { get; }
-        public IRenderable Parent { get; }
-        public ElementsLinkedList<IRenderable> Children { get; }
-        void AddChild(IRenderable child);
-        void SetParent(IRenderable parent);
-
-#nullable enable
-        public Type? ViewType { get; }
-        object ViewKey { get; set; }
-        IRenderView RenderView { get; set; }
-#nullable restore
-
-        public bool Visible { get; set; }
-
-        #region BoundingBox
-
-        /// <summary>
-        /// Bounding Box of the Element
-        /// </summary>
-        public abstract BoundingBox BoundingBox { get; }
-
-        /// <summary>
-        /// The X coordinate of the location of the element Bounding Box (in content coordinates).
-        /// </summary>
-        double X { get; }
-        /// <summary>
-        /// Set the X coordinate of the location of the element Bounding Box (in content coordinates).
-        /// </summary>
-        void SetX(double x)
-        {
-            BoundingBox.Location.X = x;
-            OnPropertyChanged("X");
-        }
-
-        /// <summary>
-        /// The Y coordinate of the location of the element Bounding Box (in content coordinates).
-        /// </summary>
-        double Y { get; }
-        /// <summary>
-        /// Set the Y coordinate of the location of the element Bounding Box (in content coordinates).
-        /// </summary>
-        void SetY(double x)
-        {
-            BoundingBox.Location.Y = x;
-            OnPropertyChanged("Y");
-        }
-
-        /// <summary>
-        /// The width of the element Bounding Box (in content coordinates).
-        /// </summary>
-        double Width { get; set; }
-        /// <summary>
-        /// Set the width of the element Bounding Box (in content coordinates).
-        /// </summary>
-        void SetWidth(double x) { BoundingBox.Size.Width = x; OnPropertyChanged("Width"); }
-
-        /// <summary>
-        /// The height of the element Bounding Box (in content coordinates).
-        /// </summary>
-        double Height { get; set; }
-
-        /// <summary>
-        /// Set the height of the element Bounding Box (in content coordinates).
-        /// </summary>
-        void SetHeight(double x) { BoundingBox.Size.Height = x; OnPropertyChanged("Height"); }
-
-        void TransformBoundsTo(BoundingBox targetBBox)
-        {
-            if (this.BoundingBox.Location != targetBBox.Location)
-            {
-                if (BoundingBox.Location.X != targetBBox.Location.X)
-                {
-                    BoundingBox.Location.X = targetBBox.Location.X;
-                    //OnPropertyChanged("X");
-                }
-                if (BoundingBox.Location.Y != targetBBox.Location.Y)
-                {
-                    BoundingBox.Location.Y = targetBBox.Location.Y;
-                    //OnPropertyChanged("Y");
-                }
-            }
-            if (this.BoundingBox.Size != targetBBox.Size)
-            {
-                if (BoundingBox.Size.Width != targetBBox.Size.Width)
-                {
-                    BoundingBox.Size.Width = targetBBox.Size.Width;
-                    //OnPropertyChanged("Width");
-                }
-                if (BoundingBox.Size.Height != targetBBox.Size.Height)
-                {
-                    BoundingBox.Size.Height = targetBBox.Size.Height;
-                    //OnPropertyChanged("Height");
-                }
-            }
-        }
-
-        void Render()
-        {
-            if (RenderView != null)
-                RenderView.Render();
-        }
-
-        #endregion
-    }
-
-    public interface IRenderView
-    {
-        IRenderable Element { get; }
-        void Render();
-    }
-
     public class RenderPipeline
     {
         private static RenderPipeline instance = new RenderPipeline();
@@ -542,20 +392,174 @@ namespace Core
         }
     }
 
+    public interface IElement : INotifyPropertyChanged
+    {
+        #region Properties
+
+        /// <summary>
+        /// GUID of the element.
+        /// </summary>
+        public Guid ID { get; }
+
+        public ElementState ElementState { get; set; }
+
+        public ElementType ElementType { get; set; }
+
+        #endregion
+
+        #region INotifyPropertyChanged Members
+
+        /// <summary>
+        /// Raises the 'PropertyChanged' event when the value of a property of the data model has changed.
+        /// Be sure to Define a 'PropertyChanged' event that is raised when the value of a property of the data model has changed.
+        /// eg. <code>public new abstract event PropertyChangedEventHandler PropertyChanged;</code>
+        /// </summary>
+        public abstract void OnPropertyChanged(string name);
+
+        #endregion
+    }
+
+    public interface IRenderable : IElement
+    {
+        #region Render Pipeline Info
+
+        //TODO: GUID Lookup in DataModel Instance
+        public IRenderable ZPrev { get; }
+        public IRenderable ZNext { get; }
+        public IRenderable Parent { get; }
+        public ElementsLinkedList<IRenderable> Children { get; }
+        void AddChild(IRenderable child);
+        void SetParent(IRenderable parent);
+
+        #endregion
+
+        #region Properties
+
+#nullable enable
+        public Type? ViewType { get; }
+#nullable restore
+        object ViewKey { get; set; }
+        IRenderView RenderView { get; set; }
+
+        public bool Visible { get; set; }
+
+        #endregion
+
+        #region BoundingBox
+
+        /// <summary>
+        /// Bounding Box of the Element
+        /// </summary>
+        public abstract BoundingBox BoundingBox { get; }
+
+        /// <summary>
+        /// The X coordinate of the location of the element Bounding Box (in content coordinates).
+        /// </summary>
+        double X { get; }
+        /// <summary>
+        /// Set the X coordinate of the location of the element Bounding Box (in content coordinates).
+        /// </summary>
+        void SetX(double x)
+        {
+            BoundingBox.Location.X = x;
+            OnPropertyChanged("X");
+        }
+
+        /// <summary>
+        /// The Y coordinate of the location of the element Bounding Box (in content coordinates).
+        /// </summary>
+        double Y { get; }
+        /// <summary>
+        /// Set the Y coordinate of the location of the element Bounding Box (in content coordinates).
+        /// </summary>
+        void SetY(double x)
+        {
+            BoundingBox.Location.Y = x;
+            OnPropertyChanged("Y");
+        }
+
+        /// <summary>
+        /// The width of the element Bounding Box (in content coordinates).
+        /// </summary>
+        double Width { get; set; }
+        /// <summary>
+        /// Set the width of the element Bounding Box (in content coordinates).
+        /// </summary>
+        void SetWidth(double x) { BoundingBox.Size.Width = x; OnPropertyChanged("Width"); }
+
+        /// <summary>
+        /// The height of the element Bounding Box (in content coordinates).
+        /// </summary>
+        double Height { get; set; }
+
+        /// <summary>
+        /// Set the height of the element Bounding Box (in content coordinates).
+        /// </summary>
+        void SetHeight(double x) { BoundingBox.Size.Height = x; OnPropertyChanged("Height"); }
+
+        //void TransformBoundsTo(BoundingBox targetBBox)
+        //{
+        //    if (this.BoundingBox.Location != targetBBox.Location)
+        //    {
+        //        if (BoundingBox.Location.X != targetBBox.Location.X)
+        //        {
+        //            BoundingBox.Location.X = targetBBox.Location.X;
+        //            //OnPropertyChanged("X");
+        //        }
+        //        if (BoundingBox.Location.Y != targetBBox.Location.Y)
+        //        {
+        //            BoundingBox.Location.Y = targetBBox.Location.Y;
+        //            //OnPropertyChanged("Y");
+        //        }
+        //    }
+        //    if (this.BoundingBox.Size != targetBBox.Size)
+        //    {
+        //        if (BoundingBox.Size.Width != targetBBox.Size.Width)
+        //        {
+        //            BoundingBox.Size.Width = targetBBox.Size.Width;
+        //            //OnPropertyChanged("Width");
+        //        }
+        //        if (BoundingBox.Size.Height != targetBBox.Size.Height)
+        //        {
+        //            BoundingBox.Size.Height = targetBBox.Size.Height;
+        //            //OnPropertyChanged("Height");
+        //        }
+        //    }
+        //}
+
+        void Render()
+        {
+            if (RenderView != null)
+                RenderView.Render();
+        }
+
+        #endregion
+    }
+
+    public interface IRenderView
+    {
+        IRenderable Element { get; }
+        void Render();
+    }
+
+
 
     public interface IComputable : IElement
     {
-        public Guid[] DataDS { get; }
-        public Guid[] DataUS { get; }
-        public Guid[] EventDS { get; }
-        public Guid[] EventUS { get; }
+        public ElementsLinkedList<IComputable> DataDS { get; }
+        public ElementsLinkedList<IComputable> DataUS { get; }
+        public ElementsLinkedList<IComputable> EventDS { get; }
+        public ElementsLinkedList<IComputable> EventUS { get; }
 
         public ElementsLinkedList<INode> Nodes { get; }
         public ComputableElementState ComputableElementState { get; set; }
         public ElementConsole Console { get; }
         public bool Enabled { get; set; }
         void ClearData();
-        void CollectData();
+        void CollectData()
+        {
+            //TODO: Populate DataDS and DataUS and Collect data from nodes
+        }
         void ComputeData();
     }
 

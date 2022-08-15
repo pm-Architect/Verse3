@@ -1,23 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using Core;
+using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Xaml;
-using System.Xaml.Schema;
-using Core;
 using Verse3.VanillaElements;
-using static Core.Geometry2D;
 using XamlReader = System.Windows.Markup.XamlReader;
 
 namespace Verse3
@@ -156,7 +144,7 @@ namespace Verse3
     /// </summary>
     public class ColorToBrushConverter : IValueConverter
     {
-        
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return new SolidColorBrush((Color)value);

@@ -1,22 +1,10 @@
 using Core;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Verse3;
 using static Core.Geometry2D;
 
 namespace Verse3.VanillaElements
@@ -27,7 +15,7 @@ namespace Verse3.VanillaElements
     public partial class NodeElementView : UserControl, IRenderView
     {
         private NodeElement _element;
-        
+
         public IRenderable Element
         {
             get { return _element; }
@@ -232,7 +220,7 @@ namespace Verse3.VanillaElements
     }
 
     public class NodeElement : IRenderable, INode
-    {        
+    {
         #region Data Members
 
         private BoundingBox boundingBox = BoundingBox.Unset;
@@ -321,6 +309,13 @@ namespace Verse3.VanillaElements
         public void SetParent(IRenderable parent)
         {
             this._parent = parent;
+            if (this._parent != null)
+            {
+                if (!this._parent.Children.Contains(this))
+                {
+                    this._parent.Children.Add(this);
+                }
+            }
         }
 
         public ElementState State { get; set; }
@@ -424,7 +419,7 @@ namespace Verse3.VanillaElements
         {
 
         }
-        
+
         public IElement Parent { get; }
 
         public ElementsLinkedList<IConnection> Connections => connections;

@@ -1,24 +1,14 @@
 using Core;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Verse3;
-using static Core.Geometry2D;
 using Verse3.VanillaElements;
+using static Core.Geometry2D;
 using TextElement = Verse3.VanillaElements.TextElement;
 
 namespace TestPlugin
@@ -28,8 +18,8 @@ namespace TestPlugin
     /// </summary>
     public partial class TestElementView : UserControl, IRenderView
     {
-        private TestElement? _element;        
-        
+        private TestElement? _element;
+
         public IRenderable? Element
         {
             get
@@ -83,7 +73,7 @@ namespace TestPlugin
                 }
 
                 var nodeBlock = new NodeElement(testelement);
-                DataTemplateManager.RegisterDataTemplate(nodeBlock);                
+                DataTemplateManager.RegisterDataTemplate(nodeBlock);
                 testelement.AddChild(nodeBlock);
 
 
@@ -360,7 +350,7 @@ namespace TestPlugin
         #region Constructors
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        
+
         public TestElement()
         {
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
@@ -380,7 +370,7 @@ namespace TestPlugin
             byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
             this.backgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
         }
-        
+
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         #endregion
@@ -441,6 +431,13 @@ namespace TestPlugin
         public void SetParent(IRenderable parent)
         {
             this._parent = parent;
+            if (this._parent != null)
+            {
+                if (!this._parent.Children.Contains(this))
+                {
+                    this._parent.Children.Add(this);
+                }
+            }
         }
     }
 }
