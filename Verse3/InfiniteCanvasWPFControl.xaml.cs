@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Verse3.VanillaElements;
 using static Core.Geometry2D;
 
 namespace Verse3
@@ -276,9 +277,7 @@ namespace Verse3
         private void zoomAndPanControl_MouseMove(object sender, MouseEventArgs e)
         {
             currCanvasMousePosition = e.GetPosition(LBcontent);
-
-            //MousePositionNode.Instance.OnPropertyChanged("X");
-            //MousePositionNode.Instance.OnPropertyChanged("Y");
+            MousePositionNode.RefreshPosition();
 
             //TODO: Re-render every IRenderable
             //foreach (IRenderable renderable in DataViewModel.Instance.Elements)

@@ -204,38 +204,7 @@ namespace TestPlugin
 
             DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
 
-            if (this.Element != null)
-            {
-                this.Element.SetX(this.Element.X + rectangleDragVector.X);
-                this.Element.SetY(this.Element.Y + rectangleDragVector.Y);
-                RenderPipeline.RenderRenderable(this.Element);
-            }
-
-            if (this._element != null)
-            {
-                if (this._element.Children != null)
-                {
-                    foreach (IRenderable renderable in this._element.Children)
-                    {
-                        if (renderable != null)
-                        {
-                            renderable.SetX(renderable.X + rectangleDragVector.X);
-                            renderable.SetY(renderable.Y + rectangleDragVector.Y);
-                        }
-                    }
-                    //for (int i = 0; i < this._element.Children.Count; i++)
-                    //{
-                    //    if (this._element.Children[i] is NodeElement)
-                    //    {
-                    //        NodeElement node = (NodeElement)this._element.Children[i];
-                    //        if (node != null && node.RenderView != null)
-                    //        {
-                    //            node.RenderView.Render();
-                    //        }
-                    //    }
-                    //}
-                }
-            }
+            RenderPipeline.TranslateOffsetRenderable(this.Element, rectangleDragVector.X, rectangleDragVector.Y);
 
             DataViewModel.WPFControl.ExpandContent();
 

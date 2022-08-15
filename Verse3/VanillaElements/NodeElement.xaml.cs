@@ -203,17 +203,24 @@ namespace Verse3.VanillaElements
                 {
                     this._element.AddChild(b);
                     this._element.Connections.Add(b);
+                    MousePositionNode.Instance.Connections.Add(b);
+                    //b.RedrawBezier(b.Origin, b.Destination);
+                    //b.RenderView.Render();
                 }
             }
             else
             {
                 if (b != null)
                 {
+                    if (MousePositionNode.Instance.Connections.Contains(b))
+                        MousePositionNode.Instance.Connections.Remove(b);
                     b.SetDestination(DataViewModel.ActiveNode);
                     this._element.AddChild(b);
                     this._element.Connections.Add(b);
                     DataViewModel.ActiveConnection = default;
                     DataViewModel.ActiveNode = default;
+                    //b.RedrawBezier(b.Origin, b.Destination);
+                    //b.RenderView.Render();
                 }
             }
         }
@@ -417,32 +424,47 @@ namespace Verse3.VanillaElements
 
         private MousePositionNode()
         {
-
         }
 
+        public static void RefreshPosition()
+        {
+            System.Drawing.Point p = DataViewModel.WPFControl.GetMouseRelPosition();
+            Instance._hotspot = new CanvasPoint(p.X, p.Y);
+
+            if (MousePositionNode.Instance.Connections != null)
+            {
+                if (MousePositionNode.Instance.Connections.Count > 0)
+                {
+                    //RenderPipeline.Render();
+                    foreach (IConnection c in MousePositionNode.Instance.Connections)
+                    {
+                        if (c is BezierElement)
+                        {
+                            BezierElement b = c as BezierElement;
+                            b.RedrawBezier(b.Origin, b.Destination);
+                            b.RenderView.Render();
+                        }
+                    }
+                }
+            }
+        }
+        
         public IElement Parent { get; }
 
         public ElementsLinkedList<IConnection> Connections => connections;
 
         public NodeType NodeType => NodeType.Unset;
 
+        private CanvasPoint _hotspot = CanvasPoint.Unset;
         public CanvasPoint Hotspot
         {
             get
             {
-                System.Drawing.Point p = DataViewModel.WPFControl.GetMouseRelPosition();
-                if (this.Connections != null)
-                {
-                    if (this.Connections.Count > 0)
-                    {
-                        foreach (BezierElement bezier in this.Connections)
-                        {
-                            bezier.RedrawBezier(bezier.Origin, bezier.Destination);
-                        }
-                    }
-                }
-
-                return new CanvasPoint(p.X, p.Y);
+                return _hotspot;
+            }
+            private set
+            {
+                _hotspot = value;
             }
         }
 

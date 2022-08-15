@@ -530,6 +530,10 @@ namespace Verse3.VanillaElements
             this.destination = destination;
             //this.destination.Connections.Add(this);
             RedrawBezier(this.origin, this.destination);
+            if (this.RenderView != null)
+            {
+                this.RenderView.Render();
+            }
         }
 
         #region Constructors
@@ -570,8 +574,6 @@ namespace Verse3.VanillaElements
             this.InnerBoundingBox = this.BoundingBox;
             this.inflatedX = false;
             this.inflatedY = false;
-            //if (bezView != null)
-            //    bezView.Render();
         }
 
 

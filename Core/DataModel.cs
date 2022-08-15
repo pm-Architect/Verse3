@@ -366,6 +366,35 @@ namespace Core
             }
             return count;
         }
+        public static bool TranslateOffsetRenderable(IRenderable renderable, double xOffset, double yOffset, bool recursive = true)
+        {
+            bool renderSuccess = true;
+            try
+            {
+                if (renderable != null)
+                {
+                    renderable.SetX(renderable.X + xOffset);
+                    renderable.SetY(renderable.Y + yOffset);
+                    RenderPipeline.RenderRenderable(renderable);
+                }
+            }
+            catch /*(Exception e)*/
+            {
+                //TODO: Log to console
+                return false;
+            }
+            if (recursive)
+            {
+                if (renderable.Children != null && renderable.Children.Count > 0)
+                {
+                    foreach (IRenderable child in renderable.Children)
+                    {
+                        renderSuccess = renderSuccess && RenderPipeline.TranslateOffsetRenderable(child, xOffset, yOffset);
+                    }
+                }
+            }
+            return renderSuccess;
+        }
         public static bool RenderRenderable(IRenderable renderable, bool recursive = true)
         {
             bool renderSuccess = true;
@@ -378,9 +407,9 @@ namespace Core
                 //TODO: Log to console
                 return false;
             }
-            if (renderable.Children.Count > 0)
+            if (recursive)
             {
-                if (recursive)
+                if (renderable.Children != null && renderable.Children.Count > 0)
                 {
                     foreach (IRenderable child in renderable.Children)
                     {
