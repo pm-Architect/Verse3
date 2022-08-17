@@ -262,6 +262,8 @@ namespace TestPlugin
     public class TestElement : BaseComp
     {
         internal double _sliderValue = 0.0;
+        private double _inputValue = 0.0;
+
         public string? ElementText
         {
             get
@@ -326,8 +328,13 @@ namespace TestPlugin
                             if (conn.Origin == n && conn.Destination is NodeElement)
                             {
                                 NodeElement nd = (NodeElement)conn.Destination;
-                                nd.DataGoo.Data = _sliderValue;
+                                nd.DataGoo.Data = _sliderValue + _inputValue;
                                 RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
+                            }
+                            else if (conn.Destination == n && conn.Origin is NodeElement)
+                            {
+                                _inputValue = n.DataGoo.Data;
+                                RenderPipeline.RenderRenderable(conn.Origin.Parent as IRenderable);
                             }
                         }
                     }

@@ -226,25 +226,25 @@ namespace Verse3.VanillaElements
         }
         public void Compute()
         {
-            if (Nodes[0] == this)
-            {
-                if (this.Connections != null && this.Connections.Count > 0)
-                {
-                    if (this.Connections[0].Destination is NodeElement && this.Connections[0].Origin == this)
-                    {
-                        NodeElement des = this.Connections[0].Destination as NodeElement;
-                        if (this.DataGoo != null)
-                        {
-                            //TODO: Restructure \ Refine Compute steps
-                            //this.DataGoo = des.DataGoo;
-                            //if (this.DataGoo == null)
-                            //{
-                                //des.DataGoo = new DataStructure<double>(0.0);
-                            //}
-                        }
-                    }
-                }
-            }
+            //if (Nodes[0] == this)
+            //{
+            //    if (this.Connections != null && this.Connections.Count > 0)
+            //    {
+            //        if (this.Connections[0].Destination is NodeElement && this.Connections[0].Origin == this)
+            //        {
+            //            NodeElement des = this.Connections[0].Destination as NodeElement;
+            //            if (this.DataGoo != null)
+            //            {
+            //                //TODO: Restructure \ Refine Compute steps
+            //                //this.DataGoo = des.DataGoo;
+            //                //if (this.DataGoo == null)
+            //                //{
+            //                    //des.DataGoo = new DataStructure<double>(0.0);
+            //                //}
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         #endregion
