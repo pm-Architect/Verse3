@@ -314,28 +314,23 @@ namespace TestPlugin
 
         public override void Compute()
         {
-            IComputable c = this as IComputable;
-            if (c != null)
+            if (this.Nodes != null && this.Nodes.Count == 1 && this.Nodes[0] is NodeElement)
             {
-                if (c.Nodes != null && c.Nodes.Count == 1 && c.Nodes[0] is NodeElement)
+                NodeElement n = (NodeElement)this.Nodes[0];
+                if (n.Connections != null && n.Connections.Count > 0)
                 {
-                    NodeElement n = (NodeElement)c.Nodes[0];
-                    n.Compute();
-                    if (n.Connections != null && n.Connections.Count > 0)
+                    foreach (IConnection conn in n.Connections)
                     {
-                        foreach (IConnection conn in c.Nodes[0].Connections)
+                        if (conn.Origin == n && conn.Destination is NodeElement)
                         {
-                            if (conn.Origin == n && conn.Destination is NodeElement)
-                            {
-                                NodeElement nd = (NodeElement)conn.Destination;
-                                nd.DataGoo.Data = _sliderValue + _inputValue;
-                                RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
-                            }
-                            else if (conn.Destination == n && conn.Origin is NodeElement)
-                            {
-                                _inputValue = n.DataGoo.Data;
-                                RenderPipeline.RenderRenderable(conn.Origin.Parent as IRenderable);
-                            }
+                            NodeElement nd = (NodeElement)conn.Destination;
+                            nd.DataGoo.Data = _sliderValue + _inputValue;
+                            RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
+                        }
+                        else if (conn.Destination == n && conn.Origin is NodeElement)
+                        {
+                            _inputValue = n.DataGoo.Data;
+                            RenderPipeline.RenderRenderable(conn.Origin.Parent as IRenderable);
                         }
                     }
                 }

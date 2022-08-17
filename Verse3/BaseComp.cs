@@ -93,6 +93,8 @@ namespace Verse3
         private ElementsLinkedList<INode> _nodes = new ElementsLinkedList<INode>();
         public ElementsLinkedList<INode> Nodes => _nodes;
 
+        public ComputableElementState ComputableElementState { get; set; } = ComputableElementState.Unset;
+
         #endregion
 
         #region Constructor and Compute
@@ -109,9 +111,78 @@ namespace Verse3
             computationPipelineInfo = new ComputationPipelineInfo(this);
         }
 
-        public virtual void Compute()
+        public abstract void Compute();
+
+        public virtual void CollectData()
         {
-            
+            if (this.Nodes != null && this.Nodes.Count > 1/* && computable.Nodes[0] is NodeElement*/)
+            {
+                foreach (INode n in this.Nodes)
+                {
+                    if (n is IComputable && (n.NodeType == NodeType.Input || n.NodeType == NodeType.Unset))
+                    {
+                        IComputable c = (IComputable)n;
+                        this.computationPipelineInfo.AddDataUpStream(c);
+                        if (n.Connections != null && n.Connections.Count > 0)
+                        {
+                            foreach (IConnection conn in n.Connections)
+                            {
+                                //INCOMING CONNECTIONS
+                                if (conn.Destination == n && conn.Origin is IComputable)
+                                {
+                                    c.ComputationPipelineInfo.AddDataDownStream(conn.Origin as IComputable);
+                                    //_inputValue = n.DataGoo.Data;
+                                    //RenderPipeline.RenderRenderable(conn.Origin.Parent as IRenderable);
+                                }
+                                //OUTGOING CONNECTIONS
+                                //else if (conn.Origin == n/* && conn.Destination is NodeElement*/)
+                                //{
+                                //NodeElement nd = (NodeElement)conn.Destination;
+                                //nd.DataGoo.Data = _sliderValue + _inputValue;
+                                //RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
+                                //}
+                            }
+                        }
+                        ComputationPipeline.ComputeComputable(c);
+                    }
+                }
+            }
+        }
+        public virtual void DeliverData()
+        {
+            if (this.Nodes != null && this.Nodes.Count > 0/* && computable.Nodes[0] is NodeElement*/)
+            {
+                foreach (INode n in this.Nodes)
+                {
+                    if (n is IComputable && (n.NodeType == NodeType.Output || n.NodeType == NodeType.Unset))
+                    {
+                        IComputable c = (IComputable)n;
+                        this.computationPipelineInfo.AddDataDownStream(c);
+                        if (n.Connections != null && n.Connections.Count > 0)
+                        {
+                            foreach (IConnection conn in n.Connections)
+                            {
+                                //INCOMING CONNECTIONS
+                                //if (conn.Destination == n/* && conn.Origin is NodeElement*/)
+                                //{
+                                //_inputValue = n.DataGoo.Data;
+                                //RenderPipeline.RenderRenderable(conn.Origin.Parent as IRenderable);
+                                //}
+                                //OUTGOING CONNECTIONS
+                                /*else */
+                                if (conn.Origin == n/* && conn.Destination is NodeElement*/)
+                                {
+                                    c.ComputationPipelineInfo.AddDataUpStream(conn.Destination as IComputable);
+                                    //NodeElement nd = (NodeElement)conn.Destination;
+                                    //nd.DataGoo.Data = _sliderValue + _inputValue;
+                                    //RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
+                                }
+                            }
+                        }
+                        ComputationPipeline.ComputeComputable(c);
+                    }
+                }
+            }
         }
 
         //#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

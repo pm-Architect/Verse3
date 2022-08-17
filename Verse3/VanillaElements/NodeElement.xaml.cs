@@ -128,10 +128,10 @@ namespace Verse3.VanillaElements
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //Set as active Node
-            DataViewModel.ActiveNode = this.Element as INode;
             BezierElement b = (BezierElement)DataViewModel.ActiveConnection;
             if (DataViewModel.ActiveConnection == default)
             {
+                DataViewModel.ActiveNode = this.Element as INode;
                 DataViewModel.ActiveConnection = DataViewModel.CreateConnection(DataViewModel.ActiveNode);
                 b = (BezierElement)DataViewModel.ActiveConnection;
                 if (b != null)
@@ -147,9 +147,14 @@ namespace Verse3.VanillaElements
             {
                 if (b != null)
                 {
+                    if (DataViewModel.ActiveNode is IComputable && DataViewModel.ActiveNode != this.Element)
+                    {
+                        this.Element.ComputationPipelineInfo.AddDataUpStream(DataViewModel.ActiveNode as IComputable);
+                    }
+                    DataViewModel.ActiveNode = this.Element as INode;
+                    b.SetDestination(DataViewModel.ActiveNode);
                     if (MousePositionNode.Instance.Connections.Contains(b))
                         MousePositionNode.Instance.Connections.Remove(b);
-                    b.SetDestination(DataViewModel.ActiveNode);
                     this.Element.RenderPipelineInfo.AddChild(b);
                     this.Element.Connections.Add(b);
                     DataViewModel.ActiveConnection = default;
@@ -180,11 +185,11 @@ namespace Verse3.VanillaElements
 
         public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
 
-        IElement INode.Parent { get => this.parentElement; }
+        IElement INode.Parent { get => this.RenderPipelineInfo.Parent; }
 
         public ElementsLinkedList<IConnection> Connections => connections;
 
-        public NodeType NodeType { get => NodeType.Output; }
+        public NodeType NodeType { get => NodeType.Unset; }
 
         public CanvasPoint Hotspot
         {
@@ -208,11 +213,12 @@ namespace Verse3.VanillaElements
         public ComputationPipelineInfo ComputationPipelineInfo => _computationPipelineInfo;
 
         public ElementsLinkedList<INode> Nodes => new ElementsLinkedList<INode>() { this };
+        public ComputableElementState ComputableElementState { get; set; }
 
         #endregion
 
         #region Constructor and Compute
-        
+
         public NodeElement(IRenderable parent) : base()
         {
             _computationPipelineInfo = new ComputationPipelineInfo(this);
@@ -241,6 +247,61 @@ namespace Verse3.VanillaElements
             //                //{
             //                    //des.DataGoo = new DataStructure<double>(0.0);
             //                //}
+            //            }
+            //        }
+            //    }
+            //}
+        }
+        public void CollectData()
+        {
+            if (this.Connections != null && this.Connections.Count > 0)
+            {
+                foreach (IConnection conn in this.Connections)
+                {
+                    //INCOMING CONNECTIONS
+                    if (conn.Destination == this/* && conn.Origin is NodeElement*/)
+                    {
+                        
+                    }
+                    //OUTGOING CONNECTIONS
+                    //else if (conn.Origin == n/* && conn.Destination is NodeElement*/)
+                    //{
+                    //NodeElement nd = (NodeElement)conn.Destination;
+                    //nd.DataGoo.Data = _sliderValue + _inputValue;
+                    //RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
+                    //}
+                }
+            }
+        }
+        public void DeliverData()
+        {
+            //if (this.Nodes != null && this.Nodes.Count > 1/* && computable.Nodes[0] is NodeElement*/)
+            //{
+            //    foreach (INode n in this.Nodes)
+            //    {
+            //        if (n is IComputable)
+            //        {
+            //            IComputable c = (IComputable)n;
+            //            c.Compute();
+            //        }
+            //        if (n.Connections != null && n.Connections.Count > 0)
+            //        {
+            //            foreach (IConnection conn in n.Connections)
+            //            {
+            //                //INCOMING CONNECTIONS
+            //                //if (conn.Destination == n/* && conn.Origin is NodeElement*/)
+            //                //{
+            //                //_inputValue = n.DataGoo.Data;
+            //                //RenderPipeline.RenderRenderable(conn.Origin.Parent as IRenderable);
+            //                //}
+            //                //OUTGOING CONNECTIONS
+            //                /*else */
+            //                if (conn.Origin == n/* && conn.Destination is NodeElement*/)
+            //                {
+            //                    //NodeElement nd = (NodeElement)conn.Destination;
+            //                    //nd.DataGoo.Data = _sliderValue + _inputValue;
+            //                    //RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
+            //                }
             //            }
             //        }
             //    }

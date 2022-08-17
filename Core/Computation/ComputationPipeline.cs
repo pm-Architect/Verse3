@@ -31,38 +31,12 @@ namespace Core
             this._current = default;
         }
         
-        public static int Compute()
+        public static int Compute(IComputable sender = null)
         {
             int count = 0;
             try
             {
-                //Parallel.ForEach(DataModel.Instance.Elements, e => { });
-                foreach (IElement e in DataModel.Instance.Elements)
-                {
-                    if (e != null && e is IComputable)
-                    {
-                        IComputable computable = e as IComputable;
-                        //if (RenderPipeline.Instance._current != default)
-                        //{
-                        //    RenderPipeline.Instance._current.ZNext = renderable;
-                        //}
-                        ComputationPipeline.Instance._current = computable;
-                        if (ComputeComputable(computable))
-                        {
-                            count++;
-                        }
-                        //renderable.Render();
-                        //count++;
-                        //if (renderable.Children.Count > 0)
-                        //{
-                        //    foreach (IRenderable child in renderable.Children)
-                        //    {
-                        //        child.Render();
-                        //        count++;
-                        //    }
-                        //}
-                    }
-                }
+                count = ComputeComputable(ComputationPipeline.Instance._current);
             }
             catch /*(Exception e)*/
             {
@@ -71,25 +45,65 @@ namespace Core
             return count;
         }
 
-        //TODO: Output int
-        public static bool ComputeComputable(IComputable computable, bool recursive = true)
+        
+        
+
+        public static int ComputeComputable(IComputable computable, bool recursive = true, bool upstream = false)
         {
-            bool computeSuccess = true;
-            if (computable != null)
+            if (computable.ComputableElementState == ComputableElementState.Computing) return -1;
+            else computable.ComputableElementState = ComputableElementState.Computing;
+            int count = 0;
+            try
             {
-                computable.Compute();
-                if (recursive)
+                bool computeSuccess = true;
+                if (computable != null)
                 {
-                    if (computable.ComputationPipelineInfo.DataDS != null && computable.ComputationPipelineInfo.DataDS.Count > 0)
+                    
+                    ComputationPipeline.Instance._current = computable;
+                    computable.CollectData();
+                    computable.Compute();
+                    computable.DeliverData();
+                    
+                    count++;
+                    if (recursive)
                     {
-                        foreach (IComputable compDS in computable.ComputationPipelineInfo.DataDS)
+                        if (!upstream)
                         {
-                            computeSuccess = computeSuccess && ComputeComputable(compDS);
+                            if (computable.ComputationPipelineInfo.DataDS != null && computable.ComputationPipelineInfo.DataDS.Count > 0)
+                            {
+                                foreach (IComputable compDS in computable.ComputationPipelineInfo.DataDS)
+                                {
+                                    //TODO: Log to console
+                                    computeSuccess = computeSuccess && (ComputeComputable(compDS) > 0);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (computable.ComputationPipelineInfo.DataUS != null && computable.ComputationPipelineInfo.DataUS.Count > 0)
+                            {
+                                foreach (IComputable compUS in computable.ComputationPipelineInfo.DataUS)
+                                {
+                                    //TODO: Log to console
+                                    computeSuccess = computeSuccess && (ComputeComputable(compUS) > 0);
+                                }
+                            }
                         }
                     }
                 }
+                if (computeSuccess) return count;
+                else return -1;
             }
-            return computeSuccess;
+            catch /*(Exception e)*/
+            {
+                computable.ComputableElementState = ComputableElementState.Failed;
+                //TODO: Log to console
+            }
+            finally
+            {
+                computable.ComputableElementState = ComputableElementState.Computed;
+            }
+            return count;
         }
     }
     
@@ -150,14 +164,17 @@ namespace Core
         public ComputationPipelineInfo ComputationPipelineInfo { get; }
 
         public ElementsLinkedList<INode> Nodes { get; }
-        //public ComputableElementState ComputableElementState { get; set; }
+
+        void CollectData();
+
+        public ComputableElementState ComputableElementState { get; set; }
         //public ElementConsole Console { get; }
         //public bool Enabled { get; set; }
         //void ClearData();
-        //void CollectData()
         //{
-            //TODO: Populate DataDS and DataUS and Collect data from nodes
+        //TODO: Populate DataDS and DataUS and Collect data from nodes
         //}
         void Compute();
+        void DeliverData();
     }
 }

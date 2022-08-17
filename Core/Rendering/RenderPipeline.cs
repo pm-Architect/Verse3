@@ -70,6 +70,7 @@ namespace Core
         //TODO: Output int
         public static bool RenderRenderable(IRenderable renderable, double xOffset, double yOffset, bool recursive = true)
         {
+            //if (renderable.RenderableState == RenderableState.Rendering) return -1;
             bool renderSuccess = true;
             try
             {
