@@ -29,7 +29,10 @@ namespace TestPlugin
                 {
                     _element = this.DataContext as TestElement;
                 }
+                //TODO: Log to Console if this.Element is still null
+#pragma warning disable CS8603 // Possible null reference return.
                 return _element;
+#pragma warning restore CS8603 // Possible null reference return.
             }
             private set
             {
@@ -47,13 +50,16 @@ namespace TestPlugin
         #region Constructor and Render
 
 
+        //TODO: Log to Console if this.Element is still null
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public TestElementView()
         {
             if (this.DataContext is TestElement) this.Element = (TestElement)this.DataContext;
             InitializeComponent();
             Render();
         }
-        
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
         public void Render()
         {
             if (this.Element != null)

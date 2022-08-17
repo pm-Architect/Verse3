@@ -157,10 +157,11 @@ namespace Verse3.VanillaElements
                     //b.RenderView.Render();
                 }
             }
+            this.Element.OnPropertyChanged("BoundingBox");
         }
     }
 
-    public class NodeElement : BaseElement, INode
+    public class NodeElement : BaseElement, INode/*, IDataGooContainer*/
     {
         #region Data Members
 
@@ -189,12 +190,17 @@ namespace Verse3.VanillaElements
         }
 
         #endregion
-        
+
+        //public void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        //{
+        //    base.OnPropertyChanged(propertyName);
+        //}
+
         private void NodeElement_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             foreach (IRenderable renderable in this.Connections)
             {
-                renderable.Render();
+                //renderable.Render();
             }
         }
 

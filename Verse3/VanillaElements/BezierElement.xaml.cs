@@ -387,6 +387,8 @@ namespace Verse3.VanillaElements
 
         public void SetDestination(INode destination)
         {
+            //TODO: Check whether destination is valid
+            //TODO: LOOP WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //this.destination.Connections.Remove(this);
             this.destination = destination;
             //this.destination.Connections.Add(this);

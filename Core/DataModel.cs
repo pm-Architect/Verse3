@@ -4,6 +4,9 @@ using static Core.Geometry2D;
 
 namespace Core
 {
+
+    #region Dev-Singletons and Pipelines
+
     /// <summary>
     /// A simple example of a data-model.  
     /// The purpose of this data-model is to share display data between the main window and overview window.
@@ -424,6 +427,10 @@ namespace Core
         }
     }
 
+    #endregion
+
+    #region Element Interface
+
     public interface IElement : INotifyPropertyChanged
     {
         #region Properties
@@ -450,6 +457,10 @@ namespace Core
 
         #endregion
     }
+
+    #endregion
+
+    #region Renderables
 
     public class RenderPipelineInfo
     {
@@ -586,7 +597,9 @@ namespace Core
         void Render();
     }
 
+    #endregion
 
+    #region Computables
 
     public interface IComputable : IElement
     {
@@ -607,6 +620,10 @@ namespace Core
         void ComputeData();
     }
 
+    #endregion
+
+    #region Nodes and Connections
+
     public interface INode : IElement
     {
         public IElement Parent { get; }
@@ -625,6 +642,10 @@ namespace Core
         public ConnectionType ConnectionType { get; }
         public new ElementType ElementType { get => ElementType.Connection; }
     }
+
+    #endregion
+
+    #region Enums
 
     public enum ElementState
     {
@@ -693,4 +714,5 @@ namespace Core
         Event = 2
     }
 
+    #endregion
 }
