@@ -601,12 +601,61 @@ namespace Core
 
     #region Computables
 
+    public class ComputationPipelineInfo
+    {
+        private IComputable _computable;
+        private ElementsLinkedList<IComputable> _dataDS = new ElementsLinkedList<IComputable>();
+        public ElementsLinkedList<IComputable> DataDS => _dataDS;
+        
+        private ElementsLinkedList<IComputable> _dataUS = new ElementsLinkedList<IComputable>();
+        public ElementsLinkedList<IComputable> DataUS => _dataUS;
+
+        private ElementsLinkedList<IComputable> _eventDS = new ElementsLinkedList<IComputable>();
+        public ElementsLinkedList<IComputable> EventDS => _eventDS;
+
+        private ElementsLinkedList<IComputable> _eventUS = new ElementsLinkedList<IComputable>();
+        public ElementsLinkedList<IComputable> EventUS => _eventUS;
+        public ComputationPipelineInfo(IComputable computable)
+        {
+            this._computable = computable;
+        }
+        public void AddDataUpStream(IComputable dataUS)
+        {
+            if (!this._dataUS.Contains(dataUS))
+            {
+                this._dataUS.Add(dataUS);
+                dataUS.ComputationPipelineInfo.AddDataDownStream(_computable);
+            }
+        }
+        public void AddDataDownStream(IComputable dataDS)
+        {
+            if (!this._dataDS.Contains(dataDS))
+            {
+                this._dataDS.Add(dataDS);
+                dataDS.ComputationPipelineInfo.AddDataUpStream(_computable);
+            }
+        }
+        public void AddEventUpStream(IComputable eventUS)
+        {
+            if (!this._eventUS.Contains(eventUS))
+            {
+                this._eventUS.Add(eventUS);
+                eventUS.ComputationPipelineInfo.AddEventDownStream(_computable);
+            }
+        }
+        public void AddEventDownStream(IComputable eventDS)
+        {
+            if (!this._eventDS.Contains(eventDS))
+            {
+                this._eventDS.Add(eventDS);
+                eventDS.ComputationPipelineInfo.AddEventUpStream(_computable);
+            }
+        }
+    }
+    
     public interface IComputable : IElement
     {
-        public ElementsLinkedList<IComputable> DataDS { get; }
-        public ElementsLinkedList<IComputable> DataUS { get; }
-        public ElementsLinkedList<IComputable> EventDS { get; }
-        public ElementsLinkedList<IComputable> EventUS { get; }
+        public ComputationPipelineInfo ComputationPipelineInfo { get; }
 
         public ElementsLinkedList<INode> Nodes { get; }
         public ComputableElementState ComputableElementState { get; set; }
