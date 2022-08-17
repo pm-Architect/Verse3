@@ -1,5 +1,6 @@
 using Core;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -157,62 +158,25 @@ namespace Verse3.VanillaElements
                     //b.RenderView.Render();
                 }
             }
+            ComputationPipeline.Compute();
+            RenderPipeline.Render();
             this.Element.OnPropertyChanged("BoundingBox");
         }
     }
 
-    public class NodeElement : BaseElement, INode/*, IDataGooContainer*/
+    public class NodeElement : BaseElement, INode, IDataGooContainer<double>
     {
         #region Data Members
 
         private ElementsLinkedList<IConnection> connections = new ElementsLinkedList<IConnection>();
         internal IRenderable parentElement = default;
-        
+        private object displayedText;
+
         #endregion
 
         #region Properties
 
         public override Type ViewType => typeof(NodeElementView);
-
-        #endregion
-
-        #region Constructors
-
-        public NodeElement(IRenderable parent) : base()
-        {
-            parentElement = parent as IRenderable;
-            double x = DataViewModel.ContentCanvasMarginOffset + parentElement.X;
-            double y = DataViewModel.ContentCanvasMarginOffset + parentElement.Y;
-            base.boundingBox = new BoundingBox(x, y, parentElement.Width, 50);
-            (this as IRenderable).RenderPipelineInfo.SetParent(parentElement);
-            this.DisplayedText = "Node";
-            this.PropertyChanged += NodeElement_PropertyChanged;
-        }
-
-        #endregion
-
-        //public void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        //{
-        //    base.OnPropertyChanged(propertyName);
-        //}
-
-        private void NodeElement_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            foreach (IRenderable renderable in this.Connections)
-            {
-                //renderable.Render();
-            }
-        }
-
-        //public NodeElement(int x, int y, int width, int height)
-        //{
-        //    this.boundingBox = new BoundingBox(x, y, width, height);
-
-        //    this.DisplayedText = "Button";
-        //}
-
-
-        private object displayedText;
 
         public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
 
@@ -234,6 +198,65 @@ namespace Verse3.VanillaElements
         }
 
         public double HotspotThresholdRadius { get; }
+
+        public Type DataValueType => typeof(double);
+
+        private DataStructure<double> _dataGoo = new DataStructure<double>();
+        public DataStructure<double> DataGoo { get => _dataGoo; set => _dataGoo = value; }
+
+        private ComputationPipelineInfo _computationPipelineInfo;
+        public ComputationPipelineInfo ComputationPipelineInfo => _computationPipelineInfo;
+
+        public ElementsLinkedList<INode> Nodes => new ElementsLinkedList<INode>() { this };
+
+        #endregion
+
+        #region Constructor and Compute
+        
+        public NodeElement(IRenderable parent) : base()
+        {
+            _computationPipelineInfo = new ComputationPipelineInfo(this);
+            parentElement = parent as IRenderable;
+            double x = DataViewModel.ContentCanvasMarginOffset + parentElement.X;
+            double y = DataViewModel.ContentCanvasMarginOffset + parentElement.Y;
+            base.boundingBox = new BoundingBox(x, y, parentElement.Width, 50);
+            (this as IRenderable).RenderPipelineInfo.SetParent(parentElement);
+            this.DisplayedText = "Node";
+            this.PropertyChanged += NodeElement_PropertyChanged;
+        }
+        public void Compute()
+        {
+            if (Nodes[0] == this)
+            {
+                if (this.Connections != null && this.Connections.Count > 0)
+                {
+                    if (this.Connections[0].Destination is NodeElement && this.Connections[0].Origin == this)
+                    {
+                        NodeElement des = this.Connections[0].Destination as NodeElement;
+                        if (this.DataGoo != null)
+                        {
+                            //TODO: Restructure \ Refine Compute steps
+                            //this.DataGoo = des.DataGoo;
+                            //if (this.DataGoo == null)
+                            //{
+                                //des.DataGoo = new DataStructure<double>(0.0);
+                            //}
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        private void NodeElement_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            foreach (IRenderable renderable in this.Connections)
+            {
+                //renderable.Render();
+            }
+        }
+
     }
 
     public class MousePositionNode : INode

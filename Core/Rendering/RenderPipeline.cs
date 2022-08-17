@@ -132,10 +132,10 @@ namespace Core
     {
         private IRenderable _renderable;
         public IRenderable Renderable => _renderable;
-        private IRenderable _zPrev;
-        public IRenderable ZPrev => _zPrev;
-        private IRenderable _zNext;
-        public IRenderable ZNext => _zNext;
+        //private IRenderable _zPrev;
+        //public IRenderable ZPrev => _zPrev;
+        //private IRenderable _zNext;
+        //public IRenderable ZNext => _zNext;
         private IRenderable _parent;
         public IRenderable Parent
         {

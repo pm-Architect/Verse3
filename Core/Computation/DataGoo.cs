@@ -36,10 +36,10 @@ namespace Core
 
     public interface IDataGooContainer : IComputable
     {
-        public ContainerState ContainerState { get; }
-        public DataState DataState { get; }
+        //public ContainerState ContainerState { get; }
+        //public DataState DataState { get; }
         Type DataValueType { get; }
-        IList<IDataGooContainer> Sources { get; }
+        //IList<IDataGooContainer> Sources { get; }
         //int AddSource(IDataGooContainer source);
         //void RemoveSource(int index);
         //void RemoveSource(IDataGooContainer source);
@@ -49,6 +49,22 @@ namespace Core
         //void ReplaceSource(IDataGooContainer oldSource, IDataGooContainer newSource);
         //void ReplaceSource(Guid oldSourceID, IDataGooContainer newSource);
         DataStructure DataGoo { get; set; }
+    }
+    public interface IDataGooContainer<D> : IComputable
+    {
+        //public ContainerState ContainerState { get; }
+        //public DataState DataState { get; }
+        Type DataValueType { get; }
+        //ElementsLinkedList<IDataGooContainer> Sources { get; }
+        //int AddSource(IDataGooContainer source);
+        //void RemoveSource(int index);
+        //void RemoveSource(IDataGooContainer source);
+        //void RemoveSource(Guid sourceID);
+        //void RemoveAllSources();
+        //void ReplaceSource(int index, IDataGooContainer newSource);
+        //void ReplaceSource(IDataGooContainer oldSource, IDataGooContainer newSource);
+        //void ReplaceSource(Guid oldSourceID, IDataGooContainer newSource);
+        DataStructure<D> DataGoo { get; set; }
     }
 
     public class DataStructure<D> : DataStructure

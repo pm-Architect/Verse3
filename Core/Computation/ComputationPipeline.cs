@@ -150,14 +150,14 @@ namespace Core
         public ComputationPipelineInfo ComputationPipelineInfo { get; }
 
         public ElementsLinkedList<INode> Nodes { get; }
-        public ComputableElementState ComputableElementState { get; set; }
-        public ElementConsole Console { get; }
-        public bool Enabled { get; set; }
-        void ClearData();
-        void CollectData()
-        {
+        //public ComputableElementState ComputableElementState { get; set; }
+        //public ElementConsole Console { get; }
+        //public bool Enabled { get; set; }
+        //void ClearData();
+        //void CollectData()
+        //{
             //TODO: Populate DataDS and DataUS and Collect data from nodes
-        }
+        //}
         void Compute();
     }
 }

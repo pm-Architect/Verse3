@@ -13,7 +13,7 @@ using static Core.Geometry2D;
 
 namespace Verse3
 {
-    public abstract class BaseComp : IRenderable
+    public abstract class BaseComp : IRenderable, IComputable
     {
         #region Data Members
 
@@ -87,9 +87,15 @@ namespace Verse3
         public IRenderable Parent => RenderPipelineInfo.Parent;
         public ElementsLinkedList<IRenderable> Children => RenderPipelineInfo.Children;
 
+        private ComputationPipelineInfo computationPipelineInfo;
+        public ComputationPipelineInfo ComputationPipelineInfo => computationPipelineInfo;
+
+        private ElementsLinkedList<INode> _nodes = new ElementsLinkedList<INode>();
+        public ElementsLinkedList<INode> Nodes => _nodes;
+
         #endregion
 
-        #region Constructors
+        #region Constructor and Compute
 
         //#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -100,6 +106,12 @@ namespace Verse3
             //byte r = (byte)rng.Next(0, 255);
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
             renderPipelineInfo = new RenderPipelineInfo(this);
+            computationPipelineInfo = new ComputationPipelineInfo(this);
+        }
+
+        public virtual void Compute()
+        {
+            
         }
 
         //#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

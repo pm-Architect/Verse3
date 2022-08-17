@@ -1,7 +1,5 @@
 using Core;
 using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -76,6 +74,7 @@ namespace TestPlugin
                 nodeBlock = new NodeElement(this.Element);
                 DataTemplateManager.RegisterDataTemplate(nodeBlock);
                 this.Element.RenderPipelineInfo.AddChild(nodeBlock);
+                this.Element.Nodes.Add(nodeBlock);
                 //Subscribe to NodeElement PropertyChanged Event
                 //nodeBlock.PropertyChanged += NodeBlock_PropertyChanged;
 
@@ -110,27 +109,28 @@ namespace TestPlugin
 
         private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (nodeBlock.Connections != null)
-            {
-                if (nodeBlock.Connections.Count > 0)
-                {
-                    IConnection c = nodeBlock.Connections[0];
-                    if (c.Origin == nodeBlock)
-                    {
-                        if (c.Destination != MousePositionNode.Instance && c.Destination != null)
-                        {
-                            if (c.Destination.Parent is TestElement)
-                            {
-                                TestElement te = (TestElement)c.Destination.Parent;
-                                if (te != null)
-                                {
-                                    te._sliderValue = sliderBlock.Value.ToString();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            this.Element._sliderValue = sliderBlock.Value;
+            //if (nodeBlock.Connections != null)
+            //{
+            //    if (nodeBlock.Connections.Count > 0)
+            //    {
+            //        IConnection c = nodeBlock.Connections[0];
+            //        if (c.Origin == nodeBlock)
+            //        {
+            //            if (c.Destination != MousePositionNode.Instance && c.Destination != null)
+            //            {
+            //                if (c.Destination.Parent is TestElement)
+            //                {
+            //                    TestElement te = (TestElement)c.Destination.Parent;
+            //                    if (te != null)
+            //                    {
+            //                        te._sliderValue = sliderBlock.Value;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         #endregion
@@ -139,13 +139,7 @@ namespace TestPlugin
         private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
         {
             RenderPipeline.Render();
-            //TestElement? testelement = this.Element as TestElement;
-            //if (testelement != null)
-            //{
-            //    this.Render();
-            //    //string? txt = testelement.ElementText;
-            //    //textBlock.DisplayedText = txt;
-            //}
+            ComputationPipeline.Compute();
         }
 
         #region MouseEvents
@@ -267,13 +261,14 @@ namespace TestPlugin
 
     public class TestElement : BaseComp
     {
-        internal string _sliderValue = "";
+        internal double _sliderValue = 0.0;
         public string? ElementText
         {
             get
             {
                 string? name = this.GetType().FullName;
                 string? viewname = this.ViewType.FullName;
+                string? dataIN = ((NodeElement)Nodes[0]).DataGoo.Data.ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
                 //TODO: Z Index control for IRenderable
                 return $"Name: {name}" +
@@ -281,7 +276,7 @@ namespace TestPlugin
                     $"\nID: {this.ID}" +
                     $"\nX: {this.X}" +
                     $"\nY: {this.Y}" +
-                    $"\nIncoming Value: {_sliderValue}";
+                    $"\nIncoming Value: {dataIN}";
             }
         }
 
@@ -314,6 +309,31 @@ namespace TestPlugin
         }
 
         #endregion
+
+        public override void Compute()
+        {
+            IComputable c = this as IComputable;
+            if (c != null)
+            {
+                if (c.Nodes != null && c.Nodes.Count == 1 && c.Nodes[0] is NodeElement)
+                {
+                    NodeElement n = (NodeElement)c.Nodes[0];
+                    n.Compute();
+                    if (n.Connections != null && n.Connections.Count > 0)
+                    {
+                        foreach (IConnection conn in c.Nodes[0].Connections)
+                        {
+                            if (conn.Origin == n && conn.Destination is NodeElement)
+                            {
+                                NodeElement nd = (NodeElement)conn.Destination;
+                                nd.DataGoo.Data = _sliderValue;
+                                RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         //private IRenderable _parent;
         //public IRenderable Parent => _parent;
