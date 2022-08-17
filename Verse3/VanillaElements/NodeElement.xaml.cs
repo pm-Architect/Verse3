@@ -159,8 +159,8 @@ namespace Verse3.VanillaElements
                 }
             }
             ComputationPipeline.Compute();
-            RenderPipeline.Render();
-            this.Element.OnPropertyChanged("BoundingBox");
+            //RenderPipeline.Render();
+            //this.Element.OnPropertyChanged("BoundingBox");
         }
     }
 
