@@ -104,7 +104,7 @@ namespace Core
             }
         }
 
-        public static double ContentCanvasMarginOffset = 0.0;
+        public static double ContentCanvasMarginOffset = 10.0;
 
         public DataModel() : base()
         {
@@ -375,23 +375,23 @@ namespace Core
                 {
                     renderable.SetX(renderable.X + xOffset);
                     renderable.SetY(renderable.Y + yOffset);
-                    RenderPipeline.RenderRenderable(renderable);
+                    renderSuccess = renderSuccess && RenderPipeline.RenderRenderable(renderable);
+                    if (recursive)
+                    {
+                        if (renderable.Children != null && renderable.Children.Count > 0)
+                        {
+                            foreach (IRenderable child in renderable.Children)
+                            {
+                                renderSuccess = renderSuccess && RenderPipeline.TranslateOffsetRenderable(child, xOffset, yOffset);
+                            }
+                        }
+                    }
                 }
             }
             catch /*(Exception e)*/
             {
                 //TODO: Log to console
                 return false;
-            }
-            if (recursive)
-            {
-                if (renderable.Children != null && renderable.Children.Count > 0)
-                {
-                    foreach (IRenderable child in renderable.Children)
-                    {
-                        renderSuccess = renderSuccess && RenderPipeline.TranslateOffsetRenderable(child, xOffset, yOffset);
-                    }
-                }
             }
             return renderSuccess;
         }
@@ -400,22 +400,25 @@ namespace Core
             bool renderSuccess = true;
             try
             {
-                renderable.Render();
+                if (renderable != null)
+                {
+                    renderable.Render();
+                    if (recursive)
+                    {
+                        if (renderable.Children != null && renderable.Children.Count > 0)
+                        {
+                            foreach (IRenderable child in renderable.Children)
+                            {
+                                renderSuccess = renderSuccess && RenderRenderable(child);
+                            }
+                        }
+                    }
+                }
             }
             catch /*(Exception e)*/
             {
                 //TODO: Log to console
                 return false;
-            }
-            if (recursive)
-            {
-                if (renderable.Children != null && renderable.Children.Count > 0)
-                {
-                    foreach (IRenderable child in renderable.Children)
-                    {
-                        renderSuccess = renderSuccess && RenderRenderable(child);
-                    }
-                }
             }
             return renderSuccess;
         }
@@ -448,17 +451,59 @@ namespace Core
         #endregion
     }
 
+    public class RenderPipelineInfo
+    {
+        private IRenderable _renderable;
+        public IRenderable Renderable => _renderable;
+        private IRenderable _zPrev;
+        public IRenderable ZPrev => _zPrev;
+        private IRenderable _zNext;
+        public IRenderable ZNext => _zNext;
+        private IRenderable _parent;
+        public IRenderable Parent
+        {
+            get { return _parent; }
+            set { _parent = value; }
+        }
+        private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
+        public ElementsLinkedList<IRenderable> Children => _children;
+
+        public RenderPipelineInfo(IRenderable renderable)
+        {
+            this._renderable = renderable;
+        }
+
+        public void AddChild(IRenderable child)
+        {
+            if (!this.Children.Contains(child))
+            {
+                this.Children.Add(child);
+                child.RenderPipelineInfo.SetParent(Renderable);
+            }
+        }
+        public void SetParent(IRenderable parent)
+        {
+            this.Parent = parent;
+            if (this.Parent != null)
+            {
+                if (!this.Parent.Children.Contains(Renderable))
+                {
+                    this.Parent.Children.Add(Renderable);
+                }
+            }
+        }
+    }
+
     public interface IRenderable : IElement
     {
         #region Render Pipeline Info
 
+        public RenderPipelineInfo RenderPipelineInfo { get; }
         //TODO: GUID Lookup in DataModel Instance
-        public IRenderable ZPrev { get; }
-        public IRenderable ZNext { get; }
-        public IRenderable Parent { get; }
-        public ElementsLinkedList<IRenderable> Children { get; }
-        void AddChild(IRenderable child);
-        void SetParent(IRenderable parent);
+        //public IRenderable ZPrev { get; }
+        //public IRenderable ZNext { get; }
+        public IRenderable Parent { get => RenderPipelineInfo.Parent; }
+        public ElementsLinkedList<IRenderable> Children { get => RenderPipelineInfo.Children; }
 
         #endregion
 
@@ -526,48 +571,18 @@ namespace Core
         /// </summary>
         void SetHeight(double x) { BoundingBox.Size.Height = x; OnPropertyChanged("Height"); }
 
-        //void TransformBoundsTo(BoundingBox targetBBox)
-        //{
-        //    if (this.BoundingBox.Location != targetBBox.Location)
-        //    {
-        //        if (BoundingBox.Location.X != targetBBox.Location.X)
-        //        {
-        //            BoundingBox.Location.X = targetBBox.Location.X;
-        //            //OnPropertyChanged("X");
-        //        }
-        //        if (BoundingBox.Location.Y != targetBBox.Location.Y)
-        //        {
-        //            BoundingBox.Location.Y = targetBBox.Location.Y;
-        //            //OnPropertyChanged("Y");
-        //        }
-        //    }
-        //    if (this.BoundingBox.Size != targetBBox.Size)
-        //    {
-        //        if (BoundingBox.Size.Width != targetBBox.Size.Width)
-        //        {
-        //            BoundingBox.Size.Width = targetBBox.Size.Width;
-        //            //OnPropertyChanged("Width");
-        //        }
-        //        if (BoundingBox.Size.Height != targetBBox.Size.Height)
-        //        {
-        //            BoundingBox.Size.Height = targetBBox.Size.Height;
-        //            //OnPropertyChanged("Height");
-        //        }
-        //    }
-        //}
-
+        #endregion
+        
         void Render()
         {
             if (RenderView != null)
                 RenderView.Render();
         }
-
-        #endregion
     }
 
     public interface IRenderView
     {
-        IRenderable Element { get; }
+        abstract IRenderable Element { get; }
         void Render();
     }
 

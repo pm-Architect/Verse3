@@ -12,23 +12,31 @@ namespace Verse3.VanillaElements
     /// <summary>
     /// Visual Interaction logic for TestElement.xaml
     /// </summary>
-    public partial class ButtonElementView : UserControl, IRenderView
+    public partial class ButtonElementView : UserControl, IBaseElementView<ButtonElement>
     {
-        private IRenderable _element;
+        #region IBaseElementView Members
 
-        public IRenderable Element
+        private ButtonElement _element;
+        public ButtonElement Element
         {
-            get { return _element; }
+            get
+            {
+                if (this._element == null)
+                {
+                    _element = this.DataContext as ButtonElement;
+                }
+                return _element;
+            }
             private set
             {
-                _element = value;
-                //Update();
+                _element = value as ButtonElement;
             }
         }
-        public Guid? ElementGuid
-        {
-            get { return _element?.ID; }
-        }
+        IRenderable IRenderView.Element => Element;
+
+        #endregion
+
+        #region Constructor and Render
 
         public ButtonElementView()
         {
@@ -39,12 +47,10 @@ namespace Verse3.VanillaElements
         {
             if (this.Element != null)
             {
-                //this.Element.BoundingBox.Size.Height = SliderBlock.ActualHeight;
-                //this.Element.BoundingBox.Size.Width = SliderBlock.ActualWidth;
-                //this.Element.OnPropertyChanged("Width");
-                //this.Element.OnPropertyChanged("Height");
             }
         }
+
+        #endregion
 
         #region MouseEvents
 
@@ -53,39 +59,6 @@ namespace Verse3.VanillaElements
         /// </summary>
         void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            ////MouseButtonEventArgs
-            //DataViewModel.WPFControl.ContentElements.Focus();
-            //Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
-
-            //ButtonElementView rectangle = (ButtonElementView)sender;
-            //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
-
-            ////myRectangle.IsSelected = true;
-
-            ////mouseButtonDown = e.ChangedButton;
-
-            //if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0)
-            //{
-            //    //
-            //    // When the shift key is held down special zooming logic is executed in content_MouseDown,
-            //    // so don't handle mouse input here.
-            //    //
-            //    return;
-            //}
-
-            //if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.None)
-            //{
-            //    //
-            //    // We are in some other mouse handling mode, don't do anything.
-            //    return;
-            //}
-
-            //DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.DraggingRectangles;
-            //DataViewModel.WPFControl.origContentMouseDownPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
-
-            //rectangle.CaptureMouse();
-
-            //e.Handled = true;
         }
 
         /// <summary>
@@ -93,21 +66,6 @@ namespace Verse3.VanillaElements
         /// </summary>
         void OnMouseUp(object sender, MouseButtonEventArgs e)
         {
-            ////MouseButtonEventArgs
-            //if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
-            //{
-            //    //
-            //    // We are not in rectangle dragging mode.
-            //    //
-            //    return;
-            //}
-
-            //DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
-
-            //ButtonElementView rectangle = (ButtonElementView)sender;
-            //rectangle.ReleaseMouseCapture();
-
-            //e.Handled = true;
         }
 
         /// <summary>
@@ -115,37 +73,10 @@ namespace Verse3.VanillaElements
         /// </summary>
         void OnMouseMove(object sender, MouseEventArgs e)
         {
-            ////MouseEventArgs
-            //if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
-            //{
-            //    //
-            //    // We are not in rectangle dragging mode, so don't do anything.
-            //    //
-            //    return;
-            //}
-
-            //Point curContentPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
-            //Vector rectangleDragVector = curContentPoint - DataViewModel.WPFControl.origContentMouseDownPoint;
-
-            ////
-            //// When in 'dragging rectangles' mode update the position of the rectangle as the user drags it.
-            ////
-
-            //DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
-
-            //ButtonElementView rectangle = (ButtonElementView)sender;
-            //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
-            //myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
-            //myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
-
-            //DataViewModel.WPFControl.ExpandContent();
-
-            //e.Handled = true;
         }
 
         void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            //MouseWheelEventArgs
         }
 
         #endregion
@@ -155,14 +86,14 @@ namespace Verse3.VanillaElements
         void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             //DependencyPropertyChangedEventArgs
-            Element = this.DataContext as IRenderable;
+            Element = this.DataContext as ButtonElement;
             Render();
         }
 
         void OnLoaded(object sender, RoutedEventArgs e)
         {
             //RoutedEventArgs
-            Element = this.DataContext as IRenderable;
+            Element = this.DataContext as ButtonElement;
             Render();
         }
 
@@ -170,163 +101,36 @@ namespace Verse3.VanillaElements
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            ((ButtonElement)this.Element).ButtonClicked(sender, e);
+            this.Element.ButtonClicked(sender, e);
         }
     }
 
-    public class ButtonElement : IRenderable
+    public class ButtonElement : BaseElement
     {
-        #region Data Members
-
-        private BoundingBox boundingBox = BoundingBox.Unset;
-        private Guid _id = Guid.NewGuid();
-        private static Type view = typeof(ButtonElementView);
-        public event EventHandler<RoutedEventArgs> OnButtonClicked;
-        internal ButtonElementView elView;
-        public IRenderView RenderView
-        {
-            get
-            {
-                return elView;
-            }
-            set
-            {
-                if (value is ButtonElementView)
-                {
-                    elView = (ButtonElementView)value;
-                }
-            }
-        }
-
-        #endregion
 
         #region Properties
 
-        public Type ViewType { get { return view; } }
-        public object ViewKey { get; set; }
-
-        public Guid ID { get => _id; private set => _id = value; }
-
-        public bool IsSelected { get; set; }
-
-        public BoundingBox BoundingBox { get => boundingBox; private set => boundingBox = value; }
-
-        public double X { get => boundingBox.Location.X; }
-
-        public double Y { get => boundingBox.Location.Y; }
-
-        public double Width
-        {
-            get
-            {
-                return boundingBox.Size.Width;
-            }
-            set
-            {
-                boundingBox.Size.Width = value;
-            }
-        }
-
-        public double Height
-        {
-            get
-            {
-                return boundingBox.Size.Height;
-            }
-            set
-            {
-                boundingBox.Size.Height = value;
-            }
-        }
-
-        private IRenderable _zPrev;
-        public IRenderable ZPrev => _zPrev;
-        private IRenderable _zNext;
-        public IRenderable ZNext => _zNext;
-        private IRenderable _parent;
-        public IRenderable Parent => _parent;
-        private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
-        public ElementsLinkedList<IRenderable> Children => _children;
-
-        public void AddChild(IRenderable child)
-        {
-            if (!this.Children.Contains(child))
-            {
-                this.Children.Add(child);
-                child.SetParent(this);
-            }
-        }
-
-        public void SetParent(IRenderable parent)
-        {
-            this._parent = parent;
-            if (this._parent != null)
-            {
-                if (!this._parent.Children.Contains(this))
-                {
-                    this._parent.Children.Add(this);
-                }
-            }
-        }
-
-        public ElementState State { get; set; }
-
-        //public IRenderView ElementView { get; }
-
-        public ElementState ElementState { get; set; }
-        public ElementType ElementType { get; set; }
-        bool IRenderable.Visible { get; set; }
-
+        public event EventHandler<RoutedEventArgs> OnButtonClicked;
+        
+        public override Type ViewType => typeof(ButtonElementView);
+        
+        private object displayedText;
+        public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
+        
         #endregion
 
         #region Constructors
 
-        public ButtonElement()
+        public ButtonElement() : base()
         {
-            this.DisplayedText = "Button";
-        }
-
-        public ButtonElement(int x, int y, int width, int height)
-        {
-            this.boundingBox = new BoundingBox(x, y, width, height);
-
             this.DisplayedText = "Button";
         }
 
         #endregion
+
         internal void ButtonClicked(object sender, RoutedEventArgs e)
         {
             OnButtonClicked.Invoke(sender, e);
         }
-
-        private object displayedText;
-
-        public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
-
-        #region INotifyPropertyChanged Members
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void OnPropertyChanged(string name)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
-
-        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
-        {
-            if (!Equals(field, newValue))
-            {
-                field = newValue;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-                return true;
-            }
-
-            return false;
-        }
-
-        #endregion
     }
 }

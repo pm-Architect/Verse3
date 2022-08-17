@@ -7,6 +7,11 @@
         //LOOP LIMITING THRESHOLD : ENV_VAR
     }
 
+    public static class ComputationCore
+    {
+        
+    }
+
     internal static class AssemblyManager
     {
 

@@ -6,6 +6,7 @@ using System.Windows.Forms;
 
 namespace Verse3
 {
+    //TODO: Create a better Editor Form that can pop up in an MDI container form
     public partial class Form1 : Form
     {
         private InfiniteCanvasWPFControl infiniteCanvasWPFControl;

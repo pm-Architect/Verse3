@@ -1,11 +1,16 @@
 ﻿using Core;
 using System;
+using System.ComponentModel;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using Verse3.VanillaElements;
+using static Core.Geometry2D;
 using XamlReader = System.Windows.Markup.XamlReader;
 
 namespace Verse3
@@ -47,6 +52,213 @@ namespace Verse3
             //end.Connections.Add(bezier);
             return bezier;
         }
+    }
+
+    public interface IBaseElementView<R> : IRenderView where R : IRenderable
+    {
+        public new R Element
+        {
+            get
+            {
+                if (Element == null)
+                {
+                    if (this.GetType().IsAssignableTo(typeof(UserControl)))
+                    {
+                        object dc = ((UserControl)this).DataContext;
+                        if (dc.GetType().IsAssignableTo(typeof(R)))
+                        {
+                            Element = (R)dc;
+                        }
+                    }
+                }
+                return Element;
+            }
+            private set
+            {
+                if (value is R)
+                {
+                    Element = (R)value;
+                }
+                else
+                {
+                    throw new InvalidCastException();
+                }
+            }
+        }
+        public Guid? ElementGuid
+        {
+            get { return Element?.ID; }
+        }
+
+
+        public new void Render()
+        {
+            if (this.Element != null)
+            {
+                if (this.Element.RenderView != this) this.Element.RenderView = this;
+            }
+        }
+
+        #region MouseEvents
+
+        /// <summary>
+        /// Event raised when a mouse button is clicked down over a Rectangle.
+        /// </summary>
+        public void OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Event raised when a mouse button is released over a Rectangle.
+        /// </summary>
+        public void OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Event raised when the mouse cursor is moved when over a Rectangle.
+        /// </summary>
+        public void OnMouseMove(object sender, MouseEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Event raised when the mouse wheel is moved.
+        /// </summary>
+        public void OnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+        }
+
+        #endregion
+
+        #region UserControlEvents
+
+        //public void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        //{
+        //    if (this.GetType().IsAssignableTo(typeof(UserControl)))
+        //    {
+        //        UserControl uc = this as UserControl;
+        //        if (uc.DataContext is R)
+        //        {
+        //            Element = (R)uc.DataContext;
+        //        }
+        //    }
+        //    Render();
+        //}
+
+        //public void OnLoaded(object sender, RoutedEventArgs e)
+        //{
+        //    if (this.GetType().IsAssignableTo(typeof(UserControl)))
+        //    {
+        //        UserControl uc = this as UserControl;
+        //        if (uc.DataContext is R)
+        //        {
+        //            Element = (R)uc.DataContext;
+        //        }
+        //    }
+        //    Render();
+        //}
+
+        #endregion
+    }
+
+    public abstract class BaseElement : IRenderable
+    {
+        #region Data Members
+
+        private RenderPipelineInfo renderPipelineInfo;
+        protected BoundingBox boundingBox = BoundingBox.Unset;
+        private Guid _id = Guid.NewGuid();
+        internal IRenderView elView;
+
+        #endregion
+
+        #region Properties
+
+        public RenderPipelineInfo RenderPipelineInfo => renderPipelineInfo;
+        public IRenderView RenderView
+        {
+            get
+            {
+                return elView;
+            }
+            set
+            {
+                if (ViewType.IsAssignableFrom(value.GetType()))
+                {
+                    elView = value;
+                }
+                else
+                {
+                    throw new InvalidCastException();
+                }
+            }
+        }
+        public abstract Type ViewType { get; }
+        public object ViewKey { get; set; }
+
+        public Guid ID { get => _id; private set => _id = value; }
+
+        public bool IsSelected { get; set; }
+
+        public BoundingBox BoundingBox { get => boundingBox; private set => SetProperty(ref boundingBox, value); }
+
+        public double X { get => boundingBox.Location.X; }
+
+        public double Y { get => boundingBox.Location.Y; }
+
+        public double Width
+        {
+            get => boundingBox.Size.Width;
+            set => boundingBox.Size.Width = value;
+        }
+
+        public double Height
+        {
+            get => boundingBox.Size.Height;
+            set => boundingBox.Size.Height = value;
+        }
+
+        public ElementState State { get; set; }
+
+        //public IRenderView ElementView { get; internal set; }
+
+        public ElementState ElementState { get; set; }
+        public ElementType ElementType { get; set; }
+        bool IRenderable.Visible { get; set; }
+
+        #endregion
+
+        public BaseElement()
+        {
+            this.renderPipelineInfo = new RenderPipelineInfo(this);
+        }
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        {
+            if (!Equals(field, newValue))
+            {
+                field = newValue;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                return true;
+            }
+
+            return false;
+        }
+
+        #endregion
     }
 
     #region DataTemplateManager
@@ -125,10 +337,15 @@ namespace Verse3
             //el.BoundingBox = new BoundingBox();
             //Element needs to know DataTemplateKey in order to make a reference to it
             el.ViewKey = template.DataTemplateKey;
-            if (DataViewModel.WPFControl.Resources[el.ViewKey] != null) return false;
+            if (DataViewModel.WPFControl.Resources[el.ViewKey] != null)
+            {
+                //el.RenderView = (IRenderView)DataViewModel.WPFControl.Resources[el.ViewKey];
+                return false;
+            }
             else
             {
                 DataViewModel.WPFControl.Resources.Add(el.ViewKey, template);
+                //el.RenderView = (IRenderView)DataViewModel.WPFControl.Resources[el.ViewKey];
                 return true;
             }
         }
@@ -174,43 +391,6 @@ namespace Verse3
             throw new NotImplementedException();
         }
     }
-
-    //public class ElementHeightPseudoConverter : IValueConverter
-    //{
-    //    public static double Padding { get; set; } = 2.5;
-    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        double h = 0.0;
-    //        if (parameter is ListBox)
-    //        {
-    //            ListBox listBox = parameter as ListBox;
-    //            foreach (object o in listBox.ItemsSource)
-    //            {
-    //                if (o is IRenderable)
-    //                {
-    //                    IRenderable r = o as IRenderable;
-    //                    if (r.BoundingBox.IsValid())
-    //                    {
-    //                        h += Padding;
-    //                        h += r.Height;
-    //                        h += Padding;
-    //                    }
-    //                }
-    //            }
-    //            //object o = listBox.Template.FindName("CompCanvas", listBox);
-    //            //if (o is Canvas)
-    //            //{
-    //            //    Canvas canvas = o as Canvas;
-    //            //    return canvas.ActualHeight;
-    //            //}
-    //        }
-    //        return h;
-    //    }
-    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
 
     #endregion
 }

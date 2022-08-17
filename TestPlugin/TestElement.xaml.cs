@@ -16,11 +16,12 @@ namespace TestPlugin
     /// <summary>
     /// Visual Interaction logic for TestElement.xaml
     /// </summary>
-    public partial class TestElementView : UserControl, IRenderView
+    public partial class TestElementView : UserControl, IBaseCompView<TestElement>
     {
-        private TestElement? _element;
+        #region IBaseElementView Members
 
-        public IRenderable? Element
+        private TestElement? _element;
+        public TestElement Element
         {
             get
             {
@@ -33,77 +34,101 @@ namespace TestPlugin
             private set
             {
                 _element = value as TestElement;
-                //Update();
             }
         }
-        public Guid? ElementGuid
-        {
-            get { return Element?.ID; }
-        }
+        IRenderable IRenderView.Element => Element;
+
+        #endregion
+        
+        internal TextElement textBlock = new TextElement();
+        internal SliderElement sliderBlock = new SliderElement();
+        internal NodeElement nodeBlock;
+
+        #region Constructor and Render
+
 
         public TestElementView()
         {
+            if (this.DataContext is TestElement) this.Element = (TestElement)this.DataContext;
             InitializeComponent();
             Render();
         }
-
-        TextElement textBlock = new TextElement();
-
+        
         public void Render()
         {
-            //< TextBlock HorizontalAlignment = "Center"
-            //       TextWrapping = "Wrap"
-            //       Text = "{Binding ElementText}"
-            //       VerticalAlignment = "Center"
-            //       FontFamily = "Maven Pro"
-            //       FontSize = "18"
-            //       />
-
-
-            if (this.Element is TestElement)
+            if (this.Element != null)
             {
-                TestElement testelement = (TestElement)this.Element;
-                if (testelement.RenderView != this) testelement.RenderView = this;
-                InputsList.ItemsSource = testelement.Children;
+                if (this.Element.RenderView != this) this.Element.RenderView = this;
+                InputsList.ItemsSource = this.Element.Children;
 
-                if (testelement.Children.Count > 0)
+                if (this.Element.Children.Count > 0)
                 {
-                    textBlock.DisplayedText = testelement.ElementText;
+                    textBlock.DisplayedText = this.Element.ElementText;
                     return;
                 }
 
-                var nodeBlock = new NodeElement(testelement);
+                nodeBlock = new NodeElement(this.Element);
                 DataTemplateManager.RegisterDataTemplate(nodeBlock);
-                testelement.AddChild(nodeBlock);
+                this.Element.RenderPipelineInfo.AddChild(nodeBlock);
+                //Subscribe to NodeElement PropertyChanged Event
+                //nodeBlock.PropertyChanged += NodeBlock_PropertyChanged;
 
 
-                string? txt = testelement.ElementText;
+                string? txt = this.Element.ElementText;
                 textBlock = new TextElement();
                 textBlock.DisplayedText = txt;
                 textBlock.TextAlignment = TextAlignment.Left;
                 DataTemplateManager.RegisterDataTemplate(textBlock);
-                testelement.AddChild(textBlock);
+                this.Element.RenderPipelineInfo.AddChild(textBlock);
 
-                var sliderBlock = new SliderElement();
+                sliderBlock = new SliderElement();
                 sliderBlock.Minimum = 0;
                 sliderBlock.Maximum = 100;
                 sliderBlock.Value = 50;
+                sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
                 DataTemplateManager.RegisterDataTemplate(sliderBlock);
-                testelement.AddChild(sliderBlock);
+                this.Element.RenderPipelineInfo.AddChild(sliderBlock);
 
                 var buttonBlock = new ButtonElement();
                 buttonBlock.DisplayedText = "Click me";
                 buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
                 DataTemplateManager.RegisterDataTemplate(buttonBlock);
-                testelement.AddChild(buttonBlock);
+                this.Element.RenderPipelineInfo.AddChild(buttonBlock);
 
                 var textBoxBlock = new TextBoxElement();
                 textBoxBlock.InputText = "Enter text";
                 DataTemplateManager.RegisterDataTemplate(textBoxBlock);
-                testelement.AddChild(textBoxBlock);
+                this.Element.RenderPipelineInfo.AddChild(textBoxBlock);
             }
-
         }
+
+        private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (nodeBlock.Connections != null)
+            {
+                if (nodeBlock.Connections.Count > 0)
+                {
+                    IConnection c = nodeBlock.Connections[0];
+                    if (c.Origin == nodeBlock)
+                    {
+                        if (c.Destination != MousePositionNode.Instance && c.Destination != null)
+                        {
+                            if (c.Destination.Parent is TestElement)
+                            {
+                                TestElement te = (TestElement)c.Destination.Parent;
+                                if (te != null)
+                                {
+                                    te._sliderValue = sliderBlock.Value.ToString();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
+        
 
         private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
         {
@@ -234,8 +259,9 @@ namespace TestPlugin
         #endregion
     }
 
-    public class TestElement : IRenderable
+    public class TestElement : BaseComp
     {
+        internal string _sliderValue = "";
         public string? ElementText
         {
             get
@@ -248,79 +274,20 @@ namespace TestPlugin
                     $"\nView: {viewname}" +
                     $"\nID: {this.ID}" +
                     $"\nX: {this.X}" +
-                    $"\nY: {this.Y}";
+                    $"\nY: {this.Y}" +
+                    $"\nIncoming Value: {_sliderValue}";
             }
         }
-
-        #region Data Members
-
-        private BoundingBox boundingBox;
-        private Guid _id = Guid.NewGuid();
-        private static Type view = typeof(TestElementView);
-        internal TestElementView elView;
-        public IRenderView RenderView
-        {
-            get
-            {
-                return elView;
-            }
-            set
-            {
-                if (value is TestElementView)
-                {
-                    elView = (TestElementView)value;
-                }
-            }
-        }
-
-        #endregion
 
         #region Properties
 
-        public Type ViewType { get { return view; } }
-        public object ViewKey { get; set; }
-
-        public Guid ID { get => _id; private set => _id = value; }
-
-        public bool IsSelected { get; set; }
-
-        public BoundingBox BoundingBox
-        {
-            get => boundingBox;
-            private set => SetProperty(ref boundingBox, value);
-        }
-
-        public double X { get => boundingBox.Location.X; }
-
-        public double Y { get => boundingBox.Location.Y; }
-
-        public double Width
-        {
-            get => boundingBox.Size.Width;
-            set => boundingBox.Size.Width = value;
-        }
-
-        public double Height
-        {
-            get => boundingBox.Size.Height;
-            set => boundingBox.Size.Height = value;
-        }
-
-        public ElementState State { get; set; }
-
-        //public IRenderView? ElementView { get; }
-
-        public ElementState ElementState { get; set; }
-        public ElementType ElementType { get; set; }
-        bool IRenderable.Visible { get; set; }
+        public override Type ViewType => typeof(TestElementView);
 
         #endregion
 
         #region Constructors
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
-        public TestElement()
+        public TestElement() : base()
         {
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             //Random rng = new Random();
@@ -328,85 +295,23 @@ namespace TestPlugin
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public TestElement(int x, int y, int width, int height)
+        public TestElement(int x, int y, int width, int height) : base()
         {
-            this.BoundingBox = new BoundingBox(x, y, width, height);
+            base.boundingBox = new BoundingBox(x, y, width, height);
 
-            //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
+            this.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             Random rnd = new Random();
             byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
             byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
             byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            this.backgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
-        }
-
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
-        #endregion
-
-        #region INotifyPropertyChanged Members
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        public void OnPropertyChanged(string name)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-                //this.boundingBox.PropertyChanged += this.PropertyChanged;
-            }
-        }
-
-        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string? propertyName = null)
-        {
-            if (!Equals(field, newValue))
-            {
-                field = newValue;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-                return true;
-            }
-
-            return false;
+            this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
         }
 
         #endregion
 
-        private Brush background;
-
-        public Brush Background { get => background; set => SetProperty(ref background, value); }
-
-        private Brush backgroundTint;
-
-        public Brush BackgroundTint { get => backgroundTint; set => SetProperty(ref backgroundTint, value); }
-
-        private IRenderable _zPrev;
-        public IRenderable ZPrev => _zPrev;
-        private IRenderable _zNext;
-        public IRenderable ZNext => _zNext;
-        private IRenderable _parent;
-        public IRenderable Parent => _parent;
-        private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
-        public ElementsLinkedList<IRenderable> Children => _children;
-
-        public void AddChild(IRenderable child)
-        {
-            if (!this.Children.Contains(child))
-            {
-                this.Children.Add(child);
-                child.SetParent(this);
-            }
-        }
-
-        public void SetParent(IRenderable parent)
-        {
-            this._parent = parent;
-            if (this._parent != null)
-            {
-                if (!this._parent.Children.Contains(this))
-                {
-                    this._parent.Children.Add(this);
-                }
-            }
-        }
+        //private IRenderable _parent;
+        //public IRenderable Parent => _parent;
+        //private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
+        //public ElementsLinkedList<IRenderable> Children => _children;
     }
 }

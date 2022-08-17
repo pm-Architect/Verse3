@@ -13,41 +13,46 @@ namespace Verse3.VanillaElements
     /// <summary>
     /// Visual Interaction logic for TestElement.xaml
     /// </summary>
-    public partial class SliderElementView : UserControl, IRenderView
+    public partial class SliderElementView : UserControl, IBaseElementView<SliderElement>
     {
-        private IRenderable _element;
 
-        public IRenderable Element
+        #region IBaseElementView Members
+
+        private SliderElement _element;
+        public SliderElement Element
         {
-            get { return _element; }
+            get
+            {
+                if (this._element == null)
+                {
+                    _element = this.DataContext as SliderElement;
+                }
+                return _element;
+            }
             private set
             {
-                _element = value;
-                //Update();
+                _element = value as SliderElement;
             }
         }
-        public Guid? ElementGuid
-        {
-            get { return _element?.ID; }
-        }
+        IRenderable IRenderView.Element => Element;
+
+        #endregion
+
+        #region Constructor and Render
 
         public SliderElementView()
         {
             InitializeComponent();
-
-            Resources["PrimaryBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ff6700"));
         }
 
         public void Render()
         {
             if (this.Element != null)
             {
-                //this.Element.BoundingBox.Size.Height = SliderBlock.ActualHeight;
-                //this.Element.BoundingBox.Size.Width = SliderBlock.ActualWidth;
-                //this.Element.OnPropertyChanged("Width");
-                //this.Element.OnPropertyChanged("Height");
             }
         }
+
+        #endregion
 
         #region MouseEvents
 
@@ -56,39 +61,6 @@ namespace Verse3.VanillaElements
         /// </summary>
         void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            ////MouseButtonEventArgs
-            //DataViewModel.WPFControl.ContentElements.Focus();
-            //Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
-
-            //SliderElementView rectangle = (SliderElementView)sender;
-            //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
-
-            ////myRectangle.IsSelected = true;
-
-            ////mouseButtonDown = e.ChangedButton;
-
-            //if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0)
-            //{
-            //    //
-            //    // When the shift key is held down special zooming logic is executed in content_MouseDown,
-            //    // so don't handle mouse input here.
-            //    //
-            //    return;
-            //}
-
-            //if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.None)
-            //{
-            //    //
-            //    // We are in some other mouse handling mode, don't do anything.
-            //    return;
-            //}
-
-            //DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.DraggingRectangles;
-            //DataViewModel.WPFControl.origContentMouseDownPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
-
-            //rectangle.CaptureMouse();
-
-            //e.Handled = true;
         }
 
         /// <summary>
@@ -96,21 +68,6 @@ namespace Verse3.VanillaElements
         /// </summary>
         void OnMouseUp(object sender, MouseButtonEventArgs e)
         {
-            ////MouseButtonEventArgs
-            //if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
-            //{
-            //    //
-            //    // We are not in rectangle dragging mode.
-            //    //
-            //    return;
-            //}
-
-            //DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
-
-            //SliderElementView rectangle = (SliderElementView)sender;
-            //rectangle.ReleaseMouseCapture();
-
-            //e.Handled = true;
         }
 
         /// <summary>
@@ -118,37 +75,10 @@ namespace Verse3.VanillaElements
         /// </summary>
         void OnMouseMove(object sender, MouseEventArgs e)
         {
-            ////MouseEventArgs
-            //if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
-            //{
-            //    //
-            //    // We are not in rectangle dragging mode, so don't do anything.
-            //    //
-            //    return;
-            //}
-
-            //Point curContentPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
-            //Vector rectangleDragVector = curContentPoint - DataViewModel.WPFControl.origContentMouseDownPoint;
-
-            ////
-            //// When in 'dragging rectangles' mode update the position of the rectangle as the user drags it.
-            ////
-
-            //DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
-
-            //SliderElementView rectangle = (SliderElementView)sender;
-            //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
-            //myRectangle.SetX(myRectangle.X + rectangleDragVector.X);
-            //myRectangle.SetY(myRectangle.Y + rectangleDragVector.Y);
-
-            //DataViewModel.WPFControl.ExpandContent();
-
-            //e.Handled = true;
         }
 
         void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            //MouseWheelEventArgs
         }
 
         #endregion
@@ -158,14 +88,14 @@ namespace Verse3.VanillaElements
         void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             //DependencyPropertyChangedEventArgs
-            Element = this.DataContext as IRenderable;
+            Element = this.DataContext as SliderElement;
             Render();
         }
 
         void OnLoaded(object sender, RoutedEventArgs e)
         {
             //RoutedEventArgs
-            Element = this.DataContext as IRenderable;
+            Element = this.DataContext as SliderElement;
             Render();
         }
 
@@ -173,174 +103,48 @@ namespace Verse3.VanillaElements
 
         private void SliderBlock_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            //((SliderElement)this.Element).Value = (double)e.NewValue;
+            this.Element.OnValueChanged(sender, e);
         }
     }
 
-    public class SliderElement : IRenderable
+    public class SliderElement : BaseElement
     {
-        #region Data Members
-
-        private BoundingBox boundingBox = BoundingBox.Unset;
-        private Guid _id = Guid.NewGuid();
-        private static Type view = typeof(SliderElementView);
-        internal SliderElementView elView;
-        public IRenderView RenderView
-        {
-            get
-            {
-                return elView;
-            }
-            set
-            {
-                if (value is SliderElementView)
-                {
-                    elView = (SliderElementView)value;
-                }
-            }
-        }
-
-        #endregion
-
         #region Properties
 
-        public Type ViewType { get { return view; } }
-        public object ViewKey { get; set; }
-
-        public Guid ID { get => _id; private set => _id = value; }
-
-        public bool IsSelected { get; set; }
-
-        public BoundingBox BoundingBox { get => boundingBox; private set => boundingBox = value; }
-
-        public double X { get => boundingBox.Location.X; }
-
-        public double Y { get => boundingBox.Location.Y; }
-
-        public double Width
-        {
-            get
-            {
-                return boundingBox.Size.Width;
-            }
-            set
-            {
-                boundingBox.Size.Width = value;
-            }
-        }
-
-        public double Height
-        {
-            get
-            {
-                return boundingBox.Size.Height;
-            }
-            set
-            {
-                boundingBox.Size.Height = value;
-            }
-        }
-
-        private IRenderable _zPrev;
-        public IRenderable ZPrev => _zPrev;
-        private IRenderable _zNext;
-        public IRenderable ZNext => _zNext;
-        private IRenderable _parent;
-        public IRenderable Parent => _parent;
-        private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
-        public ElementsLinkedList<IRenderable> Children => _children;
-
-        public void AddChild(IRenderable child)
-        {
-            if (!this.Children.Contains(child))
-            {
-                this.Children.Add(child);
-                child.SetParent(this);
-            }
-        }
-
-        public void SetParent(IRenderable parent)
-        {
-            this._parent = parent;
-            if (this._parent != null)
-            {
-                if (!this._parent.Children.Contains(this))
-                {
-                    this._parent.Children.Add(this);
-                }
-            }
-        }
-
-        public ElementState State { get; set; }
-
-        //public IRenderView ElementView { get; }
-
-        public ElementState ElementState { get; set; }
-        public ElementType ElementType { get; set; }
-        bool IRenderable.Visible { get; set; }
-
-        #endregion
-
-        #region Constructors
-
-        public SliderElement()
-        {
-            this.Minimum = 0;
-            this.Maximum = 100;
-            this.Value = 50;
-        }
-
-        public SliderElement(int x, int y, int width, int height)
-        {
-            this.boundingBox = new BoundingBox(x, y, width, height);
-
-            this.Minimum = 0;
-            this.Maximum = 100;
-            this.Value = 50;
-        }
-
-        #endregion
-
-        #region INotifyPropertyChanged Members
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void OnPropertyChanged(string name)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
-
-        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
-        {
-            if (!Equals(field, newValue))
-            {
-                field = newValue;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-                return true;
-            }
-
-            return false;
-        }
-
+        public override Type ViewType => typeof(SliderElementView);
+        
         private double minimum;
-
         public double Minimum { get => minimum; set => SetProperty(ref minimum, value); }
 
         private double maximum;
-
         public double Maximum { get => maximum; set => SetProperty(ref maximum, value); }
 
-        private double value1;
-
-        public double Value { get => value1; set => SetProperty(ref value1, value); }
+        private double _value;
+        public double Value { get => _value; set => SetProperty(ref _value, value); }
 
         private int interval;
-
         public int Interval { get => interval; set => SetProperty(ref interval, value); }
 
         #endregion
+
+
+
+        #region Constructors
+
+        public SliderElement() : base()
+        {
+            this.Minimum = 0;
+            this.Maximum = 100;
+            this.Value = 50;
+        }
+
+        #endregion
+
+        public event EventHandler<RoutedPropertyChangedEventArgs<double>> ValueChanged;
+        public void OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            this.Value = (double)e.NewValue;
+            this.ValueChanged.Invoke(sender, e);
+        }
     }
 }
