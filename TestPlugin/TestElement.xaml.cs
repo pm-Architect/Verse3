@@ -235,7 +235,7 @@ namespace TestPlugin
 
             DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
 
-            RenderPipeline.TranslateOffsetRenderable(this.Element, rectangleDragVector.X, rectangleDragVector.Y);
+            RenderPipeline.RenderRenderable(this.Element, rectangleDragVector.X, rectangleDragVector.Y);
 
             DataViewModel.WPFControl.ExpandContent();
 
