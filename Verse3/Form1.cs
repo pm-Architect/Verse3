@@ -90,14 +90,28 @@ namespace Verse3
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        public void HotLoadLibraryFolder(string path)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            if (Directory.Exists(path))
+            {
+                foreach (string file in Directory.GetFiles(path))
+                {
+                    if (file.EndsWith(".verse"))
+                    {
+                        HotLoadLibrary(file);
+                    }
+                }
+            }
+        }
+
+        public void HotLoadLibrary(string path)
+        {
+            if (DataViewModel.WPFControl == null) return;
+            if (File.Exists(path))
             {
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    File.OpenRead(openFileDialog.FileName).CopyTo(ms);
+                    File.OpenRead(path).CopyTo(ms);
                     var elements = AssemblyLoader.Load(ms);
 
                     foreach (IElement el in elements)
@@ -136,6 +150,17 @@ namespace Verse3
                     DataViewModel.WPFControl.ExpandContent();
                 }
             }
+        }
+
+        private void HotLoadLibraryFromFile(object sender, EventArgs e)
+        {
+            //HotLoadLibraryFolder("C:\\Users\\prane\\Dropbox\\Desktop\\Hackuble\\Verse3\\Verse3\\TestPlugin\\bin\\Debug\\net6.0-windows\\Libraries\\");
+            HotLoadLibraryFolder(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Verse3\\Libraries\\"));
+            //OpenFileDialog openFileDialog = new OpenFileDialog();
+            //if (openFileDialog.ShowDialog() == DialogResult.OK)
+            //{
+            //    HotLoadLibrary(openFileDialog.FileName);
+            //}
         }
 
         //private void DrawBezierCurve(Point start, Point end, bool rtl)

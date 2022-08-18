@@ -32,12 +32,10 @@
         <Button
             x:Name="NodeButton"
             Style="{StaticResource ButtonPrimary}"
-            HorizontalAlignment="Stretch"
+            HorizontalAlignment="{Binding HorizontalAlignment}"
             VerticalAlignment="Stretch"
-            FontFamily="Maven Pro"
             Margin="45,10,45,10"
             Background="#ff6700"
-            Foreground="White"
             Click="Button_Click"
             >
             <Polygon x:Name="poly" Points="0,0 8,5, 0,10" Stroke="Black" Fill="Black" />

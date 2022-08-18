@@ -219,7 +219,7 @@ namespace Verse3.VanillaElements
 
         #region Constructor and Compute
 
-        public NodeElement(IRenderable parent) : base()
+        public NodeElement(IRenderable parent, NodeType type = NodeType.Unset) : base()
         {
             _computationPipelineInfo = new ComputationPipelineInfo(this);
             parentElement = parent as IRenderable;
@@ -316,6 +316,33 @@ namespace Verse3.VanillaElements
             {
                 //renderable.Render();
             }
+        }
+
+        private HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center;
+
+        public HorizontalAlignment HorizontalAlignment
+        {
+            get
+            {
+                if (this.NodeType == NodeType.Input)
+                {
+                    if (horizontalAlignment != HorizontalAlignment.Left)
+                    {
+                        horizontalAlignment = HorizontalAlignment.Left;
+                        SetProperty(ref horizontalAlignment, HorizontalAlignment.Left);
+                    }
+                }
+                else if (this.NodeType == NodeType.Output)
+                {
+                    if (horizontalAlignment != HorizontalAlignment.Right)
+                    {
+                        horizontalAlignment = HorizontalAlignment.Right;
+                        SetProperty(ref horizontalAlignment, HorizontalAlignment.Right);
+                    }
+                }
+                return horizontalAlignment;
+            }
+            set => SetProperty(ref horizontalAlignment, value);
         }
 
     }

@@ -337,6 +337,7 @@ namespace Verse3
             //el.BoundingBox = new BoundingBox();
             //Element needs to know DataTemplateKey in order to make a reference to it
             el.ViewKey = template.DataTemplateKey;
+            if (DataViewModel.WPFControl == null) return false;
             if (DataViewModel.WPFControl.Resources[el.ViewKey] != null)
             {
                 //el.RenderView = (IRenderView)DataViewModel.WPFControl.Resources[el.ViewKey];
