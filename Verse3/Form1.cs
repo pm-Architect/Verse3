@@ -110,6 +110,7 @@ namespace Verse3
             }
         }
 
+        private Dictionary<string, IEnumerable<IElement>> Elements = new Dictionary<string, IEnumerable<IElement>>();
         public void HotLoadLibrary(string path)
         {
             try
@@ -117,43 +118,71 @@ namespace Verse3
                 if (DataViewModel.WPFControl == null) return;
                 if (File.Exists(path))
                 {
-                    using (MemoryStream ms = new MemoryStream())
+                    if (!LoadedLibraries.ContainsKey(path))
                     {
-                        File.OpenRead(path).CopyTo(ms);
-                        var elements = AssemblyLoader.Load(ms);
-
-                        foreach (IElement el in elements)
+                        using (MemoryStream ms = new MemoryStream())
                         {
-                            if (el is IRenderable)
+                            File.OpenRead(path).CopyTo(ms);
+                            var es = AssemblyLoader.Load(ms);
+                            if (!Elements.ContainsValue(es))
                             {
-                                DataTemplateManager.RegisterDataTemplate(el as IRenderable);
-                                //TODO: Check for other types of constructors
-                                //TODO: Get LibraryInfo
-                                MethodInfo mi = el.GetType().GetRuntimeMethod("GetCompInfo", new Type[] { });
-                                if (mi != null)
+                                Elements.Add(path, es);
+                                LoadElements(path, es);
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (Elements.ContainsKey(path))
+                        {
+                            using (MemoryStream ms = new MemoryStream())
+                            {
+                                File.OpenRead(path).CopyTo(ms);
+                                var es = AssemblyLoader.Load(ms);
+                                Elements[path] = es;
+                            }
+                            //LoadElements(Elements[path], path);
+                        }
+                    }
+                }
+            }
+            catch/* (Exception ex)*/
+            {
+                //throw ex;
+            }
+        }
+
+        private void LoadElements(string path, IEnumerable<IElement> es)
+        {
+            if (es != null)
+            {
+                foreach (IElement el in es)
+                {
+                    if (el is IRenderable)
+                    {
+                        DataTemplateManager.RegisterDataTemplate(el as IRenderable);
+                        //TODO: Check for other types of constructors
+                        //TODO: Get LibraryInfo
+                        MethodInfo mi = el.GetType().GetRuntimeMethod("GetCompInfo", new Type[] { });
+                        if (mi != null)
+                        {
+                            if (mi.ReturnType == typeof(CompInfo))
+                            {
+                                CompInfo compInfo = (CompInfo)mi.Invoke(el, null);
+                                if (compInfo.ConstructorInfo != null)
                                 {
-                                    if (mi.ReturnType == typeof(CompInfo))
+                                    if (!LoadedLibraries.ContainsValue(compInfo))
                                     {
-                                        CompInfo compInfo = (CompInfo)mi.Invoke(el, null);
-                                        if (compInfo.ConstructorInfo != null)
-                                        {
-                                            if (!LoadedLibraries.ContainsValue(compInfo))
-                                            {
-                                                //TODO: Check for validity / scan library info
-                                                AddToArsenal(compInfo);
-                                                LoadedLibraries.Add(path, compInfo);
-                                            }
-                                        }
+                                        //TODO: Check for validity / scan library info
+                                        AddToArsenal(compInfo);
+                                        LoadedLibraries.Add(path, compInfo);
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
             }
         }
 
