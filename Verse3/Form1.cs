@@ -32,6 +32,7 @@ namespace Verse3
             InfiniteCanvasWPFControl.MouseDown += Canvas_MouseDown;
             InfiniteCanvasWPFControl.MouseUp += Canvas_MouseUp;
             InfiniteCanvasWPFControl.MouseMove += Canvas_MouseMove;
+            InfiniteCanvasWPFControl.Loaded += LoadLibraries;
         }
 
         private void Canvas_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
@@ -91,6 +92,7 @@ namespace Verse3
             }
         }
 
+        private Dictionary<string, CompInfo> LoadedLibraries = new Dictionary<string, CompInfo>();
         public void HotLoadLibraryFolder(string path)
         {
             if (Directory.Exists(path))
@@ -99,7 +101,10 @@ namespace Verse3
                 {
                     if (file.EndsWith(".verse"))
                     {
-                        HotLoadLibrary(file);
+                        if (!LoadedLibraries.ContainsKey(file))
+                        {
+                            HotLoadLibrary(file);
+                        }
                     }
                 }
             }
@@ -107,28 +112,22 @@ namespace Verse3
 
         public void HotLoadLibrary(string path)
         {
-            if (DataViewModel.WPFControl == null) return;
-            if (File.Exists(path))
+            try
             {
-                using (MemoryStream ms = new MemoryStream())
+                if (DataViewModel.WPFControl == null) return;
+                if (File.Exists(path))
                 {
-                    File.OpenRead(path).CopyTo(ms);
-                    var elements = AssemblyLoader.Load(ms);
-
-                    foreach (IElement el in elements)
+                    using (MemoryStream ms = new MemoryStream())
                     {
-                        if (el is IRenderable)
+                        File.OpenRead(path).CopyTo(ms);
+                        var elements = AssemblyLoader.Load(ms);
+
+                        foreach (IElement el in elements)
                         {
-                            DataTemplateManager.RegisterDataTemplate(el as IRenderable);
-                            
-                            
-                            
-                            //Random rnd = new Random();
-                            //for (int i = 0; i < 10; i++)
-                            //{
-
+                            if (el is IRenderable)
+                            {
+                                DataTemplateManager.RegisterDataTemplate(el as IRenderable);
                                 //TODO: Check for other types of constructors
-
                                 //TODO: Get LibraryInfo
                                 MethodInfo mi = el.GetType().GetRuntimeMethod("GetCompInfo", new Type[] { });
                                 if (mi != null)
@@ -138,32 +137,23 @@ namespace Verse3
                                         CompInfo compInfo = (CompInfo)mi.Invoke(el, null);
                                         if (compInfo.ConstructorInfo != null)
                                         {
-                                            AddToArsenal(compInfo);
+                                            if (!LoadedLibraries.ContainsValue(compInfo))
+                                            {
+                                                //TODO: Check for validity / scan library info
+                                                AddToArsenal(compInfo);
+                                                LoadedLibraries.Add(path, compInfo);
+                                            }
                                         }
                                     }
                                 }
-
-                                //int x = (int)rnd.NextInt64((long)20, (long)1000);
-                                //int y = (int)rnd.NextInt64((long)20, (long)1000);
-                                //int w = (int)rnd.NextInt64((long)250, (long)350);
-                                //int h = (int)rnd.NextInt64((long)250, (long)350);
-                                //Type[] types = { i.GetType(), i.GetType(), i.GetType(), i.GetType() };
-                                //ConstructorInfo ci = el.GetType().GetConstructor(types);
-                                //if (ci != null)
-                                //{
-                                //    //TODO: Invoke constructor based on <PluginName>.cfg json file
-                                //    IElement elInst = ci.Invoke(new object[] { x, y, w, h }) as IElement;
-                                //    DataModel.Instance.Elements.Add(elInst);
-                                //}
-                            //}
-
-
-
+                            }
                         }
                     }
-
-                    DataViewModel.WPFControl.ExpandContent();
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
@@ -350,69 +340,39 @@ namespace Verse3
                 Button btn = sender as Button;
                 if (btn.Tag != null && btn.Tag is CompInfo)
                 {
-                    CompInfo ci = (CompInfo)btn.Tag;
-                    if (ci.ConstructorInfo != null)
+                    if (DataViewModel.WPFControl != null)
                     {
-                        Random rnd = new Random();
-                        ////TODO: Invoke constructor based on <PluginName>.cfg json file
-                        ////TODO: Allow user to place the comp with MousePosition
-                        int x = (int)rnd.NextInt64((long)20, (long)1000);
-                        int y = (int)rnd.NextInt64((long)20, (long)1000);
-                        int w = (int)rnd.NextInt64((long)250, (long)350);
-                        int h = (int)rnd.NextInt64((long)250, (long)350);
-                        IElement elInst = ci.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
-                        DataModel.Instance.Elements.Add(elInst);
+                        CompInfo ci = (CompInfo)btn.Tag;
+                        if (ci.ConstructorInfo != null)
+                        {
+                            Random rnd = new Random();
+                            ////TODO: Invoke constructor based on <PluginName>.cfg json file
+                            ////TODO: Allow user to place the comp with MousePosition
+                            int x = (int)rnd.NextInt64((long)20, (long)1000);
+                            int y = (int)rnd.NextInt64((long)20, (long)1000);
+                            int w = (int)rnd.NextInt64((long)250, (long)350);
+                            int h = (int)rnd.NextInt64((long)250, (long)350);
+                            IElement elInst = ci.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
+                            DataModel.Instance.Elements.Add(elInst);
+                            DataViewModel.WPFControl.ExpandContent();
+                        }
                     }
                 }
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void LoadLibraries(object sender, EventArgs e)
         {
-            //if (!started)
-            //{
-            //    started = true;
-            //    rtl = false;
-            //}
-            //else if (started)
-            //{
-            //    started = false;
-            //}
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            //if (!started)
-            //{
-            //    started = true;
-            //    rtl = true;
-            //}
-            //else if (started)
-            //{
-            //    started = false;
-            //}
-        }
-
-        private void HotLoadLibraryFromFile(object sender, EventArgs e)
-        {
-            //HotLoadLibraryFolder("C:\\Users\\prane\\Dropbox\\Desktop\\Hackuble\\Verse3\\Verse3\\TestPlugin\\bin\\Debug\\net6.0-windows\\Libraries\\");
-            //HotLoadLibraryFolder(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Verse3\\Libraries\\"));
-            //OpenFileDialog openFileDialog = new OpenFileDialog();
-            //if (openFileDialog.ShowDialog() == DialogResult.OK)
-            //{
-            //    HotLoadLibrary(openFileDialog.FileName);
-            //}
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            //label1.Text = InfiniteCanvasWPFControl.AverageFPS.ToString();
-            //label2.Text = InfiniteCanvasWPFControl.GetMouseRelPosition().ToString();
+            HotLoadLibraryFolder(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Verse3\\Libraries\\"));
         }
 
         private void loadLibraryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            HotLoadLibraryFolder(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Verse3\\Libraries\\"));
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                HotLoadLibrary(openFileDialog.FileName);
+            }
         }
     }
 }

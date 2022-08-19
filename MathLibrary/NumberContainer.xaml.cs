@@ -100,12 +100,12 @@ namespace MathLibrary
                 this.Element.RenderPipelineInfo.AddChild(nodeBlock);
                 this.Element.ComputationPipelineInfo.IOManager.AddDataOutputNode(nodeBlock);
 
-                string? txt = this.Element.ElementText;
-                textBlock = new TextElement();
-                textBlock.DisplayedText = txt;
-                textBlock.TextAlignment = TextAlignment.Left;
-                DataTemplateManager.RegisterDataTemplate(textBlock);
-                this.Element.RenderPipelineInfo.AddChild(textBlock);
+                //string? txt = this.Element.ElementText;
+                //textBlock = new TextElement();
+                //textBlock.DisplayedText = txt;
+                //textBlock.TextAlignment = TextAlignment.Left;
+                //DataTemplateManager.RegisterDataTemplate(textBlock);
+                //this.Element.RenderPipelineInfo.AddChild(textBlock);
 
 
                 //var buttonBlock = new ButtonElement();
@@ -124,27 +124,6 @@ namespace MathLibrary
         private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
         {
             this.Element._sliderValue = sliderBlock.Value;
-            //if (nodeBlock.Connections != null)
-            //{
-            //    if (nodeBlock.Connections.Count > 0)
-            //    {
-            //        IConnection c = nodeBlock.Connections[0];
-            //        if (c.Origin == nodeBlock)
-            //        {
-            //            if (c.Destination != MousePositionNode.Instance && c.Destination != null)
-            //            {
-            //                if (c.Destination.Parent is Add)
-            //                {
-            //                    Add te = (Add)c.Destination.Parent;
-            //                    if (te != null)
-            //                    {
-            //                        te._sliderValue = sliderBlock.Value;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
         }
 
         #endregion
@@ -330,15 +309,10 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            if (this.ComputationPipelineInfo.IOManager.DataInputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 1/* && this.Nodes[0] is NodeElement*/)
+            if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count == 1)
             {
-                double sum = 0.0;
-                foreach (NodeElement n in this.ComputationPipelineInfo.IOManager.DataInputNodes)
-                {
-                    if (n != null) sum += n.DataGoo.Data;
-                }
                 if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
-                    ((NodeElement)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data = sum;
+                    ((NodeElement)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data = _sliderValue;
             }
         }
         public override CompInfo GetCompInfo()
