@@ -111,5 +111,16 @@ namespace Verse3
             childForm.Text = "Window " + childFormNumber++;
             childForm.Show();
         }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (this.ActiveMdiChild is Form1)
+            {
+                toolStripStatusLabel.Text = (this.ActiveMdiChild as Form1).InfiniteCanvasWPFControl.AverageFPS.ToString();
+                toolStripStatusLabel1.Text = (this.ActiveMdiChild as Form1).InfiniteCanvasWPFControl.GetMouseRelPosition().ToString();
+            }
+            //label1.Text = InfiniteCanvasWPFControl.AverageFPS.ToString();
+            //label2.Text = InfiniteCanvasWPFControl.GetMouseRelPosition().ToString();
+        }
     }
 }

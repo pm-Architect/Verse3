@@ -44,8 +44,8 @@ namespace MathLibrary
         internal TextElement textBlock = new TextElement();
         internal SliderElement sliderBlock = new SliderElement();
         internal NodeElement nodeBlock;
-        internal NodeElement nodeBlock1;
-        internal NodeElement nodeBlock2;
+        //internal NodeElement nodeBlock1;
+        //internal NodeElement nodeBlock2;
 
         #region Constructor and Render
 
@@ -72,24 +72,33 @@ namespace MathLibrary
                     textBlock.DisplayedText = this.Element.ElementText;
                     return;
                 }
-
-                nodeBlock = new NodeElement(this.Element, NodeType.Input);
-                DataTemplateManager.RegisterDataTemplate(nodeBlock);
-                this.Element.RenderPipelineInfo.AddChild(nodeBlock);
-                this.Element.ComputationPipelineInfo.IOManager.AddDataInputNode(nodeBlock);
                 //Subscribe to NodeElement PropertyChanged Event
                 //nodeBlock.PropertyChanged += NodeBlock_PropertyChanged;
 
-                nodeBlock1 = new NodeElement(this.Element, NodeType.Input);
-                DataTemplateManager.RegisterDataTemplate(nodeBlock1);
-                this.Element.RenderPipelineInfo.AddChild(nodeBlock1);
-                this.Element.ComputationPipelineInfo.IOManager.AddDataInputNode(nodeBlock1);
+                //nodeBlock1 = new NodeElement(this.Element, NodeType.Input);
+                //DataTemplateManager.RegisterDataTemplate(nodeBlock1);
+                //this.Element.RenderPipelineInfo.AddChild(nodeBlock1);
+                //this.Element.ComputationPipelineInfo.IOManager.AddDataInputNode(nodeBlock1);
 
-                nodeBlock2 = new NodeElement(this.Element, NodeType.Output);
-                DataTemplateManager.RegisterDataTemplate(nodeBlock2);
-                this.Element.RenderPipelineInfo.AddChild(nodeBlock2);
-                this.Element.ComputationPipelineInfo.IOManager.AddDataOutputNode(nodeBlock2);
+                //nodeBlock2 = new NodeElement(this.Element, NodeType.Output);
+                //DataTemplateManager.RegisterDataTemplate(nodeBlock2);
+                //this.Element.RenderPipelineInfo.AddChild(nodeBlock2);
+                //this.Element.ComputationPipelineInfo.IOManager.AddDataOutputNode(nodeBlock2);
 
+                sliderBlock = new SliderElement();
+                sliderBlock.Minimum = 0;
+                sliderBlock.Maximum = 100;
+                sliderBlock.Value = 50;
+                sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
+                sliderBlock.Width = 200;
+                DataTemplateManager.RegisterDataTemplate(sliderBlock);
+                this.Element.RenderPipelineInfo.AddChild(sliderBlock);
+
+                nodeBlock = new NodeElement(this.Element, NodeType.Output);
+                nodeBlock.Width = 50;
+                DataTemplateManager.RegisterDataTemplate(nodeBlock);
+                this.Element.RenderPipelineInfo.AddChild(nodeBlock);
+                this.Element.ComputationPipelineInfo.IOManager.AddDataOutputNode(nodeBlock);
 
                 string? txt = this.Element.ElementText;
                 textBlock = new TextElement();
@@ -98,19 +107,12 @@ namespace MathLibrary
                 DataTemplateManager.RegisterDataTemplate(textBlock);
                 this.Element.RenderPipelineInfo.AddChild(textBlock);
 
-                //sliderBlock = new SliderElement();
-                //sliderBlock.Minimum = 0;
-                //sliderBlock.Maximum = 100;
-                //sliderBlock.Value = 50;
-                //sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
-                //DataTemplateManager.RegisterDataTemplate(sliderBlock);
-                //this.Element.RenderPipelineInfo.AddChild(sliderBlock);
 
-                var buttonBlock = new ButtonElement();
-                buttonBlock.DisplayedText = "Click me";
-                buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
-                DataTemplateManager.RegisterDataTemplate(buttonBlock);
-                this.Element.RenderPipelineInfo.AddChild(buttonBlock);
+                //var buttonBlock = new ButtonElement();
+                //buttonBlock.DisplayedText = "Click me";
+                //buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
+                //DataTemplateManager.RegisterDataTemplate(buttonBlock);
+                //this.Element.RenderPipelineInfo.AddChild(buttonBlock);
 
                 //var textBoxBlock = new TextBoxElement();
                 //textBoxBlock.InputText = "Enter text";
@@ -338,6 +340,16 @@ namespace MathLibrary
                 if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
                     ((NodeElement)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data = sum;
             }
+        }
+        public override CompInfo GetCompInfo()
+        {
+            CompInfo ci = new CompInfo();
+            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
+            ci.ConstructorInfo = this.GetType().GetConstructor(types);
+            ci.Name = "Number Slider";
+            ci.Group = "Inputs";
+            ci.Tab = "Math";
+            return ci;
         }
 
         //private IRenderable _parent;

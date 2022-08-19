@@ -338,6 +338,16 @@ namespace TestPlugin
                 }
             }
         }
+        public override CompInfo GetCompInfo()
+        {
+            CompInfo ci = new CompInfo();
+            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
+            ci.ConstructorInfo = this.GetType().GetConstructor(types);
+            ci.Name = "Test";
+            ci.Group = "Test";
+            ci.Tab = "Test";
+            return ci;
+        }
 
         //private IRenderable _parent;
         //public IRenderable Parent => _parent;

@@ -26,7 +26,7 @@
     <Grid
         Width="{Binding BoundingBox.Size.Width}"
         Height="{Binding BoundingBox.Size.Height}"
-        MinWidth="100"
+        MinWidth="50"
         MinHeight="50"
         >
         <Button

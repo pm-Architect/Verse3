@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -190,6 +191,8 @@ namespace Verse3
 
         #endregion
 
+        public abstract CompInfo GetCompInfo();
+
         #region INotifyPropertyChanged Members
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -322,6 +325,22 @@ namespace Verse3
         //}
 
         #endregion
+    }
+
+    public struct CompInfo
+    {
+        public ConstructorInfo ConstructorInfo { get; set; }
+        public string Name { get; set; }
+        public string Group { get; set; }
+        public string Tab { get; set; }
+        public string Description { get; set; }
+        public string Author { get; set; }
+        public string Version { get; set; }
+        public string License { get; set; }
+        public string Website { get; set; }
+        public string Repository { get; set; }
+        public string Icon { get; set; }
+        public Type[] ConstructorParams { get; set; }
     }
 
 }

@@ -42,7 +42,7 @@ namespace MathLibrary
         #endregion
 
         internal TextElement textBlock = new TextElement();
-        internal SliderElement sliderBlock = new SliderElement();
+        //internal SliderElement sliderBlock = new SliderElement();
         internal NodeElement nodeBlock;
         internal NodeElement nodeBlock1;
         internal NodeElement nodeBlock2;
@@ -106,11 +106,11 @@ namespace MathLibrary
                 //DataTemplateManager.RegisterDataTemplate(sliderBlock);
                 //this.Element.RenderPipelineInfo.AddChild(sliderBlock);
 
-                var buttonBlock = new ButtonElement();
-                buttonBlock.DisplayedText = "Click me";
-                buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
-                DataTemplateManager.RegisterDataTemplate(buttonBlock);
-                this.Element.RenderPipelineInfo.AddChild(buttonBlock);
+                //var buttonBlock = new ButtonElement();
+                //buttonBlock.DisplayedText = "Click me";
+                //buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
+                //DataTemplateManager.RegisterDataTemplate(buttonBlock);
+                //this.Element.RenderPipelineInfo.AddChild(buttonBlock);
 
                 //var textBoxBlock = new TextBoxElement();
                 //textBoxBlock.InputText = "Enter text";
@@ -119,9 +119,9 @@ namespace MathLibrary
             }
         }
 
-        private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            this.Element._sliderValue = sliderBlock.Value;
+        //private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
+        //{
+            //this.Element._sliderValue = sliderBlock.Value;
             //if (nodeBlock.Connections != null)
             //{
             //    if (nodeBlock.Connections.Count > 0)
@@ -143,7 +143,7 @@ namespace MathLibrary
             //        }
             //    }
             //}
-        }
+        //}
 
         #endregion
 
@@ -321,7 +321,7 @@ namespace MathLibrary
             byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
             byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
             byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
+            //this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
         }
 
         #endregion
@@ -338,6 +338,18 @@ namespace MathLibrary
                 if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
                     ((NodeElement)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data = sum;
             }
+        }
+
+        public override CompInfo GetCompInfo()
+        {
+            CompInfo ci = new CompInfo();
+            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
+            ci.ConstructorInfo = this.GetType().GetConstructor(types);
+            ci.ConstructorParams = types;
+            ci.Name = "Addition";
+            ci.Group = "Operations";
+            ci.Tab = "Math";
+            return ci;
         }
 
         //private IRenderable _parent;
