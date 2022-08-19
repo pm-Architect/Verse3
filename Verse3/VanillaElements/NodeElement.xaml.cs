@@ -147,7 +147,7 @@ namespace Verse3.VanillaElements
             {
                 if (b != null)
                 {
-                    if (DataViewModel.ActiveNode is IComputable && DataViewModel.ActiveNode != this.Element)
+                    if (DataViewModel.ActiveNode is IComputable && DataViewModel.ActiveNode != this.Element && DataViewModel.ActiveNode.NodeType == NodeType.Output)
                     {
                         this.Element.ComputationPipelineInfo.AddDataUpStream(DataViewModel.ActiveNode as IComputable);
                     }
@@ -174,7 +174,7 @@ namespace Verse3.VanillaElements
         #region Data Members
 
         private ElementsLinkedList<IConnection> connections = new ElementsLinkedList<IConnection>();
-        internal IRenderable parentElement = default;
+        //internal IRenderable parentElement = default;
         private object displayedText;
 
         #endregion
@@ -185,7 +185,17 @@ namespace Verse3.VanillaElements
 
         public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
 
-        IElement INode.Parent { get => this.RenderPipelineInfo.Parent; }
+        IElement INode.Parent
+        {
+            get => this.RenderPipelineInfo.Parent;
+            set
+            {
+                if (value is IRenderable)
+                    this.RenderPipelineInfo.Parent = value as IRenderable;
+                //else
+                //    this.RenderPipelineInfo.Parent = null;
+            }
+        }
 
         public ElementsLinkedList<IConnection> Connections => connections;
 
@@ -222,13 +232,25 @@ namespace Verse3.VanillaElements
         public NodeElement(IRenderable parent, NodeType type = NodeType.Unset) : base()
         {
             _computationPipelineInfo = new ComputationPipelineInfo(this);
-            parentElement = parent as IRenderable;
-            double x = DataViewModel.ContentCanvasMarginOffset + parentElement.X;
-            double y = DataViewModel.ContentCanvasMarginOffset + parentElement.Y;
-            base.boundingBox = new BoundingBox(x, y, parentElement.Width, 50);
-            (this as IRenderable).RenderPipelineInfo.SetParent(parentElement);
+            this.RenderPipelineInfo.Parent = parent as IRenderable;
+            double x = DataViewModel.ContentCanvasMarginOffset + this.RenderPipelineInfo.Parent.X;
+            double y = DataViewModel.ContentCanvasMarginOffset + this.RenderPipelineInfo.Parent.Y;
+            base.boundingBox = new BoundingBox(x, y, this.RenderPipelineInfo.Parent.Width, 50);
+            (this as IRenderable).RenderPipelineInfo.SetParent(this.RenderPipelineInfo.Parent);
             this.DisplayedText = "Node";
             this.PropertyChanged += NodeElement_PropertyChanged;
+            if (type == NodeType.Input)
+            {
+                this.HorizontalAlignment = HorizontalAlignment.Left;
+            }
+            else if (type == NodeType.Output)
+            {
+                this.HorizontalAlignment = HorizontalAlignment.Right;
+            }
+            else
+            {
+                this.HorizontalAlignment = HorizontalAlignment.Center;
+            }
         }
         public void Compute()
         {
@@ -261,7 +283,8 @@ namespace Verse3.VanillaElements
                     //INCOMING CONNECTIONS
                     if (conn.Destination == this/* && conn.Origin is NodeElement*/)
                     {
-                        
+                        this.NodeContentColor = System.Windows.Media.Brushes.White;
+                        //break;
                     }
                     //OUTGOING CONNECTIONS
                     //else if (conn.Origin == n/* && conn.Destination is NodeElement*/)
@@ -329,7 +352,8 @@ namespace Verse3.VanillaElements
                     if (horizontalAlignment != HorizontalAlignment.Left)
                     {
                         horizontalAlignment = HorizontalAlignment.Left;
-                        SetProperty(ref horizontalAlignment, HorizontalAlignment.Left);
+                        //SetProperty(ref horizontalAlignment, HorizontalAlignment.Left);
+                        OnPropertyChanged("HorizontalAlignment");
                     }
                 }
                 else if (this.NodeType == NodeType.Output)
@@ -337,12 +361,42 @@ namespace Verse3.VanillaElements
                     if (horizontalAlignment != HorizontalAlignment.Right)
                     {
                         horizontalAlignment = HorizontalAlignment.Right;
-                        SetProperty(ref horizontalAlignment, HorizontalAlignment.Right);
+                        //SetProperty(ref horizontalAlignment, HorizontalAlignment.Right);
+                        OnPropertyChanged("HorizontalAlignment");
                     }
                 }
                 return horizontalAlignment;
             }
-            set => SetProperty(ref horizontalAlignment, value);
+             private set => SetProperty(ref horizontalAlignment, value);
+        }
+
+        private System.Windows.Media.Brush nodeContentColor = System.Windows.Media.Brushes.White;
+
+        public System.Windows.Media.Brush NodeContentColor
+        {
+            get
+            {
+                if (this.connections != null && this.connections.Count > 0)
+                {
+                    if (nodeContentColor != System.Windows.Media.Brushes.White)
+                    {
+                        nodeContentColor = System.Windows.Media.Brushes.White;
+                        //SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.White);
+                        OnPropertyChanged("NodeContentColor");
+                    }
+                }
+                else
+                {
+                    if (nodeContentColor != System.Windows.Media.Brushes.Transparent)
+                    {
+                        nodeContentColor = System.Windows.Media.Brushes.Transparent;
+                        //SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.Transparent);
+                        OnPropertyChanged("NodeContentColor");
+                    }
+                }
+                return nodeContentColor;
+            }
+            private set => SetProperty(ref nodeContentColor, value);
         }
 
     }
@@ -378,8 +432,8 @@ namespace Verse3.VanillaElements
                 }
             }
         }
-        
-        public IElement Parent { get; }
+
+        public IElement Parent { get; set; } = default;
 
         public ElementsLinkedList<IConnection> Connections => connections;
 

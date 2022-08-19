@@ -107,9 +107,30 @@ namespace Core
         }
     }
     
+    public interface IComputable : IElement
+    {
+        public ComputationPipelineInfo ComputationPipelineInfo { get; }
+
+        //public ElementsLinkedList<INode> Nodes { get; }
+
+        void CollectData();
+
+        public ComputableElementState ComputableElementState { get; set; }
+        //public ElementConsole Console { get; }
+        //public bool Enabled { get; set; }
+        //void ClearData();
+        //{
+        //TODO: Populate DataDS and DataUS and Collect data from nodes
+        //}
+        void Compute();
+        void DeliverData();
+    }
+
     public class ComputationPipelineInfo
     {
         private IComputable _computable;
+        private IOManager _ioManager;
+        public IOManager IOManager => _ioManager;
         private ElementsLinkedList<IComputable> _dataDS = new ElementsLinkedList<IComputable>();
         public ElementsLinkedList<IComputable> DataDS => _dataDS;
 
@@ -124,9 +145,11 @@ namespace Core
         public ComputationPipelineInfo(IComputable computable)
         {
             this._computable = computable;
+            this._ioManager = new IOManager(computable);
         }
         public void AddDataUpStream(IComputable dataUS)
         {
+            if (dataUS is null) return;
             if (!this._dataUS.Contains(dataUS))
             {
                 this._dataUS.Add(dataUS);
@@ -135,6 +158,7 @@ namespace Core
         }
         public void AddDataDownStream(IComputable dataDS)
         {
+            if (dataDS is null) return;
             if (!this._dataDS.Contains(dataDS))
             {
                 this._dataDS.Add(dataDS);
@@ -143,6 +167,7 @@ namespace Core
         }
         public void AddEventUpStream(IComputable eventUS)
         {
+            if (eventUS is null) return;
             if (!this._eventUS.Contains(eventUS))
             {
                 this._eventUS.Add(eventUS);
@@ -151,6 +176,7 @@ namespace Core
         }
         public void AddEventDownStream(IComputable eventDS)
         {
+            if (eventDS is null) return;
             if (!this._eventDS.Contains(eventDS))
             {
                 this._eventDS.Add(eventDS);
@@ -159,22 +185,90 @@ namespace Core
         }
     }
 
-    public interface IComputable : IElement
+    public class IOManager
     {
-        public ComputationPipelineInfo ComputationPipelineInfo { get; }
+        private IComputable _computable;
+        private ElementsLinkedList<INode> _dataInputNodes = new ElementsLinkedList<INode>();
+        public ElementsLinkedList<INode> DataInputNodes => _dataInputNodes;
 
-        public ElementsLinkedList<INode> Nodes { get; }
+        private ElementsLinkedList<INode> _dataOutputNodes = new ElementsLinkedList<INode>();
+        public ElementsLinkedList<INode> DataOutputNodes => _dataOutputNodes;
+        private ElementsLinkedList<INode> _eventInputNodes = new ElementsLinkedList<INode>();
+        public ElementsLinkedList<INode> EventInputNodes => _eventInputNodes;
+        private ElementsLinkedList<INode> _eventOutputNodes = new ElementsLinkedList<INode>();
+        public ElementsLinkedList<INode> EventOutputNodes => _eventOutputNodes;
+        public IOManager(IComputable computable)
+        {
+            this._computable = computable;
+            //this._dataInputNodes = computable.ComputationPipelineInfo.DataUS;
+            //this._dataOutputNodes = computable.ComputationPipelineInfo.DataDS;
+            //this._eventInputNodes = computable.ComputationPipelineInfo.EventUS;
+            //this._eventOutputNodes = computable.ComputationPipelineInfo.EventDS;
+        }
 
-        void CollectData();
-
-        public ComputableElementState ComputableElementState { get; set; }
-        //public ElementConsole Console { get; }
-        //public bool Enabled { get; set; }
-        //void ClearData();
-        //{
-        //TODO: Populate DataDS and DataUS and Collect data from nodes
-        //}
-        void Compute();
-        void DeliverData();
+        public void AddDataInputNode(INode dataInputNode)
+        {
+            if (dataInputNode is null) return;
+            if (!this._dataInputNodes.Contains(dataInputNode))
+            {
+                if (dataInputNode.NodeType == NodeType.Input)
+                {
+                    //dataInputNode.Parent = _computable;
+                    this._dataInputNodes.Add(dataInputNode);
+                    if (dataInputNode is IComputable)
+                    {
+                        this._computable.ComputationPipelineInfo.AddDataUpStream(dataInputNode as IComputable);
+                    }
+                }
+            }
+        }
+        public void AddDataOutputNode(INode dataOutputNode)
+        {
+            if (dataOutputNode is null) return;
+            if (!this._dataOutputNodes.Contains(dataOutputNode))
+            {
+                if (dataOutputNode.NodeType == NodeType.Output)
+                {
+                    //dataOutputNode.Parent = _computable;
+                    this._dataOutputNodes.Add(dataOutputNode);
+                    if (dataOutputNode is IComputable)
+                    {
+                        this._computable.ComputationPipelineInfo.AddDataDownStream(dataOutputNode as IComputable);
+                    }
+                }
+            }
+        }
+        public void AddEventInputNode(INode eventInputNode)
+        {
+            if (eventInputNode is null) return;
+            if (!this._eventInputNodes.Contains(eventInputNode))
+            {
+                if (eventInputNode.NodeType == NodeType.Input)
+                {
+                    //eventInputNode.Parent = _computable;
+                    this._eventInputNodes.Add(eventInputNode);
+                    if (eventInputNode is IComputable)
+                    {
+                        this._computable.ComputationPipelineInfo.AddEventUpStream(eventInputNode as IComputable);
+                    }
+                }
+            }
+        }
+        public void AddEventOutputNode(INode eventOutputNode)
+        {
+            if (eventOutputNode is null) return;
+            if (!this._eventOutputNodes.Contains(eventOutputNode))
+            {
+                if (eventOutputNode.NodeType == NodeType.Output)
+                {
+                    //eventOutputNode.Parent = _computable;
+                    this._eventOutputNodes.Add(eventOutputNode);
+                    if (eventOutputNode is IComputable)
+                    {
+                        this._computable.ComputationPipelineInfo.AddEventDownStream(eventOutputNode as IComputable);
+                    }
+                }
+            }
+        }
     }
 }

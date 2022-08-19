@@ -11,7 +11,7 @@ namespace Core
 
     public interface INode : IElement
     {
-        public IElement Parent { get; }
+        public IElement Parent { get; set; }
         public ElementsLinkedList<IConnection> Connections { get; }
         public NodeType NodeType { get; }
         public CanvasPoint Hotspot { get; }

@@ -34,11 +34,13 @@
             Style="{StaticResource ButtonPrimary}"
             HorizontalAlignment="{Binding HorizontalAlignment}"
             VerticalAlignment="Stretch"
-            Margin="45,10,45,10"
+            Width="30"
+            Height="30"
+            Margin="10,10,10,10"
             Background="#ff6700"
             Click="Button_Click"
             >
-            <Polygon x:Name="poly" Points="0,0 8,5, 0,10" Stroke="Black" Fill="Black" />
+            <Polygon x:Name="poly" Points="0,0, 8,5, 0,10" Stroke="Black" Fill="{Binding NodeContentColor}" />
         </Button>
     </Grid>
 </UserControl>

@@ -90,8 +90,8 @@ namespace Verse3
         private ComputationPipelineInfo computationPipelineInfo;
         public ComputationPipelineInfo ComputationPipelineInfo => computationPipelineInfo;
 
-        private ElementsLinkedList<INode> _nodes = new ElementsLinkedList<INode>();
-        public ElementsLinkedList<INode> Nodes => _nodes;
+        //private ElementsLinkedList<INode> _nodes = new ElementsLinkedList<INode>();
+        //public ElementsLinkedList<INode> Nodes => _nodes;
 
         public ComputableElementState ComputableElementState { get; set; } = ComputableElementState.Unset;
 
@@ -115,14 +115,14 @@ namespace Verse3
 
         public virtual void CollectData()
         {
-            if (this.Nodes != null && this.Nodes.Count > 1/* && computable.Nodes[0] is NodeElement*/)
+            if (this.ComputationPipelineInfo.IOManager.DataInputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 1)
             {
-                foreach (INode n in this.Nodes)
+                foreach (INode n in this.ComputationPipelineInfo.IOManager.DataInputNodes)
                 {
                     if (n is IComputable && (n.NodeType == NodeType.Input || n.NodeType == NodeType.Unset))
                     {
                         IComputable c = (IComputable)n;
-                        this.computationPipelineInfo.AddDataUpStream(c);
+                        //this.computationPipelineInfo.AddDataUpStream(c);
                         if (n.Connections != null && n.Connections.Count > 0)
                         {
                             foreach (IConnection conn in n.Connections)
@@ -131,6 +131,7 @@ namespace Verse3
                                 if (conn.Destination == n && conn.Origin is IComputable)
                                 {
                                     c.ComputationPipelineInfo.AddDataDownStream(conn.Origin as IComputable);
+                                    //ComputationPipeline.ComputeComputable(conn.Origin as IComputable);
                                     //_inputValue = n.DataGoo.Data;
                                     //RenderPipeline.RenderRenderable(conn.Origin.Parent as IRenderable);
                                 }
@@ -150,14 +151,14 @@ namespace Verse3
         }
         public virtual void DeliverData()
         {
-            if (this.Nodes != null && this.Nodes.Count > 0/* && computable.Nodes[0] is NodeElement*/)
+            if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0/* && computable.Nodes[0] is NodeElement*/)
             {
-                foreach (INode n in this.Nodes)
+                foreach (INode n in this.ComputationPipelineInfo.IOManager.DataOutputNodes)
                 {
                     if (n is IComputable && (n.NodeType == NodeType.Output || n.NodeType == NodeType.Unset))
                     {
                         IComputable c = (IComputable)n;
-                        this.computationPipelineInfo.AddDataDownStream(c);
+                        //this.computationPipelineInfo.AddDataDownStream(c);
                         if (n.Connections != null && n.Connections.Count > 0)
                         {
                             foreach (IConnection conn in n.Connections)
@@ -170,7 +171,7 @@ namespace Verse3
                                 //}
                                 //OUTGOING CONNECTIONS
                                 /*else */
-                                if (conn.Origin == n/* && conn.Destination is NodeElement*/)
+                                if (conn.Origin == n && conn.Destination is IComputable)
                                 {
                                     c.ComputationPipelineInfo.AddDataUpStream(conn.Destination as IComputable);
                                     //NodeElement nd = (NodeElement)conn.Destination;
@@ -322,4 +323,5 @@ namespace Verse3
 
         #endregion
     }
+
 }

@@ -896,7 +896,8 @@ namespace Core
 
         public ElementsLinkedListNode<T> Find(T value)
         {
-            return this.Find(value.ID);
+            if (value != null && value.ID != default) return this.Find(value.ID);
+            else return null;
         }
 
         /// <summary>Finds the first node that contains the specified value.</summary>

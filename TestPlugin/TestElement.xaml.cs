@@ -71,10 +71,10 @@ namespace TestPlugin
                     return;
                 }
 
-                nodeBlock = new NodeElement(this.Element);
+                nodeBlock = new NodeElement(this.Element, NodeType.Input);
                 DataTemplateManager.RegisterDataTemplate(nodeBlock);
                 this.Element.RenderPipelineInfo.AddChild(nodeBlock);
-                this.Element.Nodes.Add(nodeBlock);
+                this.Element.ComputationPipelineInfo.IOManager.DataInputNodes.Add(nodeBlock);
                 //Subscribe to NodeElement PropertyChanged Event
                 //nodeBlock.PropertyChanged += NodeBlock_PropertyChanged;
 
@@ -270,7 +270,9 @@ namespace TestPlugin
             {
                 string? name = this.GetType().FullName;
                 string? viewname = this.ViewType.FullName;
-                string? dataIN = ((NodeElement)Nodes[0]).DataGoo.Data.ToString();
+                string? dataIN = "";
+                if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 0)
+                    dataIN = ((NodeElement)this.ComputationPipelineInfo.IOManager.DataInputNodes[0])?.DataGoo.Data.ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
                 //TODO: Z Index control for IRenderable
                 return $"Name: {name}" +
@@ -314,9 +316,9 @@ namespace TestPlugin
 
         public override void Compute()
         {
-            if (this.Nodes != null && this.Nodes.Count == 1 && this.Nodes[0] is NodeElement)
+            if (this.ComputationPipelineInfo.IOManager.DataInputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count == 1 && this.ComputationPipelineInfo.IOManager.DataInputNodes[0] is NodeElement)
             {
-                NodeElement n = (NodeElement)this.Nodes[0];
+                NodeElement n = (NodeElement)this.ComputationPipelineInfo.IOManager.DataInputNodes[0];
                 if (n.Connections != null && n.Connections.Count > 0)
                 {
                     foreach (IConnection conn in n.Connections)

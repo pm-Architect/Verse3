@@ -1,4 +1,4 @@
-using Core;
+﻿using Core;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,20 +12,20 @@ using TextElement = Verse3.VanillaElements.TextElement;
 namespace MathLibrary
 {
     /// <summary>
-    /// Visual Interaction logic for Addition.xaml
+    /// Visual Interaction logic for NumberContainer.xaml
     /// </summary>
-    public partial class AdditionView : UserControl, IBaseCompView<Addition>
+    public partial class NumberContainerView : UserControl, IBaseCompView<NumberContainer>
     {
         #region IBaseElementView Members
 
-        private Addition? _element;
-        public Addition Element
+        private NumberContainer? _element;
+        public NumberContainer Element
         {
             get
             {
                 if (this._element == null)
                 {
-                    _element = this.DataContext as Addition;
+                    _element = this.DataContext as NumberContainer;
                 }
                 //TODO: Log to Console if this.Element is still null
 #pragma warning disable CS8603 // Possible null reference return.
@@ -34,7 +34,7 @@ namespace MathLibrary
             }
             private set
             {
-                _element = value as Addition;
+                _element = value as NumberContainer;
             }
         }
         IRenderable IRenderView.Element => Element;
@@ -52,9 +52,9 @@ namespace MathLibrary
 
         //TODO: Log to Console if this.Element is still null
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public AdditionView()
+        public NumberContainerView()
         {
-            if (this.DataContext is Addition) this.Element = (Addition)this.DataContext;
+            if (this.DataContext is NumberContainer) this.Element = (NumberContainer)this.DataContext;
             InitializeComponent();
             Render();
         }
@@ -79,7 +79,7 @@ namespace MathLibrary
                 this.Element.ComputationPipelineInfo.IOManager.AddDataInputNode(nodeBlock);
                 //Subscribe to NodeElement PropertyChanged Event
                 //nodeBlock.PropertyChanged += NodeBlock_PropertyChanged;
-                
+
                 nodeBlock1 = new NodeElement(this.Element, NodeType.Input);
                 DataTemplateManager.RegisterDataTemplate(nodeBlock1);
                 this.Element.RenderPipelineInfo.AddChild(nodeBlock1);
@@ -165,7 +165,7 @@ namespace MathLibrary
             DataViewModel.WPFControl.ContentElements.Focus();
             Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
 
-            AdditionView rectangle = (AdditionView)sender;
+            NumberContainerView rectangle = (NumberContainerView)sender;
             IRenderable myRectangle = (IRenderable)rectangle.DataContext;
 
             //myRectangle.IsSelected = true;
@@ -212,7 +212,7 @@ namespace MathLibrary
 
             DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
 
-            AdditionView rectangle = (AdditionView)sender;
+            NumberContainerView rectangle = (NumberContainerView)sender;
             rectangle.ReleaseMouseCapture();
 
             e.Handled = true;
@@ -271,7 +271,7 @@ namespace MathLibrary
         #endregion
     }
 
-    public class Addition : BaseComp
+    public class NumberContainer : BaseComp
     {
         internal double _sliderValue = 0.0;
         //private double _inputValue = 0.0;
@@ -298,13 +298,13 @@ namespace MathLibrary
 
         #region Properties
 
-        public override Type ViewType => typeof(AdditionView);
+        public override Type ViewType => typeof(NumberContainerView);
 
         #endregion
 
         #region Constructors
 
-        public Addition() : base()
+        public NumberContainer() : base()
         {
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             //Random rng = new Random();
@@ -312,7 +312,7 @@ namespace MathLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public Addition(int x, int y, int width, int height) : base()
+        public NumberContainer(int x, int y, int width, int height) : base()
         {
             base.boundingBox = new BoundingBox(x, y, width, height);
 
