@@ -127,45 +127,7 @@ namespace Verse3.VanillaElements
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //Set as active Node
-            BezierElement b = (BezierElement)DataViewModel.ActiveConnection;
-            if (DataViewModel.ActiveConnection == default)
-            {
-                DataViewModel.ActiveNode = this.Element as INode;
-                DataViewModel.ActiveConnection = DataViewModel.CreateConnection(DataViewModel.ActiveNode);
-                b = (BezierElement)DataViewModel.ActiveConnection;
-                if (b != null)
-                {
-                    this.Element.RenderPipelineInfo.AddChild(b);
-                    this.Element.Connections.Add(b);
-                    MousePositionNode.Instance.Connections.Add(b);
-                    //b.RedrawBezier(b.Origin, b.Destination);
-                    //b.RenderView.Render();
-                }
-            }
-            else
-            {
-                if (b != null)
-                {
-                    if (DataViewModel.ActiveNode is IComputable && DataViewModel.ActiveNode != this.Element && DataViewModel.ActiveNode.NodeType == NodeType.Output)
-                    {
-                        this.Element.ComputationPipelineInfo.AddDataUpStream(DataViewModel.ActiveNode as IComputable);
-                    }
-                    DataViewModel.ActiveNode = this.Element as INode;
-                    b.SetDestination(DataViewModel.ActiveNode);
-                    if (MousePositionNode.Instance.Connections.Contains(b))
-                        MousePositionNode.Instance.Connections.Remove(b);
-                    this.Element.RenderPipelineInfo.AddChild(b);
-                    this.Element.Connections.Add(b);
-                    DataViewModel.ActiveConnection = default;
-                    DataViewModel.ActiveNode = default;
-                    //b.RedrawBezier(b.Origin, b.Destination);
-                    //b.RenderView.Render();
-                }
-            }
-            ComputationPipeline.Compute();
-            //RenderPipeline.Render();
-            //this.Element.OnPropertyChanged("BoundingBox");
+            this.Element.ToggleActive();
         }
     }
 
@@ -207,6 +169,49 @@ namespace Verse3.VanillaElements
             {
                 //renderable.Render();
             }
+        }
+
+        internal void ToggleActive()
+        {
+            //Set as active Node
+            BezierElement b = (BezierElement)DataViewModel.ActiveConnection;
+            if (DataViewModel.ActiveConnection == default)
+            {
+                DataViewModel.ActiveNode = this as INode;
+                DataViewModel.ActiveConnection = DataViewModel.CreateConnection(DataViewModel.ActiveNode);
+                b = (BezierElement)DataViewModel.ActiveConnection;
+                if (b != null)
+                {
+                    this.RenderPipelineInfo.AddChild(b);
+                    this.Connections.Add(b);
+                    MousePositionNode.Instance.Connections.Add(b);
+                    //b.RedrawBezier(b.Origin, b.Destination);
+                    //b.RenderView.Render();
+                }
+            }
+            else
+            {
+                if (b != null)
+                {
+                    if (DataViewModel.ActiveNode is IComputable && DataViewModel.ActiveNode != this && DataViewModel.ActiveNode.NodeType == NodeType.Output)
+                    {
+                        this.ComputationPipelineInfo.AddDataUpStream(DataViewModel.ActiveNode as IComputable);
+                    }
+                    DataViewModel.ActiveNode = this as INode;
+                    b.SetDestination(DataViewModel.ActiveNode);
+                    if (MousePositionNode.Instance.Connections.Contains(b))
+                        MousePositionNode.Instance.Connections.Remove(b);
+                    this.RenderPipelineInfo.AddChild(b);
+                    this.Connections.Add(b);
+                    DataViewModel.ActiveConnection = default;
+                    DataViewModel.ActiveNode = default;
+                    //b.RedrawBezier(b.Origin, b.Destination);
+                    //b.RenderView.Render();
+                }
+            }
+            ComputationPipeline.Compute();
+            //RenderPipeline.Render();
+            //this.Element.OnPropertyChanged("BoundingBox");
         }
 
         private HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center;
@@ -294,7 +299,7 @@ namespace Verse3.VanillaElements
                         {
                             BezierElement b = c as BezierElement;
                             b.RedrawBezier(b.Origin, b.Destination);
-                            b.RenderView.Render();
+                            if (b.RenderView != null) b.RenderView.Render();
                         }
                     }
                 }

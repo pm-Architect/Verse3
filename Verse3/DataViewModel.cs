@@ -44,7 +44,6 @@ namespace Verse3
             {
                 end = MousePositionNode.Instance;
             }
-            bool rtl = (start.NodeType == NodeType.Input);
             BezierElement bezier = new BezierElement(start, end);
             DataTemplateManager.RegisterDataTemplate(bezier as IRenderable);
             DataViewModel.Instance.Elements.Add(bezier);

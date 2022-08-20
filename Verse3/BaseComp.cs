@@ -124,74 +124,14 @@ namespace Verse3
         {
             if (this.ComputationPipelineInfo.IOManager.DataInputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 1)
             {
-                foreach (IDataNode n in this.ComputationPipelineInfo.IOManager.DataInputNodes)
-                {
-                    n.CollectData();
-                    //if (n is IComputable && (n.NodeType == NodeType.Input || n.NodeType == NodeType.Unset))
-                    //{
-                    //    IComputable c = (IComputable)n;
-                    //    //this.computationPipelineInfo.AddDataUpStream(c);
-                    //    if (n.Connections != null && n.Connections.Count > 0)
-                    //    {
-                    //        foreach (IConnection conn in n.Connections)
-                    //        {
-                    //            //INCOMING CONNECTIONS
-                    //            if (conn.Destination == n && conn.Origin is IComputable)
-                    //            {
-                    //                c.ComputationPipelineInfo.AddDataDownStream(conn.Origin as IComputable);
-                    //                //ComputationPipeline.ComputeComputable(conn.Origin as IComputable);
-                    //                //_inputValue = n.DataGoo.Data;
-                    //                //RenderPipeline.RenderRenderable(conn.Origin.Parent as IRenderable);
-                    //            }
-                    //            //OUTGOING CONNECTIONS
-                    //            //else if (conn.Origin == n/* && conn.Destination is NodeElement*/)
-                    //            //{
-                    //            //NodeElement nd = (NodeElement)conn.Destination;
-                    //            //nd.DataGoo.Data = _sliderValue + _inputValue;
-                    //            //RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
-                    //            //}
-                    //        }
-                    //    }
-                    //    ComputationPipeline.ComputeComputable(c);
-                    //}
-                }
+                this.ComputationPipelineInfo.CollectData();
             }
         }
         public virtual void DeliverData()
         {
             if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0/* && computable.Nodes[0] is NodeElement*/)
             {
-                foreach (IDataNode n in this.ComputationPipelineInfo.IOManager.DataOutputNodes)
-                {
-                    n.DeliverData();
-                    //if (n is IComputable && (n.NodeType == NodeType.Output || n.NodeType == NodeType.Unset))
-                    //{
-                    //    IComputable c = (IComputable)n;
-                    //    //this.computationPipelineInfo.AddDataDownStream(c);
-                    //    if (n.Connections != null && n.Connections.Count > 0)
-                    //    {
-                    //        foreach (IConnection conn in n.Connections)
-                    //        {
-                    //            //INCOMING CONNECTIONS
-                    //            //if (conn.Destination == n/* && conn.Origin is NodeElement*/)
-                    //            //{
-                    //            //_inputValue = n.DataGoo.Data;
-                    //            //RenderPipeline.RenderRenderable(conn.Origin.Parent as IRenderable);
-                    //            //}
-                    //            //OUTGOING CONNECTIONS
-                    //            /*else */
-                    //            if (conn.Origin == n && conn.Destination is IComputable)
-                    //            {
-                    //                c.ComputationPipelineInfo.AddDataUpStream(conn.Destination as IComputable);
-                    //                //NodeElement nd = (NodeElement)conn.Destination;
-                    //                //nd.DataGoo.Data = _sliderValue + _inputValue;
-                    //                //RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
-                    //            }
-                    //        }
-                    //    }
-                    //    ComputationPipeline.ComputeComputable(c);
-                    //}
-                }
+                this.ComputationPipelineInfo.DeliverData();
             }
         }
 
@@ -511,7 +451,8 @@ namespace Verse3
 
         public ElementsLinkedList<IConnection> Connections => connections;
 
-        public NodeType NodeType { get => NodeType.Unset; }
+        private NodeType _nodeType = NodeType.Unset;
+        public NodeType NodeType { get => _nodeType; }
 
         public CanvasPoint Hotspot
         {
@@ -555,6 +496,7 @@ namespace Verse3
             this.renderPipelineInfo = new RenderPipelineInfo(this);
             _computationPipelineInfo = new ComputationPipelineInfo(this);
             this.RenderPipelineInfo.Parent = parent as IRenderable;
+            this._nodeType = type;
             //this.DataGoo.DataChanged += DataChanged;
             //double x = DataViewModel.ContentCanvasMarginOffset + this.RenderPipelineInfo.Parent.X;
             //double y = DataViewModel.ContentCanvasMarginOffset + this.RenderPipelineInfo.Parent.Y;
@@ -602,9 +544,15 @@ namespace Verse3
                     //INCOMING CONNECTIONS
                     if (conn.Destination == this && conn.Origin is IDataNode<D>)
                     {
-                        if (!this.DataGoo.Data.Equals((conn.Origin as IDataNode<D>).DataGoo.Data))
+                        IDataNode<D> no = conn.Origin as IDataNode<D>;
+                        if (!this.DataGoo.IsValid)
                         {
-                            this.DataGoo.Data = (((IDataNode<D>)conn.Origin).DataGoo as DataStructure<D>).Data;
+                            this.DataGoo.Clear();
+                            this.DataGoo.Data = no.DataGoo.Data;
+                        }
+                        else if (!this.DataGoo.Data.Equals(no.DataGoo.Data))
+                        {
+                            this.DataGoo.Data = no.DataGoo.Data;
                         }
                         //this.NodeContentColor = System.Windows.Media.Brushes.White;
                         //break;
@@ -627,9 +575,15 @@ namespace Verse3
                 {
                     if (conn.Origin == this && conn.Destination is IDataNode<D>)
                     {
-                        if (!((conn.Destination as IDataNode<D>).DataGoo.Data.Equals(this.DataGoo.Data)))
+                        IDataNode<D> nd = conn.Destination as IDataNode<D>;
+                        if (!nd.DataGoo.IsValid)
                         {
-                            (conn.Destination as IDataNode<D>).DataGoo.Data = this.DataGoo.Data;
+                            nd.DataGoo.Clear();
+                            nd.DataGoo.Data = this.DataGoo.Data;
+                        }
+                        else if (!(nd.DataGoo.Data.Equals(this.DataGoo.Data)))
+                        {
+                            nd.DataGoo.Data = this.DataGoo.Data;
                         }
                         //this.NodeContentColor = System.Windows.Media.Brushes.White;
                         //break;

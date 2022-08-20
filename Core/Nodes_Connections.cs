@@ -30,6 +30,7 @@ namespace Core
     public interface IDataNode<D> : IDataNode
     {
         //public new event EventHandler<DataChangedEventArgs<D>> DataChanged;
+        new DataStructure<D> DataGoo { get; set; }
     }
 
     public interface IEventNode : INode/*, IDataGooContainer<object>*/

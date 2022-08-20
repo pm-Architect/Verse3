@@ -280,6 +280,7 @@ namespace MathLibrary
             double b = this.ComputationPipelineInfo.IOManager.GetData<double>(1);
             if (b == default) return;
             this.ComputationPipelineInfo.IOManager.SetData<double>((a + b), 0);
+            textBlock.DisplayedText = this.ElementText;
             //if (this.ComputationPipelineInfo.IOManager.DataInputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 1/* && this.Nodes[0] is NodeElement*/)
             //{
             //    double sum = 0.0;

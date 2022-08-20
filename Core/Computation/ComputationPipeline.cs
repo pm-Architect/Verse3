@@ -186,30 +186,30 @@ namespace Core
         }
         public void CollectData()
         {
-            if (this._dataUS.Count > 0)
-            {
-                foreach (IComputable dataUS in this._dataUS)
-                {
-                    if (dataUS.ComputableElementState == ComputableElementState.Computed)
-                    {
-                        IOManager.CollectData();
-                    }
-                    //else ComputationPipeline.ComputeComputable(dataUS);
-                }
-            }
+            IOManager.CollectData();
+            //if (this._dataUS.Count > 0)
+            //{
+            //    foreach (IComputable dataUS in this._dataUS)
+            //    {
+            //        if (dataUS.ComputableElementState == ComputableElementState.Computed)
+            //        {
+            //        }
+            //        //else ComputationPipeline.ComputeComputable(dataUS);
+            //    }
+            //}
         }
         public void DeliverData()
         {
-            if (this._computable.ComputableElementState == ComputableElementState.Computed)
-            {
-                foreach (IComputable dataDS in this._dataDS)
-                {
-                    if (dataDS.ComputableElementState == ComputableElementState.Computed)
-                    {
-                        IOManager.DeliverData();
-                    }
-                }
-            }
+            IOManager.DeliverData();
+            //if (this._computable.ComputableElementState == ComputableElementState.Computed)
+            //{
+            //    foreach (IComputable dataDS in this._dataDS)
+            //    {
+            //        if (dataDS.ComputableElementState == ComputableElementState.Computed)
+            //        {
+            //        }
+            //    }
+            //}
             //else ComputationPipeline.ComputeComputable(this._computable);
         }
     }
@@ -327,24 +327,36 @@ namespace Core
         
         public object GetData(int index)
         {
-            return this._dataOutputNodes[index].DataGoo.Data;
+            return this._dataInputNodes[index].DataGoo.Data;
         }
         public Type GetData(out object output, int index)
         {
-            output = this._dataOutputNodes[index].DataGoo.Data;
-            return this._dataOutputNodes[index].DataGoo.Data.GetType();
+            output = this._dataInputNodes[index].DataGoo.Data;
+            return this._dataInputNodes[index].DataGoo.Data.GetType();
         }
         public T GetData<T>(int index)
         {
-            if (this._dataOutputNodes[index].DataGoo.DataType == typeof(T))
-                return (T)this._dataOutputNodes[index].DataGoo.Data;
-            else return default;
+            if (this._dataInputNodes[index].DataValueType == typeof(T))
+            {
+                if (this._dataInputNodes[index].DataGoo.IsValid && this._dataInputNodes[index].DataGoo.Data != null)
+                {
+                    if (this._dataInputNodes[index].DataGoo.Data is T)
+                    {
+                        return (T)this._dataInputNodes[index].DataGoo.Data;
+                    }
+                    else
+                    {
+                        throw new Exception("Data type mismatch");
+                    }
+                }
+            }
+            return default;
         }
         public bool GetData<T>(out T output, int index)
         {
-            if (this._dataOutputNodes[index].DataGoo.DataType == typeof(T))
+            if (this._dataInputNodes[index].DataValueType == typeof(T))
             {
-                output = (T)this._dataOutputNodes[index].DataGoo.Data;
+                output = (T)this._dataInputNodes[index].DataGoo.Data;
                 return true;
             }
             else
@@ -356,7 +368,7 @@ namespace Core
         
         public bool SetData(object data, int index)
         {
-            if (this._dataOutputNodes[index].DataGoo.DataType == data.GetType())
+            if (this._dataOutputNodes[index].DataValueType == data.GetType())
             {
                 this._dataOutputNodes[index].DataGoo.Data = data;
                 return true;
@@ -365,7 +377,7 @@ namespace Core
         }
         public bool SetData<T>(T data, int index)
         {
-            if (this._dataOutputNodes[index].DataGoo.DataType == typeof(T))
+            if (this._dataOutputNodes[index].DataValueType == typeof(T))
             {
                 this._dataOutputNodes[index].DataGoo.Data = data;
                 return true;
@@ -375,15 +387,43 @@ namespace Core
 
         public void CollectData()
         {
-            foreach (IDataNode<object> dataInputNode in this._dataInputNodes)
+            foreach (IDataNode dataInputNode in this._dataInputNodes)
             {
+                //TODO: ONLY WHEN/IF CONNECTIONS CHANGED
+                if (dataInputNode.Connections != null && dataInputNode.Connections.Count > 0)
+                {
+                    foreach (IConnection conn in dataInputNode.Connections)
+                    {
+                        if (conn.Destination == dataInputNode && conn.Origin.Parent is IComputable)
+                        {
+                            if (!this._computable.ComputationPipelineInfo.DataUS.Contains(conn.Origin.Parent as IComputable))
+                            {
+                                this._computable.ComputationPipelineInfo.DataUS.Add(conn.Origin.Parent as IComputable);
+                            }
+                        }
+                    }
+                }
                 dataInputNode.CollectData();
             }
         }
         public void DeliverData()
         {
-            foreach (IDataNode<object> dataOutputNode in this._dataOutputNodes)
+            foreach (IDataNode dataOutputNode in this._dataOutputNodes)
             {
+                //TODO: ONLY WHEN?IF CONNECTIONS CHANGED
+                if (dataOutputNode.Connections != null && dataOutputNode.Connections.Count > 0)
+                {
+                    foreach (IConnection conn in dataOutputNode.Connections)
+                    {
+                        if (conn.Origin == dataOutputNode && conn.Destination.Parent is IComputable)
+                        {
+                            if (!this._computable.ComputationPipelineInfo.DataDS.Contains(conn.Destination.Parent as IComputable))
+                            {
+                                this._computable.ComputationPipelineInfo.DataDS.Add(conn.Destination.Parent as IComputable);
+                            }
+                        }
+                    }
+                }
                 dataOutputNode.DeliverData();
             }
         }

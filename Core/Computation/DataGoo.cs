@@ -73,11 +73,21 @@ namespace Core
         public event EventHandler<DataChangedEventArgs<D>> DataChanged;
         public new D Data
         {
-            get { return (D)base.Data; }
+            get 
+            {
+                if (base.volatileData == null)
+                    return default(D);
+                if (base.volatileData is D)
+                    return (D)base.volatileData;
+                else
+                    throw new Exception("Data is not of type " + typeof(D).Name);
+            }
             set
             {
-                D old = (D)base.Data;
-                base.Data = value;
+                if (value == null) throw new ArgumentNullException("value");
+                D old = default;
+                if (base.volatileData != null && base.volatileData is D) old = (D)base.volatileData;
+                base.volatileData = value;
                 if (DataChanged != null)
                     DataChanged(this, new DataChangedEventArgs<D>(old, value));
             }
@@ -124,9 +134,10 @@ namespace Core
 
     public class DataStructure : DataLinkedList<IDataGoo>, IDataGoo
     {
-        public object Data { get; set; }
+        protected object volatileData = default;
+        public object Data { get => volatileData; set => volatileData = value; }
         public Guid ID { get; set; }
-        public bool IsValid { get; }
+        public bool IsValid { get => (this.Data != default); }
         public string IsValidReason { get; }
         public IDataGoo Parent { get; }
         public DataStructure Children { get; }
