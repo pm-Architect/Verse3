@@ -639,14 +639,38 @@ namespace Verse3
         private NodeType _nodeType = NodeType.Unset;
         public NodeType NodeType { get => _nodeType; }
 
+        internal CanvasPoint _hotspot = new CanvasPoint(0,0);
         public CanvasPoint Hotspot
         {
             get
             {
-                CanvasPoint center = this.BoundingBox.Center;
-                //center.X += (this.BoundingBox.Size.Width / 2);
-                //center.Y -= (this.BoundingBox.Size.Height / 2);
-                return center;
+                double v = 0.0;
+                if ((this as INode).Parent is IComputable)
+                {
+                    IComputable c = (this as INode).Parent as IComputable;
+                    if (this.NodeType == NodeType.Output)
+                    {
+                        if (c.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 1 && c.ComputationPipelineInfo.IOManager.DataOutputNodes.Contains(this))
+                        {
+                            int i = c.ComputationPipelineInfo.IOManager.DataOutputNodes.IndexOf(this);
+                            v = i * this.BoundingBox.Size.Height;
+                        }
+                        _hotspot = this.RenderPipelineInfo.Parent.BoundingBox.Location +
+                        new CanvasPoint(this.RenderPipelineInfo.Parent.BoundingBox.Size.Width,
+                            ((this.BoundingBox.Size.Height / 2) + v));
+                    }
+                    else
+                    {
+                        if (c.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 1 && c.ComputationPipelineInfo.IOManager.DataInputNodes.Contains(this))
+                        {
+                            int i = c.ComputationPipelineInfo.IOManager.DataInputNodes.IndexOf(this);
+                            v = i * this.BoundingBox.Size.Height;
+                        }
+                        _hotspot = this.RenderPipelineInfo.Parent.BoundingBox.Location +
+                        new CanvasPoint(0.0, ((this.BoundingBox.Size.Height / 2) + v));
+                    }
+                }
+                return _hotspot;
             }
         }
 
@@ -716,6 +740,8 @@ namespace Verse3
         //}
 
         //public new event EventHandler<DataChangedEventArgs> DataChanged;
+        
+        
         public void Compute()
         {
             this.ComputableElementState = ComputableElementState.Computed;
