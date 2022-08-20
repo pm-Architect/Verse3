@@ -48,7 +48,7 @@ namespace Core
         
         
 
-        public static int ComputeComputable(IComputable computable, bool recursive = true, bool upstream = false)
+        public static int ComputeComputable(IComputable computable, bool recursive = true, bool upstream = false, bool render = true)
         {
             //TODO: PARALLEL COMPUTATION
             if (computable.ComputableElementState == ComputableElementState.Computing) return -1;
@@ -103,6 +103,11 @@ namespace Core
             finally
             {
                 computable.ComputableElementState = ComputableElementState.Computed;
+                if (computable is IRenderable)
+                {
+                    IRenderable r = computable as IRenderable;
+                    RenderPipeline.RenderRenderable(r);
+                }
             }
             return count;
         }

@@ -104,7 +104,7 @@ namespace Verse3.VanillaElements
         private void SliderBlock_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             this.Element.OnValueChanged(sender, e);
-            ComputationPipeline.ComputeComputable(this.Element.RenderPipelineInfo.Parent as IComputable);
+            //ComputationPipeline.ComputeComputable(this.Element.RenderPipelineInfo.Parent as IComputable);
             //RenderPipeline.Render();
         }
     }

@@ -95,11 +95,11 @@ namespace MathLibrary
         #endregion
 
 
-        private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
-        {
-            RenderPipeline.Render();
-            ComputationPipeline.Compute();
-        }
+        //private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
+        //{
+        //    RenderPipeline.Render();
+        //    ComputationPipeline.Compute();
+        //}
 
         #region MouseEvents
 
