@@ -41,19 +41,16 @@ namespace MathLibrary
 
         #endregion
 
-
         #region Constructor and Render
 
 
         //TODO: Log to Console if this.Element is still null
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public AdditionView()
         {
             if (this.DataContext is Addition) this.Element = (Addition)this.DataContext;
             InitializeComponent();
             Render();
         }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         public void Render()
         {
@@ -93,13 +90,6 @@ namespace MathLibrary
         //}
 
         #endregion
-
-
-        //private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
-        //{
-        //    RenderPipeline.Render();
-        //    ComputationPipeline.Compute();
-        //}
 
         #region MouseEvents
 
@@ -218,11 +208,9 @@ namespace MathLibrary
         #endregion
     }
 
+
     public class Addition : BaseComp
     {
-        internal double _sliderValue = 0.0;
-        //private double _inputValue = 0.0;
-
         public string? ElementText
         {
             get
