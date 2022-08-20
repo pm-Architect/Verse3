@@ -41,11 +41,6 @@ namespace MathLibrary
 
         #endregion
 
-        internal TextElement textBlock = new TextElement();
-        //internal SliderElement sliderBlock = new SliderElement();
-        internal NodeElement nodeBlock;
-        internal NodeElement nodeBlock1;
-        internal NodeElement nodeBlock2;
 
         #region Constructor and Render
 
@@ -65,57 +60,9 @@ namespace MathLibrary
             if (this.Element != null)
             {
                 if (this.Element.RenderView != this) this.Element.RenderView = this;
+                this.Element.RenderComp();
+
                 InputsList.ItemsSource = this.Element.Children;
-
-                if (this.Element.Children.Count > 0)
-                {
-                    textBlock.DisplayedText = this.Element.ElementText;
-                    return;
-                }
-
-                nodeBlock = new NodeElement(this.Element, NodeType.Input);
-                DataTemplateManager.RegisterDataTemplate(nodeBlock);
-                this.Element.RenderPipelineInfo.AddChild(nodeBlock);
-                this.Element.ComputationPipelineInfo.IOManager.AddDataInputNode(nodeBlock);
-                //Subscribe to NodeElement PropertyChanged Event
-                //nodeBlock.PropertyChanged += NodeBlock_PropertyChanged;
-                
-                nodeBlock1 = new NodeElement(this.Element, NodeType.Input);
-                DataTemplateManager.RegisterDataTemplate(nodeBlock1);
-                this.Element.RenderPipelineInfo.AddChild(nodeBlock1);
-                this.Element.ComputationPipelineInfo.IOManager.AddDataInputNode(nodeBlock1);
-
-                nodeBlock2 = new NodeElement(this.Element, NodeType.Output);
-                DataTemplateManager.RegisterDataTemplate(nodeBlock2);
-                this.Element.RenderPipelineInfo.AddChild(nodeBlock2);
-                this.Element.ComputationPipelineInfo.IOManager.AddDataOutputNode(nodeBlock2);
-
-
-                string? txt = this.Element.ElementText;
-                textBlock = new TextElement();
-                textBlock.DisplayedText = txt;
-                textBlock.TextAlignment = TextAlignment.Left;
-                DataTemplateManager.RegisterDataTemplate(textBlock);
-                this.Element.RenderPipelineInfo.AddChild(textBlock);
-
-                //sliderBlock = new SliderElement();
-                //sliderBlock.Minimum = 0;
-                //sliderBlock.Maximum = 100;
-                //sliderBlock.Value = 50;
-                //sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
-                //DataTemplateManager.RegisterDataTemplate(sliderBlock);
-                //this.Element.RenderPipelineInfo.AddChild(sliderBlock);
-
-                //var buttonBlock = new ButtonElement();
-                //buttonBlock.DisplayedText = "Click me";
-                //buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
-                //DataTemplateManager.RegisterDataTemplate(buttonBlock);
-                //this.Element.RenderPipelineInfo.AddChild(buttonBlock);
-
-                //var textBoxBlock = new TextBoxElement();
-                //textBoxBlock.InputText = "Enter text";
-                //DataTemplateManager.RegisterDataTemplate(textBoxBlock);
-                //this.Element.RenderPipelineInfo.AddChild(textBoxBlock);
             }
         }
 
@@ -328,16 +275,21 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            if (this.ComputationPipelineInfo.IOManager.DataInputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 1/* && this.Nodes[0] is NodeElement*/)
-            {
-                double sum = 0.0;
-                foreach (NodeElement n in this.ComputationPipelineInfo.IOManager.DataInputNodes)
-                {
-                    if (n != null) sum += n.DataGoo.Data;
-                }
-                if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
-                    ((NodeElement)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data = sum;
-            }
+            double a = this.ComputationPipelineInfo.IOManager.GetData<double>(0);
+            if (a == default) return;
+            double b = this.ComputationPipelineInfo.IOManager.GetData<double>(1);
+            if (b == default) return;
+            this.ComputationPipelineInfo.IOManager.SetData<double>((a + b), 0);
+            //if (this.ComputationPipelineInfo.IOManager.DataInputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 1/* && this.Nodes[0] is NodeElement*/)
+            //{
+            //    double sum = 0.0;
+            //    foreach (NodeElement n in this.ComputationPipelineInfo.IOManager.DataInputNodes)
+            //    {
+            //        if (n != null) sum += n.DataGoo.Data;
+            //    }
+            //    if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
+            //        ((NodeElement)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data = sum;
+            //}
         }
 
         public override CompInfo GetCompInfo()
@@ -352,9 +304,41 @@ namespace MathLibrary
             return ci;
         }
 
-        //private IRenderable _parent;
-        //public IRenderable Parent => _parent;
-        //private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
-        //public ElementsLinkedList<IRenderable> Children => _children;
+        internal TextElement textBlock = new TextElement();
+        internal NodeElement nodeBlock;
+        internal NodeElement nodeBlock1;
+        internal NodeElement nodeBlock2;
+        public override void Initialize()
+        {
+            if (this.Children.Count > 0)
+            {
+                textBlock.DisplayedText = this.ElementText;
+                return;
+            }
+
+            nodeBlock = new NodeElement(this, NodeType.Input);
+            DataTemplateManager.RegisterDataTemplate(nodeBlock);
+            this.RenderPipelineInfo.AddChild(nodeBlock);
+            this.ComputationPipelineInfo.IOManager.AddDataInputNode<double>(nodeBlock as IDataNode<double>);
+            //Subscribe to NodeElement PropertyChanged Event
+            //nodeBlock.PropertyChanged += NodeBlock_PropertyChanged;
+
+            nodeBlock1 = new NodeElement(this, NodeType.Input);
+            DataTemplateManager.RegisterDataTemplate(nodeBlock1);
+            this.RenderPipelineInfo.AddChild(nodeBlock1);
+            this.ComputationPipelineInfo.IOManager.AddDataInputNode<double>(nodeBlock1 as IDataNode<double>);
+
+            nodeBlock2 = new NodeElement(this, NodeType.Output);
+            DataTemplateManager.RegisterDataTemplate(nodeBlock2);
+            this.RenderPipelineInfo.AddChild(nodeBlock2);
+            this.ComputationPipelineInfo.IOManager.AddDataOutputNode<double>(nodeBlock2 as IDataNode<double>);
+
+            string? txt = this.ElementText;
+            textBlock = new TextElement();
+            textBlock.DisplayedText = txt;
+            textBlock.TextAlignment = TextAlignment.Left;
+            DataTemplateManager.RegisterDataTemplate(textBlock);
+            this.RenderPipelineInfo.AddChild(textBlock);
+        }
     }
 }

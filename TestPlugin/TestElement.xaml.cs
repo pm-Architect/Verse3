@@ -41,9 +41,6 @@ namespace TestPlugin
 
         #endregion
         
-        internal TextElement textBlock = new TextElement();
-        internal SliderElement sliderBlock = new SliderElement();
-        internal NodeElement nodeBlock;
 
         #region Constructor and Render
 
@@ -63,84 +60,13 @@ namespace TestPlugin
             if (this.Element != null)
             {
                 if (this.Element.RenderView != this) this.Element.RenderView = this;
+                this.Element.RenderComp();
+
                 InputsList.ItemsSource = this.Element.Children;
-
-                if (this.Element.Children.Count > 0)
-                {
-                    textBlock.DisplayedText = this.Element.ElementText;
-                    return;
-                }
-
-                nodeBlock = new NodeElement(this.Element, NodeType.Input);
-                DataTemplateManager.RegisterDataTemplate(nodeBlock);
-                this.Element.RenderPipelineInfo.AddChild(nodeBlock);
-                this.Element.ComputationPipelineInfo.IOManager.DataInputNodes.Add(nodeBlock);
-                //Subscribe to NodeElement PropertyChanged Event
-                //nodeBlock.PropertyChanged += NodeBlock_PropertyChanged;
-
-
-                string? txt = this.Element.ElementText;
-                textBlock = new TextElement();
-                textBlock.DisplayedText = txt;
-                textBlock.TextAlignment = TextAlignment.Left;
-                DataTemplateManager.RegisterDataTemplate(textBlock);
-                this.Element.RenderPipelineInfo.AddChild(textBlock);
-
-                sliderBlock = new SliderElement();
-                sliderBlock.Minimum = 0;
-                sliderBlock.Maximum = 100;
-                sliderBlock.Value = 50;
-                sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
-                DataTemplateManager.RegisterDataTemplate(sliderBlock);
-                this.Element.RenderPipelineInfo.AddChild(sliderBlock);
-
-                var buttonBlock = new ButtonElement();
-                buttonBlock.DisplayedText = "Click me";
-                buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
-                DataTemplateManager.RegisterDataTemplate(buttonBlock);
-                this.Element.RenderPipelineInfo.AddChild(buttonBlock);
-
-                var textBoxBlock = new TextBoxElement();
-                textBoxBlock.InputText = "Enter text";
-                DataTemplateManager.RegisterDataTemplate(textBoxBlock);
-                this.Element.RenderPipelineInfo.AddChild(textBoxBlock);
             }
         }
 
-        private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            this.Element._sliderValue = sliderBlock.Value;
-            //if (nodeBlock.Connections != null)
-            //{
-            //    if (nodeBlock.Connections.Count > 0)
-            //    {
-            //        IConnection c = nodeBlock.Connections[0];
-            //        if (c.Origin == nodeBlock)
-            //        {
-            //            if (c.Destination != MousePositionNode.Instance && c.Destination != null)
-            //            {
-            //                if (c.Destination.Parent is TestElement)
-            //                {
-            //                    TestElement te = (TestElement)c.Destination.Parent;
-            //                    if (te != null)
-            //                    {
-            //                        te._sliderValue = sliderBlock.Value;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-        }
-
         #endregion
-        
-
-        private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
-        {
-            RenderPipeline.Render();
-            ComputationPipeline.Compute();
-        }
 
         #region MouseEvents
 
@@ -349,9 +275,62 @@ namespace TestPlugin
             return ci;
         }
 
-        //private IRenderable _parent;
-        //public IRenderable Parent => _parent;
-        //private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
-        //public ElementsLinkedList<IRenderable> Children => _children;
+        internal TextElement textBlock = new TextElement();
+        internal SliderElement sliderBlock = new SliderElement();
+        internal NodeElement nodeBlock;
+        public override void Initialize()
+        {
+            if (this.Children.Count > 0)
+            {
+                this.textBlock.DisplayedText = this.ElementText;
+                return;
+            }
+
+            nodeBlock = new NodeElement(this, NodeType.Input);
+            DataTemplateManager.RegisterDataTemplate(nodeBlock);
+            this.RenderPipelineInfo.AddChild(nodeBlock);
+            this.ComputationPipelineInfo.IOManager.AddDataInputNode<object>(nodeBlock as IDataNode<object>);
+            //Subscribe to NodeElement PropertyChanged Event
+            //nodeBlock.PropertyChanged += NodeBlock_PropertyChanged;
+
+
+            string? txt = this.ElementText;
+            textBlock = new TextElement();
+            textBlock.DisplayedText = txt;
+            textBlock.TextAlignment = TextAlignment.Left;
+            DataTemplateManager.RegisterDataTemplate(textBlock);
+            this.RenderPipelineInfo.AddChild(textBlock);
+
+            sliderBlock = new SliderElement();
+            sliderBlock.Minimum = 0;
+            sliderBlock.Maximum = 100;
+            sliderBlock.Value = 50;
+            sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
+            DataTemplateManager.RegisterDataTemplate(sliderBlock);
+            this.RenderPipelineInfo.AddChild(sliderBlock);
+
+            var buttonBlock = new ButtonElement();
+            buttonBlock.DisplayedText = "Click me";
+            buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
+            DataTemplateManager.RegisterDataTemplate(buttonBlock);
+            this.RenderPipelineInfo.AddChild(buttonBlock);
+
+            var textBoxBlock = new TextBoxElement();
+            textBoxBlock.InputText = "Enter text";
+            DataTemplateManager.RegisterDataTemplate(textBoxBlock);
+            this.RenderPipelineInfo.AddChild(textBoxBlock);
+        }
+        private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            this._sliderValue = sliderBlock.Value;
+        }
+        private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
+        {
+            RenderPipeline.Render();
+            ComputationPipeline.Compute();
+        }
+
+
+
     }
 }

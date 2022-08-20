@@ -50,11 +50,11 @@ namespace Core
         //void ReplaceSource(Guid oldSourceID, IDataGooContainer newSource);
         DataStructure DataGoo { get; set; }
     }
-    public interface IDataGooContainer<D> : IComputable
+    public interface IDataGooContainer<D> : IDataGooContainer
     {
         //public ContainerState ContainerState { get; }
         //public DataState DataState { get; }
-        Type DataValueType { get; }
+        //Type DataValueType { get; }
         //ElementsLinkedList<IDataGooContainer> Sources { get; }
         //int AddSource(IDataGooContainer source);
         //void RemoveSource(int index);
@@ -64,12 +64,24 @@ namespace Core
         //void ReplaceSource(int index, IDataGooContainer newSource);
         //void ReplaceSource(IDataGooContainer oldSource, IDataGooContainer newSource);
         //void ReplaceSource(Guid oldSourceID, IDataGooContainer newSource);
-        DataStructure<D> DataGoo { get; set; }
+        new DataStructure<D> DataGoo { get; set; }
     }
 
     public class DataStructure<D> : DataStructure
     {
-        public new D Data { get; set; }
+        //Fire an event when Data is set
+        public event EventHandler<DataChangedEventArgs<D>> DataChanged;
+        public new D Data
+        {
+            get { return (D)base.Data; }
+            set
+            {
+                D old = (D)base.Data;
+                base.Data = value;
+                if (DataChanged != null)
+                    DataChanged(this, new DataChangedEventArgs<D>(old, value));
+            }
+        }
         public new Type DataType => typeof(D);
 
         public DataStructure() : base()
@@ -88,6 +100,25 @@ namespace Core
         public DataStructure(IEnumerable<IDataGoo<D>> data) : base(data)
         {
             ID = Guid.NewGuid();
+        }
+    }
+
+    public class DataChangedEventArgs<D> : DataChangedEventArgs
+    {
+        public new D OldData { get; private set; }
+        public new D NewData { get; private set; }
+        public DataChangedEventArgs(D oldData, D newData) : base(oldData, newData)
+        {
+        }
+    }
+    public class DataChangedEventArgs : EventArgs
+    {
+        public object OldData { get; private set; }
+        public object NewData { get; private set; }
+        public DataChangedEventArgs(object oldData, object newData)
+        {
+            OldData = oldData;
+            NewData = newData;
         }
     }
 

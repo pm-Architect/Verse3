@@ -50,6 +50,7 @@ namespace Core
 
         public static int ComputeComputable(IComputable computable, bool recursive = true, bool upstream = false)
         {
+            //TODO: PARALLEL COMPUTATION
             if (computable.ComputableElementState == ComputableElementState.Computing) return -1;
             else computable.ComputableElementState = ComputableElementState.Computing;
             int count = 0;
@@ -80,14 +81,14 @@ namespace Core
                         }
                         else
                         {
-                            if (computable.ComputationPipelineInfo.DataUS != null && computable.ComputationPipelineInfo.DataUS.Count > 0)
-                            {
-                                foreach (IComputable compUS in computable.ComputationPipelineInfo.DataUS)
-                                {
-                                    //TODO: Log to console
-                                    computeSuccess = computeSuccess && (ComputeComputable(compUS) > 0);
-                                }
-                            }
+                            //if (computable.ComputationPipelineInfo.DataUS != null && computable.ComputationPipelineInfo.DataUS.Count > 0)
+                            //{
+                            //    foreach (IComputable compUS in computable.ComputationPipelineInfo.DataUS)
+                            //    {
+                            //        //TODO: Log to console
+                            //        computeSuccess = computeSuccess && (ComputeComputable(compUS) > 0);
+                            //    }
+                            //}
                         }
                     }
                 }
@@ -183,20 +184,73 @@ namespace Core
                 eventDS.ComputationPipelineInfo.AddEventUpStream(_computable);
             }
         }
+        public void CollectData()
+        {
+            if (this._dataUS.Count > 0)
+            {
+                foreach (IComputable dataUS in this._dataUS)
+                {
+                    if (dataUS.ComputableElementState == ComputableElementState.Computed)
+                    {
+                        IOManager.CollectData();
+                    }
+                    //else ComputationPipeline.ComputeComputable(dataUS);
+                }
+            }
+        }
+        public void DeliverData()
+        {
+            if (this._computable.ComputableElementState == ComputableElementState.Computed)
+            {
+                foreach (IComputable dataDS in this._dataDS)
+                {
+                    if (dataDS.ComputableElementState == ComputableElementState.Computed)
+                    {
+                        IOManager.DeliverData();
+                    }
+                }
+            }
+            //else ComputationPipeline.ComputeComputable(this._computable);
+        }
     }
 
     public class IOManager
     {
         private IComputable _computable;
-        private ElementsLinkedList<INode> _dataInputNodes = new ElementsLinkedList<INode>();
-        public ElementsLinkedList<INode> DataInputNodes => _dataInputNodes;
+        private ElementsLinkedList<IDataNode> _dataInputNodes = new ElementsLinkedList<IDataNode>();
+        public ElementsLinkedList<IDataNode> DataInputNodes => _dataInputNodes;
 
-        private ElementsLinkedList<INode> _dataOutputNodes = new ElementsLinkedList<INode>();
-        public ElementsLinkedList<INode> DataOutputNodes => _dataOutputNodes;
-        private ElementsLinkedList<INode> _eventInputNodes = new ElementsLinkedList<INode>();
-        public ElementsLinkedList<INode> EventInputNodes => _eventInputNodes;
-        private ElementsLinkedList<INode> _eventOutputNodes = new ElementsLinkedList<INode>();
-        public ElementsLinkedList<INode> EventOutputNodes => _eventOutputNodes;
+        private ElementsLinkedList<IDataNode> _dataOutputNodes = new ElementsLinkedList<IDataNode>();
+        public ElementsLinkedList<IDataNode> DataOutputNodes => _dataOutputNodes;
+        private ElementsLinkedList<IEventNode> _eventInputNodes = new ElementsLinkedList<IEventNode>();
+        public ElementsLinkedList<IEventNode> EventInputNodes => _eventInputNodes;
+        private ElementsLinkedList<IEventNode> _eventOutputNodes = new ElementsLinkedList<IEventNode>();
+        public ElementsLinkedList<IEventNode> EventOutputNodes => _eventOutputNodes;
+        
+        //public int ConnectionCount
+        //{
+        //    get
+        //    {
+        //        int count = 0;
+        //        try
+        //        {
+        //            foreach (IDataNode<object> dataInputNode in _dataInputNodes)
+        //            {
+        //                if (dataInputNode.Connections.Count > 0) count += dataInputNode.Connections.Count;
+        //            }
+        //            foreach (IDataNode<object> dataOutputNode in _dataOutputNodes)
+        //            {
+        //                if (dataOutputNode.Connections.Count > 0) count += dataOutputNode.Connections.Count;
+        //            }
+        //        }
+        //        catch
+        //        { 
+        //            //TODO: LOG to console
+        //        }
+        //        return count;
+        //    }
+        //}
+        
         public IOManager(IComputable computable)
         {
             this._computable = computable;
@@ -206,39 +260,39 @@ namespace Core
             //this._eventOutputNodes = computable.ComputationPipelineInfo.EventDS;
         }
 
-        public void AddDataInputNode(INode dataInputNode)
+        public void AddDataInputNode<T>(IDataNode<T> dataInputNode)
         {
             if (dataInputNode is null) return;
             if (!this._dataInputNodes.Contains(dataInputNode))
             {
                 if (dataInputNode.NodeType == NodeType.Input)
                 {
-                    //dataInputNode.Parent = _computable;
+                    dataInputNode.Parent = _computable;
                     this._dataInputNodes.Add(dataInputNode);
-                    if (dataInputNode is IComputable)
-                    {
-                        this._computable.ComputationPipelineInfo.AddDataUpStream(dataInputNode as IComputable);
-                    }
+                    //if (dataInputNode is IComputable)
+                    //{
+                    //    this._computable.ComputationPipelineInfo.AddDataUpStream(dataInputNode as IComputable);
+                    //}
                 }
             }
         }
-        public void AddDataOutputNode(INode dataOutputNode)
+        public void AddDataOutputNode<T>(IDataNode<T> dataOutputNode)
         {
             if (dataOutputNode is null) return;
             if (!this._dataOutputNodes.Contains(dataOutputNode))
             {
                 if (dataOutputNode.NodeType == NodeType.Output)
                 {
-                    //dataOutputNode.Parent = _computable;
+                    dataOutputNode.Parent = _computable;
                     this._dataOutputNodes.Add(dataOutputNode);
-                    if (dataOutputNode is IComputable)
-                    {
-                        this._computable.ComputationPipelineInfo.AddDataDownStream(dataOutputNode as IComputable);
-                    }
+                    //if (dataOutputNode is IComputable)
+                    //{
+                    //    this._computable.ComputationPipelineInfo.AddDataDownStream(dataOutputNode as IComputable);
+                    //}
                 }
             }
         }
-        public void AddEventInputNode(INode eventInputNode)
+        public void AddEventInputNode(IEventNode eventInputNode)
         {
             if (eventInputNode is null) return;
             if (!this._eventInputNodes.Contains(eventInputNode))
@@ -254,7 +308,7 @@ namespace Core
                 }
             }
         }
-        public void AddEventOutputNode(INode eventOutputNode)
+        public void AddEventOutputNode(IEventNode eventOutputNode)
         {
             if (eventOutputNode is null) return;
             if (!this._eventOutputNodes.Contains(eventOutputNode))
@@ -268,6 +322,69 @@ namespace Core
                         this._computable.ComputationPipelineInfo.AddEventDownStream(eventOutputNode as IComputable);
                     }
                 }
+            }
+        }
+        
+        public object GetData(int index)
+        {
+            return this._dataOutputNodes[index].DataGoo.Data;
+        }
+        public Type GetData(out object output, int index)
+        {
+            output = this._dataOutputNodes[index].DataGoo.Data;
+            return this._dataOutputNodes[index].DataGoo.Data.GetType();
+        }
+        public T GetData<T>(int index)
+        {
+            if (this._dataOutputNodes[index].DataGoo.DataType == typeof(T))
+                return (T)this._dataOutputNodes[index].DataGoo.Data;
+            else return default;
+        }
+        public bool GetData<T>(out T output, int index)
+        {
+            if (this._dataOutputNodes[index].DataGoo.DataType == typeof(T))
+            {
+                output = (T)this._dataOutputNodes[index].DataGoo.Data;
+                return true;
+            }
+            else
+            {
+                output = default;
+                return false;
+            }
+        }
+        
+        public bool SetData(object data, int index)
+        {
+            if (this._dataOutputNodes[index].DataGoo.DataType == data.GetType())
+            {
+                this._dataOutputNodes[index].DataGoo.Data = data;
+                return true;
+            }
+            else return false;
+        }
+        public bool SetData<T>(T data, int index)
+        {
+            if (this._dataOutputNodes[index].DataGoo.DataType == typeof(T))
+            {
+                this._dataOutputNodes[index].DataGoo.Data = data;
+                return true;
+            }
+            else return false;
+        }
+
+        public void CollectData()
+        {
+            foreach (IDataNode<object> dataInputNode in this._dataInputNodes)
+            {
+                dataInputNode.CollectData();
+            }
+        }
+        public void DeliverData()
+        {
+            foreach (IDataNode<object> dataOutputNode in this._dataOutputNodes)
+            {
+                dataOutputNode.DeliverData();
             }
         }
     }

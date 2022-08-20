@@ -112,41 +112,48 @@ namespace Verse3
             computationPipelineInfo = new ComputationPipelineInfo(this);
         }
 
+        public abstract void Initialize();
+        public virtual void RenderComp()
+        {
+            Initialize();
+        }
+
         public abstract void Compute();
 
         public virtual void CollectData()
         {
             if (this.ComputationPipelineInfo.IOManager.DataInputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 1)
             {
-                foreach (INode n in this.ComputationPipelineInfo.IOManager.DataInputNodes)
+                foreach (IDataNode n in this.ComputationPipelineInfo.IOManager.DataInputNodes)
                 {
-                    if (n is IComputable && (n.NodeType == NodeType.Input || n.NodeType == NodeType.Unset))
-                    {
-                        IComputable c = (IComputable)n;
-                        //this.computationPipelineInfo.AddDataUpStream(c);
-                        if (n.Connections != null && n.Connections.Count > 0)
-                        {
-                            foreach (IConnection conn in n.Connections)
-                            {
-                                //INCOMING CONNECTIONS
-                                if (conn.Destination == n && conn.Origin is IComputable)
-                                {
-                                    c.ComputationPipelineInfo.AddDataDownStream(conn.Origin as IComputable);
-                                    //ComputationPipeline.ComputeComputable(conn.Origin as IComputable);
-                                    //_inputValue = n.DataGoo.Data;
-                                    //RenderPipeline.RenderRenderable(conn.Origin.Parent as IRenderable);
-                                }
-                                //OUTGOING CONNECTIONS
-                                //else if (conn.Origin == n/* && conn.Destination is NodeElement*/)
-                                //{
-                                //NodeElement nd = (NodeElement)conn.Destination;
-                                //nd.DataGoo.Data = _sliderValue + _inputValue;
-                                //RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
-                                //}
-                            }
-                        }
-                        ComputationPipeline.ComputeComputable(c);
-                    }
+                    n.CollectData();
+                    //if (n is IComputable && (n.NodeType == NodeType.Input || n.NodeType == NodeType.Unset))
+                    //{
+                    //    IComputable c = (IComputable)n;
+                    //    //this.computationPipelineInfo.AddDataUpStream(c);
+                    //    if (n.Connections != null && n.Connections.Count > 0)
+                    //    {
+                    //        foreach (IConnection conn in n.Connections)
+                    //        {
+                    //            //INCOMING CONNECTIONS
+                    //            if (conn.Destination == n && conn.Origin is IComputable)
+                    //            {
+                    //                c.ComputationPipelineInfo.AddDataDownStream(conn.Origin as IComputable);
+                    //                //ComputationPipeline.ComputeComputable(conn.Origin as IComputable);
+                    //                //_inputValue = n.DataGoo.Data;
+                    //                //RenderPipeline.RenderRenderable(conn.Origin.Parent as IRenderable);
+                    //            }
+                    //            //OUTGOING CONNECTIONS
+                    //            //else if (conn.Origin == n/* && conn.Destination is NodeElement*/)
+                    //            //{
+                    //            //NodeElement nd = (NodeElement)conn.Destination;
+                    //            //nd.DataGoo.Data = _sliderValue + _inputValue;
+                    //            //RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
+                    //            //}
+                    //        }
+                    //    }
+                    //    ComputationPipeline.ComputeComputable(c);
+                    //}
                 }
             }
         }
@@ -154,35 +161,36 @@ namespace Verse3
         {
             if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0/* && computable.Nodes[0] is NodeElement*/)
             {
-                foreach (INode n in this.ComputationPipelineInfo.IOManager.DataOutputNodes)
+                foreach (IDataNode n in this.ComputationPipelineInfo.IOManager.DataOutputNodes)
                 {
-                    if (n is IComputable && (n.NodeType == NodeType.Output || n.NodeType == NodeType.Unset))
-                    {
-                        IComputable c = (IComputable)n;
-                        //this.computationPipelineInfo.AddDataDownStream(c);
-                        if (n.Connections != null && n.Connections.Count > 0)
-                        {
-                            foreach (IConnection conn in n.Connections)
-                            {
-                                //INCOMING CONNECTIONS
-                                //if (conn.Destination == n/* && conn.Origin is NodeElement*/)
-                                //{
-                                //_inputValue = n.DataGoo.Data;
-                                //RenderPipeline.RenderRenderable(conn.Origin.Parent as IRenderable);
-                                //}
-                                //OUTGOING CONNECTIONS
-                                /*else */
-                                if (conn.Origin == n && conn.Destination is IComputable)
-                                {
-                                    c.ComputationPipelineInfo.AddDataUpStream(conn.Destination as IComputable);
-                                    //NodeElement nd = (NodeElement)conn.Destination;
-                                    //nd.DataGoo.Data = _sliderValue + _inputValue;
-                                    //RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
-                                }
-                            }
-                        }
-                        ComputationPipeline.ComputeComputable(c);
-                    }
+                    n.DeliverData();
+                    //if (n is IComputable && (n.NodeType == NodeType.Output || n.NodeType == NodeType.Unset))
+                    //{
+                    //    IComputable c = (IComputable)n;
+                    //    //this.computationPipelineInfo.AddDataDownStream(c);
+                    //    if (n.Connections != null && n.Connections.Count > 0)
+                    //    {
+                    //        foreach (IConnection conn in n.Connections)
+                    //        {
+                    //            //INCOMING CONNECTIONS
+                    //            //if (conn.Destination == n/* && conn.Origin is NodeElement*/)
+                    //            //{
+                    //            //_inputValue = n.DataGoo.Data;
+                    //            //RenderPipeline.RenderRenderable(conn.Origin.Parent as IRenderable);
+                    //            //}
+                    //            //OUTGOING CONNECTIONS
+                    //            /*else */
+                    //            if (conn.Origin == n && conn.Destination is IComputable)
+                    //            {
+                    //                c.ComputationPipelineInfo.AddDataUpStream(conn.Destination as IComputable);
+                    //                //NodeElement nd = (NodeElement)conn.Destination;
+                    //                //nd.DataGoo.Data = _sliderValue + _inputValue;
+                    //                //RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
+                    //            }
+                    //        }
+                    //    }
+                    //    ComputationPipeline.ComputeComputable(c);
+                    //}
                 }
             }
         }
@@ -256,11 +264,12 @@ namespace Verse3
         }
 
 
-        public new void Render()
+        public new virtual void Render()
         {
             if (this.Element != null)
             {
                 if (this.Element.RenderView != this) this.Element.RenderView = this;
+                this.Element.RenderComp();
             }
         }
 
@@ -341,6 +350,300 @@ namespace Verse3
         public string Repository { get; set; }
         public string Icon { get; set; }
         public Type[] ConstructorParams { get; set; }
+    }
+
+    public abstract class DataNode<D> : IRenderable, IDataNode<D>
+    {
+        #region Data Members
+
+        private RenderPipelineInfo renderPipelineInfo;
+        protected BoundingBox boundingBox = BoundingBox.Unset;
+        private Guid _id = Guid.NewGuid();
+        internal IRenderView elView;
+
+        #endregion
+
+        #region Properties
+
+        public RenderPipelineInfo RenderPipelineInfo => renderPipelineInfo;
+        public IRenderView RenderView
+        {
+            get
+            {
+                return elView;
+            }
+            set
+            {
+                if (ViewType.IsAssignableFrom(value.GetType()))
+                {
+                    elView = value;
+                }
+                else
+                {
+                    throw new InvalidCastException();
+                }
+            }
+        }
+        public abstract Type ViewType { get; }
+        public object ViewKey { get; set; }
+
+        public Guid ID { get => _id; private set => _id = value; }
+
+        public bool IsSelected { get; set; }
+
+        public BoundingBox BoundingBox { get => boundingBox; private set => SetProperty(ref boundingBox, value); }
+
+        public double X { get => boundingBox.Location.X; }
+
+        public double Y { get => boundingBox.Location.Y; }
+
+        public double Width
+        {
+            get => boundingBox.Size.Width;
+            set => boundingBox.Size.Width = value;
+        }
+
+        public double Height
+        {
+            get => boundingBox.Size.Height;
+            set => boundingBox.Size.Height = value;
+        }
+
+        public ElementState State { get; set; }
+
+        //public IRenderView ElementView { get; internal set; }
+
+        public ElementState ElementState { get; set; }
+        public ElementType ElementType { get; set; }
+        bool IRenderable.Visible { get; set; }
+
+
+        public IEnumerable<IElement> ElementDS
+        {
+            get
+            {
+                List<IElement> elements = new List<IElement>();
+                if (this.NodeType == NodeType.Input) return elements;
+                if (this.Connections != null && this.Connections.Count > 0)
+                {
+                    foreach (IConnection connection in this.Connections)
+                    {
+                        if (connection.Origin == this)
+                        {
+                            elements.Add(connection.Destination.Parent);
+                        }
+                    }
+                }
+                return elements;
+            }
+        }
+        public IEnumerable<IElement> ElementUS
+        {
+            get
+            {
+                List<IElement> elements = new List<IElement>();
+                if (this.NodeType == NodeType.Output) return elements;
+                if (this.Connections != null && this.Connections.Count > 0)
+                {
+                    foreach (IConnection connection in this.Connections)
+                    {
+                        if (connection.Destination == this)
+                        {
+                            elements.Add(connection.Origin.Parent);
+                        }
+                    }
+                }
+                return elements;
+            }
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        {
+            if (!Equals(field, newValue))
+            {
+                field = newValue;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                return true;
+            }
+
+            return false;
+        }
+
+        #endregion
+
+        #region Data Members
+
+        private ElementsLinkedList<IConnection> connections = new ElementsLinkedList<IConnection>();
+        //internal IRenderable parentElement = default;
+        private object displayedText;
+
+        #endregion
+
+        #region Properties
+
+        public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
+
+        IElement INode.Parent
+        {
+            get => this.RenderPipelineInfo.Parent;
+            set
+            {
+                if (value is IRenderable)
+                    this.RenderPipelineInfo.Parent = value as IRenderable;
+                //else
+                //    this.RenderPipelineInfo.Parent = null;
+            }
+        }
+
+        public ElementsLinkedList<IConnection> Connections => connections;
+
+        public NodeType NodeType { get => NodeType.Unset; }
+
+        public CanvasPoint Hotspot
+        {
+            get
+            {
+                CanvasPoint center = this.BoundingBox.Center;
+                //center.X += (this.BoundingBox.Size.Width / 2);
+                //center.Y -= (this.BoundingBox.Size.Height / 2);
+                return center;
+            }
+        }
+
+        public double HotspotThresholdRadius { get; }
+
+        public Type DataValueType => typeof(D);
+
+        private DataStructure<D> _dataGoo = new DataStructure<D>();
+        public DataStructure<D> DataGoo { get => _dataGoo; set => _dataGoo = value; }
+
+        private ComputationPipelineInfo _computationPipelineInfo;
+        public ComputationPipelineInfo ComputationPipelineInfo => _computationPipelineInfo;
+
+        public ElementsLinkedList<INode> Nodes => new ElementsLinkedList<INode>() { this };
+        public ComputableElementState ComputableElementState { get; set; }
+        DataStructure IDataGooContainer.DataGoo
+        {
+            get => this.DataGoo;
+            set
+            {
+                if (value is DataStructure<D>)
+                    this.DataGoo = value as DataStructure<D>;
+                else
+                    throw new InvalidCastException();
+            }
+        }
+
+        #endregion
+
+        public DataNode(IRenderable parent, NodeType type = NodeType.Unset) : base()
+        {
+            this.renderPipelineInfo = new RenderPipelineInfo(this);
+            _computationPipelineInfo = new ComputationPipelineInfo(this);
+            this.RenderPipelineInfo.Parent = parent as IRenderable;
+            //this.DataGoo.DataChanged += DataChanged;
+            //double x = DataViewModel.ContentCanvasMarginOffset + this.RenderPipelineInfo.Parent.X;
+            //double y = DataViewModel.ContentCanvasMarginOffset + this.RenderPipelineInfo.Parent.Y;
+            //base.boundingBox = new BoundingBox(x, y, this.RenderPipelineInfo.Parent.Width, 50);
+            //(this as IRenderable).RenderPipelineInfo.SetParent(this.RenderPipelineInfo.Parent);
+            //this.DisplayedText = "Node";
+            //this.PropertyChanged += NodeElement_PropertyChanged;
+            //if (type == NodeType.Input)
+            //{
+            //    this.HorizontalAlignment = HorizontalAlignment.Left;
+            //}
+            //else if (type == NodeType.Output)
+            //{
+            //    this.HorizontalAlignment = HorizontalAlignment.Right;
+            //}
+            //else
+            //{
+            //    this.HorizontalAlignment = HorizontalAlignment.Center;
+            //}
+        }
+
+        //event EventHandler<DataChangedEventArgs> IDataNode.DataChanged
+        //{
+        //    add => DataChanged += value;
+        //    remove => DataChanged -= value;
+        //}
+
+        //event EventHandler<DataChangedEventArgs<D>> IDataNode<D>.DataChanged
+        //{
+        //    add => DataChanged += value;
+        //    remove => DataChanged -= value;
+        //}
+
+        //public new event EventHandler<DataChangedEventArgs> DataChanged;
+        public void Compute()
+        {
+            this.ComputableElementState = ComputableElementState.Computed;
+        }
+        public void CollectData()
+        {
+            if (this.Connections != null && this.Connections.Count > 0)
+            {
+                foreach (IConnection conn in this.Connections)
+                {
+                    //INCOMING CONNECTIONS
+                    if (conn.Destination == this && conn.Origin is IDataNode<D>)
+                    {
+                        if (!this.DataGoo.Data.Equals((conn.Origin as IDataNode<D>).DataGoo.Data))
+                        {
+                            this.DataGoo.Data = (((IDataNode<D>)conn.Origin).DataGoo as DataStructure<D>).Data;
+                        }
+                        //this.NodeContentColor = System.Windows.Media.Brushes.White;
+                        //break;
+                    }
+                    //OUTGOING CONNECTIONS
+                    //else if (conn.Origin == n/* && conn.Destination is NodeElement*/)
+                    //{
+                    //NodeElement nd = (NodeElement)conn.Destination;
+                    //nd.DataGoo.Data = _sliderValue + _inputValue;
+                    //RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
+                    //}
+                }
+            }
+        }
+        public void DeliverData()
+        {
+            if (this.Connections != null && this.Connections.Count > 0)
+            {
+                foreach (IConnection conn in this.Connections)
+                {
+                    if (conn.Origin == this && conn.Destination is IDataNode<D>)
+                    {
+                        if (!((conn.Destination as IDataNode<D>).DataGoo.Data.Equals(this.DataGoo.Data)))
+                        {
+                            (conn.Destination as IDataNode<D>).DataGoo.Data = this.DataGoo.Data;
+                        }
+                        //this.NodeContentColor = System.Windows.Media.Brushes.White;
+                        //break;
+                    }
+                    //OUTGOING CONNECTIONS
+                    //else if (conn.Origin == n/* && conn.Destination is NodeElement*/)
+                    //{
+                    //NodeElement nd = (NodeElement)conn.Destination;
+                    //nd.DataGoo.Data = _sliderValue + _inputValue;
+                    //RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
+                    //}
+                }
+            }
+        }
     }
 
 }

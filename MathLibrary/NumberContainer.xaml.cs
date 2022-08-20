@@ -41,12 +41,6 @@ namespace MathLibrary
 
         #endregion
 
-        internal TextElement textBlock = new TextElement();
-        internal SliderElement sliderBlock = new SliderElement();
-        internal NodeElement nodeBlock;
-        //internal NodeElement nodeBlock1;
-        //internal NodeElement nodeBlock2;
-
         #region Constructor and Render
 
 
@@ -65,75 +59,13 @@ namespace MathLibrary
             if (this.Element != null)
             {
                 if (this.Element.RenderView != this) this.Element.RenderView = this;
+                this.Element.RenderComp();
+                
                 InputsList.ItemsSource = this.Element.Children;
-
-                if (this.Element.Children.Count > 0)
-                {
-                    textBlock.DisplayedText = this.Element.ElementText;
-                    return;
-                }
-                //Subscribe to NodeElement PropertyChanged Event
-                //nodeBlock.PropertyChanged += NodeBlock_PropertyChanged;
-
-                //nodeBlock1 = new NodeElement(this.Element, NodeType.Input);
-                //DataTemplateManager.RegisterDataTemplate(nodeBlock1);
-                //this.Element.RenderPipelineInfo.AddChild(nodeBlock1);
-                //this.Element.ComputationPipelineInfo.IOManager.AddDataInputNode(nodeBlock1);
-
-                //nodeBlock2 = new NodeElement(this.Element, NodeType.Output);
-                //DataTemplateManager.RegisterDataTemplate(nodeBlock2);
-                //this.Element.RenderPipelineInfo.AddChild(nodeBlock2);
-                //this.Element.ComputationPipelineInfo.IOManager.AddDataOutputNode(nodeBlock2);
-
-                sliderBlock = new SliderElement();
-                sliderBlock.Minimum = 0;
-                sliderBlock.Maximum = 100;
-                sliderBlock.Value = 50;
-                sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
-                sliderBlock.Width = 200;
-                DataTemplateManager.RegisterDataTemplate(sliderBlock);
-                this.Element.RenderPipelineInfo.AddChild(sliderBlock);
-
-                nodeBlock = new NodeElement(this.Element, NodeType.Output);
-                nodeBlock.Width = 50;
-                DataTemplateManager.RegisterDataTemplate(nodeBlock);
-                this.Element.RenderPipelineInfo.AddChild(nodeBlock);
-                this.Element.ComputationPipelineInfo.IOManager.AddDataOutputNode(nodeBlock);
-
-                //string? txt = this.Element.ElementText;
-                //textBlock = new TextElement();
-                //textBlock.DisplayedText = txt;
-                //textBlock.TextAlignment = TextAlignment.Left;
-                //DataTemplateManager.RegisterDataTemplate(textBlock);
-                //this.Element.RenderPipelineInfo.AddChild(textBlock);
-
-
-                //var buttonBlock = new ButtonElement();
-                //buttonBlock.DisplayedText = "Click me";
-                //buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
-                //DataTemplateManager.RegisterDataTemplate(buttonBlock);
-                //this.Element.RenderPipelineInfo.AddChild(buttonBlock);
-
-                //var textBoxBlock = new TextBoxElement();
-                //textBoxBlock.InputText = "Enter text";
-                //DataTemplateManager.RegisterDataTemplate(textBoxBlock);
-                //this.Element.RenderPipelineInfo.AddChild(textBoxBlock);
             }
         }
 
-        private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            this.Element._sliderValue = sliderBlock.Value;
-        }
-
         #endregion
-
-
-        private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
-        {
-            RenderPipeline.Render();
-            ComputationPipeline.Compute();
-        }
 
         #region MouseEvents
 
@@ -309,11 +241,12 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count == 1)
-            {
-                if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
-                    ((NodeElement)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data = _sliderValue;
-            }
+            this.ComputationPipelineInfo.IOManager.SetData<double>(_sliderValue, 0);
+            //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count == 1)
+            //{
+            //    if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
+            //        ((NodeElement)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data = _sliderValue;
+            //}
         }
         public override CompInfo GetCompInfo()
         {
@@ -324,6 +257,39 @@ namespace MathLibrary
             ci.Group = "Inputs";
             ci.Tab = "Math";
             return ci;
+        }
+
+        internal TextElement textBlock = new TextElement();
+        internal SliderElement sliderBlock = new SliderElement();
+        internal NodeElement nodeBlock;
+        public override void Initialize()
+        {
+            if (this.Children.Count > 0)
+            {
+                textBlock.DisplayedText = this.ElementText;
+                return;
+            }
+
+            sliderBlock = new SliderElement();
+            sliderBlock.Minimum = 0;
+            sliderBlock.Maximum = 100;
+            sliderBlock.Value = 50;
+            sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
+            sliderBlock.Width = 200;
+            DataTemplateManager.RegisterDataTemplate(sliderBlock);
+            this.RenderPipelineInfo.AddChild(sliderBlock);
+            
+            nodeBlock = new NodeElement(this, NodeType.Output);
+            nodeBlock.Width = 50;
+            DataTemplateManager.RegisterDataTemplate(nodeBlock);
+            this.RenderPipelineInfo.AddChild(nodeBlock);
+            this.ComputationPipelineInfo.IOManager.AddDataOutputNode<double>(nodeBlock as IDataNode<double>);
+        }
+        
+        private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            this._sliderValue = sliderBlock.Value;
+            ComputationPipeline.ComputeComputable(this);
         }
 
         //private IRenderable _parent;
