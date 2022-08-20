@@ -176,7 +176,7 @@ namespace Verse3
                                     {
                                         //TODO: Check for validity / scan library info
                                         AddToArsenal(compInfo);
-                                        LoadedLibraries.Add(path, compInfo);
+                                        LoadedLibraries.Add(path + "._" + compInfo.Name, compInfo);
                                     }
                                 }
                             }

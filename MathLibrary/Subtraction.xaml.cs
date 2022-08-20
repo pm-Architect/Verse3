@@ -12,20 +12,20 @@ using TextElement = Verse3.VanillaElements.TextElement;
 namespace MathLibrary
 {
     /// <summary>
-    /// Visual Interaction logic for Addition.xaml
+    /// Visual Interaction logic for Subtraction.xaml
     /// </summary>
-    public partial class AdditionView : UserControl, IBaseCompView<Addition>
+    public partial class SubtractionView : UserControl, IBaseCompView<Subtraction>
     {
         #region IBaseElementView Members
 
-        private Addition? _element;
-        public Addition Element
+        private Subtraction? _element;
+        public Subtraction Element
         {
             get
             {
                 if (this._element == null)
                 {
-                    _element = this.DataContext as Addition;
+                    _element = this.DataContext as Subtraction;
                 }
                 //TODO: Log to Console if this.Element is still null
 #pragma warning disable CS8603 // Possible null reference return.
@@ -34,7 +34,7 @@ namespace MathLibrary
             }
             private set
             {
-                _element = value as Addition;
+                _element = value as Subtraction;
             }
         }
         IRenderable IRenderView.Element => Element;
@@ -45,9 +45,9 @@ namespace MathLibrary
 
 
         //TODO: Log to Console if this.Element is still null
-        public AdditionView()
+        public SubtractionView()
         {
-            if (this.DataContext is Addition) this.Element = (Addition)this.DataContext;
+            if (this.DataContext is Subtraction) this.Element = (Subtraction)this.DataContext;
             InitializeComponent();
             Render();
         }
@@ -102,7 +102,7 @@ namespace MathLibrary
             DataViewModel.WPFControl.ContentElements.Focus();
             Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
 
-            AdditionView rectangle = (AdditionView)sender;
+            SubtractionView rectangle = (SubtractionView)sender;
             IRenderable myRectangle = (IRenderable)rectangle.DataContext;
 
             //myRectangle.IsSelected = true;
@@ -149,7 +149,7 @@ namespace MathLibrary
 
             DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
 
-            AdditionView rectangle = (AdditionView)sender;
+            SubtractionView rectangle = (SubtractionView)sender;
             rectangle.ReleaseMouseCapture();
 
             e.Handled = true;
@@ -209,7 +209,7 @@ namespace MathLibrary
     }
 
 
-    public class Addition : BaseComp
+    public class Subtraction : BaseComp
     {
         public string? ElementText
         {
@@ -233,13 +233,13 @@ namespace MathLibrary
 
         #region Properties
 
-        public override Type ViewType => typeof(AdditionView);
+        public override Type ViewType => typeof(SubtractionView);
 
         #endregion
 
         #region Constructors
 
-        public Addition() : base()
+        public Subtraction() : base()
         {
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             //Random rng = new Random();
@@ -247,7 +247,7 @@ namespace MathLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public Addition(int x, int y, int width, int height) : base()
+        public Subtraction(int x, int y, int width, int height) : base()
         {
             base.boundingBox = new BoundingBox(x, y, width, height);
 
@@ -267,7 +267,7 @@ namespace MathLibrary
             if (a == default) a = 0;
             double b = this.ComputationPipelineInfo.IOManager.GetData<double>(1);
             if (b == default) b = 0;
-            this.ComputationPipelineInfo.IOManager.SetData<double>((a + b), 0);
+            this.ComputationPipelineInfo.IOManager.SetData<double>((a - b), 0);
             textBlock.DisplayedText = this.ElementText;
             //if (this.ComputationPipelineInfo.IOManager.DataInputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 1/* && this.Nodes[0] is NodeElement*/)
             //{
@@ -287,7 +287,7 @@ namespace MathLibrary
             Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
             ci.ConstructorInfo = this.GetType().GetConstructor(types);
             ci.ConstructorParams = types;
-            ci.Name = "Addition";
+            ci.Name = "Subtraction";
             ci.Group = "Operations";
             ci.Tab = "Math";
             return ci;

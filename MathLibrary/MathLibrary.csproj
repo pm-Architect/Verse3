@@ -11,6 +11,21 @@
     <ProjectReference Include="..\Verse3\Verse3.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="Subtraction.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Division.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Multiplication.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(AppData)\Verse3\Libraries\$(TargetName).verse&quot;" />
   </Target>
