@@ -247,16 +247,16 @@ namespace MathLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public Multiplication(int x, int y, int width, int height) : base()
+        public Multiplication(int x, int y, int width = 250, int height = 350) : base()
         {
             base.boundingBox = new BoundingBox(x, y, width, height);
 
-            this.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             Random rnd = new Random();
-            byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
+            byte rc = (byte)Math.Round(rnd.NextDouble() * 125.0);
+            byte gc = (byte)Math.Round(rnd.NextDouble() * 125.0);
+            byte bc = (byte)Math.Round(rnd.NextDouble() * 125.0);
+            this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
+            this.Background = new SolidColorBrush(Colors.Gray);
         }
 
         #endregion
@@ -286,7 +286,6 @@ namespace MathLibrary
             CompInfo ci = new CompInfo();
             Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
             ci.ConstructorInfo = this.GetType().GetConstructor(types);
-            ci.ConstructorParams = types;
             ci.Name = "Multiplication";
             ci.Group = "Operations";
             ci.Tab = "Math";

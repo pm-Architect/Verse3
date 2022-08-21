@@ -225,16 +225,16 @@ namespace MathLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public NumberContainer(int x, int y, int width, int height) : base()
+        public NumberContainer(int x, int y, int width = 250, int height = 50) : base()
         {
             base.boundingBox = new BoundingBox(x, y, width, height);
 
-            this.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             Random rnd = new Random();
             byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
             byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
             byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
             this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
+            this.Background = new SolidColorBrush(Colors.Gray);
         }
 
         #endregion

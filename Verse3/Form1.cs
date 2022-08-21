@@ -174,6 +174,28 @@ namespace Verse3
                                 {
                                     if (!LoadedLibraries.ContainsValue(compInfo))
                                     {
+                                        if (compInfo.Name == "Extent" && 
+                                            compInfo.Group == "_CanvasElements" && 
+                                            compInfo.Tab == "_CanvasElements")
+                                        {
+                                            LoadedLibraries.Add(path + "._" + compInfo.Name, compInfo);
+                                            //Create two instances of CanvasExtent Element to make the initial/min canvas size 10000x10000
+                                            int x = -5000;
+                                            int y = -5000;
+                                            int w = 10;
+                                            int h = 10;
+                                            IElement elInst = compInfo.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
+                                            DataModel.Instance.Elements.Add(elInst);
+                                            DataViewModel.WPFControl.ExpandContent();
+                                            x = 9990;
+                                            y = 9990;
+                                            w = 10;
+                                            h = 10;
+                                            elInst = compInfo.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
+                                            DataModel.Instance.Elements.Add(elInst);
+                                            DataViewModel.WPFControl.ExpandContent();
+                                            continue;
+                                        }
                                         //TODO: Check for validity / scan library info
                                         AddToArsenal(compInfo);
                                         LoadedLibraries.Add(path + "._" + compInfo.Name, compInfo);
@@ -374,16 +396,40 @@ namespace Verse3
                         CompInfo ci = (CompInfo)btn.Tag;
                         if (ci.ConstructorInfo != null)
                         {
-                            Random rnd = new Random();
+                            //Random rnd = new Random();
                             ////TODO: Invoke constructor based on <PluginName>.cfg json file
                             ////TODO: Allow user to place the comp with MousePosition
-                            int x = (int)rnd.NextInt64((long)20, (long)1000);
-                            int y = (int)rnd.NextInt64((long)20, (long)1000);
-                            int w = (int)rnd.NextInt64((long)250, (long)350);
-                            int h = (int)rnd.NextInt64((long)250, (long)350);
-                            IElement elInst = ci.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
-                            DataModel.Instance.Elements.Add(elInst);
-                            DataViewModel.WPFControl.ExpandContent();
+                            //int x = InfiniteCanvasWPFControl.GetMouseRelPosition().X;
+                            //int y = InfiniteCanvasWPFControl.GetMouseRelPosition().Y;
+                            //int w = ci.
+                            //int h = (int)rnd.NextInt64((long)250, (long)350);
+                            if (ci.ConstructorInfo.GetParameters().Length > 0)
+                            {
+                                ParameterInfo[] pi = ci.ConstructorInfo.GetParameters();
+                                object[] args = new object[pi.Length];
+                                for (int i = 0; i < pi.Length; i++)
+                                {
+                                    if (!(pi[i].DefaultValue is DBNull)) args[i] = pi[i].DefaultValue;
+                                    else
+                                    {
+                                        if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "x")
+                                            args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().X;
+                                        else if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "y")
+                                            args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().Y;
+                                    }
+                                }
+                                IElement elInst = ci.ConstructorInfo.Invoke(args) as IElement;
+                                DataModel.Instance.Elements.Add(elInst);
+                                DataViewModel.WPFControl.ExpandContent();
+                            }
+                            else
+                            {
+                                //throw new Exception("Constructor parameters not provided");
+                                DataViewModel.WPFControl.ExpandContent();
+                            }
+                            //IElement elInst = ci.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
+                            //DataModel.Instance.Elements.Add(elInst);
+                            //DataViewModel.WPFControl.ExpandContent();
                         }
                     }
                 }

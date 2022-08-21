@@ -226,7 +226,7 @@ namespace TestPlugin
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public TestElement(int x, int y, int width, int height) : base()
+        public TestElement(int x, int y, int width = 350, int height = 350) : base()
         {
             base.boundingBox = new BoundingBox(x, y, width, height);
 

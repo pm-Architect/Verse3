@@ -474,7 +474,9 @@ namespace Verse3
         public string Website { get; set; }
         public string Repository { get; set; }
         public string Icon { get; set; }
-        public Type[] ConstructorParams { get; set; }
+        //public Type[] ConstructorParamTypes { get; set; }
+        //public string[] ConstructorParamNames { get; set; }
+        //public object[] ConstructorDefaults { get; set; }
     }
 
     public abstract class DataNode<D> : IRenderable, IDataNode<D>
