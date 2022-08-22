@@ -209,7 +209,7 @@ namespace Verse3.VanillaElements
                     //b.RenderView.Render();
                 }
             }
-            ComputationPipeline.Compute();
+            //ComputationPipeline.Compute();
             //RenderPipeline.Render();
             //this.Element.OnPropertyChanged("BoundingBox");
         }

@@ -589,6 +589,7 @@ namespace Verse3
         #region INotifyPropertyChanged Members
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event IDataNode<D>.NodeDataChangedEventHandler NodeDataChanged;
 
         public void OnPropertyChanged(string name)
         {
@@ -702,11 +703,17 @@ namespace Verse3
 
         #endregion
 
+
+        private void OnDataChanged(DataStructure<D> sender, DataChangedEventArgs<D> e)
+        {
+            this.NodeDataChanged.Invoke(this, e);
+        }
         public DataNode(IRenderable parent, NodeType type = NodeType.Unset) : base()
         {
             this.renderPipelineInfo = new RenderPipelineInfo(this);
             _computationPipelineInfo = new ComputationPipelineInfo(this);
             this.RenderPipelineInfo.Parent = parent as IRenderable;
+            this.DataGoo.DataChanged += OnDataChanged;
             this._nodeType = type;
             //this.DataGoo.DataChanged += DataChanged;
             //double x = DataViewModel.ContentCanvasMarginOffset + this.RenderPipelineInfo.Parent.X;
@@ -742,8 +749,8 @@ namespace Verse3
         //}
 
         //public new event EventHandler<DataChangedEventArgs> DataChanged;
-        
-        
+
+
         public void Compute()
         {
             this.ComputableElementState = ComputableElementState.Computed;

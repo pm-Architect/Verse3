@@ -70,7 +70,8 @@ namespace Core
     public class DataStructure<D> : DataStructure
     {
         //Fire an event when Data is set
-        public event EventHandler<DataChangedEventArgs<D>> DataChanged;
+        public delegate void DataChangedEventHandler(DataStructure<D> sender, DataChangedEventArgs<D> e);
+        public DataChangedEventHandler DataChanged;
         public new D Data
         {
             get 
@@ -88,7 +89,7 @@ namespace Core
                 D old = default;
                 if (base.volatileData != null && base.volatileData is D) old = (D)base.volatileData;
                 base.volatileData = value;
-                if (DataChanged != null)
+                if (DataChanged != null && DataChanged.GetInvocationList().Length > 0)
                     DataChanged(this, new DataChangedEventArgs<D>(old, value));
             }
         }
@@ -110,25 +111,6 @@ namespace Core
         public DataStructure(IEnumerable<IDataGoo<D>> data) : base(data)
         {
             ID = Guid.NewGuid();
-        }
-    }
-
-    public class DataChangedEventArgs<D> : DataChangedEventArgs
-    {
-        public new D OldData { get; private set; }
-        public new D NewData { get; private set; }
-        public DataChangedEventArgs(D oldData, D newData) : base(oldData, newData)
-        {
-        }
-    }
-    public class DataChangedEventArgs : EventArgs
-    {
-        public object OldData { get; private set; }
-        public object NewData { get; private set; }
-        public DataChangedEventArgs(object oldData, object newData)
-        {
-            OldData = oldData;
-            NewData = newData;
         }
     }
 
@@ -175,6 +157,25 @@ namespace Core
         }
 
         #endregion
+    }
+
+    public class DataChangedEventArgs<D> : DataChangedEventArgs
+    {
+        public new D OldData { get; private set; }
+        public new D NewData { get; private set; }
+        public DataChangedEventArgs(D oldData, D newData) : base(oldData, newData)
+        {
+        }
+    }
+    public class DataChangedEventArgs : EventArgs
+    {
+        public object OldData { get; private set; }
+        public object NewData { get; private set; }
+        public DataChangedEventArgs(object oldData, object newData)
+        {
+            OldData = oldData;
+            NewData = newData;
+        }
     }
 
     public class DataAddress

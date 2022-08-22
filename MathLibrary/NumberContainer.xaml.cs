@@ -289,7 +289,8 @@ namespace MathLibrary
         private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
         {
             this._sliderValue = sliderBlock.Value;
-            ComputationPipeline.ComputeComputable(this);
+            this.ComputationPipelineInfo.IOManager.SetData<double>(this._sliderValue, 0);
+            //ComputationPipeline.ComputeComputable(this);
         }
 
         //private IRenderable _parent;
