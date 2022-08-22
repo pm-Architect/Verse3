@@ -45,12 +45,13 @@ namespace Core
             return count;
         }
 
-        
-        
 
-        public static int ComputeComputable(IComputable computable, bool recursive = true, bool upstream = false, bool render = true)
+
+
+
+        public static int ComputeComputable(IComputable computable, bool recursive = true/*, bool upstream = false*//*, bool render = true*/)
         {
-            if (computable is null) return default;
+            if (computable == null) return -1;
             //TODO: PARALLEL COMPUTATION
             if (computable.ComputableElementState == ComputableElementState.Computing) return -1;
             else computable.ComputableElementState = ComputableElementState.Computing;
@@ -60,35 +61,45 @@ namespace Core
                 bool computeSuccess = true;
                 if (computable != null)
                 {
-                    
+
                     ComputationPipeline.Instance._current = computable;
-                    computable.CollectData();
-                    computable.Compute();
-                    computable.DeliverData();
-                    
-                    count++;
-                    if (recursive)
+                    if (computable.ComputationPipelineInfo.IOManager.EventInputNodes != null &&
+                        computable.ComputationPipelineInfo.IOManager.EventInputNodes.Count > 0)
                     {
-                        if (!upstream)
+                        //TODO: Log to console
+                        //Computables with EventUS will only compute when their EventUS computables trigger the event they are listening to
+                        computable.CollectData();
+                    }
+                    else
+                    {
+                        computable.CollectData();
+                        computable.Compute();
+                        computable.DeliverData();
+
+                        count++;
+                        if (recursive)
                         {
-                            if (computable.ComputationPipelineInfo.DataDS != null && computable.ComputationPipelineInfo.DataDS.Count > 0)
-                            {
-                                foreach (IComputable compDS in computable.ComputationPipelineInfo.DataDS)
-                                {
-                                    //TODO: Log to console
-                                    computeSuccess = computeSuccess && (ComputeComputable(compDS) > 0);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            //if (computable.ComputationPipelineInfo.DataUS != null && computable.ComputationPipelineInfo.DataUS.Count > 0)
+                            //if (!upstream)
                             //{
-                            //    foreach (IComputable compUS in computable.ComputationPipelineInfo.DataUS)
-                            //    {
-                            //        //TODO: Log to console
-                            //        computeSuccess = computeSuccess && (ComputeComputable(compUS) > 0);
-                            //    }
+                                if (computable.ComputationPipelineInfo.DataDS != null && computable.ComputationPipelineInfo.DataDS.Count > 0)
+                                {
+                                    foreach (IComputable compDS in computable.ComputationPipelineInfo.DataDS)
+                                    {
+                                        //TODO: Log to console
+                                        computeSuccess = computeSuccess && (ComputeComputable(compDS) > 0);
+                                    }
+                                }
+                            //}
+                            //else
+                            //{
+                                //if (computable.ComputationPipelineInfo.DataUS != null && computable.ComputationPipelineInfo.DataUS.Count > 0)
+                                //{
+                                //    foreach (IComputable compUS in computable.ComputationPipelineInfo.DataUS)
+                                //    {
+                                //        //TODO: Log to console
+                                //        computeSuccess = computeSuccess && (ComputeComputable(compUS) > 0);
+                                //    }
+                                //}
                             //}
                         }
                     }
