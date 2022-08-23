@@ -219,7 +219,7 @@ namespace MathLibrary
                 string? viewname = this.ViewType.FullName;
                 string? dataIN = "";
                 if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
-                    dataIN = ((NodeElement)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0])?.DataGoo.Data.ToString();
+                    dataIN = ((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0])?.DataGoo.Data.ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
                 //TODO: Z Index control for IRenderable
                 return $"Name: {name}" +
@@ -294,9 +294,9 @@ namespace MathLibrary
         }
 
         internal TextElement textBlock = new TextElement();
-        internal NodeElement nodeBlock;
-        internal NodeElement nodeBlock1;
-        internal NodeElement nodeBlock2;
+        internal NumberDataNode nodeBlock;
+        internal NumberDataNode nodeBlock1;
+        internal NumberDataNode nodeBlock2;
         public override void Initialize()
         {
             if (this.Children.Count > 0)
@@ -305,19 +305,19 @@ namespace MathLibrary
                 return;
             }
 
-            nodeBlock = new NodeElement(this, NodeType.Input);
+            nodeBlock = new NumberDataNode(this, NodeType.Input);
             DataTemplateManager.RegisterDataTemplate(nodeBlock);
             this.RenderPipelineInfo.AddChild(nodeBlock);
             this.ComputationPipelineInfo.IOManager.AddDataInputNode<double>(nodeBlock as IDataNode<double>);
             //Subscribe to NodeElement PropertyChanged Event
             //nodeBlock.PropertyChanged += NodeBlock_PropertyChanged;
 
-            nodeBlock1 = new NodeElement(this, NodeType.Input);
+            nodeBlock1 = new NumberDataNode(this, NodeType.Input);
             DataTemplateManager.RegisterDataTemplate(nodeBlock1);
             this.RenderPipelineInfo.AddChild(nodeBlock1);
             this.ComputationPipelineInfo.IOManager.AddDataInputNode<double>(nodeBlock1 as IDataNode<double>);
 
-            nodeBlock2 = new NodeElement(this, NodeType.Output);
+            nodeBlock2 = new NumberDataNode(this, NodeType.Output);
             DataTemplateManager.RegisterDataTemplate(nodeBlock2);
             this.RenderPipelineInfo.AddChild(nodeBlock2);
             this.ComputationPipelineInfo.IOManager.AddDataOutputNode<double>(nodeBlock2 as IDataNode<double>);

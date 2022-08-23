@@ -197,7 +197,7 @@ namespace MathLibrary
                 string? viewname = this.ViewType.FullName;
                 string? dataIN = "";
                 if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
-                    dataIN = ((NodeElement)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0])?.DataGoo.Data.ToString();
+                    dataIN = ((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0])?.DataGoo.Data.ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
                 //TODO: Z Index control for IRenderable
                 return $"Name: {name}" +
@@ -261,7 +261,7 @@ namespace MathLibrary
 
         internal TextElement textBlock = new TextElement();
         internal SliderElement sliderBlock = new SliderElement();
-        internal NodeElement nodeBlock;
+        internal NumberDataNode nodeBlock;
         public override void Initialize()
         {
             if (this.Children.Count > 0)
@@ -279,7 +279,7 @@ namespace MathLibrary
             DataTemplateManager.RegisterDataTemplate(sliderBlock);
             this.RenderPipelineInfo.AddChild(sliderBlock);
             
-            nodeBlock = new NodeElement(this, NodeType.Output);
+            nodeBlock = new NumberDataNode(this, NodeType.Output);
             nodeBlock.Width = 50;
             DataTemplateManager.RegisterDataTemplate(nodeBlock);
             this.RenderPipelineInfo.AddChild(nodeBlock);
@@ -297,5 +297,12 @@ namespace MathLibrary
         //public IRenderable Parent => _parent;
         //private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
         //public ElementsLinkedList<IRenderable> Children => _children;
+    }
+
+    public class NumberDataNode : NodeElement<double>
+    {
+        public NumberDataNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
+        {
+        }
     }
 }

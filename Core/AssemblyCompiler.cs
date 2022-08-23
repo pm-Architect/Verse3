@@ -96,8 +96,19 @@ namespace Verse3
 
         internal static IElement CreateRunClass(Type type)
         {
-            var instance = Activator.CreateInstance(type) as IElement;
-            return instance;
+            try
+            {
+                var instance = Activator.CreateInstance(type) as IElement;
+                if (instance != null)
+                {
+                    return instance;
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

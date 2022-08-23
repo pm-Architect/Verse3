@@ -292,7 +292,27 @@ namespace Core
                 }
             }
         }
-                
+        private void OnEvent(IEventNode container, EventArgData e)
+        {
+            if (container.NodeType == NodeType.Input)
+            {
+                //Call EventOccured() delegate
+                bool gate = container.EventOccured(e);
+                if (gate)
+                {
+                    if (container.Parent is IComputable) ComputationPipeline.ComputeComputable(container.Parent as IComputable);
+                }
+            }
+            else if (container.NodeType == NodeType.Output)
+            {
+                if (container.Parent is IComputable)
+                {
+                    IComputable c = container.Parent as IComputable;
+                    c.ComputationPipelineInfo.IOManager.DeliverData();
+                }
+            }
+        }
+
         public int AddDataInputNode<T>(IDataNode<T> dataInputNode)
         {
             if (dataInputNode is null) return default;
@@ -326,7 +346,7 @@ namespace Core
             }
             return default;
         }
-        public int AddEventInputNode(IEventNode eventInputNode)
+        public int AddEventInputNode(IEventNode eventInputNode, EventDelegate eventDelegate = null)
         {
             if (eventInputNode is null) return default;
             if (!this._eventInputNodes.Contains(eventInputNode))
@@ -335,11 +355,18 @@ namespace Core
                 {
                     eventInputNode.Parent = _computable;
                     this._eventInputNodes.Add(eventInputNode);
+                    int i = this._eventInputNodes.IndexOf(eventInputNode);
+                    (this._eventInputNodes[i] as IEventNode).NodeEvent += OnEvent;
+                    if (eventDelegate != null)
+                    {
+                        EventDelegates.Add(eventDelegate);
+                    }
                 }
             }
             return default;
         }
-        public int AddEventOutputNode(IEventNode eventOutputNode)
+
+        public int AddEventOutputNode(IEventNode eventOutputNode, EventDelegate eventDelegate = null)
         {
             if (eventOutputNode is null) return default;
             if (!this._eventOutputNodes.Contains(eventOutputNode))
@@ -348,6 +375,12 @@ namespace Core
                 {
                     eventOutputNode.Parent = _computable;
                     this._eventOutputNodes.Add(eventOutputNode);
+                    int i = this._eventOutputNodes.IndexOf(eventOutputNode);
+                    (this._eventOutputNodes[i] as IEventNode).NodeEvent += OnEvent;
+                    if (eventDelegate != null)
+                    {
+                        EventDelegates.Add(eventDelegate);
+                    }
                 }
             }
             return default;
@@ -455,5 +488,13 @@ namespace Core
                 dataOutputNode.DeliverData();
             }
         }
+
+        //private Foo(IComputable computable)
+        //{
+        //    EventDelegate eventDelegate = Bar;
+        //}
+
+        public delegate void EventDelegate(IEventNode container, EventArgData e);
+        public List<EventDelegate> EventDelegates = new List<EventDelegate>();
     }
 }

@@ -147,8 +147,9 @@ namespace Verse3
                     }
                 }
             }
-            catch/* (Exception ex)*/
+            catch (Exception)
             {
+                throw;
                 //throw ex;
             }
         }

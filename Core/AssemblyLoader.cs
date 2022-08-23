@@ -38,7 +38,7 @@ namespace Verse3
                 {
                     System.Diagnostics.Trace.WriteLine($"Loading {type.FullName}");
                     var command = AssemblyCompiler.CreateRunClass(type);
-                    foundCommands.Add(command);
+                    if (command != null) foundCommands.Add(command);
                 }
             }
             return foundCommands;

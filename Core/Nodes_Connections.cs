@@ -25,6 +25,7 @@ namespace Core
     public interface IDataNode : INode, IDataGooContainer
     {
         //public event EventHandler<DataChangedEventArgs> DataChanged;
+        public void ToggleActive();
     }
 
     public interface IDataNode<D> : IDataNode
@@ -37,7 +38,16 @@ namespace Core
 
     public interface IEventNode : INode/*, IDataGooContainer<object>*/
     {
+        public delegate void NodeEventHandler(IEventNode container, EventArgData e);
+        public event NodeEventHandler NodeEvent;
+        public EventArgData EventArgData { get; set; }
+        public void TriggerEvent();
+        public bool EventOccured(EventArgData e);
+    }
 
+    public class EventArgData : DataStructure<EventArgs>
+    {
+        //TODO: Implement relevant fields
     }
 
     public interface IConnection : IElement

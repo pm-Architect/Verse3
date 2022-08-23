@@ -818,6 +818,175 @@ namespace Verse3
                 }
             }
         }
+
+        public abstract void ToggleActive();
     }
 
+    public abstract class EventNode : IRenderable, IEventNode
+    {
+        #region Data Members
+
+        private RenderPipelineInfo renderPipelineInfo;
+        protected BoundingBox boundingBox = BoundingBox.Unset;
+        private Guid _id = Guid.NewGuid();
+        internal IRenderView elView;
+
+        #endregion
+
+        #region Properties
+
+        public RenderPipelineInfo RenderPipelineInfo => renderPipelineInfo;
+        public IRenderView RenderView
+        {
+            get
+            {
+                return elView;
+            }
+            set
+            {
+                if (ViewType.IsAssignableFrom(value.GetType()))
+                {
+                    elView = value;
+                }
+                else
+                {
+                    throw new InvalidCastException();
+                }
+            }
+        }
+        public abstract Type ViewType { get; }
+        public object ViewKey { get; set; }
+
+        public Guid ID { get => _id; private set => _id = value; }
+
+        public bool IsSelected { get; set; }
+
+        public BoundingBox BoundingBox { get => boundingBox; private set => SetProperty(ref boundingBox, value); }
+
+        public double X { get => boundingBox.Location.X; }
+
+        public double Y { get => boundingBox.Location.Y; }
+
+        public double Width
+        {
+            get => boundingBox.Size.Width;
+            set => boundingBox.Size.Width = value;
+        }
+
+        public double Height
+        {
+            get => boundingBox.Size.Height;
+            set => boundingBox.Size.Height = value;
+        }
+
+        public ElementState State { get; set; }
+
+        //public IRenderView ElementView { get; internal set; }
+
+        public ElementState ElementState { get; set; }
+        public ElementType ElementType { get; set; }
+        bool IRenderable.Visible { get; set; }
+
+
+        public IEnumerable<IElement> ElementDS
+        {
+            get
+            {
+                List<IElement> elements = new List<IElement>();
+                if (this.NodeType == NodeType.Input) return elements;
+                if (this.Connections != null && this.Connections.Count > 0)
+                {
+                    foreach (IConnection connection in this.Connections)
+                    {
+                        if (connection.Origin == this)
+                        {
+                            elements.Add(connection.Destination.Parent);
+                        }
+                    }
+                }
+                return elements;
+            }
+        }
+        public IEnumerable<IElement> ElementUS
+        {
+            get
+            {
+                List<IElement> elements = new List<IElement>();
+                if (this.NodeType == NodeType.Output) return elements;
+                if (this.Connections != null && this.Connections.Count > 0)
+                {
+                    foreach (IConnection connection in this.Connections)
+                    {
+                        if (connection.Destination == this)
+                        {
+                            elements.Add(connection.Origin.Parent);
+                        }
+                    }
+                }
+                return elements;
+            }
+        }
+
+        public EventArgData EventArgData { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public IElement Parent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public ElementsLinkedList<IConnection> Connections => throw new NotImplementedException();
+
+        public NodeType NodeType => throw new NotImplementedException();
+
+        public CanvasPoint Hotspot => throw new NotImplementedException();
+
+        public double HotspotThresholdRadius => throw new NotImplementedException();
+
+        #endregion
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event IEventNode.NodeEventHandler NodeEvent;
+
+        public void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        {
+            if (!Equals(field, newValue))
+            {
+                field = newValue;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                return true;
+            }
+
+            return false;
+        }
+
+        #endregion
+
+        public void TriggerEvent()
+        {
+            NodeEvent.Invoke(this, new EventArgData());
+        }
+
+        public bool EventOccured(EventArgData e)
+        {
+            if (this.Parent is IComputable)
+            {
+                IComputable computable = this.Parent as IComputable;
+                //TODO: Call a delegate method that triggers a call-back once complete
+                if (computable.ComputationPipelineInfo.IOManager.EventInputNodes.Contains(this))
+                {
+                    int i = computable.ComputationPipelineInfo.IOManager.EventInputNodes.IndexOf(this);
+                    computable.ComputationPipelineInfo.IOManager.EventDelegates[i].Invoke(this, new EventArgData());
+                    return true;
+                }
+                //ComputationPipeline.ComputeComputable(computable);
+            }
+            return false;
+        }
+    }
 }

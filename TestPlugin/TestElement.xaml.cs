@@ -197,8 +197,8 @@ namespace TestPlugin
                 string? name = this.GetType().FullName;
                 string? viewname = this.ViewType.FullName;
                 string? dataIN = "";
-                if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 0)
-                    dataIN = ((NodeElement)this.ComputationPipelineInfo.IOManager.DataInputNodes[0])?.DataGoo.Data.ToString();
+                //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 0)
+                    //dataIN = ((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataInputNodes[0])?.DataGoo.Data.ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
                 //TODO: Z Index control for IRenderable
                 return $"Name: {name}" +
@@ -242,27 +242,27 @@ namespace TestPlugin
 
         public override void Compute()
         {
-            if (this.ComputationPipelineInfo.IOManager.DataInputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count == 1 && this.ComputationPipelineInfo.IOManager.DataInputNodes[0] is NodeElement)
-            {
-                NodeElement n = (NodeElement)this.ComputationPipelineInfo.IOManager.DataInputNodes[0];
-                if (n.Connections != null && n.Connections.Count > 0)
-                {
-                    foreach (IConnection conn in n.Connections)
-                    {
-                        if (conn.Origin == n && conn.Destination is NodeElement)
-                        {
-                            NodeElement nd = (NodeElement)conn.Destination;
-                            nd.DataGoo.Data = _sliderValue + _inputValue;
-                            RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
-                        }
-                        else if (conn.Destination == n && conn.Origin is NodeElement)
-                        {
-                            _inputValue = n.DataGoo.Data;
-                            RenderPipeline.RenderRenderable(conn.Origin.Parent as IRenderable);
-                        }
-                    }
-                }
-            }
+            //if (this.ComputationPipelineInfo.IOManager.DataInputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count == 1 && this.ComputationPipelineInfo.IOManager.DataInputNodes[0] is NumberDataNode)
+            //{
+            //    NumberDataNode n = (NumberDataNode)this.ComputationPipelineInfo.IOManager.DataInputNodes[0];
+            //    if (n.Connections != null && n.Connections.Count > 0)
+            //    {
+            //        foreach (IConnection conn in n.Connections)
+            //        {
+            //            if (conn.Origin == n && conn.Destination is NumberDataNode)
+            //            {
+            //                NumberDataNode nd = (NodeElement<double>)conn.Destination;
+            //                nd.DataGoo.Data = _sliderValue + _inputValue;
+            //                RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
+            //            }
+            //            else if (conn.Destination == n && conn.Origin is NodeElement<double>)
+            //            {
+            //                _inputValue = n.DataGoo.Data;
+            //                RenderPipeline.RenderRenderable(conn.Origin.Parent as IRenderable);
+            //            }
+            //        }
+            //    }
+            //}
         }
         public override CompInfo GetCompInfo()
         {
@@ -277,7 +277,7 @@ namespace TestPlugin
 
         internal TextElement textBlock = new TextElement();
         internal SliderElement sliderBlock = new SliderElement();
-        internal NodeElement nodeBlock;
+        //internal NumberDataNode nodeBlock;
         public override void Initialize()
         {
             if (this.Children.Count > 0)
@@ -286,10 +286,10 @@ namespace TestPlugin
                 return;
             }
 
-            nodeBlock = new NodeElement(this, NodeType.Input);
-            DataTemplateManager.RegisterDataTemplate(nodeBlock);
-            this.RenderPipelineInfo.AddChild(nodeBlock);
-            this.ComputationPipelineInfo.IOManager.AddDataInputNode<object>(nodeBlock as IDataNode<object>);
+            //nodeBlock = new NumberDataNode(this, NodeType.Input);
+            //DataTemplateManager.RegisterDataTemplate(nodeBlock);
+            //this.RenderPipelineInfo.AddChild(nodeBlock);
+            //this.ComputationPipelineInfo.IOManager.AddDataInputNode<object>(nodeBlock as IDataNode<object>);
             //Subscribe to NodeElement PropertyChanged Event
             //nodeBlock.PropertyChanged += NodeBlock_PropertyChanged;
 

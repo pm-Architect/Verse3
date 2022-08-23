@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Markup;
 using static Core.Geometry2D;
 
 namespace Verse3.VanillaElements
@@ -13,27 +14,73 @@ namespace Verse3.VanillaElements
     /// <summary>
     /// Visual Interaction logic for TestElement.xaml
     /// </summary>
-    public partial class NodeElementView : UserControl, IBaseElementView<NodeElement>
+    public partial class NodeElementView : UserControl, IBaseElementView<IRenderable>
     {
+        public class GenericObjectFactoryExtension : MarkupExtension
+        {
+            public Type Type { get; set; }
+            public Type T { get; set; }
+
+            public override object ProvideValue(IServiceProvider serviceProvider)
+            {
+                var genericType = Type.MakeGenericType(T);
+                return Activator.CreateInstance(genericType);
+            }
+        }
+
         #region IBaseElementView Members
 
-        private NodeElement _element;
-        public NodeElement Element
+        private Type Y = default;
+        //DEV NOTE: CAUTION! DYNAMIC TYPE IS USED
+        private dynamic _element;
+        public IRenderable Element
         {
             get
             {
                 if (this._element == null)
                 {
-                    _element = this.DataContext as NodeElement;
+                    //if (this.DataContext.GetType().GenericTypeArguments.Length == 1)
+                    //{
+                    if (this.DataContext != null)
+                    {
+                        Y = this.DataContext.GetType();
+                        if (Y.BaseType.Name == (typeof(NodeElement<>).Name))
+                        {
+                            //TODO: Log to Console and process
+                            //Y = this.DataContext.GetType().MakeGenericType(Y);
+                            //_element = Convert.ChangeType(this.DataContext, U) as IRenderable;
+                            Y = this.DataContext.GetType()/*.MakeGenericType(this.DataContext.GetType().GenericTypeArguments[0].GetType())*/;
+                            _element = this.DataContext as IRenderable;
+                            return _element;
+                        }
+                    }
+                    //}
                 }
                 return _element;
             }
             private set
             {
-                _element = value as NodeElement;
+                if (Y != default)
+                {
+                    if (value.GetType().IsAssignableTo(Y))
+                    {
+                        _element = value as IRenderable;
+                    }
+                }
             }
         }
         IRenderable IRenderView.Element => Element;
+        //public static T ForceCast<T>(object obj)
+        //{
+        //    try
+        //    {
+        //        return
+        //    }
+        //    catch/* (Exception ex)*/
+        //    {
+        //        //throw ex;
+        //    }
+        //}
 
         #endregion
 
@@ -46,12 +93,13 @@ namespace Verse3.VanillaElements
 
         public void Render()
         {
-            if (this.Element != null)
+            if (this.Element != null && this.Element is IDataNode)
             {
+                IDataNode node = this.Element as IDataNode;
                 if (Element.RenderView != this) Element.RenderView = this;
-                if (this.Element.Connections != null)
+                if (node.Connections != null)
                 {
-                    foreach (BezierElement bezier in this.Element.Connections)
+                    foreach (BezierElement bezier in node.Connections)
                     {
                         if (bezier != null)
                         {
@@ -108,7 +156,7 @@ namespace Verse3.VanillaElements
             //DependencyPropertyChangedEventArgs
             if (this.DataContext != null)
             {
-                this.Element = this.DataContext as NodeElement;
+                this.Element = this.DataContext as IRenderable;
                 Render();
             }
         }
@@ -127,11 +175,25 @@ namespace Verse3.VanillaElements
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.Element.ToggleActive();
+            if (this.Element != null)
+            {
+                (this.Element as IDataNode).ToggleActive();
+            }
+            //DEV NOTE: CAUTION! DYNAMIC TYPE IS USED
+            //try
+            //{
+            //    dynamic element = Convert.ChangeType(this.Element, Y);
+            //    element.ToggleActive(this, e);
+            //}
+            //catch (Exception)
+            //{
+            //    //Log to Console and process
+            //    throw;
+            //}
         }
     }
 
-    public class NodeElement : DataNode<double>
+    public class NodeElement<T> : DataNode<T>
     {
         public override Type ViewType => typeof(NodeElementView);
 
@@ -171,7 +233,7 @@ namespace Verse3.VanillaElements
             }
         }
 
-        internal void ToggleActive()
+        public override void ToggleActive()
         {
             //Set as active Node
             BezierElement b = (BezierElement)DataViewModel.ActiveConnection;

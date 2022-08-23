@@ -319,6 +319,19 @@ namespace Verse3
             context.XmlnsDictionary.Add("vm", "vm");
             context.XmlnsDictionary.Add("v", "v");
 
+            if (xaml.Contains("`1"))
+            {
+                if (/*viewModelType.GenericTypeArguments.Length == 1 && */viewModelType.IsAssignableTo(typeof(IDataNode)))
+                {
+                    string t = viewModelType.Name;
+                    while (xaml.Contains("NodeElement`1"))
+                    {
+                        xaml = xaml.Replace("NodeElement`1", t);
+                        //xaml = xaml.Replace("`1", (""));
+                    }
+                }
+            }
+
             DataTemplate template = (DataTemplate)XamlReader.Parse(xaml, context);
 
             return template;
