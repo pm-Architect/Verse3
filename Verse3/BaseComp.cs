@@ -826,15 +826,114 @@ namespace Verse3
     {
         #region Data Members
 
+        private ElementsLinkedList<IConnection> connections = new ElementsLinkedList<IConnection>();
         private RenderPipelineInfo renderPipelineInfo;
         protected BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
         internal IRenderView elView;
+        //public ComputableElementState ComputableElementState { get; set; }
 
         #endregion
 
         #region Properties
 
+        //public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
+
+        IElement INode.Parent
+        {
+            get => this.RenderPipelineInfo.Parent;
+            set
+            {
+                if (value is IRenderable)
+                    this.RenderPipelineInfo.Parent = value as IRenderable;
+                //else
+                //    this.RenderPipelineInfo.Parent = null;
+            }
+        }
+
+        public ElementsLinkedList<IConnection> Connections => connections;
+
+        private NodeType _nodeType = NodeType.Unset;
+        public NodeType NodeType { get => _nodeType; }
+
+        internal CanvasPoint _hotspot = new CanvasPoint(0, 0);
+        public CanvasPoint Hotspot
+        {
+            get
+            {
+                double v = 0.0;
+                if ((this as INode).Parent is IComputable)
+                {
+                    IComputable c = (this as INode).Parent as IComputable;
+                    if (this.NodeType == NodeType.Output)
+                    {
+                        if (c.ComputationPipelineInfo.IOManager.EventOutputNodes.Count > 1 && c.ComputationPipelineInfo.IOManager.EventOutputNodes.Contains(this))
+                        {
+                            int i = c.ComputationPipelineInfo.IOManager.EventOutputNodes.IndexOf(this);
+                            v = i * this.BoundingBox.Size.Height;
+                        }
+                        _hotspot = this.RenderPipelineInfo.Parent.BoundingBox.Location +
+                        new CanvasPoint(this.RenderPipelineInfo.Parent.BoundingBox.Size.Width,
+                            ((this.BoundingBox.Size.Height / 2) + v));
+                    }
+                    else
+                    {
+                        if (c.ComputationPipelineInfo.IOManager.EventInputNodes.Count > 1 && c.ComputationPipelineInfo.IOManager.EventInputNodes.Contains(this))
+                        {
+                            int i = c.ComputationPipelineInfo.IOManager.EventInputNodes.IndexOf(this);
+                            v = i * this.BoundingBox.Size.Height;
+                        }
+                        _hotspot = this.RenderPipelineInfo.Parent.BoundingBox.Location +
+                        new CanvasPoint(0.0, ((this.BoundingBox.Size.Height / 2) + v));
+                    }
+                }
+                return _hotspot;
+            }
+        }
+
+        public double HotspotThresholdRadius { get; }
+
+        //public Type DataValueType => typeof(D);
+
+        //private DataStructure<D> _dataGoo = new DataStructure<D>();
+        //public DataStructure<D> DataGoo { get => _dataGoo; set => _dataGoo = value; }
+
+        private ComputationPipelineInfo _computationPipelineInfo;
+        public ComputationPipelineInfo ComputationPipelineInfo => _computationPipelineInfo;
+
+        public ElementsLinkedList<INode> Nodes => new ElementsLinkedList<INode>() { this };
+        public ComputableElementState ComputableElementState { get; set; }
+        //DataStructure IDataGooContainer.DataGoo
+        //{
+        //    get => this.DataGoo;
+        //    set
+        //    {
+        //        if (value is DataStructure<D>)
+        //            this.DataGoo = value as DataStructure<D>;
+        //        else
+        //            throw new InvalidCastException();
+        //    }
+        //}
+
+        #endregion
+
+        public EventNode(IRenderable parent, NodeType type = Core.NodeType.Unset)
+        {
+            this.renderPipelineInfo = new RenderPipelineInfo(this);
+            _computationPipelineInfo = new ComputationPipelineInfo(this);
+            this.RenderPipelineInfo.Parent = parent as IRenderable;
+            //this.DataGoo.DataChanged += OnDataChanged;
+            this._nodeType = type;
+        }
+
+
+        #region Properties
+
+
+        //private NodeType _nodeType = Core.NodeType.Unset;
+        //public NodeType NodeType { get => _nodeType; }
+        //private ComputationPipelineInfo _computationPipelineInfo;
+        //public ComputationPipelineInfo ComputationPipelineInfo => _computationPipelineInfo;
         public RenderPipelineInfo RenderPipelineInfo => renderPipelineInfo;
         public IRenderView RenderView
         {
@@ -927,16 +1026,14 @@ namespace Verse3
             }
         }
 
-        public EventArgData EventArgData { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IElement Parent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public EventArgData EventArgData { get; set; }
+        public IElement Parent { get => this.Parent; set => this.Parent = value; }
 
-        public ElementsLinkedList<IConnection> Connections => throw new NotImplementedException();
+        //public ElementsLinkedList<IConnection> Connections => throw new NotImplementedException();
 
-        public NodeType NodeType => throw new NotImplementedException();
+        //public CanvasPoint Hotspot => throw new NotImplementedException();
 
-        public CanvasPoint Hotspot => throw new NotImplementedException();
-
-        public double HotspotThresholdRadius => throw new NotImplementedException();
+        //public double HotspotThresholdRadius => throw new NotImplementedException();
 
         #endregion
 
@@ -987,6 +1084,74 @@ namespace Verse3
                 //ComputationPipeline.ComputeComputable(computable);
             }
             return false;
+        }
+        public abstract void ToggleActive();
+        public void Compute()
+        {
+            this.ComputableElementState = ComputableElementState.Computed;
+        }
+        public void CollectData()
+        {
+            if (this.Connections != null && this.Connections.Count > 0)
+            {
+                foreach (IConnection conn in this.Connections)
+                {
+                    //INCOMING CONNECTIONS
+                    if (conn.Destination == this && conn.Origin is IEventNode)
+                    {
+                        IEventNode no = conn.Origin as IEventNode;
+                        //if (!this.DataGoo.IsValid)
+                        //{
+                        //    this.DataGoo.Clear();
+                        //    this.DataGoo.Data = no.DataGoo.Data;
+                        //}
+                        //else if (!this.DataGoo.Data.Equals(no.DataGoo.Data))
+                        //{
+                        //    this.DataGoo.Data = no.DataGoo.Data;
+                        //}
+                        //this.NodeContentColor = System.Windows.Media.Brushes.White;
+                        //break;
+                    }
+                    //OUTGOING CONNECTIONS
+                    //else if (conn.Origin == n/* && conn.Destination is NodeElement*/)
+                    //{
+                    //NodeElement nd = (NodeElement)conn.Destination;
+                    //nd.DataGoo.Data = _sliderValue + _inputValue;
+                    //RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
+                    //}
+                }
+            }
+        }
+        public void DeliverData()
+        {
+            if (this.Connections != null && this.Connections.Count > 0)
+            {
+                foreach (IConnection conn in this.Connections)
+                {
+                    if (conn.Origin == this && conn.Destination is IEventNode)
+                    {
+                        IEventNode no = conn.Origin as IEventNode;
+                        //if (!nd.DataGoo.IsValid)
+                        //{
+                        //    nd.DataGoo.Clear();
+                        //    nd.DataGoo.Data = this.DataGoo.Data;
+                        //}
+                        //else if (!(nd.DataGoo.Data.Equals(this.DataGoo.Data)))
+                        //{
+                        //    nd.DataGoo.Data = this.DataGoo.Data;
+                        //}
+                        //this.NodeContentColor = System.Windows.Media.Brushes.White;
+                        //break;
+                    }
+                    //OUTGOING CONNECTIONS
+                    //else if (conn.Origin == n/* && conn.Destination is NodeElement*/)
+                    //{
+                    //NodeElement nd = (NodeElement)conn.Destination;
+                    //nd.DataGoo.Data = _sliderValue + _inputValue;
+                    //RenderPipeline.RenderRenderable(conn.Destination.Parent as IRenderable);
+                    //}
+                }
+            }
         }
     }
 }

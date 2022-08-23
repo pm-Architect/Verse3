@@ -277,6 +277,11 @@ namespace Core
             //this._eventOutputNodes = computable.ComputationPipelineInfo.EventDS;
         }
 
+        public void EventOccured(int v, EventArgData eventArgData)
+        {
+            this.EventOutputNodes[v].EventOccured(eventArgData);
+        }
+
         private void OnDataChanged<T>(IDataNode<T> container, DataChangedEventArgs<T> e)
         {
             if (container.NodeType == NodeType.Input)

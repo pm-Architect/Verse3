@@ -36,7 +36,7 @@ namespace Core
         new DataStructure<D> DataGoo { get; set; }
     }
 
-    public interface IEventNode : INode/*, IDataGooContainer<object>*/
+    public interface IEventNode : INode, IComputable
     {
         public delegate void NodeEventHandler(IEventNode container, EventArgData e);
         public event NodeEventHandler NodeEvent;

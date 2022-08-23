@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace BooleanElements
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for EventIndicator.xaml
     /// </summary>
-    public partial class UserControl1 : UserControl
+    public partial class EventIndicator : UserControl
     {
-        public UserControl1()
+        public EventIndicator()
         {
             InitializeComponent();
         }

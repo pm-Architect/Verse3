@@ -12,20 +12,20 @@ using TextElement = Verse3.VanillaElements.TextElement;
 namespace MathLibrary
 {
     /// <summary>
-    /// Visual Interaction logic for NumberContainer.xaml
+    /// Visual Interaction logic for ButtonTrigger.xaml
     /// </summary>
-    public partial class NumberContainerView : UserControl, IBaseCompView<NumberContainer>
+    public partial class ButtonTriggerView : UserControl, IBaseCompView<ButtonTrigger>
     {
         #region IBaseElementView Members
 
-        private NumberContainer? _element;
-        public NumberContainer Element
+        private ButtonTrigger? _element;
+        public ButtonTrigger Element
         {
             get
             {
                 if (this._element == null)
                 {
-                    _element = this.DataContext as NumberContainer;
+                    _element = this.DataContext as ButtonTrigger;
                 }
                 //TODO: Log to Console if this.Element is still null
 #pragma warning disable CS8603 // Possible null reference return.
@@ -34,7 +34,7 @@ namespace MathLibrary
             }
             private set
             {
-                _element = value as NumberContainer;
+                _element = value as ButtonTrigger;
             }
         }
         IRenderable IRenderView.Element => Element;
@@ -46,9 +46,9 @@ namespace MathLibrary
 
         //TODO: Log to Console if this.Element is still null
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public NumberContainerView()
+        public ButtonTriggerView()
         {
-            if (this.DataContext is NumberContainer) this.Element = (NumberContainer)this.DataContext;
+            if (this.DataContext is ButtonTrigger) this.Element = (ButtonTrigger)this.DataContext;
             InitializeComponent();
             Render();
         }
@@ -78,7 +78,7 @@ namespace MathLibrary
             DataViewModel.WPFControl.ContentElements.Focus();
             Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
 
-            NumberContainerView rectangle = (NumberContainerView)sender;
+            ButtonTriggerView rectangle = (ButtonTriggerView)sender;
             IRenderable myRectangle = (IRenderable)rectangle.DataContext;
 
             //myRectangle.IsSelected = true;
@@ -125,7 +125,7 @@ namespace MathLibrary
 
             DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
 
-            NumberContainerView rectangle = (NumberContainerView)sender;
+            ButtonTriggerView rectangle = (ButtonTriggerView)sender;
             rectangle.ReleaseMouseCapture();
 
             e.Handled = true;
@@ -184,7 +184,7 @@ namespace MathLibrary
         #endregion
     }
 
-    public class NumberContainer : BaseComp
+    public class ButtonTrigger : BaseComp
     {
         internal double _sliderValue = 0.0;
         //private double _inputValue = 0.0;
@@ -211,13 +211,13 @@ namespace MathLibrary
 
         #region Properties
 
-        public override Type ViewType => typeof(NumberContainerView);
+        public override Type ViewType => typeof(ButtonTriggerView);
 
         #endregion
 
         #region Constructors
 
-        public NumberContainer() : base()
+        public ButtonTrigger() : base()
         {
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             //Random rng = new Random();
@@ -225,7 +225,7 @@ namespace MathLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public NumberContainer(int x, int y, int width = 250, int height = 50) : base()
+        public ButtonTrigger(int x, int y, int width = 250, int height = 50) : base()
         {
             base.boundingBox = new BoundingBox(x, y, width, height);
 
@@ -270,15 +270,21 @@ namespace MathLibrary
                 return;
             }
 
-            sliderBlock = new SliderElement();
-            sliderBlock.Minimum = 0;
-            sliderBlock.Maximum = 100;
-            sliderBlock.Value = 50;
-            sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
-            sliderBlock.Width = 200;
-            DataTemplateManager.RegisterDataTemplate(sliderBlock);
-            this.RenderPipelineInfo.AddChild(sliderBlock);
-            
+            //sliderBlock = new SliderElement();
+            //sliderBlock.Minimum = 0;
+            //sliderBlock.Maximum = 100;
+            //sliderBlock.Value = 50;
+            //sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
+            //sliderBlock.Width = 200;
+            //DataTemplateManager.RegisterDataTemplate(sliderBlock);
+            //this.RenderPipelineInfo.AddChild(sliderBlock);
+
+            var buttonBlock = new ButtonElement();
+            buttonBlock.DisplayedText = "Trigger";
+            buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
+            DataTemplateManager.RegisterDataTemplate(buttonBlock);
+            this.RenderPipelineInfo.AddChild(buttonBlock);
+
             nodeBlock = new NumberDataNode(this, NodeType.Output);
             nodeBlock.Width = 50;
             DataTemplateManager.RegisterDataTemplate(nodeBlock);
@@ -286,10 +292,10 @@ namespace MathLibrary
             this.ComputationPipelineInfo.IOManager.AddDataOutputNode<double>(nodeBlock as IDataNode<double>);
         }
         
-        private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
+        private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
         {
-            this._sliderValue = sliderBlock.Value;
-            this.ComputationPipelineInfo.IOManager.SetData<double>(this._sliderValue, 0);
+            this.ComputationPipelineInfo.IOManager.EventOccured(0, new EventArgData());
+            //this.ComputationPipelineInfo.IOManager.SetData<double>(this._sliderValue, 0);
             //ComputationPipeline.ComputeComputable(this);
         }
 
