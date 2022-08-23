@@ -50,7 +50,7 @@ namespace Verse3.VanillaElements
                             //Y = this.DataContext.GetType().MakeGenericType(Y);
                             //_element = Convert.ChangeType(this.DataContext, U) as IRenderable;
                             Y = this.DataContext.GetType()/*.MakeGenericType(this.DataContext.GetType().GenericTypeArguments[0].GetType())*/;
-                            _element = this.DataContext as IRenderable;
+                            _element = this.DataContext;
                             return _element;
                         }
                     }
@@ -64,7 +64,7 @@ namespace Verse3.VanillaElements
                 {
                     if (value.GetType().IsAssignableTo(Y))
                     {
-                        _element = value as IRenderable;
+                        _element = value;
                     }
                 }
             }
