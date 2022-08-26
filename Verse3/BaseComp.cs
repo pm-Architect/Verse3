@@ -1027,7 +1027,7 @@ namespace Verse3
         }
 
         public EventArgData EventArgData { get; set; }
-        public IElement Parent { get => this.Parent; set => this.Parent = value; }
+        public IElement Parent { get => this.RenderPipelineInfo.Parent; set => this.RenderPipelineInfo.SetParent(value); }
 
         //public ElementsLinkedList<IConnection> Connections => throw new NotImplementedException();
 
@@ -1075,12 +1075,39 @@ namespace Verse3
             {
                 IComputable computable = this.Parent as IComputable;
                 //TODO: Call a delegate method that triggers a call-back once complete
-                if (computable.ComputationPipelineInfo.IOManager.EventInputNodes.Contains(this))
+                foreach (IComputable compDS in this.ElementDS)
                 {
-                    int i = computable.ComputationPipelineInfo.IOManager.EventInputNodes.IndexOf(this);
-                    computable.ComputationPipelineInfo.IOManager.EventDelegates[i].Invoke(this, new EventArgData());
-                    return true;
+                    if (compDS != null)
+                    {
+                        if (compDS.ComputationPipelineInfo.IOManager.EventInputNodes != null &&
+                            compDS.ComputationPipelineInfo.IOManager.EventInputNodes.Count > 0)
+                        {
+                            foreach (IEventNode en in compDS.ComputationPipelineInfo.IOManager.EventInputNodes)
+                            {
+                                if (en.Connections != null && en.Connections.Count > 0)
+                                {
+                                    foreach (IConnection connection in en.Connections)
+                                    {
+                                        if (connection.Origin == this)
+                                        {
+                                            if (connection.Destination is EventNode)
+                                            {
+                                                EventNode d = connection.Destination as EventNode;
+                                                d.TriggerEvent();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
+                //if (computable.ComputationPipelineInfo.IOManager.EventInputNodes.Contains(this))
+                //{
+                //    int i = computable.ComputationPipelineInfo.IOManager.EventInputNodes.IndexOf(this);
+                //    computable.ComputationPipelineInfo.IOManager.EventDelegates[i].Invoke(this, new EventArgData());
+                //    return true;
+                //}
                 //ComputationPipeline.ComputeComputable(computable);
             }
             return false;

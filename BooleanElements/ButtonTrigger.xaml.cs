@@ -9,7 +9,7 @@ using Verse3.VanillaElements;
 using static Core.Geometry2D;
 using TextElement = Verse3.VanillaElements.TextElement;
 
-namespace MathLibrary
+namespace BooleanLibrary
 {
     /// <summary>
     /// Visual Interaction logic for ButtonTrigger.xaml
@@ -196,8 +196,8 @@ namespace MathLibrary
                 string? name = this.GetType().FullName;
                 string? viewname = this.ViewType.FullName;
                 string? dataIN = "";
-                if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
-                    dataIN = ((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0])?.DataGoo.Data.ToString();
+                //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
+                    //dataIN = ((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0])?.DataGoo.Data.ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
                 //TODO: Z Index control for IRenderable
                 return $"Name: {name}" +
@@ -241,7 +241,7 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            this.ComputationPipelineInfo.IOManager.SetData<double>(_sliderValue, 0);
+            //this.ComputationPipelineInfo.IOManager.SetData<double>(_sliderValue, 0);
             //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count == 1)
             //{
             //    if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
@@ -253,15 +253,15 @@ namespace MathLibrary
             CompInfo ci = new CompInfo();
             Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
             ci.ConstructorInfo = this.GetType().GetConstructor(types);
-            ci.Name = "Number Slider";
-            ci.Group = "Inputs";
-            ci.Tab = "Math";
+            ci.Name = "Button Trigger";
+            ci.Group = "Basic UI";
+            ci.Tab = "Events";
             return ci;
         }
 
         internal TextElement textBlock = new TextElement();
         internal SliderElement sliderBlock = new SliderElement();
-        internal NumberDataNode nodeBlock;
+        internal ButtonClickedEventNode nodeBlock;
         public override void Initialize()
         {
             if (this.Children.Count > 0)
@@ -285,11 +285,11 @@ namespace MathLibrary
             DataTemplateManager.RegisterDataTemplate(buttonBlock);
             this.RenderPipelineInfo.AddChild(buttonBlock);
 
-            nodeBlock = new NumberDataNode(this, NodeType.Output);
+            nodeBlock = new ButtonClickedEventNode(this, NodeType.Output);
             nodeBlock.Width = 50;
             DataTemplateManager.RegisterDataTemplate(nodeBlock);
             this.RenderPipelineInfo.AddChild(nodeBlock);
-            this.ComputationPipelineInfo.IOManager.AddDataOutputNode<double>(nodeBlock as IDataNode<double>);
+            this.ComputationPipelineInfo.IOManager.AddEventOutputNode(nodeBlock as IEventNode);
         }
         
         private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
@@ -305,9 +305,9 @@ namespace MathLibrary
         //public ElementsLinkedList<IRenderable> Children => _children;
     }
 
-    public class NumberDataNode : DataNodeElement<double>
+    public class ButtonClickedEventNode : EventNodeElement
     {
-        public NumberDataNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
+        public ButtonClickedEventNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
         {
         }
     }

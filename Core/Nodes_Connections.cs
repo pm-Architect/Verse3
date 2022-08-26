@@ -43,6 +43,7 @@ namespace Core
         public EventArgData EventArgData { get; set; }
         public void TriggerEvent();
         public bool EventOccured(EventArgData e);
+        void ToggleActive();
     }
 
     public class EventArgData : DataStructure<EventArgs>

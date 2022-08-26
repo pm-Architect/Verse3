@@ -287,21 +287,21 @@ namespace Verse3
 
         #region Private DataTemplate Management
 
-        private static void RegisterDataTemplate<TViewModel, TView>() where TView : FrameworkElement
-        {
-            RegisterDataTemplate(typeof(TViewModel), typeof(TView));
-        }
+        //private static void RegisterDataTemplate<TViewModel, TView>() where TView : FrameworkElement
+        //{
+        //    RegisterDataTemplate(typeof(TViewModel), typeof(TView));
+        //}
 
-        private static void RegisterDataTemplate(Type viewModelType, Type viewType)
-        {
-            var template = CreateTemplate(viewModelType, viewType);
+        //private static void RegisterDataTemplate(Type viewModelType, Type viewType)
+        //{
+        //    var template = CreateTemplate(viewModelType, viewType);
 
-            if (DataViewModel.WPFControl.Resources[template.DataTemplateKey] != null) return;
-            else
-            {
-                DataViewModel.WPFControl.Resources.Add(template.DataTemplateKey, template);
-            }
-        }
+        //    if (DataViewModel.WPFControl.Resources[template.DataTemplateKey] != null) return;
+        //    else
+        //    {
+        //        DataViewModel.WPFControl.Resources.Add(template.DataTemplateKey, template);
+        //    }
+        //}
 
         private static DataTemplate CreateTemplate(Type viewModelType, Type viewType)
         {
@@ -321,16 +321,27 @@ namespace Verse3
 
             if (xaml.Contains("`1"))
             {
-                if (/*viewModelType.GenericTypeArguments.Length == 1 && */viewModelType.IsAssignableTo(typeof(IDataNode)))
+                if (/*viewModelType.GenericTypeArguments.Length == 1 && */viewModelType.IsAssignableTo(typeof(DataNodeElement<>)))
                 {
+                    //TODO: Log to Console
                     string t = viewModelType.Name;
-                    while (xaml.Contains("NodeElement`1"))
+                    while (xaml.Contains("DataNodeElement`1"))
                     {
-                        xaml = xaml.Replace("NodeElement`1", t);
+                        xaml = xaml.Replace("DataNodeElement`1", t);
                         //xaml = xaml.Replace("`1", (""));
                     }
                 }
             }
+            //if (/*viewModelType.GenericTypeArguments.Length == 1 && */viewModelType.BaseType == (typeof(EventNodeElement)))
+            //{
+            //    //TODO: Log to Console
+            //    string t = viewModelType.Name;
+            //    while (xaml.Contains("EventNodeElement"))
+            //    {
+            //        xaml = xaml.Replace("EventNodeElement", t);
+            //        //xaml = xaml.Replace("`1", (""));
+            //    }
+            //}
 
             DataTemplate template = (DataTemplate)XamlReader.Parse(xaml, context);
 
@@ -352,6 +363,19 @@ namespace Verse3
             if (DataViewModel.WPFControl == null) return false;
             if (DataViewModel.WPFControl.Resources[el.ViewKey] != null)
             {
+                if (DataViewModel.WPFControl.Resources.Contains(el.ViewKey)) return false;
+                if (el.ViewType.IsAssignableTo(typeof(DataNodeElementView)))
+                {
+                    DataViewModel.WPFControl.Resources.Add(el.ViewKey, template);
+                    //el.RenderView = (IRenderView)DataViewModel.WPFControl.Resources[el.ViewKey];
+                    return true;
+                }
+                else if (el.ViewType.IsAssignableTo(typeof(EventNodeElementView)))
+                {
+                    DataViewModel.WPFControl.Resources.Add(el.ViewKey, template);
+                    //el.RenderView = (IRenderView)DataViewModel.WPFControl.Resources[el.ViewKey];
+                    return true;
+                }
                 //el.RenderView = (IRenderView)DataViewModel.WPFControl.Resources[el.ViewKey];
                 return false;
             }
