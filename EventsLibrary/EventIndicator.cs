@@ -88,11 +88,11 @@ namespace EventsLibrary
         internal ButtonClickedEventNode nodeBlock1;
         public override void Initialize()
         {
-            if (this.Children.Count > 0)
-            {
-                textBlock.DisplayedText = this.ElementText;
-                return;
-            }
+            //if (this.Children.Count > 0)
+            //{
+            //    textBlock.DisplayedText = this.ElementText;
+            //    return;
+            //}
 
             //sliderBlock = new SliderElement();
             //sliderBlock.Minimum = 0;
@@ -134,6 +134,7 @@ namespace EventsLibrary
         {
             _counter++;
             nodeBlock1.EventOccured(e);
+            textBlock.DisplayedText = this.ElementText;
         }
 
         //private IRenderable _parent;

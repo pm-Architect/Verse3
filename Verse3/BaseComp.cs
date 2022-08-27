@@ -320,6 +320,16 @@ namespace Verse3
             if (node is IRenderable) RemoveElement(node as IRenderable);
             this._owner.ComputationPipelineInfo.IOManager.RemoveNode(node);
         }
+
+        public T GetData<T>(int v)
+        {
+            return this._owner.ComputationPipelineInfo.IOManager.GetData<T>(v);
+        }
+
+        public void SetData<T>(T v1, int v2)
+        {
+            this._owner.ComputationPipelineInfo.IOManager.SetData<T>(v1, v2);
+        }
     }
 
     public interface IBaseCompView<R> : IRenderView where R : BaseComp

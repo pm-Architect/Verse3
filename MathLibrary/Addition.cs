@@ -65,11 +65,11 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            double a = this.ComputationPipelineInfo.IOManager.GetData<double>(0);
+            double a = this.ChildElementManager.GetData<double>(0);
             if (a == default) a = 0;
-            double b = this.ComputationPipelineInfo.IOManager.GetData<double>(1);
+            double b = this.ChildElementManager.GetData<double>(1);
             if (b == default) b = 0;
-            this.ComputationPipelineInfo.IOManager.SetData<double>((a + b), 0);
+            this.ChildElementManager.SetData<double>((a + b), 0);
             textBlock.DisplayedText = this.ElementText;
         }
 
@@ -97,7 +97,7 @@ namespace MathLibrary
             this.ChildElementManager.AddDataInputNode(nodeBlock1);
 
             nodeBlock2 = new NumberDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataInputNode(nodeBlock2);
+            this.ChildElementManager.AddDataOutputNode(nodeBlock2);
 
             string? txt = this.ElementText;
             textBlock = new TextElement();
