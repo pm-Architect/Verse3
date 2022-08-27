@@ -18,11 +18,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathLibrary", "MathLibrary\MathLibrary.csproj", "{875B3719-44C6-49C0-979B-04C3E62B77CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CanvasElements", "CanvasElements\CanvasElements.csproj", "{F937B28E-7528-4A7B-9A81-3F9C824FAFB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CanvasElements", "CanvasElements\CanvasElements.csproj", "{F937B28E-7528-4A7B-9A81-3F9C824FAFB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BooleanLibrary", "BooleanElements\BooleanLibrary.csproj", "{860D1F6C-91A0-4052-BADF-E3DCCE50068F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooleanLibrary", "BooleanElements\BooleanLibrary.csproj", "{860D1F6C-91A0-4052-BADF-E3DCCE50068F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{7BC84CD5-7B85-4EB7-9AF1-FBDFCC202032}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsLibrary", "EventsLibrary\EventsLibrary.csproj", "{0B040E66-5520-4084-91B2-32FD8FE02ED4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,6 +60,10 @@ Global
 		{860D1F6C-91A0-4052-BADF-E3DCCE50068F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{860D1F6C-91A0-4052-BADF-E3DCCE50068F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{860D1F6C-91A0-4052-BADF-E3DCCE50068F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B040E66-5520-4084-91B2-32FD8FE02ED4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B040E66-5520-4084-91B2-32FD8FE02ED4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B040E66-5520-4084-91B2-32FD8FE02ED4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B040E66-5520-4084-91B2-32FD8FE02ED4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{875B3719-44C6-49C0-979B-04C3E62B77CE} = {7BC84CD5-7B85-4EB7-9AF1-FBDFCC202032}
 		{F937B28E-7528-4A7B-9A81-3F9C824FAFB6} = {7BC84CD5-7B85-4EB7-9AF1-FBDFCC202032}
 		{860D1F6C-91A0-4052-BADF-E3DCCE50068F} = {7BC84CD5-7B85-4EB7-9AF1-FBDFCC202032}
+		{0B040E66-5520-4084-91B2-32FD8FE02ED4} = {7BC84CD5-7B85-4EB7-9AF1-FBDFCC202032}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {664725FC-A9E2-4130-AA07-DCEA45B3CC42}

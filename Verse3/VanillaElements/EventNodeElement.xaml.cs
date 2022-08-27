@@ -312,8 +312,8 @@ namespace Verse3.VanillaElements
                     if (nodeContentColor != System.Windows.Media.Brushes.White)
                     {
                         nodeContentColor = System.Windows.Media.Brushes.White;
-                        //SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.White);
-                        OnPropertyChanged("NodeContentColor");
+                        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.White);
+                        //OnPropertyChanged("NodeContentColor");
                     }
                 }
                 else
@@ -321,8 +321,8 @@ namespace Verse3.VanillaElements
                     if (nodeContentColor != System.Windows.Media.Brushes.Transparent)
                     {
                         nodeContentColor = System.Windows.Media.Brushes.Transparent;
-                        //SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.Transparent);
-                        OnPropertyChanged("NodeContentColor");
+                        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.Transparent);
+                        //OnPropertyChanged("NodeContentColor");
                     }
                 }
                 return nodeContentColor;

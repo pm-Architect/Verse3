@@ -258,6 +258,19 @@ namespace Verse3
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            if (this.RenderPipelineInfo.Children != null && this.RenderPipelineInfo.Children.Count > 0)
+            {
+                foreach (var child in this.RenderPipelineInfo.Children)
+                {
+                    if (child != null) child.Dispose();
+                }
+            }
+            GC.SuppressFinalize(this);
+        }
+        ~BaseElement() => Dispose();
     }
 
     #region DataTemplateManager
@@ -342,6 +355,16 @@ namespace Verse3
             //        //xaml = xaml.Replace("`1", (""));
             //    }
             //}
+            if (/*viewModelType.GenericTypeArguments.Length == 1 && */viewModelType.BaseType == (typeof(BaseComp)))
+            {
+                //TODO: Log to Console
+                string t = viewModelType.Name;
+                //while (xaml.Contains("BaseComp"))
+                //{
+                //    //xaml = xaml.Replace("BaseComp", t);
+                //    //xaml = xaml.Replace("`1", (""));
+                //}
+            }
 
             DataTemplate template = (DataTemplate)XamlReader.Parse(xaml, context);
 

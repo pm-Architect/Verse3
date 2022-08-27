@@ -73,20 +73,12 @@ namespace Verse3.VanillaElements
             Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
 
             BezierElementView rectangle = (BezierElementView)sender;
+            Cursor = Cursors.Hand;
             //IRenderable myRectangle = (IRenderable)rectangle.DataContext;
 
             ////myRectangle.IsSelected = true;
 
             ////mouseButtonDown = e.ChangedButton;
-
-            //if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0)
-            //{
-            //    //
-            //    // When the shift key is held down special zooming logic is executed in content_MouseDown,
-            //    // so don't handle mouse input here.
-            //    //
-            //    return;
-            //}
 
             //if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.None)
             //{
@@ -117,6 +109,13 @@ namespace Verse3.VanillaElements
             //    return;
             //}
 
+            if ((Keyboard.Modifiers & ModifierKeys.Control) != 0)
+            {
+                //TODO: Delete connection
+                this.Element.Remove();
+                //return;
+            }
+
             DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
 
             BezierElementView rectangle = (BezierElementView)sender;
@@ -130,6 +129,17 @@ namespace Verse3.VanillaElements
         /// </summary>
         void OnMouseMove(object sender, MouseEventArgs e)
         {
+            //if ((Keyboard.Modifiers & ModifierKeys.Control) != 0)
+            //{
+            //    Cursor = Cursors.Hand;
+                //TODO: Prep to delete connection
+
+                //DataViewModel.WPFControl.ExpandContent();
+
+                //e.Handled = true;
+
+                //return;
+            //}
             //MouseEventArgs
             //if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingRectangles)
             //{
@@ -290,10 +300,11 @@ namespace Verse3.VanillaElements
             Path p = new Path();
             p.Data = pge;
             Random rnd = new Random();
-            byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            p.Stroke = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
+            //byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
+            //byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
+            //byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
+            //p.Stroke = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
+            p.Stroke = new SolidColorBrush(Colors.White);
             p.StrokeThickness = 3.0;
             grid.Children.Clear();
             //TODO: CREATE ENV VARIABLE for Debug Mode
@@ -397,6 +408,16 @@ namespace Verse3.VanillaElements
             {
                 this.RenderView.Render();
             }
+        }
+
+        public void Remove()
+        {
+            this.origin.Connections.Remove(this);
+            this.destination.Connections.Remove(this);
+            //this.origin = null;
+            //this.destination = null;
+            DataViewModel.Instance.Elements.Remove(this);
+            this.Dispose();
         }
 
         #region Constructors

@@ -421,12 +421,12 @@ namespace Verse3
                                 }
                                 IElement elInst = ci.ConstructorInfo.Invoke(args) as IElement;
                                 DataModel.Instance.Elements.Add(elInst);
-                                DataViewModel.WPFControl.ExpandContent();
+                                //DataViewModel.WPFControl.ExpandContent();
                             }
                             else
                             {
                                 //throw new Exception("Constructor parameters not provided");
-                                DataViewModel.WPFControl.ExpandContent();
+                                //DataViewModel.WPFControl.ExpandContent();
                             }
                             //IElement elInst = ci.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
                             //DataModel.Instance.Elements.Add(elInst);

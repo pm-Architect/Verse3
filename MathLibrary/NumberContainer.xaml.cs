@@ -211,13 +211,12 @@ namespace MathLibrary
 
         #region Properties
 
-        public override Type ViewType => typeof(NumberContainerView);
 
         #endregion
 
         #region Constructors
 
-        public NumberContainer() : base()
+        public NumberContainer() : base(0,0)
         {
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             //Random rng = new Random();
@@ -225,16 +224,16 @@ namespace MathLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public NumberContainer(int x, int y, int width = 250, int height = 50) : base()
+        public NumberContainer(int x, int y, int width = 250, int height = 50) : base(x, y, width, height, CompOrientation.Horizontal)
         {
-            base.boundingBox = new BoundingBox(x, y, width, height);
+            //base.boundingBox = new BoundingBox(x, y, width, height);
 
-            Random rnd = new Random();
-            byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
-            this.Background = new SolidColorBrush(Colors.Gray);
+            //Random rnd = new Random();
+            //byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
+            //byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
+            //byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
+            //this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
+            //this.Background = new SolidColorBrush(Colors.Gray);
         }
 
         #endregion

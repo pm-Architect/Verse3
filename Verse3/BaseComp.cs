@@ -22,12 +22,14 @@ namespace Verse3
         private RenderPipelineInfo renderPipelineInfo;
         protected BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
-        internal IRenderView elView;
+        internal BaseCompView elView;
+        protected ChildElementManager _cEManager;
 
         #endregion
 
         #region Properties
 
+        public ChildElementManager ChildElementManager => _cEManager;
         public RenderPipelineInfo RenderPipelineInfo => renderPipelineInfo;
         public IRenderView RenderView
         {
@@ -39,7 +41,7 @@ namespace Verse3
             {
                 if (ViewType.IsAssignableFrom(value.GetType()))
                 {
-                    elView = value;
+                    elView = value as BaseCompView;
                 }
                 else
                 {
@@ -47,7 +49,7 @@ namespace Verse3
                 }
             }
         }
-        public abstract Type ViewType { get; }
+        public Type ViewType => typeof(BaseCompView);
         public object ViewKey { get; set; }
 
         public Guid ID { get => _id; private set => _id = value; }
@@ -79,43 +81,93 @@ namespace Verse3
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get; set; }
         bool IRenderable.Visible { get; set; }
-        
+
         private Brush background;
         public Brush Background { get => background; set => SetProperty(ref background, value); }
 
         private Brush backgroundTint;
         public Brush BackgroundTint { get => backgroundTint; set => SetProperty(ref backgroundTint, value); }
 
+        internal CompOrientation _orientation = CompOrientation.Vertical;
+        public string Orientation
+        {
+            get => _orientation.ToString();
+            set
+            {
+                if (Enum.TryParse(value, out CompOrientation orientation))
+                {
+                    _orientation = orientation;
+                }
+            }
+        }
+
+
         public IRenderable Parent => RenderPipelineInfo.Parent;
         public ElementsLinkedList<IRenderable> Children => RenderPipelineInfo.Children;
 
         private ComputationPipelineInfo computationPipelineInfo;
+
         public ComputationPipelineInfo ComputationPipelineInfo => computationPipelineInfo;
 
         //private ElementsLinkedList<INode> _nodes = new ElementsLinkedList<INode>();
         //public ElementsLinkedList<INode> Nodes => _nodes;
 
         public ComputableElementState ComputableElementState { get; set; } = ComputableElementState.Unset;
+        IRenderView IRenderable.RenderView
+        {
+            get => this.RenderView as IRenderView;
+            set
+            {
+                if (value is BaseCompView)
+                {
+                    this.RenderView = value as BaseCompView;
+                }
+            }
+        }
+
 
         #endregion
 
-        #region Constructor and Compute
+            #region Constructor and Compute
 
-        //#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+            //#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        public BaseComp()
+        public BaseComp(int x, int y, int width = 250, int height = 350, CompOrientation orientation = CompOrientation.Vertical)
         {
+            _cEManager = new ChildElementManager(this);
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             //Random rng = new Random();
             //byte r = (byte)rng.Next(0, 255);
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
+
+
             renderPipelineInfo = new RenderPipelineInfo(this);
             computationPipelineInfo = new ComputationPipelineInfo(this);
+
+            //if (this.RenderView == null) return;
+            _orientation = orientation;
+
+            this.boundingBox = new BoundingBox(x, y, width, height);
+
+            Random rnd = new Random();
+            byte rc = (byte)Math.Round(rnd.NextDouble() * 125.0);
+            byte gc = (byte)Math.Round(rnd.NextDouble() * 125.0);
+            byte bc = (byte)Math.Round(rnd.NextDouble() * 125.0);
+            this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
+            this.Background = new SolidColorBrush(Colors.Gray);
         }
 
         public abstract void Initialize();
         public virtual void RenderComp()
         {
+            if (this.Children.Count > 0)
+            {
+                //textBlock.DisplayedText = this.ElementText;
+                return;
+            }
+            if (this.RenderView is BaseCompView)
+            {
+            }
             Initialize();
         }
 
@@ -167,7 +219,109 @@ namespace Verse3
         }
 
         #endregion
+
+        public void Dispose()
+        {
+            if (this.RenderPipelineInfo.Children != null && this.RenderPipelineInfo.Children.Count > 0)
+            {
+                foreach (var child in this.RenderPipelineInfo.Children)
+                {
+                    if (child != null) child.Dispose();
+                }
+            }
+            GC.SuppressFinalize(this);
+        }
+        ~BaseComp() => Dispose();
     }
+
+    public class ChildElementManager
+    {
+        private BaseComp _owner;
+
+
+        //string? txt = this.ElementText;
+        //textBlock = new TextElement();
+        //textBlock.DisplayedText = txt;
+        //    textBlock.TextAlignment = TextAlignment.Left;
+        //    DataTemplateManager.RegisterDataTemplate(textBlock);
+        //    this.RenderPipelineInfo.AddChild(textBlock);
+
+        //    sliderBlock = new SliderElement();
+        //sliderBlock.Minimum = 0;
+        //    sliderBlock.Maximum = 100;
+        //    sliderBlock.Value = 50;
+        //    sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
+        //    DataTemplateManager.RegisterDataTemplate(sliderBlock);
+        //    this.RenderPipelineInfo.AddChild(sliderBlock);
+
+        //    var buttonBlock = new ButtonElement();
+        //buttonBlock.DisplayedText = "Click me";
+        //    buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
+        //    DataTemplateManager.RegisterDataTemplate(buttonBlock);
+        //    this.RenderPipelineInfo.AddChild(buttonBlock);
+
+        //    var textBoxBlock = new TextBoxElement();
+        //textBoxBlock.InputText = "Enter text";
+        //    DataTemplateManager.RegisterDataTemplate(textBoxBlock);
+        //    this.RenderPipelineInfo.AddChild(textBoxBlock);
+        
+        //nodeBlock2 = new NumberDataNode(this, NodeType.Output);
+        //DataTemplateManager.RegisterDataTemplate(nodeBlock2);
+        //    this.RenderPipelineInfo.AddChild(nodeBlock2);
+        //    this.ComputationPipelineInfo.IOManager.AddDataOutputNode<double>(nodeBlock2 as IDataNode<double>);
+
+        //    string? txt = this.ElementText;
+        //textBlock = new TextElement();
+        //textBlock.DisplayedText = txt;
+        //    textBlock.TextAlignment = TextAlignment.Left;
+        //    DataTemplateManager.RegisterDataTemplate(textBlock);
+        //    this.RenderPipelineInfo.AddChild(textBlock);
+
+        public ChildElementManager(BaseComp owner)
+        {
+            this._owner = owner;
+        }
+
+        public void AddElement(IRenderable element)
+        {
+            DataTemplateManager.RegisterDataTemplate(element);
+            this._owner.RenderPipelineInfo.AddChild(element);
+        }
+        public void RemoveElement(IRenderable element)
+        {
+            this._owner.RenderPipelineInfo.Children.Remove(element);
+        }
+        public void AddDataOutputNode<T>(IDataNode<T> node)
+        {
+            if (node is IRenderable) AddElement(node as IRenderable);
+            this._owner.ComputationPipelineInfo.IOManager.AddDataOutputNode<T>(node);
+        }
+
+        public void AddDataInputNode<T>(IDataNode<T> node)
+        {
+            if (node is IRenderable) AddElement(node as IRenderable);
+            this._owner.ComputationPipelineInfo.IOManager.AddDataInputNode<T>(node);
+        }
+
+        public void AddEventOutputNode(IEventNode node)
+        {
+            if (node is IRenderable) AddElement(node as IRenderable);
+            this._owner.ComputationPipelineInfo.IOManager.AddEventOutputNode(node);
+        }
+
+        public void AddEventInputNode(IEventNode node)
+        {
+            if (node is IRenderable) AddElement(node as IRenderable);
+            this._owner.ComputationPipelineInfo.IOManager.AddEventInputNode(node);
+        }
+
+        public void RemoveNode(INode node)
+        {
+            if (node is IRenderable) RemoveElement(node as IRenderable);
+            this._owner.ComputationPipelineInfo.IOManager.RemoveNode(node);
+        }
+    }
+
     public interface IBaseCompView<R> : IRenderView where R : BaseComp
     {
         public new R Element { get; }
@@ -820,6 +974,19 @@ namespace Verse3
         }
 
         public abstract void ToggleActive();
+        
+        public void Dispose()
+        {
+            if (this.RenderPipelineInfo.Children != null && this.RenderPipelineInfo.Children.Count > 0)
+            {
+                foreach (var child in this.RenderPipelineInfo.Children)
+                {
+                    if (child != null) child.Dispose();
+                }
+            }
+            GC.SuppressFinalize(this);
+        }
+        ~DataNode() => Dispose();
     }
 
     public abstract class EventNode : IRenderable, IEventNode
@@ -1067,6 +1234,10 @@ namespace Verse3
         public void TriggerEvent()
         {
             NodeEvent.Invoke(this, new EventArgData());
+            if (this.Parent is IComputable)
+            {
+                ComputationPipeline.ComputeComputable(this.Parent as IComputable);
+            }
         }
 
         public bool EventOccured(EventArgData e)
@@ -1180,5 +1351,24 @@ namespace Verse3
                 }
             }
         }
+        
+        public void Dispose()
+        {
+            if (this.RenderPipelineInfo.Children != null && this.RenderPipelineInfo.Children.Count > 0)
+            {
+                foreach (var child in this.RenderPipelineInfo.Children)
+                {
+                    if (child != null) child.Dispose();
+                }
+            }
+            GC.SuppressFinalize(this);
+        }
+        ~EventNode() => Dispose();
+    }
+
+    public enum CompOrientation
+    {
+        Horizontal,
+        Vertical
     }
 }

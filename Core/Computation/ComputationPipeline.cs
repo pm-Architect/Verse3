@@ -282,6 +282,30 @@ namespace Core
             this.EventOutputNodes[v].EventOccured(eventArgData);
         }
 
+        public void RemoveNode(INode node)
+        {
+            if (this.EventInputNodes.Contains(node as IEventNode))
+            {
+                this.EventInputNodes.Remove(node as IEventNode);
+                return;
+            }
+            else if (this.EventOutputNodes.Contains(node as IEventNode))
+            {
+                this.EventOutputNodes.Remove(node as IEventNode);
+                return;
+            }
+            else if (this.DataInputNodes.Contains(node as IDataNode))
+            {
+                this.DataInputNodes.Remove(node as IDataNode);
+                return;
+            }
+            else if (this.DataOutputNodes.Contains(node as IDataNode))
+            {
+                this.DataOutputNodes.Remove(node as IDataNode);
+                return;
+            }
+        }
+
         private void OnDataChanged<T>(IDataNode<T> container, DataChangedEventArgs<T> e)
         {
             if (container.NodeType == NodeType.Input)

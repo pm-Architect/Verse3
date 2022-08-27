@@ -411,5 +411,10 @@ namespace Verse3.VanillaElements
 
             return false;
         }
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
+        ~MousePositionNode() => Dispose();
     }
 }
