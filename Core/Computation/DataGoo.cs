@@ -74,7 +74,7 @@ namespace Core
         public DataChangedEventHandler DataChanged;
         public new D Data
         {
-            get 
+            get
             {
                 if (base.volatileData == null)
                     return default(D);

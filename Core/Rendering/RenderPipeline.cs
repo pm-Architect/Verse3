@@ -66,7 +66,7 @@ namespace Core
             }
             return count;
         }
-        
+
         //TODO: Output int
         public static bool RenderRenderable(IRenderable renderable, double xOffset, double yOffset, bool recursive = true)
         {
@@ -98,7 +98,7 @@ namespace Core
             }
             return renderSuccess;
         }
-        
+
         //TODO: Output int
         public static bool RenderRenderable(IRenderable renderable, bool recursive = true)
         {
@@ -128,7 +128,7 @@ namespace Core
             return renderSuccess;
         }
     }
-    
+
     public class RenderPipelineInfo
     {
         private IRenderable _renderable;

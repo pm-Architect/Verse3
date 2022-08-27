@@ -1,14 +1,8 @@
 ﻿using Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
 using Verse3;
 using Verse3.VanillaElements;
-using static Core.Geometry2D;
 
 namespace MathLibrary
 {
@@ -41,7 +35,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public Addition() : base(0,0)
+        public Addition() : base(0, 0)
         {
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             //Random rng = new Random();

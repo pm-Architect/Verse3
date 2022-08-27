@@ -4,9 +4,9 @@ using System.Windows;
 using Verse3;
 using Verse3.VanillaElements;
 
-namespace EventsLibrary
+namespace MathLibrary
 {
-    public class ButtonTrigger : BaseComp
+    public class NumberContainer : BaseComp
     {
         internal double _sliderValue = 0.0;
         //private double _inputValue = 0.0;
@@ -18,8 +18,8 @@ namespace EventsLibrary
                 string? name = this.GetType().FullName;
                 string? viewname = this.ViewType.FullName;
                 string? dataIN = "";
-                //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
-                //dataIN = ((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0])?.DataGoo.Data.ToString();
+                if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
+                    dataIN = ((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0])?.DataGoo.Data.ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
                 //TODO: Z Index control for IRenderable
                 return $"Name: {name}" +
@@ -38,7 +38,7 @@ namespace EventsLibrary
 
         #region Constructors
 
-        public ButtonTrigger() : base(0, 0)
+        public NumberContainer() : base(0, 0)
         {
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             //Random rng = new Random();
@@ -46,7 +46,7 @@ namespace EventsLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public ButtonTrigger(int x, int y, int width = 250, int height = 50) : base(x, y, width, height, CompOrientation.Horizontal)
+        public NumberContainer(int x, int y, int width = 250, int height = 50) : base(x, y, width, height, CompOrientation.Horizontal)
         {
             //base.boundingBox = new BoundingBox(x, y, width, height);
 
@@ -62,7 +62,7 @@ namespace EventsLibrary
 
         public override void Compute()
         {
-            //this.ComputationPipelineInfo.IOManager.SetData<double>(_sliderValue, 0);
+            this.ComputationPipelineInfo.IOManager.SetData<double>(_sliderValue, 0);
             //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count == 1)
             //{
             //    if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
@@ -74,15 +74,15 @@ namespace EventsLibrary
             CompInfo ci = new CompInfo();
             Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
             ci.ConstructorInfo = this.GetType().GetConstructor(types);
-            ci.Name = "Button Trigger";
-            ci.Group = "Basic UI";
-            ci.Tab = "Events";
+            ci.Name = "Number Slider";
+            ci.Group = "Inputs";
+            ci.Tab = "Math";
             return ci;
         }
 
         internal TextElement textBlock = new TextElement();
         internal SliderElement sliderBlock = new SliderElement();
-        internal ButtonClickedEventNode nodeBlock;
+        internal NumberDataNode nodeBlock;
         public override void Initialize()
         {
             if (this.Children.Count > 0)
@@ -91,32 +91,26 @@ namespace EventsLibrary
                 return;
             }
 
-            //sliderBlock = new SliderElement();
-            //sliderBlock.Minimum = 0;
-            //sliderBlock.Maximum = 100;
-            //sliderBlock.Value = 50;
-            //sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
-            //sliderBlock.Width = 200;
-            //DataTemplateManager.RegisterDataTemplate(sliderBlock);
-            //this.RenderPipelineInfo.AddChild(sliderBlock);
+            sliderBlock = new SliderElement();
+            sliderBlock.Minimum = 0;
+            sliderBlock.Maximum = 100;
+            sliderBlock.Value = 50;
+            sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
+            sliderBlock.Width = 200;
+            DataTemplateManager.RegisterDataTemplate(sliderBlock);
+            this.RenderPipelineInfo.AddChild(sliderBlock);
 
-            var buttonBlock = new ButtonElement();
-            buttonBlock.DisplayedText = "Trigger";
-            buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
-            DataTemplateManager.RegisterDataTemplate(buttonBlock);
-            this.RenderPipelineInfo.AddChild(buttonBlock);
-
-            nodeBlock = new ButtonClickedEventNode(this, NodeType.Output);
+            nodeBlock = new NumberDataNode(this, NodeType.Output);
             nodeBlock.Width = 50;
             DataTemplateManager.RegisterDataTemplate(nodeBlock);
             this.RenderPipelineInfo.AddChild(nodeBlock);
-            this.ComputationPipelineInfo.IOManager.AddEventOutputNode(nodeBlock as IEventNode);
+            this.ComputationPipelineInfo.IOManager.AddDataOutputNode<double>(nodeBlock as IDataNode<double>);
         }
 
-        private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
+        private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            this.ComputationPipelineInfo.IOManager.EventOccured(0, new EventArgData());
-            //this.ComputationPipelineInfo.IOManager.SetData<double>(this._sliderValue, 0);
+            this._sliderValue = sliderBlock.Value;
+            this.ComputationPipelineInfo.IOManager.SetData<double>(this._sliderValue, 0);
             //ComputationPipeline.ComputeComputable(this);
         }
 
@@ -126,9 +120,9 @@ namespace EventsLibrary
         //public ElementsLinkedList<IRenderable> Children => _children;
     }
 
-    public class ButtonClickedEventNode : EventNodeElement
+    public class NumberDataNode : DataNodeElement<double>
     {
-        public ButtonClickedEventNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
+        public NumberDataNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
         {
         }
     }

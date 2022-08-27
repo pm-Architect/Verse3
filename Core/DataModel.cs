@@ -331,7 +331,7 @@ namespace Core
 
         #endregion
     }
-    
+
     #region Enums
 
     public enum ElementState

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core
 {
@@ -30,7 +27,7 @@ namespace Core
         {
             this._current = default;
         }
-        
+
         public static int Compute(IComputable sender = null)
         {
             int count = 0;
@@ -81,25 +78,25 @@ namespace Core
                         {
                             //if (!upstream)
                             //{
-                                if (computable.ComputationPipelineInfo.DataDS != null && computable.ComputationPipelineInfo.DataDS.Count > 0)
+                            if (computable.ComputationPipelineInfo.DataDS != null && computable.ComputationPipelineInfo.DataDS.Count > 0)
+                            {
+                                foreach (IComputable compDS in computable.ComputationPipelineInfo.DataDS)
                                 {
-                                    foreach (IComputable compDS in computable.ComputationPipelineInfo.DataDS)
-                                    {
-                                        //TODO: Log to console
-                                        computeSuccess = computeSuccess && (ComputeComputable(compDS) > 0);
-                                    }
+                                    //TODO: Log to console
+                                    computeSuccess = computeSuccess && (ComputeComputable(compDS) > 0);
                                 }
+                            }
                             //}
                             //else
                             //{
-                                //if (computable.ComputationPipelineInfo.DataUS != null && computable.ComputationPipelineInfo.DataUS.Count > 0)
-                                //{
-                                //    foreach (IComputable compUS in computable.ComputationPipelineInfo.DataUS)
-                                //    {
-                                //        //TODO: Log to console
-                                //        computeSuccess = computeSuccess && (ComputeComputable(compUS) > 0);
-                                //    }
-                                //}
+                            //if (computable.ComputationPipelineInfo.DataUS != null && computable.ComputationPipelineInfo.DataUS.Count > 0)
+                            //{
+                            //    foreach (IComputable compUS in computable.ComputationPipelineInfo.DataUS)
+                            //    {
+                            //        //TODO: Log to console
+                            //        computeSuccess = computeSuccess && (ComputeComputable(compUS) > 0);
+                            //    }
+                            //}
                             //}
                         }
                     }
@@ -124,7 +121,7 @@ namespace Core
             return count;
         }
     }
-    
+
     public interface IComputable : IElement
     {
         public ComputationPipelineInfo ComputationPipelineInfo { get; }
@@ -243,7 +240,7 @@ namespace Core
         public ElementsLinkedList<IEventNode> EventInputNodes => _eventInputNodes;
         private ElementsLinkedList<IEventNode> _eventOutputNodes = new ElementsLinkedList<IEventNode>();
         public ElementsLinkedList<IEventNode> EventOutputNodes => _eventOutputNodes;
-        
+
         //public int ConnectionCount
         //{
         //    get
@@ -267,7 +264,7 @@ namespace Core
         //        return count;
         //    }
         //}
-        
+
         public IOManager(IComputable computable)
         {
             this._computable = computable;
@@ -358,7 +355,7 @@ namespace Core
             }
             return default;
         }
-        
+
         public int AddDataOutputNode<T>(IDataNode<T> dataOutputNode)
         {
             if (dataOutputNode is null) return default;
@@ -414,7 +411,7 @@ namespace Core
             }
             return default;
         }
-        
+
         public object GetData(int index)
         {
             return this._dataInputNodes[index].DataGoo.Data;
@@ -455,7 +452,7 @@ namespace Core
                 return false;
             }
         }
-        
+
         public bool SetData(object data, int index)
         {
             if (this._dataOutputNodes[index].DataValueType == data.GetType())

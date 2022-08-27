@@ -1,12 +1,7 @@
 ﻿using Core;
 using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
 using Verse3;
-using Verse3.VanillaElements;
-using static Core.Geometry2D;
 using TextElement = Verse3.VanillaElements.TextElement;
 
 namespace MathLibrary

@@ -9,7 +9,7 @@
 
     public static class ComputationCore
     {
-        
+
     }
 
     internal static class AssemblyManager

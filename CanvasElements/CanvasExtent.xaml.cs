@@ -3,7 +3,6 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
-using System.Windows.Media;
 using Verse3;
 using static Core.Geometry2D;
 
