@@ -45,11 +45,13 @@ namespace Core
             return count;
         }
 
-        
-        
 
-        public static int ComputeComputable(IComputable computable, bool recursive = true, bool upstream = false, bool render = true)
+
+
+
+        public static int ComputeComputable(IComputable computable, bool recursive = true/*, bool upstream = false*//*, bool render = true*/)
         {
+            if (computable == null) return -1;
             //TODO: PARALLEL COMPUTATION
             if (computable.ComputableElementState == ComputableElementState.Computing) return -1;
             else computable.ComputableElementState = ComputableElementState.Computing;
@@ -59,35 +61,45 @@ namespace Core
                 bool computeSuccess = true;
                 if (computable != null)
                 {
-                    
+
                     ComputationPipeline.Instance._current = computable;
-                    computable.CollectData();
-                    computable.Compute();
-                    computable.DeliverData();
-                    
-                    count++;
-                    if (recursive)
+                    if (computable.ComputationPipelineInfo.IOManager.EventInputNodes != null &&
+                        computable.ComputationPipelineInfo.IOManager.EventInputNodes.Count > 0)
                     {
-                        if (!upstream)
+                        //TODO: Log to console
+                        //Computables with EventUS will only compute when their EventUS computables trigger the event they are listening to
+                        computable.CollectData();
+                    }
+                    else
+                    {
+                        computable.CollectData();
+                        computable.Compute();
+                        computable.DeliverData();
+
+                        count++;
+                        if (recursive)
                         {
-                            if (computable.ComputationPipelineInfo.DataDS != null && computable.ComputationPipelineInfo.DataDS.Count > 0)
-                            {
-                                foreach (IComputable compDS in computable.ComputationPipelineInfo.DataDS)
-                                {
-                                    //TODO: Log to console
-                                    computeSuccess = computeSuccess && (ComputeComputable(compDS) > 0);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            //if (computable.ComputationPipelineInfo.DataUS != null && computable.ComputationPipelineInfo.DataUS.Count > 0)
+                            //if (!upstream)
                             //{
-                            //    foreach (IComputable compUS in computable.ComputationPipelineInfo.DataUS)
-                            //    {
-                            //        //TODO: Log to console
-                            //        computeSuccess = computeSuccess && (ComputeComputable(compUS) > 0);
-                            //    }
+                                if (computable.ComputationPipelineInfo.DataDS != null && computable.ComputationPipelineInfo.DataDS.Count > 0)
+                                {
+                                    foreach (IComputable compDS in computable.ComputationPipelineInfo.DataDS)
+                                    {
+                                        //TODO: Log to console
+                                        computeSuccess = computeSuccess && (ComputeComputable(compDS) > 0);
+                                    }
+                                }
+                            //}
+                            //else
+                            //{
+                                //if (computable.ComputationPipelineInfo.DataUS != null && computable.ComputationPipelineInfo.DataUS.Count > 0)
+                                //{
+                                //    foreach (IComputable compUS in computable.ComputationPipelineInfo.DataUS)
+                                //    {
+                                //        //TODO: Log to console
+                                //        computeSuccess = computeSuccess && (ComputeComputable(compUS) > 0);
+                                //    }
+                                //}
                             //}
                         }
                     }
@@ -265,69 +277,142 @@ namespace Core
             //this._eventOutputNodes = computable.ComputationPipelineInfo.EventDS;
         }
 
-        public void AddDataInputNode<T>(IDataNode<T> dataInputNode)
+        public void EventOccured(int v, EventArgData eventArgData)
         {
-            if (dataInputNode is null) return;
+            this.EventOutputNodes[v].EventOccured(eventArgData);
+        }
+
+        public void RemoveNode(INode node)
+        {
+            if (this.EventInputNodes.Contains(node as IEventNode))
+            {
+                this.EventInputNodes.Remove(node as IEventNode);
+                return;
+            }
+            else if (this.EventOutputNodes.Contains(node as IEventNode))
+            {
+                this.EventOutputNodes.Remove(node as IEventNode);
+                return;
+            }
+            else if (this.DataInputNodes.Contains(node as IDataNode))
+            {
+                this.DataInputNodes.Remove(node as IDataNode);
+                return;
+            }
+            else if (this.DataOutputNodes.Contains(node as IDataNode))
+            {
+                this.DataOutputNodes.Remove(node as IDataNode);
+                return;
+            }
+        }
+
+        private void OnDataChanged<T>(IDataNode<T> container, DataChangedEventArgs<T> e)
+        {
+            if (container.NodeType == NodeType.Input)
+            {
+                if (container.Parent is IComputable) ComputationPipeline.ComputeComputable(container.Parent as IComputable);
+            }
+            else if (container.NodeType == NodeType.Output)
+            {
+                if (container.Parent is IComputable)
+                {
+                    IComputable c = container.Parent as IComputable;
+                    c.ComputationPipelineInfo.IOManager.DeliverData();
+                }
+            }
+        }
+        private void OnEvent(IEventNode container, EventArgData e)
+        {
+            if (container.NodeType == NodeType.Input)
+            {
+                //Call EventOccured() delegate
+                bool gate = container.EventOccured(e);
+                if (gate)
+                {
+                    if (container.Parent is IComputable) ComputationPipeline.ComputeComputable(container.Parent as IComputable);
+                }
+            }
+            else if (container.NodeType == NodeType.Output)
+            {
+                if (container.Parent is IComputable)
+                {
+                    IComputable c = container.Parent as IComputable;
+                    c.ComputationPipelineInfo.IOManager.DeliverData();
+                }
+            }
+        }
+
+        public int AddDataInputNode<T>(IDataNode<T> dataInputNode)
+        {
+            if (dataInputNode is null) return default;
             if (!this._dataInputNodes.Contains(dataInputNode))
             {
                 if (dataInputNode.NodeType == NodeType.Input)
                 {
                     dataInputNode.Parent = _computable;
                     this._dataInputNodes.Add(dataInputNode);
-                    //if (dataInputNode is IComputable)
-                    //{
-                    //    this._computable.ComputationPipelineInfo.AddDataUpStream(dataInputNode as IComputable);
-                    //}
+                    int i = this._dataInputNodes.IndexOf(dataInputNode);
+                    (this._dataInputNodes[i] as IDataNode<T>).NodeDataChanged += OnDataChanged;
+                    return i;
                 }
             }
+            return default;
         }
-        public void AddDataOutputNode<T>(IDataNode<T> dataOutputNode)
+        
+        public int AddDataOutputNode<T>(IDataNode<T> dataOutputNode)
         {
-            if (dataOutputNode is null) return;
+            if (dataOutputNode is null) return default;
             if (!this._dataOutputNodes.Contains(dataOutputNode))
             {
                 if (dataOutputNode.NodeType == NodeType.Output)
                 {
                     dataOutputNode.Parent = _computable;
                     this._dataOutputNodes.Add(dataOutputNode);
-                    //if (dataOutputNode is IComputable)
-                    //{
-                    //    this._computable.ComputationPipelineInfo.AddDataDownStream(dataOutputNode as IComputable);
-                    //}
+                    int i = this._dataOutputNodes.IndexOf(dataOutputNode);
+                    (this._dataOutputNodes[i] as IDataNode<T>).NodeDataChanged += OnDataChanged;
+                    return i;
                 }
             }
+            return default;
         }
-        public void AddEventInputNode(IEventNode eventInputNode)
+        public int AddEventInputNode(IEventNode eventInputNode, EventDelegate eventDelegate = null)
         {
-            if (eventInputNode is null) return;
+            if (eventInputNode is null) return default;
             if (!this._eventInputNodes.Contains(eventInputNode))
             {
                 if (eventInputNode.NodeType == NodeType.Input)
                 {
-                    //eventInputNode.Parent = _computable;
+                    eventInputNode.Parent = _computable;
                     this._eventInputNodes.Add(eventInputNode);
-                    if (eventInputNode is IComputable)
+                    int i = this._eventInputNodes.IndexOf(eventInputNode);
+                    (this._eventInputNodes[i] as IEventNode).NodeEvent += OnEvent;
+                    if (eventDelegate != null)
                     {
-                        this._computable.ComputationPipelineInfo.AddEventUpStream(eventInputNode as IComputable);
+                        EventDelegates.Add(eventDelegate);
                     }
                 }
             }
+            return default;
         }
-        public void AddEventOutputNode(IEventNode eventOutputNode)
+
+        public int AddEventOutputNode(IEventNode eventOutputNode, EventDelegate eventDelegate = null)
         {
-            if (eventOutputNode is null) return;
+            if (eventOutputNode is null) return default;
             if (!this._eventOutputNodes.Contains(eventOutputNode))
             {
                 if (eventOutputNode.NodeType == NodeType.Output)
                 {
-                    //eventOutputNode.Parent = _computable;
+                    eventOutputNode.Parent = _computable;
                     this._eventOutputNodes.Add(eventOutputNode);
-                    if (eventOutputNode is IComputable)
+                    int i = this._eventOutputNodes.IndexOf(eventOutputNode);
+                    (this._eventOutputNodes[i] as IEventNode).NodeEvent += OnEvent;
+                    if (eventDelegate != null)
                     {
-                        this._computable.ComputationPipelineInfo.AddEventDownStream(eventOutputNode as IComputable);
+                        EventDelegates.Add(eventDelegate);
                     }
                 }
             }
+            return default;
         }
         
         public object GetData(int index)
@@ -347,7 +432,7 @@ namespace Core
                 {
                     if (this._dataInputNodes[index].DataGoo.Data is T)
                     {
-                        return (T)this._dataInputNodes[index].DataGoo.Data;
+                        return (this._dataInputNodes[index].DataGoo as DataStructure<T>).Data;
                     }
                     else
                     {
@@ -361,7 +446,7 @@ namespace Core
         {
             if (this._dataInputNodes[index].DataValueType == typeof(T))
             {
-                output = (T)this._dataInputNodes[index].DataGoo.Data;
+                output = (this._dataInputNodes[index].DataGoo as DataStructure<T>).Data;
                 return true;
             }
             else
@@ -384,7 +469,7 @@ namespace Core
         {
             if (this._dataOutputNodes[index].DataValueType == typeof(T))
             {
-                this._dataOutputNodes[index].DataGoo.Data = data;
+                (this._dataOutputNodes[index].DataGoo as DataStructure<T>).Data = data;
                 return true;
             }
             else return false;
@@ -432,5 +517,13 @@ namespace Core
                 dataOutputNode.DeliverData();
             }
         }
+
+        //private Foo(IComputable computable)
+        //{
+        //    EventDelegate eventDelegate = Bar;
+        //}
+
+        public delegate void EventDelegate(IEventNode container, EventArgData e);
+        public List<EventDelegate> EventDelegates = new List<EventDelegate>();
     }
 }

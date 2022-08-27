@@ -149,5 +149,17 @@ namespace CanvasElements
         }
 
         #endregion
+        public void Dispose()
+        {
+            if (this.RenderPipelineInfo.Children != null && this.RenderPipelineInfo.Children.Count > 0)
+            {
+                foreach (var child in this.RenderPipelineInfo.Children)
+                {
+                    if (child != null) child.Dispose();
+                }
+            }
+            GC.SuppressFinalize(this);
+        }
+        ~CanvasExtentElement() => Dispose();
     }
 }

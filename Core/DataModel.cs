@@ -305,7 +305,7 @@ namespace Core
         #endregion
     }
 
-    public interface IElement : INotifyPropertyChanged
+    public interface IElement : INotifyPropertyChanged, IDisposable
     {
         #region Properties
 

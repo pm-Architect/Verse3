@@ -170,6 +170,14 @@ namespace Core
                 }
             }
         }
+        public void SetParent(IElement parent)
+        {
+            if (parent is IRenderable)
+            {
+                this.SetParent(parent as IRenderable);
+            }
+            else throw new Exception("Parent is not a renderable");
+        }
     }
 
     public interface IRenderable : IElement

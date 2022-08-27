@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Markup;
 using static Core.Geometry2D;
 
 namespace Verse3.VanillaElements
@@ -13,45 +14,88 @@ namespace Verse3.VanillaElements
     /// <summary>
     /// Visual Interaction logic for TestElement.xaml
     /// </summary>
-    public partial class NodeElementView : UserControl, IBaseElementView<NodeElement>
+    public partial class DataNodeElementView : UserControl, IBaseElementView<IRenderable>
     {
         #region IBaseElementView Members
 
-        private NodeElement _element;
-        public NodeElement Element
+        private Type Y = default;
+        //DEV NOTE: CAUTION! DYNAMIC TYPE IS USED
+        private dynamic _element;
+        public IRenderable Element
         {
             get
             {
                 if (this._element == null)
                 {
-                    _element = this.DataContext as NodeElement;
+                    if (this.DataContext != null)
+                    {
+                        Y = this.DataContext.GetType();
+                        if (Y.BaseType.Name == (typeof(DataNodeElement<>).Name))
+                        {
+                            //TODO: Log to Console and process
+                            //if (this.DataContext.GetType().GenericTypeArguments.Length == 1)
+                            //Y = this.DataContext.GetType().MakeGenericType(Y);
+                            //_element = Convert.ChangeType(this.DataContext, U) as IRenderable;
+                            Y = this.DataContext.GetType()/*.MakeGenericType(this.DataContext.GetType().GenericTypeArguments[0].GetType())*/;
+                            _element = this.DataContext;
+                            return _element;
+                        }
+                        else if (Y.BaseType.Name == typeof(EventNodeElement).Name)
+                        {
+                            //TODO: Log to Console and process
+                            //if (this.DataContext.GetType().GenericTypeArguments.Length == 1)
+                            //Y = this.DataContext.GetType().MakeGenericType(Y);
+                            //_element = Convert.ChangeType(this.DataContext, U) as IRenderable;
+                            Y = this.DataContext.GetType()/*.MakeGenericType(this.DataContext.GetType().GenericTypeArguments[0].GetType())*/;
+                            _element = this.DataContext;
+                            return _element;
+                        }
+                    }
                 }
                 return _element;
             }
             private set
             {
-                _element = value as NodeElement;
+                if (Y != default)
+                {
+                    if (value.GetType().IsAssignableTo(Y))
+                    {
+                        _element = value;
+                    }
+                }
             }
         }
         IRenderable IRenderView.Element => Element;
+        //public static T ForceCast<T>(object obj)
+        //{
+        //    try
+        //    {
+        //        return
+        //    }
+        //    catch/* (Exception ex)*/
+        //    {
+        //        //throw ex;
+        //    }
+        //}
 
         #endregion
 
         #region Constructor and Render
 
-        public NodeElementView()
+        public DataNodeElementView()
         {
             InitializeComponent();
         }
 
         public void Render()
         {
-            if (this.Element != null)
+            if (this.Element != null && this.Element is IDataNode)
             {
+                IDataNode node = this.Element as IDataNode;
                 if (Element.RenderView != this) Element.RenderView = this;
-                if (this.Element.Connections != null)
+                if (node.Connections != null)
                 {
-                    foreach (BezierElement bezier in this.Element.Connections)
+                    foreach (BezierElement bezier in node.Connections)
                     {
                         if (bezier != null)
                         {
@@ -108,7 +152,7 @@ namespace Verse3.VanillaElements
             //DependencyPropertyChangedEventArgs
             if (this.DataContext != null)
             {
-                this.Element = this.DataContext as NodeElement;
+                this.Element = this.DataContext as IRenderable;
                 Render();
             }
         }
@@ -127,17 +171,31 @@ namespace Verse3.VanillaElements
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.Element.ToggleActive();
+            if (this.Element != null)
+            {
+                (this.Element as IDataNode).ToggleActive();
+            }
+            //DEV NOTE: CAUTION! DYNAMIC TYPE IS USED
+            //try
+            //{
+            //    dynamic element = Convert.ChangeType(this.Element, Y);
+            //    element.ToggleActive(this, e);
+            //}
+            //catch (Exception)
+            //{
+            //    //Log to Console and process
+            //    throw;
+            //}
         }
     }
 
-    public class NodeElement : DataNode<double>
+    public class DataNodeElement<T> : DataNode<T>
     {
-        public override Type ViewType => typeof(NodeElementView);
+        public override Type ViewType => typeof(DataNodeElementView);
 
         #region Constructor and Compute
 
-        public NodeElement(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
+        public DataNodeElement(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
         {
             //_computationPipelineInfo = new ComputationPipelineInfo(this);
             //this.RenderPipelineInfo.Parent = parent as IRenderable;
@@ -171,7 +229,7 @@ namespace Verse3.VanillaElements
             }
         }
 
-        internal void ToggleActive()
+        public override void ToggleActive()
         {
             //Set as active Node
             BezierElement b = (BezierElement)DataViewModel.ActiveConnection;
@@ -209,7 +267,7 @@ namespace Verse3.VanillaElements
                     //b.RenderView.Render();
                 }
             }
-            ComputationPipeline.Compute();
+            //ComputationPipeline.Compute();
             //RenderPipeline.Render();
             //this.Element.OnPropertyChanged("BoundingBox");
         }
@@ -273,7 +331,7 @@ namespace Verse3.VanillaElements
         }
 
     }
-
+        
     public class MousePositionNode : INode
     {
         public static readonly MousePositionNode Instance = new MousePositionNode();
@@ -353,5 +411,10 @@ namespace Verse3.VanillaElements
 
             return false;
         }
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
+        ~MousePositionNode() => Dispose();
     }
 }
