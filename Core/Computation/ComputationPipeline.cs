@@ -33,7 +33,10 @@ namespace Core
             int count = 0;
             try
             {
-                count = ComputeComputable(ComputationPipeline.Instance._current);
+                if (ComputationPipeline.Instance._current != null)
+                {
+                    count = ComputeComputable(ComputationPipeline.Instance._current);
+                }
             }
             catch /*(Exception e)*/
             {
