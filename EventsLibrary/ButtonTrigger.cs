@@ -46,7 +46,7 @@ namespace EventsLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public ButtonTrigger(int x, int y, int width = 250, int height = 50) : base(x, y, width, height, CompOrientation.Horizontal)
+        public ButtonTrigger(int x, int y, int width = 250, int height = 100) : base(x, y)
         {
             //base.boundingBox = new BoundingBox(x, y, width, height);
 
@@ -71,12 +71,20 @@ namespace EventsLibrary
         }
         public override CompInfo GetCompInfo()
         {
-            CompInfo ci = new CompInfo();
             Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            ci.ConstructorInfo = this.GetType().GetConstructor(types);
-            ci.Name = "Button Trigger";
-            ci.Group = "Basic UI";
-            ci.Tab = "Events";
+            CompInfo ci = new CompInfo
+            {
+                ConstructorInfo = this.GetType().GetConstructor(types),
+                Name = "Button Trigger",
+                Group = "Basic UI",
+                Tab = "Events",
+                Description = "",
+                Author = "",
+                License = "",
+                Repository = "",
+                Version = "",
+                Website = ""
+            };
             return ci;
         }
 

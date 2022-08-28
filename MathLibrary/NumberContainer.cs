@@ -17,9 +17,7 @@ namespace MathLibrary
             {
                 string? name = this.GetType().FullName;
                 string? viewname = this.ViewType.FullName;
-                string? dataIN = "";
-                if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
-                    dataIN = ((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0])?.DataGoo.Data.ToString();
+                string? dataIN = Math.Round(_sliderValue, 2).ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
                 //TODO: Z Index control for IRenderable
                 return $"Name: {name}" +
@@ -46,7 +44,7 @@ namespace MathLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public NumberContainer(int x, int y, int width = 250, int height = 50) : base(x, y, width, height, CompOrientation.Horizontal)
+        public NumberContainer(int x, int y, int width = 250, int height = 300) : base(x, y)
         {
             //base.boundingBox = new BoundingBox(x, y, width, height);
 
@@ -62,7 +60,7 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            this.ComputationPipelineInfo.IOManager.SetData<double>(_sliderValue, 0);
+            //this.ChildElementManager.SetData<double>(_sliderValue, 0);
             //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count == 1)
             //{
             //    if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
@@ -71,12 +69,20 @@ namespace MathLibrary
         }
         public override CompInfo GetCompInfo()
         {
-            CompInfo ci = new CompInfo();
             Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            ci.ConstructorInfo = this.GetType().GetConstructor(types);
-            ci.Name = "Number Slider";
-            ci.Group = "Inputs";
-            ci.Tab = "Math";
+            CompInfo ci = new CompInfo
+            {
+                ConstructorInfo = this.GetType().GetConstructor(types),
+                Name = "Number Slider",
+                Group = "Inputs",
+                Tab = "Math",
+                Description = "",
+                Author = "",
+                License = "",
+                Repository = "",
+                Version = "",
+                Website = ""
+            };
             return ci;
         }
 
@@ -85,32 +91,29 @@ namespace MathLibrary
         internal NumberDataNode nodeBlock;
         public override void Initialize()
         {
-            if (this.Children.Count > 0)
-            {
-                textBlock.DisplayedText = this.ElementText;
-                return;
-            }
-
             sliderBlock = new SliderElement();
             sliderBlock.Minimum = 0;
             sliderBlock.Maximum = 100;
             sliderBlock.Value = 50;
             sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
             sliderBlock.Width = 200;
-            DataTemplateManager.RegisterDataTemplate(sliderBlock);
-            this.RenderPipelineInfo.AddChild(sliderBlock);
+            this.ChildElementManager.AddElement(sliderBlock);
 
             nodeBlock = new NumberDataNode(this, NodeType.Output);
             nodeBlock.Width = 50;
-            DataTemplateManager.RegisterDataTemplate(nodeBlock);
-            this.RenderPipelineInfo.AddChild(nodeBlock);
-            this.ComputationPipelineInfo.IOManager.AddDataOutputNode<double>(nodeBlock as IDataNode<double>);
+            this.ChildElementManager.AddDataOutputNode<double>(nodeBlock as IDataNode<double>);
+
+            textBlock = new TextElement();
+            textBlock.DisplayedText = this.ElementText;
+            textBlock.TextAlignment = TextAlignment.Left;
+            this.ChildElementManager.AddElement(textBlock);
         }
 
         private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
         {
             this._sliderValue = sliderBlock.Value;
-            this.ComputationPipelineInfo.IOManager.SetData<double>(this._sliderValue, 0);
+            this.ChildElementManager.SetData<double>(this._sliderValue, 0);
+            textBlock.DisplayedText = this.ElementText;
             //ComputationPipeline.ComputeComputable(this);
         }
 

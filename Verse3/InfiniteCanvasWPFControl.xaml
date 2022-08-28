@@ -8,7 +8,8 @@
              xmlns:core="clr-namespace:Core;assembly=Core"
              mc:Ignorable="d"
              d:DesignHeight="1920" d:DesignWidth="1080"
-             Loaded="Control_Loaded">
+             Loaded="Control_Loaded"
+             Height="1920" Width="1080">
     <UserControl.Resources>
         <!-- 
         Converts a color value to a brush.

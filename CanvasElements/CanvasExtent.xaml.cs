@@ -86,7 +86,7 @@ namespace CanvasElements
         public ElementState State { get; set; }
 
         public ElementState ElementState { get; set; }
-        public ElementType ElementType { get; set; }
+        public ElementType ElementType { get => ElementType.CanvasElement; set => ElementType = ElementType.CanvasElement; }
         bool IRenderable.Visible { get; set; }
 
         public IRenderable Parent => RenderPipelineInfo.Parent;
@@ -114,12 +114,20 @@ namespace CanvasElements
 
         public CompInfo GetCompInfo()
         {
-            CompInfo ci = new CompInfo();
             Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            ci.ConstructorInfo = this.GetType().GetConstructor(types);
-            ci.Name = "Extent";
-            ci.Group = "_CanvasElements";
-            ci.Tab = "_CanvasElements";
+            CompInfo ci = new CompInfo
+            {
+                ConstructorInfo = this.GetType().GetConstructor(types),
+                Name = "Extent",
+                Group = "_CanvasElements",
+                Tab = "_CanvasElements",
+                Description = "",
+                Author = "",
+                License = "",
+                Repository = "",
+                Version = "",
+                Website = ""
+            };
             return ci;
         }
 

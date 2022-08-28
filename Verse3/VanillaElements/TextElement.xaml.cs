@@ -105,6 +105,7 @@ namespace Verse3.VanillaElements
     {
         #region Properties
 
+        public override ElementType ElementType => ElementType.DisplayUIElement;
         public override Type ViewType { get { return typeof(TextElementView); } }
         
         

@@ -77,10 +77,27 @@ namespace Verse3
             if (this.Element != null)
             {
                 if (this.Element.RenderView != this) this.Element.RenderView = this;
+                //if (CenterBar.Width != this.ActualWidth - (InputsList.ActualWidth + OutputsList.ActualWidth))
+                //{
+                //    if (this.ActualWidth > (InputsList.ActualWidth + OutputsList.ActualWidth))
+                //        CenterBar.Width = this.ActualWidth - (InputsList.ActualWidth + OutputsList.ActualWidth);
+                //}
                 this.Element.RenderComp();
 
-                InputsList.ItemsSource = this.Element.Children;
-                
+                //InputsList.ItemsSource = this.Element.ChildElementManager.InputSide;
+                //OutputsList.ItemsSource = this.Element.ChildElementManager.OutputSide;
+                //if (this.Element.Width != (InputsList.ActualWidth + OutputsList.ActualWidth + CenterBar.Width))
+                //{
+
+
+                //    else
+                //    {
+                //        CenterBar.Width = 50;
+                //        this.Element.Width = (InputsList.ActualWidth + OutputsList.ActualWidth + CenterBar.Width);
+                //    }
+                //}
+                //if (this.Element.Height != MainStackPanel.ActualHeight) this.Element.Height = MainStackPanel.ActualHeight;
+                //TODO: else log to console
             }
         }
 
@@ -97,7 +114,7 @@ namespace Verse3
             Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
 
             BaseCompView rectangle = (BaseCompView)sender;
-            IRenderable myRectangle = (IRenderable)rectangle.DataContext;
+            BaseComp myRectangle = rectangle.Element;
 
             //myRectangle.IsSelected = true;
 

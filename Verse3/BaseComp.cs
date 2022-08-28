@@ -65,13 +65,21 @@ namespace Verse3
         public double Width
         {
             get => boundingBox.Size.Width;
-            set => boundingBox.Size.Width = value;
+            set
+            {
+                this.BoundingBox.Size.Width = value;
+                OnPropertyChanged("Width");
+            }
         }
 
         public double Height
         {
             get => boundingBox.Size.Height;
-            set => boundingBox.Size.Height = value;
+            set
+            {
+                this.BoundingBox.Size.Height = value;
+                OnPropertyChanged("Height");
+            }
         }
 
         public ElementState State { get; set; }
@@ -79,7 +87,7 @@ namespace Verse3
         //public IRenderView ElementView { get; internal set; }
 
         public ElementState ElementState { get; set; }
-        public ElementType ElementType { get; set; }
+        public ElementType ElementType { get => ElementType.BaseComp; set => ElementType = ElementType.BaseComp; }
         bool IRenderable.Visible { get; set; }
 
         private Brush background;
@@ -88,18 +96,18 @@ namespace Verse3
         private Brush backgroundTint;
         public Brush BackgroundTint { get => backgroundTint; set => SetProperty(ref backgroundTint, value); }
 
-        internal CompOrientation _orientation = CompOrientation.Vertical;
-        public string Orientation
-        {
-            get => _orientation.ToString();
-            set
-            {
-                if (Enum.TryParse(value, out CompOrientation orientation))
-                {
-                    _orientation = orientation;
-                }
-            }
-        }
+        //internal CompOrientation _orientation = CompOrientation.Vertical;
+        //public string Orientation
+        //{
+        //    get => _orientation.ToString();
+        //    set
+        //    {
+        //        if (Enum.TryParse(value, out CompOrientation orientation))
+        //        {
+        //            _orientation = orientation;
+        //        }
+        //    }
+        //}
 
 
         public IRenderable Parent => RenderPipelineInfo.Parent;
@@ -128,11 +136,11 @@ namespace Verse3
 
         #endregion
 
-            #region Constructor and Compute
+        #region Constructor and Compute
 
-            //#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        //#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        public BaseComp(int x, int y, int width = 250, int height = 350, CompOrientation orientation = CompOrientation.Vertical)
+        public BaseComp(int x, int y)
         {
             _cEManager = new ChildElementManager(this);
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
@@ -145,9 +153,9 @@ namespace Verse3
             computationPipelineInfo = new ComputationPipelineInfo(this);
 
             //if (this.RenderView == null) return;
-            _orientation = orientation;
+            //_orientation = orientation;
 
-            this.boundingBox = new BoundingBox(x, y, width, height);
+            this.boundingBox = new BoundingBox(x, y, 500, 500);
 
             Random rnd = new Random();
             byte rc = (byte)Math.Round(rnd.NextDouble() * 125.0);
@@ -158,17 +166,32 @@ namespace Verse3
         }
 
         public abstract void Initialize();
+        /// <summary>
+        /// Override only if you know what you're doing
+        /// </summary>
         public virtual void RenderComp()
         {
             if (this.Children.Count > 0)
             {
+                //TODO: At every render
                 //textBlock.DisplayedText = this.ElementText;
+                this.ChildElementManager.AdjustBounds();
                 return;
             }
-            if (this.RenderView is BaseCompView)
-            {
-            }
             Initialize();
+            //if (this.RenderView is BaseCompView)
+            //{
+            //    BaseCompView view = this.RenderView as BaseCompView;
+
+            //    if (this.Width != (view.InputsList.ActualWidth + view.OutputsList.ActualWidth + view.CenterBar.Width))
+            //    {
+            //        this.Width = (view.InputsList.ActualWidth + view.OutputsList.ActualWidth + view.CenterBar.Width);
+            //    }
+            //    if (this.Height != view.MainStackPanel.ActualHeight) this.Height = view.MainStackPanel.ActualHeight;
+
+            //    //TODO: Add Center Bar Elements (Title, Icon, etc)
+            //    //this.ChildElementManager.AddElement()
+            //}
         }
 
         public abstract void Compute();
@@ -238,54 +261,64 @@ namespace Verse3
     {
         private BaseComp _owner;
 
-
-        //string? txt = this.ElementText;
-        //textBlock = new TextElement();
-        //textBlock.DisplayedText = txt;
-        //    textBlock.TextAlignment = TextAlignment.Left;
-        //    DataTemplateManager.RegisterDataTemplate(textBlock);
-        //    this.RenderPipelineInfo.AddChild(textBlock);
-
-        //    sliderBlock = new SliderElement();
-        //sliderBlock.Minimum = 0;
-        //    sliderBlock.Maximum = 100;
-        //    sliderBlock.Value = 50;
-        //    sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
-        //    DataTemplateManager.RegisterDataTemplate(sliderBlock);
-        //    this.RenderPipelineInfo.AddChild(sliderBlock);
-
-        //    var buttonBlock = new ButtonElement();
-        //buttonBlock.DisplayedText = "Click me";
-        //    buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
-        //    DataTemplateManager.RegisterDataTemplate(buttonBlock);
-        //    this.RenderPipelineInfo.AddChild(buttonBlock);
-
-        //    var textBoxBlock = new TextBoxElement();
-        //textBoxBlock.InputText = "Enter text";
-        //    DataTemplateManager.RegisterDataTemplate(textBoxBlock);
-        //    this.RenderPipelineInfo.AddChild(textBoxBlock);
-        
-        //nodeBlock2 = new NumberDataNode(this, NodeType.Output);
-        //DataTemplateManager.RegisterDataTemplate(nodeBlock2);
-        //    this.RenderPipelineInfo.AddChild(nodeBlock2);
-        //    this.ComputationPipelineInfo.IOManager.AddDataOutputNode<double>(nodeBlock2 as IDataNode<double>);
-
-        //    string? txt = this.ElementText;
-        //textBlock = new TextElement();
-        //textBlock.DisplayedText = txt;
-        //    textBlock.TextAlignment = TextAlignment.Left;
-        //    DataTemplateManager.RegisterDataTemplate(textBlock);
-        //    this.RenderPipelineInfo.AddChild(textBlock);
-
         public ChildElementManager(BaseComp owner)
         {
             this._owner = owner;
+        }
+
+        public void AdjustBounds()
+        {
+            if (_owner.RenderView is BaseCompView)
+            {
+                BaseCompView view = _owner.RenderView as BaseCompView;
+
+                if (view.MainStackPanel.ActualWidth < 50 || view.MainStackPanel.ActualHeight < 50) return;
+                if (view.MainStackPanel.ActualWidth > 500 || view.MainStackPanel.ActualHeight > 500) return;
+                if (_owner.Width != view.MainStackPanel.ActualWidth) _owner.Width = view.MainStackPanel.ActualWidth;
+                if (_owner.Height != view.MainStackPanel.ActualHeight) _owner.Height = view.MainStackPanel.ActualHeight;
+                //_owner.OnPropertyChanged("BoundingBox");
+                //RenderPipeline.RenderRenderable(_owner);
+            }
         }
 
         public void AddElement(IRenderable element)
         {
             DataTemplateManager.RegisterDataTemplate(element);
             this._owner.RenderPipelineInfo.AddChild(element);
+            switch (element.ElementType)
+            {
+                case ElementType.UIElement:
+                    {
+                        _bottomUI.Add(element);
+                        break;
+                    }
+                case ElementType.DisplayUIElement:
+                    {
+                        _center.Add(element);
+                        break;
+                    }
+                case ElementType.Node:
+                    {
+                        if (element is INode)
+                        {
+                            INode node = element as INode;
+                            if (node.NodeType == NodeType.Input)
+                            {
+                                _input.Add(element);
+                            }
+                            else if (node.NodeType == NodeType.Output)
+                            {
+                                _output.Add(element);
+                            }
+                        }
+                        break;
+                    }
+                default:
+                    {
+
+                        break;
+                    }
+            }
         }
         public void RemoveElement(IRenderable element)
         {
@@ -330,7 +363,149 @@ namespace Verse3
         {
             this._owner.ComputationPipelineInfo.IOManager.SetData<T>(v1, v2);
         }
+
+        public T GetData<T>(int v, T defaultValue)
+        {
+            T a = this._owner.ComputationPipelineInfo.IOManager.GetData<T>(v);
+            if (a is null) a = defaultValue;
+            return a;
+        }
+
+        public ElementsLinkedList<IRenderable> FilterChildElementsByType(ElementType elementType)
+        {
+            ElementsLinkedList<IRenderable> renderables = new ElementsLinkedList<IRenderable>();
+            foreach (IRenderable renderable in _owner.Children)
+            {
+                if (renderable.ElementType == elementType)
+                {
+                    //TODO: Log to console
+                    //if (renderable is INode) continue;
+                    /*else */renderables.Add(renderable);
+                }
+            }
+            return renderables;
+        }
+
+        private ElementsLinkedList<IRenderable> _input = new ElementsLinkedList<IRenderable>();
+        public ElementsLinkedList<IRenderable> InputSide
+        {
+            get
+            {
+                //foreach (IRenderable renderable in _owner.Children)
+                //{
+                //    if (renderable.ElementType == ElementType.Node)
+                //    {
+                //        if (renderable is INode)
+                //        {
+                //            INode node = renderable as INode;
+                //            if (node.NodeType == NodeType.Input)
+                //            {
+                //                _input.Add(renderable);
+                //            }
+                //        }
+                //    }
+                //}
+                return _input;
+            }
+        }
+
+        private ElementsLinkedList<IRenderable> _output = new ElementsLinkedList<IRenderable>();
+        public ElementsLinkedList<IRenderable> OutputSide
+        {
+            get
+            {
+                //foreach (IRenderable renderable in _owner.Children)
+                //{
+                //    if (renderable.ElementType == ElementType.Node)
+                //    {
+                //        if (renderable is INode)
+                //        {
+                //            INode node = renderable as INode;
+                //            if (node.NodeType == NodeType.Output)
+                //            {
+                //                _output.Add(renderable);
+                //            }
+                //        }
+                //    }
+                //}
+                return _output;
+            }
+        }
+
+        private ElementsLinkedList<IRenderable> _bottomUI = new ElementsLinkedList<IRenderable>();
+        public ElementsLinkedList<IRenderable> BottomUIItems
+        {
+            get
+            {
+                //foreach (IRenderable renderable in _owner.Children)
+                //{
+                //    if (renderable.ElementType == ElementType.UIElement)
+                //    {
+                //        //TODO: Log to console
+                //        if (renderable is INode) continue;
+                //        else _bottomUI.Add(renderable);
+                //    }
+                //}
+                return _bottomUI;
+            }
+        }
+
+        private ElementsLinkedList<IRenderable> _center = new ElementsLinkedList<IRenderable>();
+        public ElementsLinkedList<IRenderable> CenterBarItems
+        {
+            get
+            {
+                //foreach (IRenderable renderable in _owner.Children)
+                //{
+                //    if (renderable.ElementType == ElementType.DisplayUIElement)
+                //    {
+                //        //TODO: Log to console
+                //        if (renderable is INode) continue;
+                //        else _center.Add(renderable);
+                //    }
+                //}
+                return _center;
+            }
+        }
     }
+
+    //string? txt = this.ElementText;
+    //textBlock = new TextElement();
+    //textBlock.DisplayedText = txt;
+    //    textBlock.TextAlignment = TextAlignment.Left;
+    //    DataTemplateManager.RegisterDataTemplate(textBlock);
+    //    this.RenderPipelineInfo.AddChild(textBlock);
+
+    //    sliderBlock = new SliderElement();
+    //sliderBlock.Minimum = 0;
+    //    sliderBlock.Maximum = 100;
+    //    sliderBlock.Value = 50;
+    //    sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
+    //    DataTemplateManager.RegisterDataTemplate(sliderBlock);
+    //    this.RenderPipelineInfo.AddChild(sliderBlock);
+
+    //    var buttonBlock = new ButtonElement();
+    //buttonBlock.DisplayedText = "Click me";
+    //    buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
+    //    DataTemplateManager.RegisterDataTemplate(buttonBlock);
+    //    this.RenderPipelineInfo.AddChild(buttonBlock);
+
+    //    var textBoxBlock = new TextBoxElement();
+    //textBoxBlock.InputText = "Enter text";
+    //    DataTemplateManager.RegisterDataTemplate(textBoxBlock);
+    //    this.RenderPipelineInfo.AddChild(textBoxBlock);
+
+    //nodeBlock2 = new NumberDataNode(this, NodeType.Output);
+    //DataTemplateManager.RegisterDataTemplate(nodeBlock2);
+    //    this.RenderPipelineInfo.AddChild(nodeBlock2);
+    //    this.ComputationPipelineInfo.IOManager.AddDataOutputNode<double>(nodeBlock2 as IDataNode<double>);
+
+    //    string? txt = this.ElementText;
+    //textBlock = new TextElement();
+    //textBlock.DisplayedText = txt;
+    //    textBlock.TextAlignment = TextAlignment.Left;
+    //    DataTemplateManager.RegisterDataTemplate(textBlock);
+    //    this.RenderPipelineInfo.AddChild(textBlock);
 
     public interface IBaseCompView<R> : IRenderView where R : BaseComp
     {
@@ -625,19 +800,19 @@ namespace Verse3
     //    #endregion
     //}
 
-    public struct CompInfo
+    public readonly struct CompInfo
     {
-        public ConstructorInfo ConstructorInfo { get; set; }
-        public string Name { get; set; }
-        public string Group { get; set; }
-        public string Tab { get; set; }
-        public string Description { get; set; }
-        public string Author { get; set; }
-        public string Version { get; set; }
-        public string License { get; set; }
-        public string Website { get; set; }
-        public string Repository { get; set; }
-        public string Icon { get; set; }
+        public ConstructorInfo ConstructorInfo { get; init; }
+        public string Name { get; init; }
+        public string Group { get; init; }
+        public string Tab { get; init; }
+        public string Description { get; init; }
+        public string Author { get; init; }
+        public string Version { get; init; }
+        public string License { get; init; }
+        public string Website { get; init; }
+        public string Repository { get; init; }
+        public string Icon { get; init; }
         //public Type[] ConstructorParamTypes { get; set; }
         //public string[] ConstructorParamNames { get; set; }
         //public object[] ConstructorDefaults { get; set; }
@@ -705,7 +880,7 @@ namespace Verse3
         //public IRenderView ElementView { get; internal set; }
 
         public ElementState ElementState { get; set; }
-        public ElementType ElementType { get; set; }
+        public ElementType ElementType { get => ElementType.Node; set => ElementType = ElementType.Node; }
         bool IRenderable.Visible { get; set; }
 
 
@@ -811,7 +986,8 @@ namespace Verse3
         {
             get
             {
-                double v = 0.0;
+                //TODO: Turn into a converter for BaseComp
+                double v = 20.0;
                 if ((this as INode).Parent is IComputable)
                 {
                     IComputable c = (this as INode).Parent as IComputable;
@@ -820,7 +996,7 @@ namespace Verse3
                         if (c.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 1 && c.ComputationPipelineInfo.IOManager.DataOutputNodes.Contains(this))
                         {
                             int i = c.ComputationPipelineInfo.IOManager.DataOutputNodes.IndexOf(this);
-                            v = i * this.BoundingBox.Size.Height;
+                            v = v + (i * this.BoundingBox.Size.Height);
                         }
                         _hotspot = this.RenderPipelineInfo.Parent.BoundingBox.Location +
                         new CanvasPoint(this.RenderPipelineInfo.Parent.BoundingBox.Size.Width,
@@ -831,7 +1007,7 @@ namespace Verse3
                         if (c.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 1 && c.ComputationPipelineInfo.IOManager.DataInputNodes.Contains(this))
                         {
                             int i = c.ComputationPipelineInfo.IOManager.DataInputNodes.IndexOf(this);
-                            v = i * this.BoundingBox.Size.Height;
+                            v = v + (i * this.BoundingBox.Size.Height);
                         }
                         _hotspot = this.RenderPipelineInfo.Parent.BoundingBox.Location +
                         new CanvasPoint(0.0, ((this.BoundingBox.Size.Height / 2) + v));
@@ -1160,7 +1336,7 @@ namespace Verse3
         //public IRenderView ElementView { get; internal set; }
 
         public ElementState ElementState { get; set; }
-        public ElementType ElementType { get; set; }
+        public ElementType ElementType { get => ElementType.Node; set => ElementType = ElementType.Node; }
         bool IRenderable.Visible { get; set; }
 
 
@@ -1376,9 +1552,9 @@ namespace Verse3
         ~EventNode() => Dispose();
     }
 
-    public enum CompOrientation
-    {
-        Horizontal,
-        Vertical
-    }
+    //public enum CompOrientation
+    //{
+    //    Horizontal,
+    //    Vertical
+    //}
 }

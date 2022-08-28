@@ -2,11 +2,14 @@ using Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Markup;
+using System.Windows.Media;
 using static Core.Geometry2D;
 
 namespace Verse3.VanillaElements
@@ -272,63 +275,80 @@ namespace Verse3.VanillaElements
             //this.Element.OnPropertyChanged("BoundingBox");
         }
 
+        public string Text { get; set; } = "";
+        
         private HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center;
-
         public HorizontalAlignment HorizontalAlignment
         {
             get
             {
-                if (this.NodeType == NodeType.Input)
-                {
-                    if (horizontalAlignment != HorizontalAlignment.Left)
-                    {
-                        horizontalAlignment = HorizontalAlignment.Left;
-                        //SetProperty(ref horizontalAlignment, HorizontalAlignment.Left);
-                        OnPropertyChanged("HorizontalAlignment");
-                    }
-                }
-                else if (this.NodeType == NodeType.Output)
-                {
-                    if (horizontalAlignment != HorizontalAlignment.Right)
-                    {
-                        horizontalAlignment = HorizontalAlignment.Right;
-                        //SetProperty(ref horizontalAlignment, HorizontalAlignment.Right);
-                        OnPropertyChanged("HorizontalAlignment");
-                    }
-                }
+                //if (this.NodeType == NodeType.Input)
+                //{
+                //    if (horizontalAlignment != HorizontalAlignment.Left)
+                //    {
+                //        horizontalAlignment = HorizontalAlignment.Left;
+                //        //SetProperty(ref horizontalAlignment, HorizontalAlignment.Left);
+                //        OnPropertyChanged("HorizontalAlignment");
+                //    }
+                //}
+                //else if (this.NodeType == NodeType.Output)
+                //{
+                //    if (horizontalAlignment != HorizontalAlignment.Right)
+                //    {
+                //        horizontalAlignment = HorizontalAlignment.Right;
+                //        //SetProperty(ref horizontalAlignment, HorizontalAlignment.Right);
+                //        OnPropertyChanged("HorizontalAlignment");
+                //    }
+                //}
                 return horizontalAlignment;
             }
             private set => SetProperty(ref horizontalAlignment, value);
         }
 
         private System.Windows.Media.Brush nodeContentColor = System.Windows.Media.Brushes.White;
+        public System.Windows.Media.Brush NodeColor => System.Windows.Media.Brushes.Orange;
 
         public System.Windows.Media.Brush NodeContentColor
         {
             get
             {
-                if (this.Connections != null && this.Connections.Count > 0)
-                {
-                    if (nodeContentColor != System.Windows.Media.Brushes.White)
-                    {
-                        nodeContentColor = System.Windows.Media.Brushes.White;
-                        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.White);
-                        //OnPropertyChanged("NodeContentColor");
-                    }
-                }
-                else
-                {
-                    if (nodeContentColor != System.Windows.Media.Brushes.Transparent)
-                    {
-                        nodeContentColor = System.Windows.Media.Brushes.Transparent;
-                        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.Transparent);
-                        //OnPropertyChanged("NodeContentColor");
-                    }
-                }
+                //if (this.Connections != null && this.Connections.Count > 0)
+                //{
+                //    if (nodeContentColor != System.Windows.Media.Brushes.White)
+                //    {
+                //        nodeContentColor = System.Windows.Media.Brushes.White;
+                //        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.White);
+                //        //OnPropertyChanged("NodeContentColor");
+                //    }
+                //}
+                //else
+                //{
+                //    if (nodeContentColor != System.Windows.Media.Brushes.Transparent)
+                //    {
+                //        nodeContentColor = System.Windows.Media.Brushes.Transparent;
+                //        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.Transparent);
+                //        //OnPropertyChanged("NodeContentColor");
+                //    }
+                //}
                 return nodeContentColor;
             }
             private set => SetProperty(ref nodeContentColor, value);
         }
-
     }
+    //public class HorizontalAlignmentConverter : IValueConverter
+    //{
+    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        if ((NodeType)value == NodeType.Input)
+    //            return HorizontalAlignment.Left;
+    //        else if ((NodeType)value == NodeType.Output)
+    //            return HorizontalAlignment.Right;
+    //        else return HorizontalAlignment.Left;
+    //    }
+
+    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }

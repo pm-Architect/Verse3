@@ -44,7 +44,7 @@ namespace EventsLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public EventIndicator(int x, int y, int width = 250, int height = 50) : base(x, y, width, height, CompOrientation.Horizontal)
+        public EventIndicator(int x, int y, int width = 250, int height = 100) : base(x, y)
         {
             //base.boundingBox = new BoundingBox(x, y, width, height);
 
@@ -69,12 +69,20 @@ namespace EventsLibrary
         }
         public override CompInfo GetCompInfo()
         {
-            CompInfo ci = new CompInfo();
             Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            ci.ConstructorInfo = this.GetType().GetConstructor(types);
-            ci.Name = "Event Indicator";
-            ci.Group = "Event Utilities";
-            ci.Tab = "Events";
+            CompInfo ci = new CompInfo
+            {
+                ConstructorInfo = this.GetType().GetConstructor(types),
+                Name = "Event Indicator",
+                Group = "Event Utilities",
+                Tab = "Events",
+                Description = "",
+                Author = "",
+                License = "",
+                Repository = "",
+                Version = "",
+                Website = ""
+            };
             return ci;
         }
 

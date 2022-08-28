@@ -43,7 +43,7 @@ namespace MathLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public Multiplication(int x, int y, int width = 250, int height = 350) : base(x, y, width, height)
+        public Multiplication(int x, int y, int width = 250, int height = 350) : base(x, y)
         {
             //base.boundingBox = new BoundingBox(x, y, width, height);
 
@@ -79,12 +79,20 @@ namespace MathLibrary
 
         public override CompInfo GetCompInfo()
         {
-            CompInfo ci = new CompInfo();
             Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            ci.ConstructorInfo = this.GetType().GetConstructor(types);
-            ci.Name = "Multiplication";
-            ci.Group = "Operations";
-            ci.Tab = "Math";
+            CompInfo ci = new CompInfo
+            {
+                ConstructorInfo = this.GetType().GetConstructor(types),
+                Name = "Multiplication",
+                Group = "Operations",
+                Tab = "Math",
+                Description = "",
+                Author = "",
+                License = "",
+                Repository = "",
+                Version = "",
+                Website = ""
+            };
             return ci;
         }
 

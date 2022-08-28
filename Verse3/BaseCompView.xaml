@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Verse3" d:DataContext="{d:DesignInstance Type=local:BaseComp}"
              mc:Ignorable="d" 
-             d:DesignHeight="250"
-             d:DesignWidth="500"
+             d:DesignHeight="270"
+             d:DesignWidth="510"
              MouseDown="OnMouseDown"
              MouseMove="OnMouseMove"
              MouseUp="OnMouseUp"
@@ -30,8 +30,29 @@
                                 Background="{TemplateBinding Background}"
                                 IsItemsHost="True"
                             />-->
-                        <StackPanel x:Name="CompStackPanel"
-                                    Orientation="{Binding Orientation}"
+                        <WrapPanel x:Name="CompStackPanel"
+                                    Orientation="Vertical"
+                                    Margin="0,0,0,0"
+                                    Background="{TemplateBinding Background}"
+                                    IsItemsHost="True"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                    />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="noScrollViewerListBoxStyleHorizontal" TargetType="ListBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBox">
+                        <!--<Canvas x:Name="CompCanvas" 
+                                Background="{TemplateBinding Background}"
+                                IsItemsHost="True"
+                            />-->
+                        <WrapPanel x:Name="CompStackPanel"
+                                    Orientation="Horizontal"
                                     Margin="0,0,0,0"
                                     Background="{TemplateBinding Background}"
                                     IsItemsHost="True"
@@ -98,15 +119,113 @@
             StrokeThickness="1"
                 />
 
-        <ListBox 
-            x:Name="InputsList"
+        <WrapPanel
+            x:Name="MainStackPanel"
             Background="{Binding BackgroundTint}"
-            Foreground="#FFFFFFFF"
-            BorderBrush="#FF000000"
-            ItemsSource="{Binding Children}"
-            Style="{StaticResource noScrollViewerListBoxStyle}"
-            ItemContainerStyle="{StaticResource listBoxItemStyle}" HorizontalAlignment="Left" VerticalAlignment="Top"
+            Orientation="Vertical"
+            Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"
             >
-        </ListBox>
+            
+            <ListBox 
+                    x:Name="TopBar"
+                    Background="WhiteSmoke"
+                    Foreground="#FFFFFFFF"
+                    BorderBrush="#FF000000"
+                    Style="{StaticResource noScrollViewerListBoxStyleHorizontal}"
+                    ItemContainerStyle="{StaticResource listBoxItemStyle}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top"
+                    Height="20"
+                    HorizontalContentAlignment="Stretch"
+                >
+            </ListBox>
+
+            <WrapPanel
+                x:Name="OuterStackPanel"
+                Orientation="Horizontal"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+            >
+                <ListBox 
+                    x:Name="InputsList"
+                    Background="Transparent"
+                    Foreground="#FFFFFFFF"
+                    BorderBrush="#FF000000"
+                    ItemsSource="{Binding ChildElementManager.InputSide}"
+                    Style="{StaticResource noScrollViewerListBoxStyle}"
+                    ItemContainerStyle="{StaticResource listBoxItemStyle}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    MinWidth="0"
+                    HorizontalContentAlignment="Left" MinHeight="50" VerticalContentAlignment="Top"
+                >
+                </ListBox>
+
+                <ListBox 
+                    x:Name="CenterBar"
+                    Background="{Binding Background}"
+                    Foreground="#FFFFFFFF"
+                    BorderBrush="#FF000000"
+                    ItemsSource="{Binding ChildElementManager.CenterBarItems}"
+                    Style="{StaticResource noScrollViewerListBoxStyle}"
+                    ItemContainerStyle="{StaticResource listBoxItemStyle}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    MinWidth="50"
+                    MaxWidth="500"
+                    VerticalContentAlignment="Top"
+                    MinHeight="50" HorizontalContentAlignment="Stretch"
+                >
+                </ListBox>
+
+                <ListBox 
+                    x:Name="OutputsList"
+                    Background="Transparent"
+                    Foreground="#FFFFFFFF"
+                    BorderBrush="#FF000000"
+                    ItemsSource="{Binding ChildElementManager.OutputSide}"
+                    Style="{StaticResource noScrollViewerListBoxStyle}"
+                    ItemContainerStyle="{StaticResource listBoxItemStyle}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    MinWidth="0"
+                    HorizontalContentAlignment="Right" MinHeight="50" VerticalContentAlignment="Top"
+                >
+                </ListBox>
+            </WrapPanel>
+
+            <ListBox 
+                    x:Name="BottomUI"
+                    Background="Transparent"
+                    Foreground="#FFFFFFFF"
+                    BorderBrush="#FF000000"
+                    ItemsSource="{Binding ChildElementManager.BottomUIItems}"
+                    Style="{StaticResource noScrollViewerListBoxStyle}"
+                    ItemContainerStyle="{StaticResource listBoxItemStyle}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    MinHeight="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Top"
+                >
+            </ListBox>
+
+            <ListBox 
+                    x:Name="BottomBar"
+                    Background="WhiteSmoke"
+                    Foreground="#FFFFFFFF"
+                    BorderBrush="#FF000000"
+                    Style="{StaticResource noScrollViewerListBoxStyleHorizontal}"
+                    ItemContainerStyle="{StaticResource listBoxItemStyle}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top"
+                    Height="20"
+                    HorizontalContentAlignment="Stretch"
+                >
+            </ListBox>
+
+        </WrapPanel>
+
+        
+        
     </Grid>
 </UserControl>

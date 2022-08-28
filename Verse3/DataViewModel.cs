@@ -223,7 +223,7 @@ namespace Verse3
         //public IRenderView ElementView { get; internal set; }
 
         public ElementState ElementState { get; set; }
-        public ElementType ElementType { get; set; }
+        public virtual ElementType ElementType { get => ElementType.UIElement; set => ElementType = ElementType.UIElement; }
         bool IRenderable.Visible { get; set; }
 
         #endregion

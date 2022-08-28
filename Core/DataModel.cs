@@ -384,7 +384,11 @@ namespace Core
         /// <summary>
         /// Default type.
         /// </summary>
-        Node = 2
+        Node = 2,
+        UIElement = 3,
+        DisplayUIElement = 4,
+        CanvasElement = 5,
+        BaseComp = 6
     }
     public enum NodeType
     {
