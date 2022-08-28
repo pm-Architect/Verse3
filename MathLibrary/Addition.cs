@@ -91,10 +91,10 @@ namespace MathLibrary
             nodeBlock2.Width = 50;
             this.ChildElementManager.AddDataOutputNode(nodeBlock2);
 
-            textBlock = new TextElement();
-            textBlock.DisplayedText = this.ElementText;
-            textBlock.TextAlignment = TextAlignment.Left;
-            this.ChildElementManager.AddElement(textBlock);
+            //textBlock = new TextElement();
+            //textBlock.DisplayedText = this.ElementText;
+            //textBlock.TextAlignment = TextAlignment.Left;
+            //this.ChildElementManager.AddElement(textBlock);
         }
     }
 }

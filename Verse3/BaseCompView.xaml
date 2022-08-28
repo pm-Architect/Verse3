@@ -64,6 +64,27 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="noScrollViewerListBoxStyleCentered" TargetType="ListBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBox">
+                        <!--<Canvas x:Name="CompCanvas" 
+                                Background="{TemplateBinding Background}"
+                                IsItemsHost="True"
+                            />-->
+                        <WrapPanel x:Name="CompStackPanel"
+                                    Orientation="Vertical"
+                                    Margin="0,0,0,0"
+                                    Background="{TemplateBinding Background}"
+                                    IsItemsHost="True"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                    />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style 
             x:Key="listBoxItemStyle" 
             TargetType="ListBoxItem"
@@ -88,7 +109,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <!--
-                            When the ListBoxItem is selected draw a simple blue border around it.
+                            When the ListBoxItem is selected draw a simple border around it.
                             -->
                             <Trigger Property="IsSelected" Value="true">
                                 <Setter 
@@ -121,15 +142,15 @@
 
         <WrapPanel
             x:Name="MainStackPanel"
-            Background="{Binding BackgroundTint}"
+            Background="Transparent"
             Orientation="Vertical"
             Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"
             >
             
             <ListBox 
                     x:Name="TopBar"
-                    Background="WhiteSmoke"
-                    Foreground="#FFFFFFFF"
+                    Background="#FFFFFFFF"
+                    Foreground="#FF000000"
                     BorderBrush="#FF000000"
                     Style="{StaticResource noScrollViewerListBoxStyleHorizontal}"
                     ItemContainerStyle="{StaticResource listBoxItemStyle}"
@@ -162,22 +183,29 @@
                 >
                 </ListBox>
 
-                <ListBox 
-                    x:Name="CenterBar"
-                    Background="{Binding Background}"
-                    Foreground="#FFFFFFFF"
-                    BorderBrush="#FF000000"
-                    ItemsSource="{Binding ChildElementManager.CenterBarItems}"
-                    Style="{StaticResource noScrollViewerListBoxStyle}"
-                    ItemContainerStyle="{StaticResource listBoxItemStyle}"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    MinWidth="50"
-                    MaxWidth="500"
-                    VerticalContentAlignment="Top"
-                    MinHeight="50" HorizontalContentAlignment="Stretch"
-                >
-                </ListBox>
+                <WrapPanel
+                        x:Name="CenterBarWrapper"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                    >
+                    <ListBox 
+                        x:Name="CenterBar"
+                        Background="{Binding BackgroundTint}"
+                        Foreground="#FFFFFFFF"
+                        BorderBrush="#FF000000"
+                        ItemsSource="{Binding ChildElementManager.CenterBarItems}"
+                        Style="{StaticResource noScrollViewerListBoxStyleCentered}"
+                        ItemContainerStyle="{StaticResource listBoxItemStyle}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        MinWidth="24"
+                        MaxWidth="500"
+                        VerticalContentAlignment="Center"
+                        MinHeight="24" HorizontalContentAlignment="Center"
+                    >
+                    </ListBox>
+                </WrapPanel>
+                
 
                 <ListBox 
                     x:Name="OutputsList"
@@ -211,8 +239,8 @@
 
             <ListBox 
                     x:Name="BottomBar"
-                    Background="WhiteSmoke"
-                    Foreground="#FFFFFFFF"
+                    Background="#FFFFFFFF"
+                    Foreground="#FF000000"
                     BorderBrush="#FF000000"
                     Style="{StaticResource noScrollViewerListBoxStyleHorizontal}"
                     ItemContainerStyle="{StaticResource listBoxItemStyle}"

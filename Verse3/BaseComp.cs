@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Verse3.VanillaElements;
 using static Core.Geometry2D;
 
 namespace Verse3
@@ -155,7 +156,7 @@ namespace Verse3
             //if (this.RenderView == null) return;
             //_orientation = orientation;
 
-            this.boundingBox = new BoundingBox(x, y, 500, 500);
+            this.boundingBox = new BoundingBox(x, y, 0, 0);
 
             Random rnd = new Random();
             byte rc = (byte)Math.Round(rnd.NextDouble() * 125.0);
@@ -166,6 +167,8 @@ namespace Verse3
         }
 
         public abstract void Initialize();
+
+        protected TextElement titleTextBlock = new TextElement();
         /// <summary>
         /// Override only if you know what you're doing
         /// </summary>
@@ -178,7 +181,21 @@ namespace Verse3
                 this.ChildElementManager.AdjustBounds();
                 return;
             }
+
+            //textBlock.DisplayedText = this.ElementText;
+            titleTextBlock.DisplayedText = this.GetCompInfo().Name;
+            titleTextBlock.TextAlignment = TextAlignment.Left;
+            titleTextBlock.TextRotation = 90;
+            //double h = titleTextBlock.Height;
+            //titleTextBlock.Height = titleTextBlock.Width;
+            //titleTextBlock.Width = h;
+            this.ChildElementManager.AddElement(titleTextBlock);
+
+            //this.ChildElementManager.AddElement()
+
+
             Initialize();
+
             //if (this.RenderView is BaseCompView)
             //{
             //    BaseCompView view = this.RenderView as BaseCompView;
@@ -272,12 +289,36 @@ namespace Verse3
             {
                 BaseCompView view = _owner.RenderView as BaseCompView;
 
-                if (view.MainStackPanel.ActualWidth < 50 || view.MainStackPanel.ActualHeight < 50) return;
-                if (view.MainStackPanel.ActualWidth > 500 || view.MainStackPanel.ActualHeight > 500) return;
+                if (_owner.Width < 50 || _owner.Height < 50 || _owner.Width == double.NaN || _owner.Height == double.NaN)
+                {
+                    _owner.Width = 500;
+                    _owner.Height = 500;
+                    view.UpdateLayout();
+                    //view.Render();
+                }
+                //if (view.MainStackPanel.ActualWidth < 50 || view.MainStackPanel.ActualHeight < 50) return;
+                //if (view.MainStackPanel.ActualWidth > 500 || view.MainStackPanel.ActualHeight > 500) return;
                 if (_owner.Width != view.MainStackPanel.ActualWidth) _owner.Width = view.MainStackPanel.ActualWidth;
                 if (_owner.Height != view.MainStackPanel.ActualHeight) _owner.Height = view.MainStackPanel.ActualHeight;
                 //_owner.OnPropertyChanged("BoundingBox");
                 //RenderPipeline.RenderRenderable(_owner);
+                if (view.CenterBar.ActualWidth < view.ActualWidth - (view.InputsList.ActualWidth + view.OutputsList.ActualWidth))
+                {
+                    if (view.ActualWidth > (view.InputsList.ActualWidth + view.OutputsList.ActualWidth))
+                    {
+                        double targetWidth = _owner.Width;
+                        if ((view.InputsList.ActualWidth + view.OutputsList.ActualWidth + view.CenterBar.ActualWidth) >
+                            view.BottomUI.ActualWidth)
+                            targetWidth = (view.InputsList.ActualWidth + view.OutputsList.ActualWidth + view.CenterBar.ActualWidth);
+                        else targetWidth = view.BottomUI.ActualWidth;
+                        if (_owner.Width != targetWidth)
+                        {
+                            _owner.Width = targetWidth;
+                        }
+                        view.CenterBar.Width = _owner.Width - (view.InputsList.ActualWidth + view.OutputsList.ActualWidth);
+                    }
+                }
+                view.UpdateLayout();
             }
         }
 

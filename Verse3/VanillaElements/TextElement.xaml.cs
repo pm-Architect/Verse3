@@ -111,6 +111,9 @@ namespace Verse3.VanillaElements
         
         private TextAlignment textAlignment;
         public TextAlignment TextAlignment { get => textAlignment; set => SetProperty(ref textAlignment, value); }
+        
+        private double textRotation;
+        public double TextRotation { get => textRotation; set => SetProperty(ref textRotation, value); }
 
         private string displayedText;
         public string DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
@@ -146,7 +149,9 @@ namespace Verse3.VanillaElements
             this.Foreground = Brushes.White;
             this.Background = Brushes.Transparent;
             this.TextAlignment = TextAlignment.Center;
+            this.TextRotation = 0;
         }
+
 
         #endregion
     }

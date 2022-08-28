@@ -15,13 +15,24 @@
              Loaded="OnLoaded"
              >
     <Grid
-        Width="{Binding Width}"
-        Height="{Binding Height}"
+        MaxWidth="{Binding Width}"
+        MaxHeight="{Binding Height}"
         >
-        <TextBlock
+        <Border
+            BorderBrush="{x:Null}" RenderTransformOrigin="0.5,0.5"
+            >
+            <Border.LayoutTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="{Binding TextRotation}"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Border.LayoutTransform>
+            <TextBlock
             x:Name="DisplayedTextBlock"
             Text="{Binding DisplayedText}"
-            TextAlignment="Left"
+            TextAlignment="{Binding TextAlignment}"
             TextWrapping="Wrap"
             FontStyle="{Binding FontStyle}"
             FontFamily="{Binding FontFamily}"
@@ -29,9 +40,11 @@
             FontWeight="{Binding FontWeight}"
             Foreground="{Binding Foreground}"
             Background="{Binding Background}"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Margin="10"
-            />        
+            >
+            </TextBlock>
+        </Border>
     </Grid>
 </UserControl>

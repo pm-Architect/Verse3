@@ -91,6 +91,8 @@ namespace MathLibrary
         internal NumberDataNode nodeBlock;
         public override void Initialize()
         {
+            base.titleTextBlock.TextRotation = 0;
+            
             sliderBlock = new SliderElement();
             sliderBlock.Minimum = 0;
             sliderBlock.Maximum = 100;
@@ -103,10 +105,10 @@ namespace MathLibrary
             nodeBlock.Width = 50;
             this.ChildElementManager.AddDataOutputNode<double>(nodeBlock as IDataNode<double>);
 
-            textBlock = new TextElement();
-            textBlock.DisplayedText = this.ElementText;
-            textBlock.TextAlignment = TextAlignment.Left;
-            this.ChildElementManager.AddElement(textBlock);
+            //textBlock = new TextElement();
+            //textBlock.DisplayedText = this.ElementText;
+            //textBlock.TextAlignment = TextAlignment.Left;
+            //this.ChildElementManager.AddElement(textBlock);
         }
 
         private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
