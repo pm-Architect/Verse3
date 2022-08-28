@@ -63,12 +63,7 @@ namespace MathLibrary
             };
             return ci;
         }
-        
-        private TextElement textBlock = new TextElement();
-        private NumberDataNode nodeBlock;
-        private NumberDataNode nodeBlock1;
-        private NumberDataNode nodeBlock2;
-        
+
         public override void Compute()
         {
             double a = this.ChildElementManager.GetData<double>(0, 0);
@@ -77,6 +72,10 @@ namespace MathLibrary
             textBlock.DisplayedText = this.ElementText;
         }
         
+        private TextElement textBlock = new TextElement();
+        private NumberDataNode nodeBlock;
+        private NumberDataNode nodeBlock1;
+        private NumberDataNode nodeBlock2;
         public override void Initialize()
         {
             nodeBlock = new NumberDataNode(this, NodeType.Input);
@@ -91,10 +90,10 @@ namespace MathLibrary
             nodeBlock2.Width = 50;
             this.ChildElementManager.AddDataOutputNode(nodeBlock2);
 
-            //textBlock = new TextElement();
-            //textBlock.DisplayedText = this.ElementText;
-            //textBlock.TextAlignment = TextAlignment.Left;
-            //this.ChildElementManager.AddElement(textBlock);
+            textBlock = new TextElement();
+            textBlock.DisplayedText = this.ElementText;
+            textBlock.TextAlignment = TextAlignment.Left;
+            this.ChildElementManager.AddElement(textBlock);
         }
     }
 }

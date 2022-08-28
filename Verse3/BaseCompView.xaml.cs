@@ -111,17 +111,23 @@ namespace Verse3
             BaseCompView rectangle = (BaseCompView)sender;
             BaseComp myRectangle = rectangle.Element;
 
-            //myRectangle.IsSelected = true;
 
-            //mouseButtonDown = e.ChangedButton;
 
-            if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0)
+            if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0 && e.ChangedButton == MouseButton.Left)
             {
-                //
-                // When the shift key is held down special zooming logic is executed in content_MouseDown,
-                // so don't handle mouse input here.
-                //
-                return;
+                DataViewModel.WPFControl.AddToSelection(myRectangle);
+                
+                //return;
+            }
+            else if ((Keyboard.Modifiers & ModifierKeys.Control) != 0 && e.ChangedButton == MouseButton.Left)
+            {
+                DataViewModel.WPFControl.Deselect(myRectangle);
+
+                //return;
+            }
+            else
+            {
+                DataViewModel.WPFControl.Select(myRectangle);
             }
 
             if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.None)
@@ -133,6 +139,7 @@ namespace Verse3
 
             DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.DraggingElements;
             DataViewModel.WPFControl.origContentMouseDownPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
+            DataViewModel.WPFControl.mouseButtonDown = e.ChangedButton;
 
             rectangle.CaptureMouse();
 

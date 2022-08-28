@@ -63,7 +63,8 @@ namespace CanvasElements
 
         public Guid ID { get => _id; private set => _id = value; }
 
-        public bool IsSelected { get; set; }
+        private bool sel = false;
+        public bool IsSelected { get => sel; set => sel = false; }
 
         public BoundingBox BoundingBox { get => boundingBox; private set => SetProperty(ref boundingBox, value); }
 

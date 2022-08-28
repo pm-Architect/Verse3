@@ -195,6 +195,7 @@ namespace Verse3
                                             elInst = compInfo.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
                                             DataModel.Instance.Elements.Add(elInst);
                                             DataViewModel.WPFControl.ExpandContent();
+                                            DataViewModel.WPFControl.InfiniteCanvasControl1.AnimatedSnapTo(new System.Windows.Point(5000.0, 5000.0));
                                             continue;
                                         }
                                         //TODO: Check for validity / scan library info

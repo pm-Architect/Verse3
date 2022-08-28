@@ -16,7 +16,7 @@ namespace MathLibrary
                 string? viewname = this.ViewType.FullName;
                 string? dataIN = "";
                 if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
-                    dataIN = ((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0])?.DataGoo.Data.ToString();
+                    dataIN = (Math.Round((((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data), 2)).ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
                 //TODO: Z Index control for IRenderable
                 return $"Name: {name}" +
@@ -59,22 +59,10 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            double a = this.ComputationPipelineInfo.IOManager.GetData<double>(0);
-            if (a == default) a = 0;
-            double b = this.ComputationPipelineInfo.IOManager.GetData<double>(1);
-            if (b == default) b = 0;
-            this.ComputationPipelineInfo.IOManager.SetData<double>((a - b), 0);
+            double a = this.ChildElementManager.GetData<double>(0, 0);
+            double b = this.ChildElementManager.GetData<double>(1, 0);
+            this.ChildElementManager.SetData<double>((a - b), 0);
             textBlock.DisplayedText = this.ElementText;
-            //if (this.ComputationPipelineInfo.IOManager.DataInputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 1/* && this.Nodes[0] is NodeElement*/)
-            //{
-            //    double sum = 0.0;
-            //    foreach (NodeElement n in this.ComputationPipelineInfo.IOManager.DataInputNodes)
-            //    {
-            //        if (n != null) sum += n.DataGoo.Data;
-            //    }
-            //    if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
-            //        ((NodeElement)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data = sum;
-            //}
         }
 
         public override CompInfo GetCompInfo()
@@ -96,41 +84,28 @@ namespace MathLibrary
             return ci;
         }
 
-        internal TextElement textBlock = new TextElement();
-        internal NumberDataNode nodeBlock;
-        internal NumberDataNode nodeBlock1;
-        internal NumberDataNode nodeBlock2;
+        private TextElement textBlock = new TextElement();
+        private NumberDataNode nodeBlock;
+        private NumberDataNode nodeBlock1;
+        private NumberDataNode nodeBlock2;
         public override void Initialize()
         {
-            if (this.Children.Count > 0)
-            {
-                textBlock.DisplayedText = this.ElementText;
-                return;
-            }
-
             nodeBlock = new NumberDataNode(this, NodeType.Input);
-            DataTemplateManager.RegisterDataTemplate(nodeBlock);
-            this.RenderPipelineInfo.AddChild(nodeBlock);
-            this.ComputationPipelineInfo.IOManager.AddDataInputNode<double>(nodeBlock as IDataNode<double>);
-            //Subscribe to NodeElement PropertyChanged Event
-            //nodeBlock.PropertyChanged += NodeBlock_PropertyChanged;
+            nodeBlock.Width = 50;
+            this.ChildElementManager.AddDataInputNode(nodeBlock);
 
             nodeBlock1 = new NumberDataNode(this, NodeType.Input);
-            DataTemplateManager.RegisterDataTemplate(nodeBlock1);
-            this.RenderPipelineInfo.AddChild(nodeBlock1);
-            this.ComputationPipelineInfo.IOManager.AddDataInputNode<double>(nodeBlock1 as IDataNode<double>);
+            nodeBlock1.Width = 50;
+            this.ChildElementManager.AddDataInputNode(nodeBlock1);
 
             nodeBlock2 = new NumberDataNode(this, NodeType.Output);
-            DataTemplateManager.RegisterDataTemplate(nodeBlock2);
-            this.RenderPipelineInfo.AddChild(nodeBlock2);
-            this.ComputationPipelineInfo.IOManager.AddDataOutputNode<double>(nodeBlock2 as IDataNode<double>);
+            nodeBlock2.Width = 50;
+            this.ChildElementManager.AddDataOutputNode(nodeBlock2);
 
-            string? txt = this.ElementText;
             textBlock = new TextElement();
-            textBlock.DisplayedText = txt;
+            textBlock.DisplayedText = this.ElementText;
             textBlock.TextAlignment = TextAlignment.Left;
-            DataTemplateManager.RegisterDataTemplate(textBlock);
-            this.RenderPipelineInfo.AddChild(textBlock);
+            this.ChildElementManager.AddElement(textBlock);
         }
     }
 }

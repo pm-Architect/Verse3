@@ -104,8 +104,8 @@ namespace Verse3.VanillaElements
     public class TextElement : BaseElement
     {
         #region Properties
-
-        public override ElementType ElementType => ElementType.DisplayUIElement;
+                
+        //public override ElementType ElementType => ElementType.DisplayUIElement;
         public override Type ViewType { get { return typeof(TextElementView); } }
         
         

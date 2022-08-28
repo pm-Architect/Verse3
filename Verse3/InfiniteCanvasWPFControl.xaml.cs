@@ -1,6 +1,7 @@
 ﻿using Core;
 using InfiniteCanvas;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -43,7 +44,7 @@ namespace Verse3
         /// <summary>
         /// Records which mouse button clicked during mouse dragging.
         /// </summary>
-        private MouseButton mouseButtonDown;
+        public MouseButton mouseButtonDown;
 
         /// <summary>
         /// Saves the previous zoom rectangle, pressing the backspace key jumps back to this zoom rectangle.
@@ -192,6 +193,45 @@ namespace Verse3
             return new System.Drawing.Point((int)pos.X, (int)pos.Y);
         }
 
+        public void Select(IRenderable el)
+        {
+            if (el != null)
+            {
+                el.IsSelected = true;
+                this.ContentElements.SelectedItem = el;
+            }
+        }
+        
+        public void AddToSelection(IRenderable el)
+        {
+            if (el != null)
+            {
+                el.IsSelected = true;
+                this.ContentElements.SelectedItems.Add(el);
+            }
+        }
+
+        public void Deselect(IRenderable el)
+        {
+            if (el != null)
+            {
+                el.IsSelected = false;
+                this.ContentElements.SelectedItems.Remove(el);
+            }
+        }
+
+        public void ClearSelection()
+        {
+            foreach (IRenderable renderable in this.ContentElements.SelectedItems)
+            {
+                if (renderable != null)
+                {
+                    renderable.IsSelected = false;
+                }
+            }
+            this.ContentElements.SelectedItems.Clear();
+        }
+
         //TODO: LBcontent.Items and LBcontent.HitTest
         #endregion
 
@@ -228,6 +268,7 @@ namespace Verse3
             {
                 // Capture the mouse so that we eventually receive the mouse up event.
                 InfiniteCanvasControl1.CaptureMouse();
+                ClearSelection();
                 e.Handled = true;
             }
         }
@@ -260,7 +301,7 @@ namespace Verse3
                 else if (mouseHandlingMode == MouseHandlingMode.DragSelecting)
                 {
                     // When drag-zooming has finished we zoom in on the rectangle that was highlighted by the user.
-                    ApplyDragSelectRect();
+                    ApplyDragSelectRect(origContentMouseDownPoint, ((Keyboard.Modifiers & ModifierKeys.Shift) != 0));
                 }
 
                 InfiniteCanvasControl1.ReleaseMouseCapture();
@@ -433,11 +474,40 @@ namespace Verse3
             if ((Keyboard.Modifiers & ModifierKeys.Shift) == 0)
             {
                 Point doubleClickPoint = e.GetPosition(LBcontent);
-                InfiniteCanvasControl1.AnimatedSnapTo(doubleClickPoint);
+                //InfiniteCanvasControl1.AnimatedSnapTo(doubleClickPoint);
             }
         }
 
         #endregion
+
+        private void InfiniteCanvasControl1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                if (this.LBcontent.SelectedItems != null && this.LBcontent.SelectedItems.Count > 0)
+                {
+                    List<IRenderable> toBeDeleted = new List<IRenderable>();
+                    for (int i = 0; i < this.LBcontent.SelectedItems.Count; i++)
+                    {
+                        if (this.LBcontent.SelectedItems.Count > i)
+                        {
+                            IRenderable renderable = this.LBcontent.SelectedItems[i] as IRenderable;
+                            if (renderable != null)
+                            {
+                                toBeDeleted.Add(renderable);
+                            }
+                        }
+                    }
+                    this.ClearSelection();
+                    foreach (IRenderable renderable1 in toBeDeleted)
+                    {
+                        renderable1.Dispose();
+                    }
+                    e.Handled = true;
+                }
+            }
+        }
+
 
         #region ZoomFunctions
 
@@ -685,7 +755,7 @@ namespace Verse3
         /// <summary>
         /// When the user has finished dragging out the rectangle the zoom operation is applied.
         /// </summary>
-        private void ApplyDragSelectRect()
+        private void ApplyDragSelectRect(Point mousePos, bool add = false)
         {
             //
             // Record the previous zoom level, so that we can jump back to it when the backspace key is pressed.
@@ -702,6 +772,30 @@ namespace Verse3
 
             //TODO: Actually select the items in the select rectangle
 
+            if (!add) this.ClearSelection();
+            
+            BoundingBox selectionBounds = new BoundingBox(contentX, contentY, contentWidth, contentHeight);
+            foreach (IRenderable renderable in DataViewModel.Instance.Elements)
+            {
+                if (renderable != null)
+                {
+                    if (contentX == mousePos.X)
+                    {
+                        if (selectionBounds.Contains(renderable.BoundingBox))
+                        {
+                            this.AddToSelection(renderable);
+                        }
+                    }
+                    else if (contentX < mousePos.X)
+                    {
+                        if (selectionBounds.Contains(renderable.BoundingBox.Location))
+                        {
+                            this.AddToSelection(renderable);
+                        }
+                    }
+                }
+            }
+
             FadeOutDragSelectRect();
         }
         //
@@ -709,7 +803,7 @@ namespace Verse3
         //
         private void FadeOutDragSelectRect()
         {
-            AnimationHelper.StartAnimation(dragSelectBorder, Border.OpacityProperty, 0.0, 0.1,
+            AnimationHelper.StartAnimation(dragSelectBorder, Border.OpacityProperty, 0.0, 0.07,
                 delegate (object sender, EventArgs e)
                 {
                     dragSelectCanvas.Visibility = Visibility.Collapsed;
@@ -755,6 +849,5 @@ namespace Verse3
             avgfps = Math.Round(avgfps, 3);
             lastFrameTime = frameTime;
         }
-
     }
 }

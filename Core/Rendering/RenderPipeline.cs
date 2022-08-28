@@ -251,6 +251,7 @@ namespace Core
         /// The height of the element Bounding Box (in content coordinates).
         /// </summary>
         double Height { get; set; }
+        bool IsSelected { get; set; }
 
         /// <summary>
         /// Set the height of the element Bounding Box (in content coordinates).

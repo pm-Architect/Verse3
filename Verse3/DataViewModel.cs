@@ -198,7 +198,7 @@ namespace Verse3
 
         public Guid ID { get => _id; private set => _id = value; }
 
-        public bool IsSelected { get; set; }
+        //public bool IsSelected { get; set; }
 
         public BoundingBox BoundingBox { get => boundingBox; private set => SetProperty(ref boundingBox, value); }
 
@@ -223,8 +223,12 @@ namespace Verse3
         //public IRenderView ElementView { get; internal set; }
 
         public ElementState ElementState { get; set; }
-        public virtual ElementType ElementType { get => ElementType.UIElement; set => ElementType = ElementType.UIElement; }
+        
+        private ElementType _elementType = ElementType.UIElement;
+        public virtual ElementType ElementType { get => _elementType; set => _elementType = value; }
         bool IRenderable.Visible { get; set; }
+        private bool sel = false;
+        public bool IsSelected { get => sel; set => sel = false; }
 
         #endregion
 
@@ -268,6 +272,7 @@ namespace Verse3
                     if (child != null) child.Dispose();
                 }
             }
+            DataViewModel.Instance.Elements.Remove(this);
             GC.SuppressFinalize(this);
         }
         ~BaseElement() => Dispose();

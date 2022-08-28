@@ -115,7 +115,8 @@
                         <Border 
                             Name="Border"
                             BorderThickness="2"
-                            Padding="2"
+                            Padding="1"
+                            CornerRadius="7"
                             >
                             <ContentPresenter />
                         </Border>
@@ -148,7 +149,9 @@
                                               MouseUp="zoomAndPanControl_MouseUp"
                                               MouseMove="zoomAndPanControl_MouseMove"
                                               MouseWheel="zoomAndPanControl_MouseWheel"
-                                              MouseDoubleClick="zoomAndPanControl_MouseDoubleClick" Foreground="White">
+                                              MouseDoubleClick="zoomAndPanControl_MouseDoubleClick"
+                                              KeyDown="InfiniteCanvasControl1_KeyDown"
+                                              Foreground="White">
             <!--<InfiniteCanvas:InfiniteCanvasControl.Background>
                 <DrawingBrush TileMode="Tile"
                               Viewport="0,0,50,50" 
@@ -190,7 +193,7 @@
                     Style="{StaticResource noScrollViewerListBoxStyle}"
                     ItemContainerStyle="{StaticResource listBoxItemStyle}"
                     d:Width="600"
-                    d:Height="300"
+                    d:Height="300" SelectionMode="Multiple"
                     >
                 </ListBox>
                 <!--
