@@ -191,7 +191,21 @@ namespace Verse3
 
             DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
 
-            RenderPipeline.RenderRenderable(this.Element, rectangleDragVector.X, rectangleDragVector.Y);
+            //TODO: If other BaseComps are also selected, Render all selected BaseComps together with rectangleDragVector translation
+            if (DataViewModel.WPFControl.LBcontent.SelectedItems.Count > 1)
+            {
+                foreach (IRenderable renderable in DataViewModel.WPFControl.LBcontent.SelectedItems)
+                {
+                    if (renderable != null)
+                    {
+                        RenderPipeline.RenderRenderable(renderable, rectangleDragVector.X, rectangleDragVector.Y);
+                    }
+                }
+            }
+            else
+            {
+                RenderPipeline.RenderRenderable(this.Element, rectangleDragVector.X, rectangleDragVector.Y);
+            }
 
             DataViewModel.WPFControl.ExpandContent();
 

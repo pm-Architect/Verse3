@@ -396,9 +396,12 @@ namespace Verse3.VanillaElements
 
         #endregion
 
-        public void SetDestination(INode destination)
+        public bool SetDestination(INode destination)
         {
             //TODO: Check whether destination is valid
+            bool check = (destination.GetType() == this.origin.GetType());
+            check = check && (destination.NodeType != this.origin.NodeType);
+            if (!check) return false;
             //TODO: LOOP WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //this.destination.Connections.Remove(this);
             this.destination = destination;
@@ -408,6 +411,7 @@ namespace Verse3.VanillaElements
             {
                 this.RenderView.Render();
             }
+            return true;
         }
 
         public void Remove()

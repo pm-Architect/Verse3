@@ -11,7 +11,7 @@ namespace Core
         public ElementsLinkedList<IConnection> Connections { get; }
         public NodeType NodeType { get; }
         public CanvasPoint Hotspot { get; }
-        public double HotspotThresholdRadius { get; }
+        public string Name { get; set; }
         public new ElementType ElementType { get => ElementType.Node; }
 
     }
@@ -54,4 +54,21 @@ namespace Core
     }
 
     #endregion
+
+    //public class HorizontalAlignmentConverter : IValueConverter
+    //{
+    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        if ((NodeType)value == NodeType.Input)
+    //            return HorizontalAlignment.Left;
+    //        else if ((NodeType)value == NodeType.Output)
+    //            return HorizontalAlignment.Right;
+    //        else return HorizontalAlignment.Left;
+    //    }
+
+    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }

@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Markup;
+using System.Windows.Media;
 using static Core.Geometry2D;
 
 namespace Verse3.VanillaElements
@@ -92,23 +93,63 @@ namespace Verse3.VanillaElements
             if (this.Element != null && this.Element is IDataNode)
             {
                 IDataNode node = this.Element as IDataNode;
+                //if (!string.IsNullOrEmpty(this._element.Name))
+                //{
+                //    if (this.NodeRightText.Text != node.Name && this.NodeLeftText.Text != node.Name)
+                //    {
+                //        if (node.NodeType == NodeType.Input)
+                //        {
+                //            this.NodeRightText.Text = node.Name;
+                //            //this._element.ChildElementManager.AdjustBounds(true);
+                //            //this.Element.Width = this.NodeRightText.ActualWidth + 
+                //        }
+                //        else if (node.NodeType == NodeType.Output)
+                //        {
+                //            this.NodeLeftText.Text = node.Name;
+                //            //this._element.ChildElementManager.AdjustBounds(true);
+                //            //this.Element.BoundingBox.Offset(new CanvasSize(this.NodeLeftText.ActualWidth, 0.0));
+                //        }
+                //    }
+                //}
                 if (Element.RenderView != this) Element.RenderView = this;
                 if (node.Connections != null)
                 {
-                    foreach (BezierElement bezier in node.Connections)
+                    if (node.Connections.Count > 0)
                     {
-                        if (bezier != null)
+                        try
                         {
-                            if (bezier.Origin == this.Element)
-                            {
-
-                            }
-                            else if (bezier.Destination == this.Element)
-                            {
-
-                            }
-                            bezier.RedrawBezier(bezier.Origin, bezier.Destination);
+                            this._element.NodeContentColor = Brushes.White;
                         }
+                        catch (Exception)
+                        {
+                            throw;
+                        }
+                        foreach (BezierElement bezier in node.Connections)
+                        {
+                            if (bezier != null)
+                            {
+                                if (bezier.Origin == this.Element)
+                                {
+
+                                }
+                                else if (bezier.Destination == this.Element)
+                                {
+
+                                }
+                                bezier.RedrawBezier(bezier.Origin, bezier.Destination);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        this._element.NodeContentColor = Brushes.Transparent;
+                    }
+                    catch (Exception)
+                    {
+                        throw;
                     }
                 }
             }
@@ -203,7 +244,7 @@ namespace Verse3.VanillaElements
             double y = DataViewModel.ContentCanvasMarginOffset + this.RenderPipelineInfo.Parent.Y;
             base.boundingBox = new BoundingBox(x, y, this.RenderPipelineInfo.Parent.Width, 50);
             (this as IRenderable).RenderPipelineInfo.SetParent(this.RenderPipelineInfo.Parent);
-            this.DisplayedText = "Node";
+            //this.DisplayedText = "Node";
             this.PropertyChanged += NodeElement_PropertyChanged;
             if (type == NodeType.Input)
             {
@@ -242,6 +283,7 @@ namespace Verse3.VanillaElements
                 {
                     this.RenderPipelineInfo.AddChild(b);
                     this.Connections.Add(b);
+                    //this.nodeContentColor = System.Windows.Media.Brushes.White;
                     MousePositionNode.Instance.Connections.Add(b);
                     //b.RedrawBezier(b.Origin, b.Destination);
                     //b.RenderView.Render();
@@ -251,83 +293,124 @@ namespace Verse3.VanillaElements
             {
                 if (b != null)
                 {
-                    if (DataViewModel.ActiveNode is IComputable && DataViewModel.ActiveNode != this && DataViewModel.ActiveNode.NodeType == NodeType.Output)
+                    if (DataViewModel.ActiveNode.NodeType != this.NodeType)
                     {
-                        this.ComputationPipelineInfo.AddDataUpStream(DataViewModel.ActiveNode as IComputable);
+                        if (DataViewModel.ActiveNode.GetType() == this.GetType())
+                        {
+                            if (b.SetDestination(this as INode))
+                            {
+                                if (DataViewModel.ActiveNode is IComputable && DataViewModel.ActiveNode != this && DataViewModel.ActiveNode.NodeType == NodeType.Output)
+                                {
+                                    this.ComputationPipelineInfo.AddDataUpStream(DataViewModel.ActiveNode as IComputable);
+                                }
+                                DataViewModel.ActiveNode = this as INode;
+                                if (MousePositionNode.Instance.Connections.Contains(b))
+                                    MousePositionNode.Instance.Connections.Remove(b);
+                                this.RenderPipelineInfo.AddChild(b);
+                                this.Connections.Add(b);
+                                //this.nodeContentColor = System.Windows.Media.Brushes.White;
+                                DataViewModel.ActiveConnection = default;
+                                DataViewModel.ActiveNode = default;
+                            }
+                        }
                     }
-                    DataViewModel.ActiveNode = this as INode;
-                    b.SetDestination(DataViewModel.ActiveNode);
-                    if (MousePositionNode.Instance.Connections.Contains(b))
-                        MousePositionNode.Instance.Connections.Remove(b);
-                    this.RenderPipelineInfo.AddChild(b);
-                    this.Connections.Add(b);
-                    DataViewModel.ActiveConnection = default;
-                    DataViewModel.ActiveNode = default;
-                    //b.RedrawBezier(b.Origin, b.Destination);
-                    //b.RenderView.Render();
                 }
             }
             //ComputationPipeline.Compute();
-            //RenderPipeline.Render();
             //this.Element.OnPropertyChanged("BoundingBox");
+            if (this.RenderPipelineInfo.Parent is IComputable)
+            {
+                IComputable computable = (IComputable)this.RenderPipelineInfo.Parent;
+                ComputationPipeline.ComputeComputable(computable);
+            }
+            RenderPipeline.RenderRenderable(this.RenderPipelineInfo.Parent);
         }
 
-        private HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center;
+        private string _name = "";
+        public override string Name { get => _name; set => _name = value; }
 
+        private HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center;
         public HorizontalAlignment HorizontalAlignment
         {
             get
             {
-                if (this.NodeType == NodeType.Input)
-                {
-                    if (horizontalAlignment != HorizontalAlignment.Left)
-                    {
-                        horizontalAlignment = HorizontalAlignment.Left;
-                        //SetProperty(ref horizontalAlignment, HorizontalAlignment.Left);
-                        OnPropertyChanged("HorizontalAlignment");
-                    }
-                }
-                else if (this.NodeType == NodeType.Output)
-                {
-                    if (horizontalAlignment != HorizontalAlignment.Right)
-                    {
-                        horizontalAlignment = HorizontalAlignment.Right;
-                        //SetProperty(ref horizontalAlignment, HorizontalAlignment.Right);
-                        OnPropertyChanged("HorizontalAlignment");
-                    }
-                }
+                //if (this.NodeType == NodeType.Input)
+                //{
+                //    if (horizontalAlignment != HorizontalAlignment.Left)
+                //    {
+                //        horizontalAlignment = HorizontalAlignment.Left;
+                //        //SetProperty(ref horizontalAlignment, HorizontalAlignment.Left);
+                //        OnPropertyChanged("HorizontalAlignment");
+                //    }
+                //}
+                //else if (this.NodeType == NodeType.Output)
+                //{
+                //    if (horizontalAlignment != HorizontalAlignment.Right)
+                //    {
+                //        horizontalAlignment = HorizontalAlignment.Right;
+                //        //SetProperty(ref horizontalAlignment, HorizontalAlignment.Right);
+                //        OnPropertyChanged("HorizontalAlignment");
+                //    }
+                //}
                 return horizontalAlignment;
             }
-             private set => SetProperty(ref horizontalAlignment, value);
+            private set => SetProperty(ref horizontalAlignment, value);
         }
 
-        private System.Windows.Media.Brush nodeContentColor = System.Windows.Media.Brushes.White;
+        private System.Windows.Media.Brush nodeColor = System.Windows.Media.Brushes.Transparent;
+        public System.Windows.Media.Brush NodeColor
+        {
+            get
+            {
+                //if (this.Connections != null && this.Connections.Count > 0)
+                //{
+                //    if (nodeContentColor != System.Windows.Media.Brushes.White)
+                //    {
+                //        nodeContentColor = System.Windows.Media.Brushes.White;
+                //        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.White);
+                //        //OnPropertyChanged("NodeContentColor");
+                //    }
+                //}
+                //else
+                //{
+                //    if (nodeContentColor != System.Windows.Media.Brushes.Transparent)
+                //    {
+                //        nodeContentColor = System.Windows.Media.Brushes.Transparent;
+                //        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.Transparent);
+                //        //OnPropertyChanged("NodeContentColor");
+                //    }
+                //}
+                return nodeColor;
+            }
+            internal set => SetProperty(ref nodeColor, value);
+        }
 
+        private System.Windows.Media.Brush nodeContentColor = System.Windows.Media.Brushes.Transparent;
         public System.Windows.Media.Brush NodeContentColor
         {
             get
             {
-                if (this.Connections != null && this.Connections.Count > 0)
-                {
-                    if (nodeContentColor != System.Windows.Media.Brushes.White)
-                    {
-                        nodeContentColor = System.Windows.Media.Brushes.White;
-                        //SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.White);
-                        OnPropertyChanged("NodeContentColor");
-                    }
-                }
-                else
-                {
-                    if (nodeContentColor != System.Windows.Media.Brushes.Transparent)
-                    {
-                        nodeContentColor = System.Windows.Media.Brushes.Transparent;
-                        //SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.Transparent);
-                        OnPropertyChanged("NodeContentColor");
-                    }
-                }
+                //if (this.Connections != null && this.Connections.Count > 0)
+                //{
+                //    if (nodeContentColor != System.Windows.Media.Brushes.White)
+                //    {
+                //        nodeContentColor = System.Windows.Media.Brushes.White;
+                //        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.White);
+                //        //OnPropertyChanged("NodeContentColor");
+                //    }
+                //}
+                //else
+                //{
+                //    if (nodeContentColor != System.Windows.Media.Brushes.Transparent)
+                //    {
+                //        nodeContentColor = System.Windows.Media.Brushes.Transparent;
+                //        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.Transparent);
+                //        //OnPropertyChanged("NodeContentColor");
+                //    }
+                //}
                 return nodeContentColor;
             }
-            private set => SetProperty(ref nodeContentColor, value);
+            internal set => SetProperty(ref nodeContentColor, value);
         }
 
     }
@@ -383,12 +466,12 @@ namespace Verse3.VanillaElements
             }
         }
 
-        public double HotspotThresholdRadius { get; }
 
         public Guid ID { get; }
 
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get => ElementType.Node; set => ElementType = ElementType.Node; }
+        public string Name { get; set; } = "";
 
         public event PropertyChangedEventHandler PropertyChanged;
 

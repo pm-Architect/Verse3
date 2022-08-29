@@ -95,25 +95,45 @@ namespace Verse3.VanillaElements
             if (this.Element != null && this.Element is IEventNode)
             {
                 IEventNode node = this.Element as IEventNode;
+                //if (!string.IsNullOrEmpty(this._element.Text))
+                //{
+                //    if (this.NodeRightText.Text != node.Name && this.NodeLeftText.Text != node.Name)
+                //    {
+                //        if (node.NodeType == NodeType.Input)
+                //        {
+                //            this.NodeRightText.Text = node.Name;
+                //        }
+                //        else if (node.NodeType == NodeType.Output)
+                //        {
+                //            this.NodeLeftText.Text = node.Name;
+                //        }
+                //    }
+                //}
                 if (Element.RenderView != this) Element.RenderView = this;
                 if (node.Connections != null)
                 {
-                    foreach (BezierElement bezier in node.Connections)
+                    if (node.Connections.Count > 0)
                     {
-                        if (bezier != null)
+                        (this._element as EventNodeElement).NodeContentColor = Brushes.White;
+                        foreach (BezierElement bezier in node.Connections)
                         {
-                            if (bezier.Origin == this.Element)
+                            if (bezier != null)
                             {
+                                if (bezier.Origin == this.Element)
+                                {
 
-                            }
-                            else if (bezier.Destination == this.Element)
-                            {
+                                }
+                                else if (bezier.Destination == this.Element)
+                                {
 
+                                }
+                                bezier.RedrawBezier(bezier.Origin, bezier.Destination);
                             }
-                            bezier.RedrawBezier(bezier.Origin, bezier.Destination);
                         }
                     }
+                    else (this._element as EventNodeElement).NodeContentColor = Brushes.Transparent;
                 }
+                else (this._element as EventNodeElement).NodeContentColor = Brushes.Transparent;
             }
         }
 
@@ -245,6 +265,7 @@ namespace Verse3.VanillaElements
                 {
                     this.RenderPipelineInfo.AddChild(b);
                     this.Connections.Add(b);
+                    //this.nodeContentColor = System.Windows.Media.Brushes.White;
                     MousePositionNode.Instance.Connections.Add(b);
                     //b.RedrawBezier(b.Origin, b.Destination);
                     //b.RenderView.Render();
@@ -254,29 +275,43 @@ namespace Verse3.VanillaElements
             {
                 if (b != null)
                 {
-                    if (DataViewModel.ActiveNode is IComputable && DataViewModel.ActiveNode != this && DataViewModel.ActiveNode.NodeType == NodeType.Output)
+                    if (DataViewModel.ActiveNode.NodeType != this.NodeType)
                     {
-                        this.ComputationPipelineInfo.AddDataUpStream(DataViewModel.ActiveNode as IComputable);
+                        if (DataViewModel.ActiveNode.GetType() == this.GetType())
+                        {
+                            if (b.SetDestination(this as INode))
+                            {
+                                if (DataViewModel.ActiveNode is IComputable && DataViewModel.ActiveNode != this && DataViewModel.ActiveNode.NodeType == NodeType.Output)
+                                {
+                                    this.ComputationPipelineInfo.AddDataUpStream(DataViewModel.ActiveNode as IComputable);
+                                }
+                                DataViewModel.ActiveNode = this as INode;
+                                if (MousePositionNode.Instance.Connections.Contains(b))
+                                    MousePositionNode.Instance.Connections.Remove(b);
+                                this.RenderPipelineInfo.AddChild(b);
+                                this.Connections.Add(b);
+                                //this.nodeContentColor = System.Windows.Media.Brushes.White;
+                                DataViewModel.ActiveConnection = default;
+                                DataViewModel.ActiveNode = default;
+                            }
+                        }
                     }
-                    DataViewModel.ActiveNode = this as INode;
-                    b.SetDestination(DataViewModel.ActiveNode);
-                    if (MousePositionNode.Instance.Connections.Contains(b))
-                        MousePositionNode.Instance.Connections.Remove(b);
-                    this.RenderPipelineInfo.AddChild(b);
-                    this.Connections.Add(b);
-                    DataViewModel.ActiveConnection = default;
-                    DataViewModel.ActiveNode = default;
-                    //b.RedrawBezier(b.Origin, b.Destination);
-                    //b.RenderView.Render();
                 }
             }
             //ComputationPipeline.Compute();
             //RenderPipeline.Render();
             //this.Element.OnPropertyChanged("BoundingBox");
+            if (this.RenderPipelineInfo.Parent is IComputable)
+            {
+                IComputable computable = (IComputable)this.RenderPipelineInfo.Parent;
+                ComputationPipeline.ComputeComputable(computable);
+            }
+            RenderPipeline.RenderRenderable(this.RenderPipelineInfo.Parent);
         }
 
-        public string Text { get; set; } = "";
-        
+        private string _name = "";
+        public override string Name { get => _name; set => _name = value; }
+
         private HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center;
         public HorizontalAlignment HorizontalAlignment
         {
@@ -305,9 +340,35 @@ namespace Verse3.VanillaElements
             private set => SetProperty(ref horizontalAlignment, value);
         }
 
-        private System.Windows.Media.Brush nodeContentColor = System.Windows.Media.Brushes.White;
-        public System.Windows.Media.Brush NodeColor => System.Windows.Media.Brushes.Orange;
+        private System.Windows.Media.Brush nodeColor = System.Windows.Media.Brushes.Transparent;
+        public System.Windows.Media.Brush NodeColor
+        {
+            get
+            {
+                //if (this.Connections != null && this.Connections.Count > 0)
+                //{
+                //    if (nodeContentColor != System.Windows.Media.Brushes.White)
+                //    {
+                //        nodeContentColor = System.Windows.Media.Brushes.White;
+                //        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.White);
+                //        //OnPropertyChanged("NodeContentColor");
+                //    }
+                //}
+                //else
+                //{
+                //    if (nodeContentColor != System.Windows.Media.Brushes.Transparent)
+                //    {
+                //        nodeContentColor = System.Windows.Media.Brushes.Transparent;
+                //        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.Transparent);
+                //        //OnPropertyChanged("NodeContentColor");
+                //    }
+                //}
+                return nodeColor;
+            }
+            internal set => SetProperty(ref nodeColor, value);
+        }
 
+        private System.Windows.Media.Brush nodeContentColor = System.Windows.Media.Brushes.Transparent;
         public System.Windows.Media.Brush NodeContentColor
         {
             get
@@ -332,18 +393,38 @@ namespace Verse3.VanillaElements
                 //}
                 return nodeContentColor;
             }
-            private set => SetProperty(ref nodeContentColor, value);
+            internal set => SetProperty(ref nodeContentColor, value);
         }
     }
-    //public class HorizontalAlignmentConverter : IValueConverter
+
+    //public class NodeNameDisplaySideConverter : IValueConverter
     //{
     //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     //    {
-    //        if ((NodeType)value == NodeType.Input)
-    //            return HorizontalAlignment.Left;
-    //        else if ((NodeType)value == NodeType.Output)
-    //            return HorizontalAlignment.Right;
-    //        else return HorizontalAlignment.Left;
+    //        if (value is NodeType)
+    //        {
+    //            if ((NodeType)value == NodeType.Input)
+    //            {
+    //                if (parameter is bool)
+    //                {
+    //                    if (!(bool)parameter)
+    //                    {
+    //                        return true;
+    //                    }
+    //                }
+    //            }
+    //            else if ((NodeType)value == NodeType.Output)
+    //            {
+    //                if (parameter is bool)
+    //                {
+    //                    if ((bool)parameter)
+    //                    {
+    //                        return true;
+    //                    }
+    //                }
+    //            }
+    //        }
+    //        return false;
     //    }
 
     //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -351,4 +432,85 @@ namespace Verse3.VanillaElements
     //        throw new NotImplementedException();
     //    }
     //}
+    public class NodeNameDisplayTextConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values[0] is FrameworkElement)
+            {
+                FrameworkElement f = values[0] as FrameworkElement;
+                //bool.TryParse((string)parameter, out bool b);
+                bool b = (f.Name.Contains("Right"));
+                if (values[1] is RenderPipelineInfo)
+                {
+                    IRenderable renderable = ((RenderPipelineInfo)values[1]).Renderable;
+                    if (renderable != null && renderable is INode)
+                    {
+                        INode n = (INode)renderable;
+                        if (n.NodeType == NodeType.Input)
+                        {
+                            if (b)
+                            {
+                                //Set Width
+                                if (renderable.RenderView is EventNodeElementView)
+                                {
+                                    TextBlock t = (renderable.RenderView as EventNodeElementView).NodeRightText;
+                                    t.Text = n.Name;
+                                    t.UpdateLayout();
+                                    renderable.Width = t.ActualWidth + 50;
+                                }
+                                else if (renderable.RenderView is DataNodeElementView)
+                                {
+                                    TextBlock t = (renderable.RenderView as DataNodeElementView).NodeRightText;
+                                    t.Text = n.Name;
+                                    t.UpdateLayout();
+                                    renderable.Width = t.ActualWidth + 50;
+                                }
+                                return n.Name;
+                            }
+                        }
+                        else if (n.NodeType == NodeType.Output)
+                        {
+                            if (!b)
+                            {
+                                //Set Width
+                                if (renderable.RenderView is EventNodeElementView)
+                                {
+                                    TextBlock t = (renderable.RenderView as EventNodeElementView).NodeLeftText;
+                                    t.Text = n.Name;
+                                    t.UpdateLayout();
+                                    renderable.Width = t.ActualWidth + 50;
+                                }
+                                else if (renderable.RenderView is DataNodeElementView)
+                                {
+                                    TextBlock t = (renderable.RenderView as DataNodeElementView).NodeLeftText;
+                                    t.Text = n.Name;
+                                    t.UpdateLayout();
+                                    renderable.Width = t.ActualWidth + 50;
+                                }
+                                return n.Name;
+                            }
+                        }
+                    }
+                }
+            }
+            return "";
+            //if (parameter is bool)
+            //{
+            //    if ((bool)parameter)
+            //    {
+            //        if (value is string)
+            //        {
+            //            return (string)value;
+            //        }
+            //    }
+            //}
+            //return "";
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

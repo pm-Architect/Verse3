@@ -127,10 +127,10 @@ namespace Core
             public CanvasPoint[] GetPoints()
             {
                 CanvasPoint[] cpOut = {
-                new CanvasPoint(this.Top, this.Left),
-                new CanvasPoint(this.Top, this.Right),
-                new CanvasPoint(this.Bottom, this.Right),
-                new CanvasPoint(this.Bottom, this.Left)
+                new CanvasPoint(this.Left, this.Top),
+                new CanvasPoint(this.Right, this.Top),
+                new CanvasPoint(this.Right, this.Bottom),
+                new CanvasPoint(this.Left, this.Bottom)
             };
                 return cpOut;
             }
@@ -182,6 +182,17 @@ namespace Core
                 }
                 return boolOut;
             }
+
+            public bool[] Contains(CanvasPoint[] points, bool strict = true)
+            {
+                List<bool> o = new List<bool>();
+                for (int i = 0; i < points.Length; i++)
+                {
+                    o.Add(this.Contains(points[i], strict));
+                }
+                return o.ToArray();
+            }
+
             public bool Contains(BoundingBox box, bool strict = true)
             {
                 bool boolOut = true;
@@ -255,6 +266,29 @@ namespace Core
             }
             public static bool CheckIntersection(BoundingBox a, BoundingBox b, bool strict = false)
             {
+                //bool boolOut = false;
+                //if (strict)
+                //{
+                //    boolOut = boolOut || (a.Left < b.Right)
+                //}
+                //else
+                //{
+                //    boolOut = boolOut || ((a.Left >= b.Left));
+                //    boolOut = boolOut || ((a.Right <= b.Right));
+                //    boolOut = boolOut || ((a.Top >= b.Top));
+                //    boolOut = boolOut || ((a.Bottom <= b.Bottom));
+                //}
+                //return boolOut;
+                //if (a != null && b != null)
+                //{
+                //    if (strict)
+                //    {
+                //        if (a.Top < b.Bottom || a.Bottom < b.Top)
+                //        {
+
+                //        }
+                //    }
+                //}
                 foreach (CanvasPoint p in a.GetPoints()) if (b.Contains(p, strict)) return true;
                 foreach (CanvasPoint p in b.GetPoints()) if (a.Contains(p, strict)) return true;
                 return false;

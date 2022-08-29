@@ -92,46 +92,22 @@ namespace EventsLibrary
         internal ButtonClickedEventNode nodeBlock1;
         public override void Initialize()
         {
-            //if (this.Children.Count > 0)
-            //{
-            //    textBlock.DisplayedText = this.ElementText;
-            //    return;
-            //}
-
-            //sliderBlock = new SliderElement();
-            //sliderBlock.Minimum = 0;
-            //sliderBlock.Maximum = 100;
-            //sliderBlock.Value = 50;
-            //sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
-            //sliderBlock.Width = 200;
-            //DataTemplateManager.RegisterDataTemplate(sliderBlock);
-            //this.RenderPipelineInfo.AddChild(sliderBlock);
-
-            //var buttonBlock = new ButtonElement();
-            //buttonBlock.DisplayedText = "Trigger";
-            //buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
-            //DataTemplateManager.RegisterDataTemplate(buttonBlock);
-            //this.RenderPipelineInfo.AddChild(buttonBlock);
+            base.titleTextBlock.TextRotation = 0;
 
             nodeBlock = new ButtonClickedEventNode(this, NodeType.Input);
             nodeBlock.Width = 50;
             nodeBlock.NodeEvent += NodeBlock_NodeEvent;
-            DataTemplateManager.RegisterDataTemplate(nodeBlock);
-            this.RenderPipelineInfo.AddChild(nodeBlock);
-            this.ComputationPipelineInfo.IOManager.AddEventInputNode(nodeBlock as IEventNode);
+            this.ChildElementManager.AddEventInputNode(nodeBlock as IEventNode);
 
             string? txt = this.ElementText;
             textBlock = new TextElement();
             textBlock.DisplayedText = txt;
             textBlock.TextAlignment = TextAlignment.Left;
-            DataTemplateManager.RegisterDataTemplate(textBlock);
-            this.RenderPipelineInfo.AddChild(textBlock);
+            this.ChildElementManager.AddElement(textBlock);
 
             nodeBlock1 = new ButtonClickedEventNode(this, NodeType.Output);
             nodeBlock1.Width = 50;
-            DataTemplateManager.RegisterDataTemplate(nodeBlock1);
-            this.RenderPipelineInfo.AddChild(nodeBlock1);
-            this.ComputationPipelineInfo.IOManager.AddEventOutputNode(nodeBlock1 as IEventNode);
+            this.ChildElementManager.AddEventOutputNode(nodeBlock1 as IEventNode);
         }
 
         private void NodeBlock_NodeEvent(IEventNode container, EventArgData e)

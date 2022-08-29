@@ -89,36 +89,20 @@ namespace EventsLibrary
         }
 
         internal TextElement textBlock = new TextElement();
-        internal SliderElement sliderBlock = new SliderElement();
+        internal ButtonElement buttonBlock = new ButtonElement();
         internal ButtonClickedEventNode nodeBlock;
         public override void Initialize()
         {
-            if (this.Children.Count > 0)
-            {
-                textBlock.DisplayedText = this.ElementText;
-                return;
-            }
+            base.titleTextBlock.TextRotation = 0;
 
-            //sliderBlock = new SliderElement();
-            //sliderBlock.Minimum = 0;
-            //sliderBlock.Maximum = 100;
-            //sliderBlock.Value = 50;
-            //sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
-            //sliderBlock.Width = 200;
-            //DataTemplateManager.RegisterDataTemplate(sliderBlock);
-            //this.RenderPipelineInfo.AddChild(sliderBlock);
-
-            var buttonBlock = new ButtonElement();
+            buttonBlock = new ButtonElement();
             buttonBlock.DisplayedText = "Trigger";
             buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
-            DataTemplateManager.RegisterDataTemplate(buttonBlock);
-            this.RenderPipelineInfo.AddChild(buttonBlock);
+            this.ChildElementManager.AddElement(buttonBlock);
 
             nodeBlock = new ButtonClickedEventNode(this, NodeType.Output);
             nodeBlock.Width = 50;
-            DataTemplateManager.RegisterDataTemplate(nodeBlock);
-            this.RenderPipelineInfo.AddChild(nodeBlock);
-            this.ComputationPipelineInfo.IOManager.AddEventOutputNode(nodeBlock as IEventNode);
+            this.ChildElementManager.AddEventOutputNode(nodeBlock as IEventNode);
         }
 
         private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)

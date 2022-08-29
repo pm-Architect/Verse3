@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using Verse3.VanillaElements;
@@ -178,7 +178,7 @@ namespace Verse3
             {
                 //TODO: At every render
                 //textBlock.DisplayedText = this.ElementText;
-                this.ChildElementManager.AdjustBounds();
+                this.ChildElementManager.AdjustBounds(true);
                 return;
             }
 
@@ -210,6 +210,7 @@ namespace Verse3
             //    //TODO: Add Center Bar Elements (Title, Icon, etc)
             //    //this.ChildElementManager.AddElement()
             //}
+            this.ChildElementManager.AdjustBounds(true);
         }
 
         public abstract void Compute();
@@ -285,19 +286,85 @@ namespace Verse3
             this._owner = owner;
         }
 
-        public void AdjustBounds()
+        public void AdjustBounds(bool forceExpand = false)
         {
             if (_owner.RenderView is BaseCompView)
             {
                 BaseCompView view = _owner.RenderView as BaseCompView;
 
-                if (_owner.Width < 50 || _owner.Height < 50 || _owner.Width == double.NaN || _owner.Height == double.NaN)
+                if (_owner.Width < 50 || _owner.Height < 50 || _owner.Width == double.NaN || _owner.Height == double.NaN/* || forceExpand*/)
                 {
-                    _owner.Width = 500;
-                    _owner.Height = 500;
+                    _owner.Width = 1000;
+                    _owner.Height = 1000;
                     view.UpdateLayout();
+                    //if (view.InputsList.Items.Count > 0)
+                    //{
+                    //    double iWidth = view.InputsList.ActualWidth;
+                    //    foreach (var r in view.InputsList.Items)
+                    //    {
+                    //        if (r != null)
+                    //        {
+                    //            if (r is IRenderable)
+                    //            {
+                    //                IRenderable c = (IRenderable)r;
+                    //                if (c.RenderView is UserControl)
+                    //                {
+                    //                    UserControl control = (UserControl)c.RenderView;
+                    //                    if (control is IRenderView)
+                    //                    {
+                    //                        IRenderView v = control as IRenderView;
+                    //                        if (v.Element is INode)
+                    //                        {
+                    //                            double textWidth = (v.Element as INode).Name.Length * 10.0;
+                    //                            if (control.ActualWidth < textWidth + 50)
+                    //                            {
+                    //                                c.Width = textWidth + 50;
+                    //                            }
+                    //                        }
+                    //                    }
+                    //                    if (control.ActualWidth > view.InputsList.ActualWidth)
+                    //                        view.InputsList.Width = control.ActualWidth;
+                    //                }
+                    //            }
+                    //        }
+                    //    }
+                    //}
+                    //if (view.OutputsList.Items.Count > 0)
+                    //{
+                    //    double oWidth = view.OutputsList.ActualWidth;
+                    //    foreach (var r in view.OutputsList.Items)
+                    //    {
+                    //        if (r != null)
+                    //        {
+                    //            if (r is IRenderable)
+                    //            {
+                    //                IRenderable c = (IRenderable)r;
+                    //                if (c.RenderView is UserControl)
+                    //                {
+                    //                    UserControl control = (UserControl)c.RenderView;
+                    //                    if (control is IRenderView)
+                    //                    {
+                    //                        IRenderView v = control as IRenderView;
+                    //                        if (v.Element is INode)
+                    //                        {
+                    //                            double textWidth = (v.Element as INode).Name.Length * 10.0;
+                    //                            if (control.ActualWidth < textWidth + 50)
+                    //                            {
+                    //                                c.Width = textWidth + 50;
+                    //                            }
+                    //                        }
+                    //                    }
+                    //                    if (control.ActualWidth > view.OutputsList.ActualWidth)
+                    //                        view.OutputsList.Width = control.ActualWidth;
+                    //                }
+                    //            }
+                    //        }
+                    //    }
+                    //}
+                    //view.UpdateLayout();
                     //view.Render();
                 }
+
                 //if (view.MainStackPanel.ActualWidth < 50 || view.MainStackPanel.ActualHeight < 50) return;
                 //if (view.MainStackPanel.ActualWidth > 500 || view.MainStackPanel.ActualHeight > 500) return;
                 if (_owner.Width != view.MainStackPanel.ActualWidth) _owner.Width = view.MainStackPanel.ActualWidth;
@@ -367,26 +434,30 @@ namespace Verse3
         {
             this._owner.RenderPipelineInfo.Children.Remove(element);
         }
-        public void AddDataOutputNode<T>(IDataNode<T> node)
+        public void AddDataOutputNode<T>(IDataNode<T> node, string name = "")
         {
+            node.Name = name;
             if (node is IRenderable) AddElement(node as IRenderable);
             this._owner.ComputationPipelineInfo.IOManager.AddDataOutputNode<T>(node);
         }
 
-        public void AddDataInputNode<T>(IDataNode<T> node)
+        public void AddDataInputNode<T>(IDataNode<T> node, string name = "")
         {
+            node.Name = name;
             if (node is IRenderable) AddElement(node as IRenderable);
             this._owner.ComputationPipelineInfo.IOManager.AddDataInputNode<T>(node);
         }
 
-        public void AddEventOutputNode(IEventNode node)
+        public void AddEventOutputNode(IEventNode node, string name = "")
         {
+            node.Name = name;
             if (node is IRenderable) AddElement(node as IRenderable);
             this._owner.ComputationPipelineInfo.IOManager.AddEventOutputNode(node);
         }
 
-        public void AddEventInputNode(IEventNode node)
+        public void AddEventInputNode(IEventNode node, string name = "")
         {
+            node.Name = name;
             if (node is IRenderable) AddElement(node as IRenderable);
             this._owner.ComputationPipelineInfo.IOManager.AddEventInputNode(node);
         }
@@ -423,7 +494,8 @@ namespace Verse3
                 {
                     //TODO: Log to console
                     //if (renderable is INode) continue;
-                    /*else */renderables.Add(renderable);
+                    /*else */
+                    renderables.Add(renderable);
                 }
             }
             return renderables;
@@ -659,7 +731,7 @@ namespace Verse3
         #endregion
     }
 
-    
+
     public readonly struct CompInfo
     {
         public ConstructorInfo ConstructorInfo { get; init; }
@@ -816,13 +888,13 @@ namespace Verse3
 
         private ElementsLinkedList<IConnection> connections = new ElementsLinkedList<IConnection>();
         //internal IRenderable parentElement = default;
-        private object displayedText;
+        //private object displayedText;
 
         #endregion
 
         #region Properties
 
-        public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
+        //public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
 
         IElement INode.Parent
         {
@@ -841,7 +913,7 @@ namespace Verse3
         private NodeType _nodeType = NodeType.Unset;
         public NodeType NodeType { get => _nodeType; }
 
-        internal CanvasPoint _hotspot = new CanvasPoint(0,0);
+        internal CanvasPoint _hotspot = new CanvasPoint(0, 0);
         public CanvasPoint Hotspot
         {
             get
@@ -900,6 +972,8 @@ namespace Verse3
                     throw new InvalidCastException();
             }
         }
+
+        public abstract string Name { get; set; }
 
         #endregion
 
@@ -1020,7 +1094,7 @@ namespace Verse3
         }
 
         public abstract void ToggleActive();
-        
+
         public void Dispose()
         {
             if (this.RenderPipelineInfo.Children != null && this.RenderPipelineInfo.Children.Count > 0)
@@ -1079,7 +1153,7 @@ namespace Verse3
         {
             get
             {
-                double v = 0.0;
+                double v = 20.0;
                 if ((this as INode).Parent is IComputable)
                 {
                     IComputable c = (this as INode).Parent as IComputable;
@@ -1088,7 +1162,7 @@ namespace Verse3
                         if (c.ComputationPipelineInfo.IOManager.EventOutputNodes.Count > 1 && c.ComputationPipelineInfo.IOManager.EventOutputNodes.Contains(this))
                         {
                             int i = c.ComputationPipelineInfo.IOManager.EventOutputNodes.IndexOf(this);
-                            v = i * this.BoundingBox.Size.Height;
+                            v = v + (i * this.BoundingBox.Size.Height);
                         }
                         _hotspot = this.RenderPipelineInfo.Parent.BoundingBox.Location +
                         new CanvasPoint(this.RenderPipelineInfo.Parent.BoundingBox.Size.Width,
@@ -1099,7 +1173,7 @@ namespace Verse3
                         if (c.ComputationPipelineInfo.IOManager.EventInputNodes.Count > 1 && c.ComputationPipelineInfo.IOManager.EventInputNodes.Contains(this))
                         {
                             int i = c.ComputationPipelineInfo.IOManager.EventInputNodes.IndexOf(this);
-                            v = i * this.BoundingBox.Size.Height;
+                            v = v + (i * this.BoundingBox.Size.Height);
                         }
                         _hotspot = this.RenderPipelineInfo.Parent.BoundingBox.Location +
                         new CanvasPoint(0.0, ((this.BoundingBox.Size.Height / 2) + v));
@@ -1246,6 +1320,7 @@ namespace Verse3
 
         public EventArgData EventArgData { get; set; }
         public IElement Parent { get => this.RenderPipelineInfo.Parent; set => this.RenderPipelineInfo.SetParent(value); }
+        public abstract string Name { get; set; }
 
         //public ElementsLinkedList<IConnection> Connections => throw new NotImplementedException();
 
@@ -1402,7 +1477,7 @@ namespace Verse3
                 }
             }
         }
-        
+
         public void Dispose()
         {
             if (this.RenderPipelineInfo.Children != null && this.RenderPipelineInfo.Children.Count > 0)
@@ -1427,4 +1502,5 @@ namespace Verse3
     //    Horizontal,
     //    Vertical
     //}
+
 }

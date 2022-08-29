@@ -19,14 +19,14 @@
              Loaded="OnLoaded"
              >
     <UserControl.Resources>
-        <!--<local:HorizontalAlignmentConverter 
-            x:Key="horizontalAlignmentConverter"
-            />-->
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDark.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <local:NodeNameDisplayTextConverter 
+            x:Key="nodeNameDisplayTextConverter"
+            />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid
@@ -37,15 +37,21 @@
         >
         <StackPanel
             Orientation="Horizontal"
-            Width="{Binding BoundingBox.Size.Width}"
-            Height="{Binding BoundingBox.Size.Height}"
+            MinWidth="{Binding BoundingBox.Size.Width}"
+            MinHeight="{Binding BoundingBox.Size.Height}"
             Margin="0,0,0,0"
             >
             <TextBlock
-                x:Name="NodeText"
-                Text="{Binding Text}"
+                x:Name="NodeLeftText"
                 VerticalAlignment="Center"
-            />
+            >
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource nodeNameDisplayTextConverter}">
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="RenderPipelineInfo"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
             <Button
             x:Name="NodeButton"
             Style="{StaticResource ButtonPrimary}"
@@ -55,10 +61,21 @@
             Height="30"
             Margin="10,10,10,10"
             Background="{Binding NodeColor}"
-            Click="Button_Click"
+            Click="Button_Click" Cursor="Hand"
             >
                 <Polygon x:Name="poly" Points="0,0, 8,5, 0,10" Stroke="White" Fill="{Binding NodeContentColor}" />
             </Button>
+            <TextBlock
+                x:Name="NodeRightText"
+                VerticalAlignment="Center"
+            >
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource nodeNameDisplayTextConverter}">
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="RenderPipelineInfo"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
         </StackPanel>
         
     </Grid>

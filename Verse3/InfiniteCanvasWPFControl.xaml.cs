@@ -781,14 +781,15 @@ namespace Verse3
                 {
                     if (contentX == mousePos.X)
                     {
-                        if (selectionBounds.Contains(renderable.BoundingBox))
+                        if (selectionBounds.Contains(renderable.BoundingBox.Location))
                         {
                             this.AddToSelection(renderable);
                         }
                     }
                     else if (contentX < mousePos.X)
                     {
-                        if (selectionBounds.Contains(renderable.BoundingBox.Location))
+                        //if (MassBool_OR_util(selectionBounds.Contains(renderable.BoundingBox.GetPoints())))
+                        if (BoundingBox.CheckIntersection(selectionBounds, renderable.BoundingBox))
                         {
                             this.AddToSelection(renderable);
                         }
@@ -798,6 +799,16 @@ namespace Verse3
 
             FadeOutDragSelectRect();
         }
+
+        public static bool MassBool_OR_util(bool[] bools)
+        {
+            foreach (bool b in bools)
+            {
+                if (b) return true;
+            }
+            return false;
+        }
+
         //
         // Fade out the drag zoom rectangle.
         //

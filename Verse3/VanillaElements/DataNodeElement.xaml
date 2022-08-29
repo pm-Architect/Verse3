@@ -10,7 +10,7 @@
              xmlns:local="clr-namespace:Verse3.VanillaElements" d:DataContext="{d:DesignInstance Type=local:DataNodeElement`1}"
              mc:Ignorable="d" 
              d:DesignHeight="50"
-             d:DesignWidth="120"
+             d:DesignWidth="50"
              MouseDown="OnMouseDown"
              MouseMove="OnMouseMove"
              MouseUp="OnMouseUp"
@@ -24,6 +24,9 @@
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDark.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <local:NodeNameDisplayTextConverter 
+            x:Key="nodeNameDisplayTextConverter"
+            />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid
@@ -32,7 +35,24 @@
         MinWidth="50"
         MinHeight="50"
         >
-        <Button
+        <StackPanel
+            Orientation="Horizontal"
+            MinWidth="{Binding BoundingBox.Size.Width}"
+            MinHeight="{Binding BoundingBox.Size.Height}"
+            Margin="0,0,0,0"
+            >
+            <TextBlock
+                x:Name="NodeLeftText"
+                VerticalAlignment="Center"
+            >
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource nodeNameDisplayTextConverter}">
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="RenderPipelineInfo"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <Button
             x:Name="NodeButton"
             Style="{StaticResource ButtonPrimary}"
             HorizontalAlignment="{Binding HorizontalAlignment}"
@@ -40,10 +60,24 @@
             Width="30"
             Height="30"
             Margin="10,10,10,10"
-            Background="#ff6700"
-            Click="Button_Click"
+            Background="{Binding NodeColor}"
+            Click="Button_Click" Cursor="Hand"
             >
-            <Ellipse x:Name="circle" Stroke="#000000" Width="10" Height="10" Fill="{Binding NodeContentColor}" />
-        </Button>
+                <Ellipse x:Name="circle" Stroke="#FFFFFF" Width="10" Height="10" Fill="{Binding NodeContentColor}" />
+            </Button>
+            <TextBlock
+                x:Name="NodeRightText"
+                VerticalAlignment="Center"
+            >
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource nodeNameDisplayTextConverter}">
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="RenderPipelineInfo"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </StackPanel>
+
     </Grid>
+    
 </UserControl>
