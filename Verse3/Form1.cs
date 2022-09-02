@@ -451,5 +451,30 @@ namespace Verse3
                 HotLoadLibrary(openFileDialog.FileName);
             }
         }
+
+        private void exportCanvasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(elementHost1.Size.Width, elementHost1.Size.Height);
+            elementHost1.DrawToBitmap(bmp, elementHost1.Bounds);
+            //save bmp to AppData/CanvasExports
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Verse3\\CanvasExports\\");
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            { 
+                bmp.Save(Path.Combine(path, DateTime.Now.ToString("yyyyMMddHHmmss") + "_ProjectVerseCanvasExport.png"));
+            }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (Core.Core.GetUser() != null)
+            {
+                Core.Core.Logout();
+            }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

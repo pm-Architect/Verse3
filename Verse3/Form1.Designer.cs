@@ -34,6 +34,8 @@
             this.editorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadLibraryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportCanvasToImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportCanvasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tableLayoutPanel1.SuspendLayout();
@@ -72,7 +74,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.editorToolStripMenuItem});
+            this.editorToolStripMenuItem,
+            this.exportCanvasToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1039, 24);
@@ -84,7 +87,8 @@
             // 
             this.editorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clearToolStripMenuItem,
-            this.loadLibraryToolStripMenuItem});
+            this.loadLibraryToolStripMenuItem,
+            this.exportCanvasToImageToolStripMenuItem});
             this.editorToolStripMenuItem.Name = "editorToolStripMenuItem";
             this.editorToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.editorToolStripMenuItem.Text = "Editor";
@@ -92,15 +96,28 @@
             // clearToolStripMenuItem
             // 
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.clearToolStripMenuItem.Text = "Clear";
             // 
             // loadLibraryToolStripMenuItem
             // 
             this.loadLibraryToolStripMenuItem.Name = "loadLibraryToolStripMenuItem";
-            this.loadLibraryToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.loadLibraryToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.loadLibraryToolStripMenuItem.Text = "Load Library...";
             this.loadLibraryToolStripMenuItem.Click += new System.EventHandler(this.loadLibraryToolStripMenuItem_Click);
+            // 
+            // exportCanvasToImageToolStripMenuItem
+            // 
+            this.exportCanvasToImageToolStripMenuItem.Name = "exportCanvasToImageToolStripMenuItem";
+            this.exportCanvasToImageToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.exportCanvasToImageToolStripMenuItem.Text = "&Export Canvas to Image";
+            // 
+            // exportCanvasToolStripMenuItem
+            // 
+            this.exportCanvasToolStripMenuItem.Name = "exportCanvasToolStripMenuItem";
+            this.exportCanvasToolStripMenuItem.Size = new System.Drawing.Size(94, 20);
+            this.exportCanvasToolStripMenuItem.Text = "Export Canvas";
+            this.exportCanvasToolStripMenuItem.Click += new System.EventHandler(this.exportCanvasToolStripMenuItem_Click);
             // 
             // tableLayoutPanel2
             // 
@@ -142,6 +159,8 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.LoadLibraries);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
@@ -162,6 +181,8 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.ToolStripMenuItem loadLibraryToolStripMenuItem;
         private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.ToolStripMenuItem exportCanvasToImageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportCanvasToolStripMenuItem;
     }
 }
 

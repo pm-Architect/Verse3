@@ -25,7 +25,7 @@ namespace EventsLibrary
                     //$"\nID: {this.ID}" +
                     //$"\nX: {this.X}" +
                     //$"\nY: {this.Y}" +
-                    $"\nOutput Value: {dataIN}";
+                    $"Counter: {dataIN}";
             }
         }
 
@@ -102,7 +102,7 @@ namespace EventsLibrary
             string? txt = this.ElementText;
             textBlock = new TextElement();
             textBlock.DisplayedText = txt;
-            textBlock.TextAlignment = TextAlignment.Left;
+            textBlock.TextAlignment = TextAlignment.Center;
             this.ChildElementManager.AddElement(textBlock);
 
             nodeBlock1 = new ButtonClickedEventNode(this, NodeType.Output);

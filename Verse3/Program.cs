@@ -14,6 +14,7 @@ namespace Verse3
             Application.EnableVisualStyles();
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.SetCompatibleTextRenderingDefault(false);
+            Core.Core.InitConsole();
             Application.Run(new Main_Verse3());
         }
     }

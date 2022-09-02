@@ -98,6 +98,7 @@ namespace EventsLibrary
             buttonBlock = new ButtonElement();
             buttonBlock.DisplayedText = "Trigger";
             buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
+            buttonBlock.Width = 200;
             this.ChildElementManager.AddElement(buttonBlock);
 
             nodeBlock = new ButtonClickedEventNode(this, NodeType.Output);

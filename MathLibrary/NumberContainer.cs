@@ -102,8 +102,8 @@ namespace MathLibrary
             this.ChildElementManager.AddElement(sliderBlock);
 
             nodeBlock = new NumberDataNode(this, NodeType.Output);
-            nodeBlock.Width = 50;
-            this.ChildElementManager.AddDataOutputNode<double>(nodeBlock as IDataNode<double>);
+            //nodeBlock.Width = 50;
+            this.ChildElementManager.AddDataOutputNode(nodeBlock, "Number");
 
             textBlock = new TextElement();
             textBlock.DisplayedText = this.ElementText;

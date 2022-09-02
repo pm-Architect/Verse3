@@ -3,8 +3,8 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWindowsForms>true</UseWindowsForms>
-    <UseWPF>true</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
+    <UseWPF>True</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <StartupObject>Verse3.Program</StartupObject>
   </PropertyGroup>
