@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link rel="stylesheet"
+          data-name="vs/editor/editor.main"
+          href="./min/vs/editor/editor.main.css" />
+    <style>
+        html, body { height: 100%; margin: 0; }
+        #container { height: 100%; }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <script src="./min/vs/loader.js"></script>
+    <script>
+        require.config({ paths: { 'vs': './min/vs' } });
+    </script>
+    <script src="./min/vs/editor/editor.main.nls.js"></script>
+    <script src="./min/vs/editor/editor.main.js"></script>
+    <script>
+        // https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.IStandaloneEditorConstructionOptions.html
+        var model = monaco.editor.createModel('void Main() {\n\tConsole.WriteLine("Hello World!");\n}', 'csharp');
+        var editor = monaco.editor.create(document.getElementById('container'), {
+            model: model,
+            language: 'csharp',
+            theme: 'vs-dark',
+            automaticLayout: true,
+            showFoldingControls: 'mouseover'
+        });
+
+        function setFilePath(value, path) {
+            model = monaco.editor.createModel(value, 'csharp', path);
+            editor.setModel(model);
+        }
+
+        function getValue() {
+            window.chrome.webview.postMessage(editor.getValue());
+            console.log(editor.getValue());
+            return editor.getValue();
+        }
+    </script>
+</body>
+</html>

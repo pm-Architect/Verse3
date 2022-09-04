@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="VanillaElements.IDEElementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VanillaElements"
+             xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+             d:DataContext="{d:DesignInstance Type=local:IDEElement}"
+             mc:Ignorable="d"
+             d:DesignHeight="350" d:DesignWidth="600"
+             DataContextChanged="OnDataContextChanged"
+             Loaded="OnLoaded">
+    <Grid>
+        <Wpf:WebView2 x:Name="EmulatedIDEBrowser" Width="600" Height="350"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"/>
+    </Grid>
+</UserControl>

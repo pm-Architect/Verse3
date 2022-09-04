@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Verse3.VanillaElements;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
 
@@ -22,6 +23,73 @@ namespace Verse3
         public Main_Verse3()
         {
             InitializeComponent();
+
+            //Open the Registry Key HKEY_CURRENT_USER\SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION
+            const string featureBrowserEmulation =
+                @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION";
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(featureBrowserEmulation, true))
+            {
+                if (key != null)
+                {
+                    //create a DWORD value with the name of application executable and value 11001
+                    string appName = Process.GetCurrentProcess().ProcessName + ".exe";
+                    if (key.GetValue(appName) == null)
+                    {
+                        key.SetValue(appName, 11001, RegistryValueKind.DWord);
+                    }
+                }
+            }
+
+            //Copy the contents of MonacoEditor Folder to AppData folder
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string monacoEditorPath = System.IO.Path.Combine(appDataPath, "Verse3\\MonacoEditor");
+            if (!Directory.Exists(monacoEditorPath))
+            {
+                Directory.CreateDirectory(monacoEditorPath);
+                string[] files = Directory.GetFiles(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "MonacoEditor"));
+                foreach (string file in files)
+                {
+                    File.Copy(file, System.IO.Path.Combine(monacoEditorPath, System.IO.Path.GetFileName(file)));
+                }
+            }
+            else
+            {
+                //if the files already exist, check if they are old and overwrite them
+                string[] files = Directory.GetFiles(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "MonacoEditor"));
+                foreach (string file in files)
+                {
+                    if (File.Exists(System.IO.Path.Combine(monacoEditorPath, System.IO.Path.GetFileName(file))))
+                    {
+                        //compare contents of existing file to new file
+                        string existingFileContents = File.ReadAllText(System.IO.Path.Combine(monacoEditorPath, System.IO.Path.GetFileName(file)));
+                        string newFileContents = File.ReadAllText(file);
+                        if (existingFileContents != newFileContents)
+                        {
+                            File.Copy(file, System.IO.Path.Combine(monacoEditorPath, System.IO.Path.GetFileName(file)), true);
+                        }
+                    }
+                }
+            }
+
+            //const string currentUserSubKey =
+            //@"Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice";
+            //using (RegistryKey userChoiceKey = Registry.CurrentUser.OpenSubKey(currentUserSubKey, false))
+            //{
+            //    string progId = (userChoiceKey.GetValue("ProgId").ToString());
+            //    using (RegistryKey kp =
+            //           Registry.ClassesRoot.OpenSubKey(progId + @"\shell\open\command", false))
+            //    {
+            //        // Get default value and convert to EXE path.
+            //        // It's stored as:
+            //        //    "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" -- "%1"
+            //        // So we want the first quoted string only
+            //        string rawValue = (string)kp.GetValue("");
+            //        Regex reg = new Regex("(?<=\").*?(?=\")");
+            //        Match m = reg.Match(rawValue);
+            //        return m.Success ? m.Value : "";
+            //    }
+            //}
+
         }
 
         private void ShowNewForm(object sender, EventArgs e)
@@ -240,6 +308,23 @@ namespace Verse3
         {
             loggedIn = true;
         }
+
+        //List<EmbeddedIDE> ides = new List<EmbeddedIDE>();
+
+        //private void toolStripButton3_Click(object sender, EventArgs e)
+        //{
+            //EmbeddedIDE ide = new EmbeddedIDE();
+            //ides.Add(ide);
+            //ide.Show();
+        //}
+
+        //private void toolStripButton4_Click(object sender, EventArgs e)
+        //{
+            //if (ides.Count == 1)
+            //{
+            //    ides[0].GetScript();
+            //}
+        //}
 
         //private async void P_OutputDataReceived(object sender, DataReceivedEventArgs e)
         //{
