@@ -61,7 +61,4 @@
   <ItemGroup>
     <None Remove="VanillaElements\vlcsnap-2022-08-21-18h46m17s429.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="VanillaElements\vlcsnap-2022-08-21-18h46m17s429.png" />
-  </ItemGroup>
 </Project>
