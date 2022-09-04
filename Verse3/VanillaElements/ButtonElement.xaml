@@ -28,6 +28,7 @@
         Height="{Binding BoundingBox.Size.Height}"
         MinWidth="100"
         MinHeight="50"
+        MaxHeight="50"
         >
         <Button
             Style="{StaticResource ButtonPrimary}"

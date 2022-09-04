@@ -292,10 +292,10 @@ namespace Verse3
             {
                 BaseCompView view = _owner.RenderView as BaseCompView;
 
-                if (_owner.Width < 50 || _owner.Height < 50 || _owner.Width == double.NaN || _owner.Height == double.NaN/* || forceExpand*/)
+                if (_owner.Width < 50 || _owner.Height < 50 || _owner.Width == double.NaN || _owner.Height == double.NaN || forceExpand)
                 {
-                    _owner.Width = 1000;
-                    _owner.Height = 1000;
+                    _owner.Width = 10000;
+                    _owner.Height = 10000;
                     view.UpdateLayout();
                     //if (view.InputsList.Items.Count > 0)
                     //{

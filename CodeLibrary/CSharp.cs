@@ -19,7 +19,7 @@ namespace CodeLibrary
             {
                 string? name = this.GetType().FullName;
                 string? viewname = this.ViewType.FullName;
-                string? dataIN = ideElement.Script;
+                string? dataIN = _script;
                 //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
                 //    dataIN = (Math.Round((((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data), 2)).ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
@@ -71,9 +71,15 @@ namespace CodeLibrary
             //double a = this.ChildElementManager.GetData<double>(0, 0);
             //double b = this.ChildElementManager.GetData<double>(1, 0);
             //this.ChildElementManager.SetData<double>((a + b), 0);
+            _script = this.ideElement.Script;
+            //TODO: Compile the script and display the output
             textBlock.DisplayedText = this.ElementText;
+            this.ChildElementManager.AdjustBounds(true);
+            RenderPipeline.RenderRenderable(this);
         }
-        
+
+        private string _script = "";
+
         private TextElement textBlock = new TextElement();
         private IDEElement ideElement = new IDEElement();
         internal ButtonElement buttonBlock = new ButtonElement();
@@ -100,20 +106,26 @@ namespace CodeLibrary
             //this.ChildElementManager.AddEventInputNode(nodeBlock as IEventNode, "Compile");
 
             ideElement = new IDEElement();
-            ideElement.Width = 600;
-            ideElement.Height = 350;
+            ideElement.ScriptChanged += IdeElement_ScriptChanged;
+            //ideElement.BoundingBox.Size.Width = 600;
+            //ideElement.BoundingBox.Size.Height = 350;
             this.ChildElementManager.AddElement(ideElement);
 
             buttonBlock = new ButtonElement();
             buttonBlock.DisplayedText = "Trigger";
             buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
-            buttonBlock.Width = 200;
             this.ChildElementManager.AddElement(buttonBlock);
 
             textBlock = new TextElement();
             textBlock.DisplayedText = this.ElementText;
             textBlock.TextAlignment = TextAlignment.Left;
+            textBlock.BoundingBox.Size.Width = 600;
             this.ChildElementManager.AddElement(textBlock);
+        }
+
+        private void IdeElement_ScriptChanged(object? sender, EventArgs e)
+        {
+            this.Compute();
         }
 
         //private void NodeBlock_NodeEvent(IEventNode container, EventArgData e)
@@ -123,7 +135,7 @@ namespace CodeLibrary
 
         private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
         {
-            this.Compute();
+            this.ideElement.TriggerScriptUpdate();
         }
     }
 }

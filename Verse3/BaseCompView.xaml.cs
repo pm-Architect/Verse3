@@ -78,7 +78,7 @@ namespace Verse3
             {
                 if (this.Element.RenderView != this) this.Element.RenderView = this;
                 this.Element.RenderComp();
-
+                
                 //InputsList.ItemsSource = this.Element.ChildElementManager.InputSide;
                 //OutputsList.ItemsSource = this.Element.ChildElementManager.OutputSide;
                 //if (this.Element.Width != (InputsList.ActualWidth + OutputsList.ActualWidth + CenterBar.Width))

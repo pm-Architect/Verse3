@@ -9,10 +9,29 @@
              mc:Ignorable="d"
              d:DesignHeight="350" d:DesignWidth="600"
              DataContextChanged="OnDataContextChanged"
-             Loaded="OnLoaded">
-    <Grid>
-        <Wpf:WebView2 x:Name="EmulatedIDEBrowser" Width="600" Height="350"
+             Loaded="OnLoaded"
+             LostFocus="EmulatedIDEBrowser_LostFocus">
+    <Grid
+        MinWidth="600"
+        MinHeight="350"
+        Width="{Binding BoundingBox.Size.Width}"
+        Height="{Binding BoundingBox.Size.Height}"
+        VerticalAlignment="Center"
+        HorizontalAlignment="Center"
+        Margin="10,0,10,0"
+        >
+        <Wpf:WebView2 x:Name="EmulatedIDEBrowser"
                       HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch"/>
+                      VerticalAlignment="Stretch"
+                      DesignModeForegroundColor="Black"
+                      DefaultBackgroundColor="Black"
+                      LostFocus="EmulatedIDEBrowser_LostFocus"/>
+        <Image x:Name="OverlayImage"
+               HorizontalAlignment="Stretch"
+               VerticalAlignment="Stretch"
+               MouseDown="OverlayImage_MouseDown"
+               Visibility="Hidden"
+               Cursor="Hand"
+               ></Image>
     </Grid>
 </UserControl>

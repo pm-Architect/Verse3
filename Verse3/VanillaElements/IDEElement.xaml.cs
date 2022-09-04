@@ -1,6 +1,8 @@
 ﻿using Core;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -54,14 +56,70 @@ namespace VanillaElements
             this.EmulatedIDEBrowser.Source = new Uri(System.IO.Path.Combine(path, "index.html"));
         }
 
+
+        //Method to run a task asynchronously and call a method when it's done
+        public async void CaptureBrowserPreview(/*System.IO.MemoryStream s*/)
+        {
+            //await this.EmulatedIDEBrowser.CoreWebView2.CapturePreviewAsync(Microsoft.Web.WebView2.Core.CoreWebView2CapturePreviewImageFormat.Png, s);
+
+            string pic = await this.EmulatedIDEBrowser.CoreWebView2.CallDevToolsProtocolMethodAsync("Page.captureScreenshot", "{}");
+            JObject o3 = JObject.Parse(pic);
+            JToken data = o3["data"]!;
+
+            byte[] bytes = Convert.FromBase64String(data.ToString());
+            Image image = new Image();
+            //double picHeight = 0d;
+            //double picWidth = 0d;
+            using (MemoryStream stream = new MemoryStream(bytes))
+            {
+                BitmapFrame bitmap = System.Windows.Media.Imaging.BitmapDecoder.Create(stream, BitmapCreateOptions.None,
+                                        BitmapCacheOption.OnLoad).Frames[0];
+                //if (bitmap != null)
+                //{
+                //    stream.CopyTo(s);
+                //}
+                //picHeight = bitmap.Height;
+                //picWidth = bitmap.Width;
+                //image.Source = bitmap;
+                
+                //set bitmap as source
+                //this.EmulatedIDEBrowser.Source = b;
+                //Image image = new Image();
+                //image.Source = bitmap;
+                this.OverlayImage.Source = bitmap;
+                this.OverlayImage.Visibility = Visibility.Visible;
+                this.EmulatedIDEBrowser.IsEnabled = false;
+                this.EmulatedIDEBrowser.Visibility = Visibility.Hidden;
+            }
+        }
+
         public void Render()
         {
             if (this.Element != null)
             {
+                if (this.Element.RenderView != this) this.Element.RenderView = this;
+                if (!this.EmulatedIDEBrowser.IsFocused && this.OverlayImage.Visibility == Visibility.Hidden)
+                {
+                    //create stream for bitmap
+                    using (System.IO.MemoryStream s = new System.IO.MemoryStream())
+                    {
+                        if (this.EmulatedIDEBrowser.CoreWebView2 != null)
+                        {
+                            Type T = this.EmulatedIDEBrowser.DataContext.GetType();
+                            CaptureBrowserPreview();
+                            //Task t = this.EmulatedIDEBrowser.CoreWebView2.CapturePreviewAsync(Microsoft.Web.WebView2.Core.CoreWebView2CapturePreviewImageFormat.Png, s);
+                            //t.ContinueWith(t => HideIDE(t, s));
+                            //t.Wait();
+                        }
+                    }
+                    //this.EmulatedIDEBrowser.IsEnabled = false;
+                    //this.EmulatedIDEBrowser.Visibility = Visibility.Hidden;
+                }
             }
         }
 
         #endregion
+
 
         #region MouseEvents
 
@@ -112,6 +170,7 @@ namespace VanillaElements
         {
             //DependencyPropertyChangedEventArgs
             Element = this.DataContext as IDEElement;
+            //if (this.Element.RenderView != this) this.Element.RenderView = this;
             Render();
         }
 
@@ -119,6 +178,7 @@ namespace VanillaElements
         {
             //RoutedEventArgs
             Element = this.DataContext as IDEElement;
+            //if (this.Element.RenderView != this) this.Element.RenderView = this;
             Render();
         }
 
@@ -157,6 +217,23 @@ namespace VanillaElements
         {
             Console.WriteLine(e.TryGetWebMessageAsString());
             this.Element._script = e.TryGetWebMessageAsString();
+            this.Element.UpdateScript(e.TryGetWebMessageAsString());
+        }
+
+        private void OverlayImage_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!this.EmulatedIDEBrowser.IsEnabled)
+            {
+                this.OverlayImage.Source = null;
+                this.OverlayImage.Visibility = Visibility.Hidden;
+                this.EmulatedIDEBrowser.IsEnabled = true;
+                this.EmulatedIDEBrowser.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void EmulatedIDEBrowser_LostFocus(object sender, RoutedEventArgs e)
+        {
+            RenderPipeline.RenderRenderable(this.Element);
         }
     }
 
@@ -164,8 +241,29 @@ namespace VanillaElements
     {
         public override Type ViewType => typeof(IDEElementView);
 
+        public override ElementType ElementType { get => ElementType.UIElement; set => base.ElementType = ElementType.UIElement; }
+
         public IDEElement() : base()
         {
+        }
+
+        public event EventHandler<EventArgs> ScriptChanged;
+        
+        public void TriggerScriptUpdate()
+        {
+            if (this.RenderView != null)
+            {
+                (this.RenderView as IDEElementView).GetScript();
+            }
+        }
+
+        public void UpdateScript(string script)
+        {
+            _script = script;
+            if (ScriptChanged != null)
+            {
+                ScriptChanged.Invoke(this, new EventArgs());
+            }
         }
 
         internal string _script = "";
@@ -173,10 +271,6 @@ namespace VanillaElements
         {
             get
             {
-                if (this.RenderView != null)
-                {
-                    (this.RenderView as IDEElementView).GetScript();
-                }
                 return _script;
             }
         }

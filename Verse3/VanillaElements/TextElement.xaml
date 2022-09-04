@@ -15,8 +15,8 @@
              Loaded="OnLoaded"
              >
     <Grid
-        MaxWidth="{Binding Width}"
-        MaxHeight="{Binding Height}"
+        MaxWidth="{Binding BoundingBox.Size.Width}"
+        MaxHeight="{Binding BoundingBox.Size.Height}"
         >
         <Border
             BorderBrush="{x:Null}" RenderTransformOrigin="0.5,0.5"
