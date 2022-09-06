@@ -152,6 +152,8 @@ namespace Core
                     }
                 }
             }
+            //TODO: collect system info
+            //TODO: handle core limit reached - i.e. More threads needed than cores available
             if (SystemCoreCount >= 8)
             {
                 Thread t = new Thread(new ThreadStart(() => ComputationPipeline.ComputeComputable(computable)));

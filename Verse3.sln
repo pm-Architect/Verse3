@@ -28,7 +28,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventsLibrary", "EventsLibr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextLibrary", "TextLibrary\TextLibrary.csproj", "{2CF87B26-905A-44DC-93F4-C355DC5FBF10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeLibrary", "CodeLibrary\CodeLibrary.csproj", "{3BAEC9A5-8B04-40A2-AF04-8CC30D31E4A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeLibrary", "CodeLibrary\CodeLibrary.csproj", "{3BAEC9A5-8B04-40A2-AF04-8CC30D31E4A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreInterop", "CoreInterop\CoreInterop.csproj", "{27BB1A41-4017-49E4-BA7A-106682FF3B93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,6 +78,10 @@ Global
 		{3BAEC9A5-8B04-40A2-AF04-8CC30D31E4A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BAEC9A5-8B04-40A2-AF04-8CC30D31E4A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BAEC9A5-8B04-40A2-AF04-8CC30D31E4A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27BB1A41-4017-49E4-BA7A-106682FF3B93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27BB1A41-4017-49E4-BA7A-106682FF3B93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27BB1A41-4017-49E4-BA7A-106682FF3B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27BB1A41-4017-49E4-BA7A-106682FF3B93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
