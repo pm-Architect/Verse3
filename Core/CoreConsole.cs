@@ -12,9 +12,10 @@ namespace Core
         private static readonly CoreConsole Instance = new CoreConsole();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public static void PushToServer(string message)
+        //TODO: Push data to Supabase
+        public static void Log(string message)
         {
-            //TODO
+            Logger.Info(message);
         }
 
         //TODO: Debug / Events / Serial / Console Logger
@@ -29,7 +30,7 @@ namespace Core
             }
         }
 
-        public static async void sLoad(string url, string key)
+        private static async void sLoad(string url, string key)
         {
             await Client.InitializeAsync(url, key);
         }

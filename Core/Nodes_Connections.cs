@@ -12,7 +12,7 @@ namespace Core
         public NodeType NodeType { get; }
         public CanvasPoint Hotspot { get; }
         public string Name { get; set; }
-        public new ElementType ElementType { get => ElementType.Node; }
+        public new ElementType ElementType { get/* => ElementType.Node*/; }
 
     }
 
@@ -50,7 +50,7 @@ namespace Core
         public INode Origin { get; }
         public INode Destination { get; }
         public ConnectionType ConnectionType { get; }
-        public new ElementType ElementType { get => ElementType.Connection; }
+        public new ElementType ElementType { get/* => ElementType.Connection*/; }
     }
 
     #endregion

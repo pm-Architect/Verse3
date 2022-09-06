@@ -230,6 +230,40 @@ namespace Verse3
         private bool sel = false;
         public bool IsSelected { get => sel; set => sel = false; }
         public bool RenderExpired { get; set; }
+        
+        public IRenderable Parent => this.RenderPipelineInfo.Parent;
+
+        public ElementsLinkedList<IRenderable> Children => this.RenderPipelineInfo.Children;
+
+        public void SetX(double x)
+        {
+            BoundingBox.Location.X = x;
+            OnPropertyChanged("X");
+        }
+
+        public void SetY(double y)
+        {
+            BoundingBox.Location.Y = y;
+            OnPropertyChanged("Y");
+        }
+
+        public void SetWidth(double x)
+        {
+            BoundingBox.Size.Width = x;
+            OnPropertyChanged("Width");
+        }
+
+        public void SetHeight(double x)
+        {
+            BoundingBox.Size.Height = x;
+            OnPropertyChanged("Height");
+        }
+
+        public void Render()
+        {
+            if (RenderView != null)
+                RenderView.Render();
+        }
 
         #endregion
 

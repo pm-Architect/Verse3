@@ -12,6 +12,7 @@
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CoreInterop\CoreInterop.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\InfiniteCanvas\InfiniteCanvas.csproj" />
   </ItemGroup>

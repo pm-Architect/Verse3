@@ -276,6 +276,37 @@ namespace Verse3
             DataViewModel.Instance.Elements.Remove(this);
             GC.SuppressFinalize(this);
         }
+
+        public void SetX(double x)
+        {
+            BoundingBox.Location.X = x;
+            OnPropertyChanged("X");
+        }
+
+        public void SetY(double y)
+        {
+            BoundingBox.Location.Y = y;
+            OnPropertyChanged("Y");
+        }
+
+        public void SetWidth(double x)
+        {
+            BoundingBox.Size.Width = x;
+            OnPropertyChanged("Width");
+        }
+
+        public void SetHeight(double x)
+        {
+            BoundingBox.Size.Height = x;
+            OnPropertyChanged("Height");
+        }
+
+        public void Render()
+        {
+            if (RenderView != null)
+                RenderView.Render();
+        }
+
         ~BaseComp() => Dispose();
     }
 
@@ -858,6 +889,40 @@ namespace Verse3
         }
         public bool RenderExpired { get; set; }
 
+        public IRenderable Parent => this.RenderPipelineInfo.Parent;
+
+        public ElementsLinkedList<IRenderable> Children => this.RenderPipelineInfo.Children;
+
+        public void SetX(double x)
+        {
+            BoundingBox.Location.X = x;
+            OnPropertyChanged("X");
+        }
+
+        public void SetY(double y)
+        {
+            BoundingBox.Location.Y = y;
+            OnPropertyChanged("Y");
+        }
+
+        public void SetWidth(double x)
+        {
+            BoundingBox.Size.Width = x;
+            OnPropertyChanged("Width");
+        }
+
+        public void SetHeight(double x)
+        {
+            BoundingBox.Size.Height = x;
+            OnPropertyChanged("Height");
+        }
+
+        public void Render()
+        {
+            if (RenderView != null)
+                RenderView.Render();
+        }
+
         #endregion
 
         #region INotifyPropertyChanged Members
@@ -1322,7 +1387,7 @@ namespace Verse3
         }
 
         public EventArgData EventArgData { get; set; }
-        public IElement Parent { get => this.RenderPipelineInfo.Parent; set => this.RenderPipelineInfo.SetParent(value); }
+        public IRenderable Parent { get => this.RenderPipelineInfo.Parent; set => this.RenderPipelineInfo.SetParent(value); }
         public abstract string Name { get; set; }
 
         //public ElementsLinkedList<IConnection> Connections => throw new NotImplementedException();
@@ -1331,6 +1396,40 @@ namespace Verse3
 
         //public double HotspotThresholdRadius => throw new NotImplementedException();
         public bool RenderExpired { get; set; }
+
+        //public IRenderable Parent => this.RenderPipelineInfo.Parent;
+
+        public ElementsLinkedList<IRenderable> Children => this.RenderPipelineInfo.Children;
+
+        public void SetX(double x)
+        {
+            BoundingBox.Location.X = x;
+            OnPropertyChanged("X");
+        }
+
+        public void SetY(double y)
+        {
+            BoundingBox.Location.Y = y;
+            OnPropertyChanged("Y");
+        }
+
+        public void SetWidth(double x)
+        {
+            BoundingBox.Size.Width = x;
+            OnPropertyChanged("Width");
+        }
+
+        public void SetHeight(double x)
+        {
+            BoundingBox.Size.Height = x;
+            OnPropertyChanged("Height");
+        }
+
+        public void Render()
+        {
+            if (RenderView != null)
+                RenderView.Render();
+        }
 
         #endregion
 

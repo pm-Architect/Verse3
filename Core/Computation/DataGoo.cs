@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 
 namespace Core
 {
-    public interface IDataGoo : INotifyPropertyChanged
+    public interface IDataGoo : INotifyPropertyChanged, ISerializable
     {
         public Guid ID { get; }
         public IDataGoo Parent { get; }
@@ -67,8 +68,15 @@ namespace Core
         new DataStructure<D> DataGoo { get; set; }
     }
 
-    public class DataStructure<D> : DataStructure
+    [Serializable]
+    public class DataStructure<D> : DataStructure, ISerializable
     {
+        protected DataStructure(SerializationInfo info, StreamingContext context) : base()
+        {
+            info.GetValue("DataType", typeof(Type));
+            info.GetValue("Data", this.DataType);
+        }
+        
         //Fire an event when Data is set
         public delegate void DataChangedEventHandler(DataStructure<D> sender, DataChangedEventArgs<D> e);
         public DataChangedEventHandler DataChanged;
@@ -113,9 +121,16 @@ namespace Core
             ID = Guid.NewGuid();
         }
     }
-
-    public class DataStructure : DataLinkedList<IDataGoo>, IDataGoo
+    
+    [Serializable]
+    public class DataStructure : DataLinkedList<IDataGoo>, IDataGoo, ISerializable
     {
+        protected DataStructure(SerializationInfo info, StreamingContext context) : base()
+        {
+            info.GetValue("DataType", typeof(Type));
+            info.GetValue("Data", this.DataType);
+        }
+        
         protected object volatileData = default;
         public object Data { get => volatileData; set => volatileData = value; }
         public Guid ID { get; set; }
@@ -146,6 +161,11 @@ namespace Core
         public DataStructure(IEnumerable<IDataGoo> data) : base(data)
         {
             ID = Guid.NewGuid();
+        }
+
+        public override string ToString()
+        {
+            return this.Data.ToString();
         }
 
 

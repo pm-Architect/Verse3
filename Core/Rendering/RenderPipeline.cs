@@ -188,8 +188,8 @@ namespace Core
         //TODO: GUID Lookup in DataModel Instance
         //public IRenderable ZPrev { get; }
         //public IRenderable ZNext { get; }
-        public IRenderable Parent { get => RenderPipelineInfo.Parent; }
-        public ElementsLinkedList<IRenderable> Children { get => RenderPipelineInfo.Children; }
+        public IRenderable Parent { get/* => RenderPipelineInfo.Parent*/; }
+        public ElementsLinkedList<IRenderable> Children { get/* => RenderPipelineInfo.Children*/; }
 
         #endregion
 
@@ -219,11 +219,11 @@ namespace Core
         /// <summary>
         /// Set the X coordinate of the location of the element Bounding Box (in content coordinates).
         /// </summary>
-        void SetX(double x)
-        {
+        void SetX(double x);
+        /*{
             BoundingBox.Location.X = x;
             OnPropertyChanged("X");
-        }
+        }*/
 
         /// <summary>
         /// The Y coordinate of the location of the element Bounding Box (in content coordinates).
@@ -232,11 +232,11 @@ namespace Core
         /// <summary>
         /// Set the Y coordinate of the location of the element Bounding Box (in content coordinates).
         /// </summary>
-        void SetY(double x)
-        {
+        void SetY(double x);
+        /*{
             BoundingBox.Location.Y = x;
             OnPropertyChanged("Y");
-        }
+        }*/
 
         /// <summary>
         /// The width of the element Bounding Box (in content coordinates).
@@ -245,7 +245,7 @@ namespace Core
         /// <summary>
         /// Set the width of the element Bounding Box (in content coordinates).
         /// </summary>
-        void SetWidth(double x) { BoundingBox.Size.Width = x; OnPropertyChanged("Width"); }
+        void SetWidth(double x); /*{ BoundingBox.Size.Width = x; OnPropertyChanged("Width"); }*/
 
         /// <summary>
         /// The height of the element Bounding Box (in content coordinates).
@@ -257,15 +257,15 @@ namespace Core
         /// <summary>
         /// Set the height of the element Bounding Box (in content coordinates).
         /// </summary>
-        void SetHeight(double x) { BoundingBox.Size.Height = x; OnPropertyChanged("Height"); }
+        void SetHeight(double x); /*{ BoundingBox.Size.Height = x; OnPropertyChanged("Height"); }*/
 
         #endregion
 
-        void Render()
-        {
+        void Render();
+        /*{
             if (RenderView != null)
                 RenderView.Render();
-        }
+        }*/
     }
 
     public interface IRenderView
