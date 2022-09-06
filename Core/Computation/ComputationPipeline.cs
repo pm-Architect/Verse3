@@ -114,11 +114,13 @@ namespace Core
             }
             finally
             {
+                //TODO: Don't render if running Headlessly (ENV VARIABLE)
                 computable.ComputableElementState = ComputableElementState.Computed;
                 if (computable is IRenderable)
                 {
                     IRenderable r = computable as IRenderable;
-                    RenderPipeline.RenderRenderable(r);
+                    //RenderPipeline.RenderRenderable(r);
+                    RenderingCore.Render(r);
                 }
             }
             return count;
@@ -310,7 +312,7 @@ namespace Core
         {
             if (container.NodeType == NodeType.Input)
             {
-                if (container.Parent is IComputable) ComputationPipeline.ComputeComputable(container.Parent as IComputable);
+                if (container.Parent is IComputable) ComputationCore.Compute(container.Parent as IComputable);
             }
             else if (container.NodeType == NodeType.Output)
             {
@@ -329,7 +331,7 @@ namespace Core
                 bool gate = container.EventOccured(e);
                 if (gate)
                 {
-                    if (container.Parent is IComputable) ComputationPipeline.ComputeComputable(container.Parent as IComputable);
+                    if (container.Parent is IComputable) ComputationCore.Compute(container.Parent as IComputable);
                 }
             }
             else if (container.NodeType == NodeType.Output)

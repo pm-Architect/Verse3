@@ -134,6 +134,8 @@ namespace Verse3
             }
         }
 
+        public bool RenderExpired { get; set; }
+
 
         #endregion
 
@@ -854,6 +856,7 @@ namespace Verse3
                 return elements;
             }
         }
+        public bool RenderExpired { get; set; }
 
         #endregion
 
@@ -1327,6 +1330,7 @@ namespace Verse3
         //public CanvasPoint Hotspot => throw new NotImplementedException();
 
         //public double HotspotThresholdRadius => throw new NotImplementedException();
+        public bool RenderExpired { get; set; }
 
         #endregion
 
@@ -1362,7 +1366,7 @@ namespace Verse3
             NodeEvent.Invoke(this, new EventArgData());
             if (this.Parent is IComputable)
             {
-                ComputationPipeline.ComputeComputable(this.Parent as IComputable);
+                ComputationCore.Compute(this.Parent as IComputable);
             }
         }
 

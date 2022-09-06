@@ -229,6 +229,7 @@ namespace Verse3
         bool IRenderable.Visible { get; set; }
         private bool sel = false;
         public bool IsSelected { get => sel; set => sel = false; }
+        public bool RenderExpired { get; set; }
 
         #endregion
 

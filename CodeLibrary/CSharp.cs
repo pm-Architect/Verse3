@@ -75,7 +75,7 @@ namespace CodeLibrary
             //TODO: Compile the script and display the output
             textBlock.DisplayedText = this.ElementText;
             this.ChildElementManager.AdjustBounds(true);
-            RenderPipeline.RenderRenderable(this);
+            RenderingCore.Render(this);
         }
 
         private string _script = "";

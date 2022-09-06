@@ -92,6 +92,7 @@ namespace CanvasElements
 
         public IRenderable Parent => RenderPipelineInfo.Parent;
         public ElementsLinkedList<IRenderable> Children => RenderPipelineInfo.Children;
+        public bool RenderExpired { get; set; }
 
         #endregion
 

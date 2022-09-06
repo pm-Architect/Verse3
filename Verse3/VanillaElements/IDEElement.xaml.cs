@@ -233,7 +233,7 @@ namespace VanillaElements
 
         private void EmulatedIDEBrowser_LostFocus(object sender, RoutedEventArgs e)
         {
-            RenderPipeline.RenderRenderable(this.Element);
+            RenderingCore.Render(this.Element);
         }
     }
 

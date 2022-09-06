@@ -252,6 +252,7 @@ namespace Core
         /// </summary>
         double Height { get; set; }
         bool IsSelected { get; set; }
+        bool RenderExpired { get; set; }
 
         /// <summary>
         /// Set the height of the element Bounding Box (in content coordinates).

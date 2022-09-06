@@ -321,9 +321,9 @@ namespace Verse3.VanillaElements
             if (this.RenderPipelineInfo.Parent is IComputable)
             {
                 IComputable computable = (IComputable)this.RenderPipelineInfo.Parent;
-                ComputationPipeline.ComputeComputable(computable);
+                ComputationCore.Compute(computable);
             }
-            RenderPipeline.RenderRenderable(this.RenderPipelineInfo.Parent);
+            RenderingCore.Render(this.RenderPipelineInfo.Parent);
         }
 
         private string _name = "";
