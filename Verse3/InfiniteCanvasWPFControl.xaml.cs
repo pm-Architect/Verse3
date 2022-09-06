@@ -176,7 +176,7 @@ namespace Verse3
         }
 
         private Point currCanvasMousePosition = new Point();
-        internal System.Drawing.Point GetMouseRelPosition(object sender = null)
+        public System.Drawing.Point GetMouseRelPosition(object sender = null)
         {
             System.Drawing.Point p = new System.Drawing.Point((int)currCanvasMousePosition.X, (int)currCanvasMousePosition.Y);
             MousePositionChanged?.Invoke(sender, p);

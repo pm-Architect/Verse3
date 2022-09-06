@@ -444,7 +444,15 @@ namespace Verse3
             }
             else
             {
-                DataViewModel.WPFControl.Resources.Add(el.ViewKey, template);
+                try
+                {
+                    DataViewModel.WPFControl.Resources.Add(el.ViewKey, template);
+                }
+                catch (Exception ex)
+                {
+
+                    throw new Exception(ex.Message);
+                }
                 //el.RenderView = (IRenderView)DataViewModel.WPFControl.Resources[el.ViewKey];
                 return true;
             }

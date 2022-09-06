@@ -92,7 +92,9 @@ namespace Verse3
             }
         }
 
-        private Dictionary<string, CompInfo> LoadedLibraries = new Dictionary<string, CompInfo>();
+
+        private Dictionary<string, CompInfo> _loadedLibraries = new Dictionary<string, CompInfo>();
+        public Dictionary<string, CompInfo> LoadedLibraries { get => _loadedLibraries; private set => _loadedLibraries = value; }
         public void HotLoadLibraryFolder(string path)
         {
             if (Directory.Exists(path))
@@ -187,7 +189,7 @@ namespace Verse3
                                             int h = 10;
                                             IElement elInst = compInfo.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
                                             DataModel.Instance.Elements.Add(elInst);
-                                            DataViewModel.WPFControl.ExpandContent();
+                                            //DataViewModel.WPFControl.ExpandContent();
                                             x = 9990;
                                             y = 9990;
                                             w = 10;

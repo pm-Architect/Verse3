@@ -13,13 +13,13 @@ namespace Verse3
     public static class AssemblyCompiler
     {
         #region Properties
-        public static List<string> CompileLog { get; set; }
-        private static List<MetadataReference> references { get; set; }
+        public static List<string> CompileLog { get; set; } = new List<string>();
+        private static List<MetadataReference> references { get; set; } = new List<MetadataReference>();
         #endregion
 
         internal static void Init()
         {
-            if (references == null)
+            if (references == null || references.Count == 0)
             {
                 references = new List<MetadataReference>();
                 foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -30,12 +30,24 @@ namespace Verse3
                     }
                     var name = assembly.GetName().Name + ".dll";
                     Console.WriteLine(name);
-                    references.Add(MetadataReference.CreateFromFile(name));
+                    string loc = assembly.Location;
+                    try
+                    {
+                        if (loc != String.Empty && File.Exists(loc))
+                            references.Add(MetadataReference.CreateFromFile(loc));
+                        else
+                            CoreConsole.Log("Error loading assembly at :" + loc);
+                    }
+                    catch (Exception ex)
+                    {
+                        CoreConsole.Log(ex.Message + " at " + loc);
+                        //throw new Exception(ex.Message);
+                    }
                 }
             }
         }
 
-        internal static Assembly Compile(string code)
+        public static Assembly Compile(string code)
         {
             AssemblyCompiler.Init();
 
