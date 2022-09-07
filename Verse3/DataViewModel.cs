@@ -416,8 +416,10 @@ namespace Verse3
 
         #region Public DataTemplate Management
 
+        //TODO: Allow calling this method from another thread
         public static bool RegisterDataTemplate(IRenderable el)
         {
+            if (el == null) return false;
             if (el.ViewType == null) return false;
             var template = CreateTemplate(el.GetType(), el.ViewType);
             //el.BoundingBox = new BoundingBox();
@@ -447,6 +449,7 @@ namespace Verse3
                 try
                 {
                     DataViewModel.WPFControl.Resources.Add(el.ViewKey, template);
+                    return true;
                 }
                 catch (Exception ex)
                 {
@@ -454,7 +457,6 @@ namespace Verse3
                     throw new Exception(ex.Message);
                 }
                 //el.RenderView = (IRenderView)DataViewModel.WPFControl.Resources[el.ViewKey];
-                return true;
             }
         }
 
