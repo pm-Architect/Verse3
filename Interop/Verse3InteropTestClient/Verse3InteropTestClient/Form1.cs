@@ -23,20 +23,27 @@ namespace Verse3InteropTestClient
             client.ServerMessage += Client_ServerMessage;
         }
 
+        string lastMessage = "";
         private void Client_ServerMessage(object sender, DataStructure e)
         {
-            label1.Text = e.ToString();
+            //label1.Text = e.ToString();
+            lastMessage = e.ToString();
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-
+            timer1.Enabled = checkBox1.Checked;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             DataStructure<double> value = new DataStructure<double>((double)numericUpDown1.Value);
             client.Send(value);
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            label1.Text = lastMessage;
         }
     }
 }

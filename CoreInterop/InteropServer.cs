@@ -7,11 +7,21 @@ namespace CoreInterop
 {
     public class InteropServer
     {
+        public static InteropServer _LocalInteropServer { get; private set; }
+        internal static InteropServer _NetworkInteropServer { get; private set; }
         private NamedPipeServer<DataStructure> server;
         public InteropServer(string pipeName, string token)
         {
             //TODO: Authenticate with token
             server = new NamedPipeServer<DataStructure>(pipeName);
+            if (pipeName == "Verse3")
+            {
+                _LocalInteropServer = this;
+            }
+            else if (pipeName == "Verse3Network")
+            {
+                _NetworkInteropServer = this;
+            }
             server.ClientConnected += OnClientConnected;
             server.ClientDisconnected += OnClientDisconnected;
             server.ClientMessage += OnClientMessage;

@@ -73,10 +73,22 @@ namespace Core
     {
         protected DataStructure(SerializationInfo info, StreamingContext context) : base()
         {
-            info.GetValue("DataType", typeof(Type));
-            info.GetValue("Data", this.DataType);
+            if (info.ObjectType == typeof(DataStructure<D>))
+            {
+                //if (DataType == (Type)info.GetValue("DataType", typeof(Type)))
+                //{
+                    Data = (D)info.GetValue("Data", typeof(D));
+                //}
+            }
+            //info.GetValue("DataType", typeof(Type));
+            //info.GetValue("Data", this.DataType);
         }
-        
+        public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            //info.AddValue("DataType", DataType);
+            info.AddValue("Data", Data);
+        }
+
         //Fire an event when Data is set
         public delegate void DataChangedEventHandler(DataStructure<D> sender, DataChangedEventArgs<D> e);
         public DataChangedEventHandler DataChanged;
@@ -127,10 +139,20 @@ namespace Core
     {
         protected DataStructure(SerializationInfo info, StreamingContext context) : base()
         {
-            info.GetValue("DataType", typeof(Type));
-            info.GetValue("Data", this.DataType);
+            if (info.ObjectType == typeof(DataStructure))
+            {
+                if (DataType == (Type)info.GetValue("DataType", typeof(Type)))
+                {
+                    Data = info.GetValue("Data", DataType);
+                }
+            }
         }
-        
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("DataType", DataType);
+            info.AddValue("Data", Data);
+        }
+
         protected object volatileData = default;
         public object Data { get => volatileData; set => volatileData = value; }
         public Guid ID { get; set; }

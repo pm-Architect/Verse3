@@ -43,6 +43,20 @@ namespace Core
     public class EventArgData : DataStructure<EventArgs>
     {
         //TODO: Implement relevant fields
+        public EventArgData() : base()
+        {
+        }
+        public EventArgData(EventArgs eventargs) : base(eventargs)
+        {
+        }
+        public EventArgData(DataStructure argdata) : base()
+        {
+            this.Add(argdata);
+        }
+        public EventArgData(EventArgs eventargs, DataStructure argdata) : base(eventargs)
+        {
+            this.Add(argdata);
+        }
     }
 
     public interface IConnection : IElement
