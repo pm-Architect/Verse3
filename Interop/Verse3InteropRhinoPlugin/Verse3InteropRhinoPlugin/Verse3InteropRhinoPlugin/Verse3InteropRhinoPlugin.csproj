@@ -14,7 +14,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="RhinoCommon" Version="7.13.21348.13001" IncludeAssets="compile;build" />
+    <PackageReference Include="RhinoCommon" Version="7.0.20314.3001" IncludeAssets="compile;build" />
   </ItemGroup>
   
   <ItemGroup>

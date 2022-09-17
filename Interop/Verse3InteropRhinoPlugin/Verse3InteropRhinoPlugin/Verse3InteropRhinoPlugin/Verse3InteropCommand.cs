@@ -2,6 +2,7 @@
 using CoreInterop;
 using Rhino;
 using Rhino.Commands;
+using Rhino.DocObjects;
 using Rhino.Geometry;
 using Rhino.Input;
 using Rhino.Input.Custom;
@@ -92,11 +93,75 @@ namespace Verse3InteropRhinoPlugin
             //// ---
             //return Result.Success;
         }
+        //public delegate bool RunScriptDelegate(string script, bool echo);
+        //public delegate void ClearObjectsDelegate();
+        public delegate void ProcessMessageDelegate(double num, ref List<Guid> refGeo);
+        //public delegate Guid AddSphereDelegate(Sphere sphere);
+        //public delegate bool RemoveObjectDelegate(Guid guid, bool quiet);
+        private List<Guid> referencedGeo = new List<Guid>();
         private void Client_ServerMessage(object sender, DataStructure e)
         {
             //label1.Text = e.ToString();
             lastMessage = e.ToString();
             RhinoApp.WriteLine("InteropMessage: " + lastMessage);
+
+            //RunScriptDelegate dgt = new RunScriptDelegate(RhinoApp.RunScript);
+            //RhinoApp.InvokeOnUiThread(dgt, ("-_SelAll _Delete _Sphere 0,0,0 " + lastMessage), true);
+
+            //if (referencedGeo.Count > 0)
+            //{
+            //ClearObjectsDelegate clrdgt = new ClearObjectsDelegate(RhinoDoc.ActiveDoc.Objects.Clear);
+            //RhinoApp.InvokeOnUiThread(clrdgt);
+            //foreach (RhinoObject o in )
+            //{
+            //    RemoveObjectDelegate dgt = new RemoveObjectDelegate(RhinoDoc.ActiveDoc.Objects.Delete);
+            //    RhinoApp.InvokeOnUiThread(dgt, o.Id, true);
+            //    //RhinoDoc.ActiveDoc.Objects.Delete(guid, true);
+            //    //referencedGeo.Remove(o.Id);
+            //}
+            //}
+            if (double.TryParse(lastMessage, out double num))
+            {
+                //AddSphereDelegate dgt = new AddSphereDelegate(RhinoDoc.ActiveDoc.Objects.AddSphere);
+                //RhinoApp.InvokeOnUiThread(dgt, new Sphere(new Point3d(0, 0, 0), num));
+                ProcessMessageDelegate dgt = new ProcessMessageDelegate(ProcessMessage);
+                RhinoApp.InvokeOnUiThread(dgt, num, referencedGeo);
+                //referencedGeo.Add(RhinoDoc.ActiveDoc.Objects.AddSphere(new Sphere(new Point3d(0, 0, 0), num)));
+            }
+        }
+
+        public void ProcessMessage(double num, ref List<Guid> refGeo)
+        {
+            //RhinoDoc.ActiveDoc.Objects.Clear();
+            if (refGeo.Count > 0)
+            {
+                try
+                {
+                    foreach (Guid guid in refGeo)
+                    {
+
+                        if (refGeo.Count > 0)
+                        {
+                            RhinoDoc.ActiveDoc.Objects.Delete(guid, true);
+                            refGeo.Remove(guid);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //RhinoApp.WriteLine(ex.Message);
+                }
+            }
+            refGeo.Add(RhinoDoc.ActiveDoc.Objects.AddBox(new Box(Plane.WorldXY, new Interval((-num), num), new Interval((-num), num), new Interval((-num), num))));
+            if (refGeo.Count > 0 && RhinoDoc.ActiveDoc.Objects.Count > 0)
+            {
+                RhinoDoc.ActiveDoc.Views.Redraw();
+                return;
+            }
         }
     }
 }
