@@ -35,7 +35,7 @@ namespace Core
         public delegate void NodeEventHandler(IEventNode container, EventArgData e);
         public event NodeEventHandler NodeEvent;
         public EventArgData EventArgData { get; set; }
-        public void TriggerEvent();
+        public void TriggerEvent(EventArgData e);
         public bool EventOccured(EventArgData e);
         void ToggleActive();
     }
@@ -52,6 +52,10 @@ namespace Core
         public EventArgData(DataStructure argdata) : base()
         {
             this.Add(argdata);
+            //if (this.Count > 0)
+            //{
+            //    string data = this[0].Data.ToString();
+            //}
         }
         public EventArgData(EventArgs eventargs, DataStructure argdata) : base(eventargs)
         {

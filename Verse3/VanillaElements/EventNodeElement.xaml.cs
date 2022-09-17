@@ -277,7 +277,7 @@ namespace Verse3.VanillaElements
                 {
                     if (DataViewModel.ActiveNode.NodeType != this.NodeType)
                     {
-                        if (DataViewModel.ActiveNode.GetType() == this.GetType())
+                        if (DataViewModel.ActiveNode.GetType().BaseType == this.GetType().BaseType)
                         {
                             if (b.SetDestination(this as INode))
                             {

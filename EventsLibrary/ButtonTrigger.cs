@@ -118,11 +118,4 @@ namespace EventsLibrary
         //private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
         //public ElementsLinkedList<IRenderable> Children => _children;
     }
-
-    public class ButtonClickedEventNode : EventNodeElement
-    {
-        public ButtonClickedEventNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
-        {
-        }
-    }
 }

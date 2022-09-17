@@ -4,11 +4,11 @@ using System.Windows;
 using Verse3;
 using Verse3.VanillaElements;
 
-namespace MathLibrary
+namespace TextLibrary
 {
-    public class NumberContainer : BaseComp
+    public class TextContainer : BaseComp
     {
-        internal double _sliderValue = 0.0;
+        internal string _inputText = "";
         //private double _inputValue = 0.0;
 
         public string? ElementText
@@ -17,7 +17,7 @@ namespace MathLibrary
             {
                 string? name = this.GetType().FullName;
                 string? viewname = this.ViewType.FullName;
-                string? dataIN = Math.Round(_sliderValue, 2).ToString();
+                string? dataIN = _inputText;
                 //string? zindex = DataViewModel.WPFControl.Content.
                 //TODO: Z Index control for IRenderable
                 return $"Name: {name}" +
@@ -36,7 +36,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public NumberContainer() : base(0, 0)
+        public TextContainer() : base(0, 0)
         {
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             //Random rng = new Random();
@@ -44,7 +44,7 @@ namespace MathLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public NumberContainer(int x, int y, int width = 250, int height = 300) : base(x, y)
+        public TextContainer(int x, int y, int width = 250, int height = 300) : base(x, y)
         {
             //base.boundingBox = new BoundingBox(x, y, width, height);
 
@@ -73,9 +73,9 @@ namespace MathLibrary
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Number Slider",
+                Name = "Text Input",
                 Group = "Inputs",
-                Tab = "Math",
+                Tab = "Text",
                 Description = "",
                 Author = "",
                 License = "",
@@ -87,22 +87,27 @@ namespace MathLibrary
         }
 
         internal TextElement textBlock = new TextElement();
-        internal SliderElement sliderBlock = new SliderElement();
-        internal NumberDataNode nodeBlock;
+        internal TextBoxElement textBoxBlock = new TextBoxElement();
+        internal TextDataNode nodeBlock;
         public override void Initialize()
         {
             base.titleTextBlock.TextRotation = 0;
-            
-            sliderBlock = new SliderElement();
-            sliderBlock.Minimum = 0;
-            sliderBlock.Maximum = 100;
-            sliderBlock.Value = 50;
-            sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
-            sliderBlock.Width = 200;
-            this.ChildElementManager.AddElement(sliderBlock);
 
-            nodeBlock = new NumberDataNode(this, NodeType.Output);
-            //nodeBlock.Width = 50;
+            //sliderBlock = new SliderElement();
+            //sliderBlock.Minimum = 0;
+            //sliderBlock.Maximum = 100;
+            //sliderBlock.Value = 50;
+            //sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
+            //sliderBlock.Width = 200;
+            //this.ChildElementManager.AddElement(sliderBlock);
+
+            textBoxBlock = new TextBoxElement();
+            textBoxBlock.InputText = "";
+            textBoxBlock.ValueChanged += TextBoxBlock_OnValueChanged;
+            this.ChildElementManager.AddElement(textBoxBlock);
+
+            nodeBlock = new TextDataNode(this, NodeType.Output);
+            nodeBlock.Width = 50;
             this.ChildElementManager.AddDataOutputNode(nodeBlock, "Number");
 
             textBlock = new TextElement();
@@ -110,11 +115,11 @@ namespace MathLibrary
             textBlock.TextAlignment = TextAlignment.Left;
             this.ChildElementManager.AddElement(textBlock);
         }
-
-        private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
+        
+        private void TextBoxBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<string> e)
         {
-            this._sliderValue = sliderBlock.Value;
-            this.ChildElementManager.SetData<double>(this._sliderValue, 0);
+            this._inputText = textBoxBlock.InputText;
+            this.ChildElementManager.SetData<string>(this._inputText, 0);
             textBlock.DisplayedText = this.ElementText;
             //ComputationPipeline.ComputeComputable(this);
         }

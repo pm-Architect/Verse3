@@ -113,6 +113,7 @@ namespace Verse3.VanillaElements
 
         private string inputText;
         public string InputText { get => inputText; set => SetProperty(ref inputText, value); }
+        public EventHandler<RoutedPropertyChangedEventArgs<string>> ValueChanged { get; set; }
 
         #endregion
 

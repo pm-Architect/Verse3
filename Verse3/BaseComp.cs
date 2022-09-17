@@ -1460,9 +1460,9 @@ namespace Verse3
 
         #endregion
 
-        public void TriggerEvent()
+        public void TriggerEvent(EventArgData e)
         {
-            NodeEvent.Invoke(this, new EventArgData());
+            NodeEvent.Invoke(this, e);
             if (this.Parent is IComputable)
             {
                 ComputationCore.Compute(this.Parent as IComputable);
@@ -1471,6 +1471,7 @@ namespace Verse3
 
         public bool EventOccured(EventArgData e)
         {
+            this.EventArgData = e;
             if (this.Parent is IComputable)
             {
                 IComputable computable = this.Parent as IComputable;
@@ -1493,7 +1494,7 @@ namespace Verse3
                                             if (connection.Destination is EventNode)
                                             {
                                                 EventNode d = connection.Destination as EventNode;
-                                                d.TriggerEvent();
+                                                d.TriggerEvent(e);
                                             }
                                         }
                                     }
@@ -1597,6 +1598,8 @@ namespace Verse3
             DataViewModel.Instance.Elements.Remove(this);
             GC.SuppressFinalize(this);
         }
+
+
         ~EventNode() => Dispose();
     }
 

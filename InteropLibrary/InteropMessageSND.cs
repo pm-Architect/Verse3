@@ -4,11 +4,11 @@ using System.Windows;
 using Verse3;
 using Verse3.VanillaElements;
 
-namespace MathLibrary
+namespace InteropLibrary
 {
-    public class NumberContainer : BaseComp
+    public class InteropMessageSND : BaseComp
     {
-        internal double _sliderValue = 0.0;
+        internal string _lastMessage = "";
         //private double _inputValue = 0.0;
 
         public string? ElementText
@@ -17,7 +17,9 @@ namespace MathLibrary
             {
                 string? name = this.GetType().FullName;
                 string? viewname = this.ViewType.FullName;
-                string? dataIN = Math.Round(_sliderValue, 2).ToString();
+                string? dataIN = _lastMessage;
+                //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
+                //dataIN = ((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0])?.DataGoo.Data.ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
                 //TODO: Z Index control for IRenderable
                 return $"Name: {name}" +
@@ -25,7 +27,7 @@ namespace MathLibrary
                     $"\nID: {this.ID}" +
                     $"\nX: {this.X}" +
                     $"\nY: {this.Y}" +
-                    $"\nOutput Value: {dataIN}";
+                    $"\nLast Message: {dataIN}";
             }
         }
 
@@ -36,7 +38,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public NumberContainer() : base(0, 0)
+        public InteropMessageSND() : base(0, 0)
         {
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             //Random rng = new Random();
@@ -44,7 +46,7 @@ namespace MathLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public NumberContainer(int x, int y, int width = 250, int height = 300) : base(x, y)
+        public InteropMessageSND(int x, int y, int width = 250, int height = 100) : base(x, y)
         {
             //base.boundingBox = new BoundingBox(x, y, width, height);
 
@@ -60,7 +62,12 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            //this.ChildElementManager.SetData<double>(_sliderValue, 0);
+            this.ComputationPipelineInfo.IOManager.GetData<double>(out double dataIN, 0);
+            _lastMessage = dataIN.ToString();
+            DataStructure<string> goo = new DataStructure<string>(_lastMessage);
+            CoreInterop.InteropServer._LocalInteropServer.Send(goo);
+            textBlock.DisplayedText = this.ElementText;
+            //this.ComputationPipelineInfo.IOManager.SetData<double>(_sliderValue, 0);
             //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count == 1)
             //{
             //    if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
@@ -73,9 +80,9 @@ namespace MathLibrary
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Number Slider",
-                Group = "Inputs",
-                Tab = "Math",
+                Name = "Interop Message Send",
+                Group = "Events",
+                Tab = "Interop",
                 Description = "",
                 Author = "",
                 License = "",
@@ -87,37 +94,37 @@ namespace MathLibrary
         }
 
         internal TextElement textBlock = new TextElement();
-        internal SliderElement sliderBlock = new SliderElement();
+        //internal ButtonElement buttonBlock = new ButtonElement();
         internal NumberDataNode nodeBlock;
         public override void Initialize()
         {
             base.titleTextBlock.TextRotation = 0;
+
+            //buttonBlock = new ButtonElement();
+            //buttonBlock.DisplayedText = "Trigger";
+            //buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
+            //buttonBlock.Width = 200;
+            //this.ChildElementManager.AddElement(buttonBlock);
+            //CoreInterop.InteropServer._LocalInteropServer.ClientMessage += _LocalInteropServer_ClientMessage;
+
+            nodeBlock = new NumberDataNode(this, NodeType.Input);
+            nodeBlock.Width = 50;
+            this.ChildElementManager.AddDataInputNode<double>(nodeBlock as IDataNode<double>);
             
-            sliderBlock = new SliderElement();
-            sliderBlock.Minimum = 0;
-            sliderBlock.Maximum = 100;
-            sliderBlock.Value = 50;
-            sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
-            sliderBlock.Width = 200;
-            this.ChildElementManager.AddElement(sliderBlock);
-
-            nodeBlock = new NumberDataNode(this, NodeType.Output);
-            //nodeBlock.Width = 50;
-            this.ChildElementManager.AddDataOutputNode(nodeBlock, "Number");
-
             textBlock = new TextElement();
             textBlock.DisplayedText = this.ElementText;
             textBlock.TextAlignment = TextAlignment.Left;
             this.ChildElementManager.AddElement(textBlock);
         }
 
-        private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            this._sliderValue = sliderBlock.Value;
-            this.ChildElementManager.SetData<double>(this._sliderValue, 0);
-            textBlock.DisplayedText = this.ElementText;
-            //ComputationPipeline.ComputeComputable(this);
-        }
+        //private void _LocalInteropServer_ClientMessage(object? sender, DataStructure e)
+        //{
+        //    this.ComputationPipelineInfo.IOManager.EventOccured(0, new EventArgData(e));
+        //    _lastMessage = e.ToString();
+        //    textBlock.DisplayedText = this.ElementText;
+        //    //this.ComputationPipelineInfo.IOManager.SetData<double>(this._sliderValue, 0);
+        //    //ComputationPipeline.ComputeComputable(this);
+        //}
 
         //private IRenderable _parent;
         //public IRenderable Parent => _parent;

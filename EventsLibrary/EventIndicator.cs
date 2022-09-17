@@ -9,6 +9,7 @@ namespace EventsLibrary
     public class EventIndicator : BaseComp
     {
         internal int _counter = 0;
+        internal string _argstring = "";
         //private double _inputValue = 0.0;
 
         public string? ElementText
@@ -25,7 +26,8 @@ namespace EventsLibrary
                     //$"\nID: {this.ID}" +
                     //$"\nX: {this.X}" +
                     //$"\nY: {this.Y}" +
-                    $"Counter: {dataIN}";
+                    $"Counter: {dataIN}" +
+                    $"\nArgs: {_argstring}";
             }
         }
 
@@ -88,13 +90,14 @@ namespace EventsLibrary
 
         internal TextElement textBlock = new TextElement();
         internal SliderElement sliderBlock = new SliderElement();
-        internal ButtonClickedEventNode nodeBlock;
-        internal ButtonClickedEventNode nodeBlock1;
+        internal GenericEventNode nodeBlock;
+        internal GenericEventNode nodeBlock1;
+        internal NumberDataNode nodeBlock2;
         public override void Initialize()
         {
             base.titleTextBlock.TextRotation = 0;
 
-            nodeBlock = new ButtonClickedEventNode(this, NodeType.Input);
+            nodeBlock = new GenericEventNode(this, NodeType.Input);
             nodeBlock.Width = 50;
             nodeBlock.NodeEvent += NodeBlock_NodeEvent;
             this.ChildElementManager.AddEventInputNode(nodeBlock as IEventNode);
@@ -105,15 +108,28 @@ namespace EventsLibrary
             textBlock.TextAlignment = TextAlignment.Center;
             this.ChildElementManager.AddElement(textBlock);
 
-            nodeBlock1 = new ButtonClickedEventNode(this, NodeType.Output);
+            nodeBlock1 = new GenericEventNode(this, NodeType.Output);
             nodeBlock1.Width = 50;
             this.ChildElementManager.AddEventOutputNode(nodeBlock1 as IEventNode);
+
+            nodeBlock2 = new NumberDataNode(this, NodeType.Output);
+            nodeBlock2.Width = 50;
+            this.ChildElementManager.AddDataOutputNode<double>(nodeBlock2 as IDataNode<double>);
         }
 
         private void NodeBlock_NodeEvent(IEventNode container, EventArgData e)
         {
+            //TODO: FIX EventArgData Null problem
             _counter++;
             nodeBlock1.EventOccured(e);
+            if (e.Count == 1)
+            {
+                _argstring = e[0].Data.ToString();
+                if (double.TryParse(e[0].Data.ToString(), out double num))
+                {
+                    this.ComputationPipelineInfo.IOManager.SetData<double>(num, 0);
+                }
+            }
             textBlock.DisplayedText = this.ElementText;
         }
 

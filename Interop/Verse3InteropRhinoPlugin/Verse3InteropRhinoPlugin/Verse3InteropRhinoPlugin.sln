@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32526.322
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Verse3InteropRhinoPlugin", "Verse3InteropRhinoPlugin\Verse3InteropRhinoPlugin.csproj", "{A5290F1C-3751-414F-80B0-EBE19D424170}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A5290F1C-3751-414F-80B0-EBE19D424170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5290F1C-3751-414F-80B0-EBE19D424170}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5290F1C-3751-414F-80B0-EBE19D424170}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5290F1C-3751-414F-80B0-EBE19D424170}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F1D580D0-1F2D-4B8D-BC87-090E714EDF29}
+	EndGlobalSection
+EndGlobal

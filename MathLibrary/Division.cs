@@ -2,6 +2,7 @@
 using System;
 using System.Windows;
 using Verse3;
+using Verse3.VanillaElements;
 using TextElement = Verse3.VanillaElements.TextElement;
 
 namespace MathLibrary

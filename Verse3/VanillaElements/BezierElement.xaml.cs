@@ -399,7 +399,7 @@ namespace Verse3.VanillaElements
         public bool SetDestination(INode destination)
         {
             //TODO: Check whether destination is valid
-            bool check = (destination.GetType() == this.origin.GetType());
+            bool check = (destination.GetType().BaseType == this.origin.GetType().BaseType);
             check = check && (destination.NodeType != this.origin.NodeType);
             if (!check) return false;
             //TODO: LOOP WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

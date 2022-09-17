@@ -75,9 +75,9 @@ namespace InteropLibrary
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Interop Message Received",
-                Group = "Interop",
-                Tab = "Events",
+                Name = "Interop Message Receiver",
+                Group = "Events",
+                Tab = "Interop",
                 Description = "",
                 Author = "",
                 License = "",
@@ -91,6 +91,7 @@ namespace InteropLibrary
         internal TextElement textBlock = new TextElement();
         //internal ButtonElement buttonBlock = new ButtonElement();
         internal InteropMessageEventNode nodeBlock;
+        internal NumberDataNode nodeBlock2;
         public override void Initialize()
         {
             base.titleTextBlock.TextRotation = 0;
@@ -105,7 +106,11 @@ namespace InteropLibrary
             nodeBlock = new InteropMessageEventNode(this, NodeType.Output);
             nodeBlock.Width = 50;
             this.ChildElementManager.AddEventOutputNode(nodeBlock as IEventNode);
-            
+
+            nodeBlock2 = new NumberDataNode(this, NodeType.Output);
+            nodeBlock2.Width = 50;
+            this.ChildElementManager.AddDataOutputNode<double>(nodeBlock2 as IDataNode<double>);
+
             textBlock = new TextElement();
             textBlock.DisplayedText = this.ElementText;
             textBlock.TextAlignment = TextAlignment.Left;
@@ -117,7 +122,8 @@ namespace InteropLibrary
             this.ComputationPipelineInfo.IOManager.EventOccured(0, new EventArgData(e));
             _lastMessage = e.ToString();
             textBlock.DisplayedText = this.ElementText;
-            //this.ComputationPipelineInfo.IOManager.SetData<double>(this._sliderValue, 0);
+            if (double.TryParse(e.Data.ToString(), out double num))
+                this.ComputationPipelineInfo.IOManager.SetData<double>(num, 0);
             //ComputationPipeline.ComputeComputable(this);
         }
 
@@ -125,12 +131,5 @@ namespace InteropLibrary
         //public IRenderable Parent => _parent;
         //private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
         //public ElementsLinkedList<IRenderable> Children => _children;
-    }
-
-    public class InteropMessageEventNode : EventNodeElement
-    {
-        public InteropMessageEventNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
-        {
-        }
     }
 }
