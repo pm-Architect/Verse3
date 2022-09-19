@@ -62,10 +62,12 @@ namespace InteropLibrary
 
         public override void Compute()
         {
-            this.ComputationPipelineInfo.IOManager.GetData<double>(out double dataIN, 0);
-            _lastMessage = dataIN.ToString();
-            DataStructure<string> goo = new DataStructure<string>(_lastMessage);
-            CoreInterop.InteropServer._LocalInteropServer.Send(goo);
+            if (this.ComputationPipelineInfo.IOManager.GetData(out object dataIN, 0) != null)
+            {
+                _lastMessage = dataIN.ToString();
+                DataStructure goo = new DataStructure(dataIN);
+                CoreInterop.InteropServer._LocalInteropServer.Send(goo);
+            }
             textBlock.DisplayedText = this.ElementText;
             //this.ComputationPipelineInfo.IOManager.SetData<double>(_sliderValue, 0);
             //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count == 1)
@@ -95,7 +97,7 @@ namespace InteropLibrary
 
         internal TextElement textBlock = new TextElement();
         //internal ButtonElement buttonBlock = new ButtonElement();
-        internal NumberDataNode nodeBlock;
+        internal GenericDataNode nodeBlock;
         public override void Initialize()
         {
             base.titleTextBlock.TextRotation = 0;
@@ -107,9 +109,9 @@ namespace InteropLibrary
             //this.ChildElementManager.AddElement(buttonBlock);
             //CoreInterop.InteropServer._LocalInteropServer.ClientMessage += _LocalInteropServer_ClientMessage;
 
-            nodeBlock = new NumberDataNode(this, NodeType.Input);
+            nodeBlock = new GenericDataNode(this, NodeType.Input);
             nodeBlock.Width = 50;
-            this.ChildElementManager.AddDataInputNode<double>(nodeBlock as IDataNode<double>);
+            this.ChildElementManager.AddDataInputNode(nodeBlock);
             
             textBlock = new TextElement();
             textBlock.DisplayedText = this.ElementText;

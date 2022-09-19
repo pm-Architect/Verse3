@@ -13,7 +13,6 @@ namespace Core
         public CanvasPoint Hotspot { get; }
         public string Name { get; set; }
         public new ElementType ElementType { get/* => ElementType.Node*/; }
-
     }
 
     public interface IDataNode : INode, IDataGooContainer
@@ -72,6 +71,41 @@ namespace Core
     }
 
     #endregion
+
+    public static class NodeUtilities
+    {
+        public static bool CheckCompatibility(INode origin, INode destination)
+        {
+            if (origin.NodeType == NodeType.Input && destination.NodeType == NodeType.Output
+                || origin.NodeType == NodeType.Output && destination.NodeType == NodeType.Input)
+            {
+                if (origin is IDataNode && destination is IDataNode)
+                {
+                    if ((origin as IDataNode).DataValueType == (destination as IDataNode).DataValueType)
+                    {
+                        return true;
+                    }
+                    else if ((destination as IDataNode).DataValueType.IsAssignableFrom((origin as IDataNode).DataValueType))
+                    {
+                        return true;
+                    }
+                    else if ((origin as IDataNode).DataValueType.IsAssignableFrom((destination as IDataNode).DataValueType))
+                    {
+                        //CAST!!
+                        return true;
+                    }
+                }
+                else if (origin is IEventNode && destination is IEventNode)
+                {
+                    if ((origin as IEventNode).EventArgData.DataType == (destination as IEventNode).EventArgData.DataType)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }
 
     //public class HorizontalAlignmentConverter : IValueConverter
     //{

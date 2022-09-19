@@ -7,6 +7,8 @@ namespace CoreInterop
 {
     public class InteropClient
     {
+        //DEV NOTE: dynamic used here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        public delegate dynamic InteropDelegate(params object[] args);
         private NamedPipeClient<DataStructure> client;
         public InteropClient(string pipeName, string token)
         {

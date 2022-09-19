@@ -77,7 +77,8 @@ namespace Core
             {
                 //if (DataType == (Type)info.GetValue("DataType", typeof(Type)))
                 //{
-                    Data = (D)info.GetValue("Data", typeof(D));
+                Data = (D)info.GetValue("Data", typeof(D));
+                //DataType = typeof(D);
                 //}
             }
             //info.GetValue("DataType", typeof(Type));
@@ -85,8 +86,16 @@ namespace Core
         }
         public new void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            //info.AddValue("DataType", DataType);
-            info.AddValue("Data", Data);
+            try
+            {
+                info.AddValue("Data", Data);
+                //info.AddValue("DataType", DataType);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         //Fire an event when Data is set
@@ -141,16 +150,29 @@ namespace Core
         {
             if (info.ObjectType == typeof(DataStructure))
             {
-                if (DataType == (Type)info.GetValue("DataType", typeof(Type)))
-                {
-                    Data = info.GetValue("Data", DataType);
-                }
+                //if (DataType == (Type)info.GetValue("DataType", typeof(Type)))
+                //{
+                //    if (DataType is null)
+                //    {
+                volatileData = info.GetValue("Data", typeof(object));
+                DataType = Data.GetType();
+                //    }
+                //    else
+                //    {
+                //        Data = info.GetValue("Data", DataType);
+                //    }
+                //    //Data = info.GetValue("Data", DataType);
+                //}
             }
         }
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("DataType", DataType);
             info.AddValue("Data", Data);
+            //info.AddValue("DataType", DataType);
+            //if (this.Data != null)
+            //{
+
+            //}
         }
 
         protected object volatileData = default;
@@ -162,6 +184,7 @@ namespace Core
         public DataStructure Children { get; }
         public bool IsEmpty { get; }
         public DataAddress Address { get; }
+        //private Type dataType = default;
         public Type DataType { get; }
 
 

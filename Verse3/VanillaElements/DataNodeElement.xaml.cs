@@ -295,7 +295,7 @@ namespace Verse3.VanillaElements
                 {
                     if (DataViewModel.ActiveNode.NodeType != this.NodeType)
                     {
-                        if (DataViewModel.ActiveNode.GetType() == this.GetType())
+                        if (NodeUtilities.CheckCompatibility(DataViewModel.ActiveNode, this))
                         {
                             if (b.SetDestination(this as INode))
                             {

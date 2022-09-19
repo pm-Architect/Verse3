@@ -401,6 +401,7 @@ namespace Verse3.VanillaElements
             //TODO: Check whether destination is valid
             bool check = (destination.GetType().BaseType == this.origin.GetType().BaseType);
             check = check && (destination.NodeType != this.origin.NodeType);
+            check = NodeUtilities.CheckCompatibility(this.origin, destination);
             if (!check) return false;
             //TODO: LOOP WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //this.destination.Connections.Remove(this);

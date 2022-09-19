@@ -467,32 +467,32 @@ namespace Verse3
         {
             this._owner.RenderPipelineInfo.Children.Remove(element);
         }
-        public void AddDataOutputNode<T>(IDataNode<T> node, string name = "")
+        public int AddDataOutputNode<T>(IDataNode<T> node, string name = "")
         {
             node.Name = name;
             if (node is IRenderable) AddElement(node as IRenderable);
-            this._owner.ComputationPipelineInfo.IOManager.AddDataOutputNode<T>(node);
+            return this._owner.ComputationPipelineInfo.IOManager.AddDataOutputNode<T>(node);
         }
 
-        public void AddDataInputNode<T>(IDataNode<T> node, string name = "")
+        public int AddDataInputNode<T>(IDataNode<T> node, string name = "")
         {
             node.Name = name;
             if (node is IRenderable) AddElement(node as IRenderable);
-            this._owner.ComputationPipelineInfo.IOManager.AddDataInputNode<T>(node);
+            return this._owner.ComputationPipelineInfo.IOManager.AddDataInputNode<T>(node);
         }
 
-        public void AddEventOutputNode(IEventNode node, string name = "")
+        public int AddEventOutputNode(IEventNode node, string name = "")
         {
             node.Name = name;
             if (node is IRenderable) AddElement(node as IRenderable);
-            this._owner.ComputationPipelineInfo.IOManager.AddEventOutputNode(node);
+            return this._owner.ComputationPipelineInfo.IOManager.AddEventOutputNode(node);
         }
 
-        public void AddEventInputNode(IEventNode node, string name = "")
+        public int AddEventInputNode(IEventNode node, string name = "")
         {
             node.Name = name;
             if (node is IRenderable) AddElement(node as IRenderable);
-            this._owner.ComputationPipelineInfo.IOManager.AddEventInputNode(node);
+            return this._owner.ComputationPipelineInfo.IOManager.AddEventInputNode(node);
         }
 
         public void RemoveNode(INode node)
@@ -1031,13 +1031,25 @@ namespace Verse3
         public ComputableElementState ComputableElementState { get; set; }
         DataStructure IDataGooContainer.DataGoo
         {
-            get => this.DataGoo;
+            get => _dataGoo;
             set
             {
                 if (value is DataStructure<D>)
-                    this.DataGoo = value as DataStructure<D>;
+                    _dataGoo = value as DataStructure<D>;
                 else
-                    throw new InvalidCastException();
+                {
+                    if (value.Data.GetType().IsAssignableTo(typeof(D)))
+                    {
+                        try
+                        {
+                            _dataGoo = new DataStructure<D>((D)value.Data);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw ex;
+                        }
+                    }
+                }
             }
         }
 
@@ -1104,17 +1116,49 @@ namespace Verse3
                 foreach (IConnection conn in this.Connections)
                 {
                     //INCOMING CONNECTIONS
-                    if (conn.Destination == this && conn.Origin is IDataNode<D>)
+                    if (conn.Destination == this && conn.Origin is IDataNode)
                     {
-                        IDataNode<D> no = conn.Origin as IDataNode<D>;
-                        if (!this.DataGoo.IsValid)
+                        if (conn.Origin is IDataNode<D>)
                         {
-                            this.DataGoo.Clear();
-                            this.DataGoo.Data = no.DataGoo.Data;
+                            IDataNode<D> norigin = conn.Origin as IDataNode<D>;
+                            if (!this.DataGoo.IsValid)
+                            {
+                                this.DataGoo.Clear();
+                                this.DataGoo.Data = norigin.DataGoo.Data;
+                            }
+                            else if (!this.DataGoo.Data.Equals(norigin.DataGoo.Data))
+                            {
+                                this.DataGoo.Data = norigin.DataGoo.Data;
+                            }
                         }
-                        else if (!this.DataGoo.Data.Equals(no.DataGoo.Data))
+                        else if ((conn.Origin as IDataNode).DataValueType.IsAssignableFrom(this.DataValueType)
+                            || (conn.Origin as IDataNode).DataValueType.IsAssignableTo(this.DataValueType))
                         {
-                            this.DataGoo.Data = no.DataGoo.Data;
+                            IDataNode noriginCAST = conn.Origin as IDataNode;
+                            try
+                            {
+                                if (!this.DataGoo.IsValid)
+                                {
+                                    this.DataGoo.Clear();
+                                    if (noriginCAST.DataGoo.Data != null)
+                                    {
+                                        this.DataGoo.Data = (D)noriginCAST.DataGoo.Data;
+                                    }
+                                }
+                                else if (!this.DataGoo.Data.Equals(noriginCAST.DataGoo.Data))
+                                {
+                                    this.DataGoo.Data = (D)noriginCAST.DataGoo.Data;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+
+                                throw ex;
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Data type mismatch error");
                         }
                         //this.NodeContentColor = System.Windows.Media.Brushes.White;
                         //break;
@@ -1135,20 +1179,61 @@ namespace Verse3
             {
                 foreach (IConnection conn in this.Connections)
                 {
-                    if (conn.Origin == this && conn.Destination is IDataNode<D>)
+                    if (conn.Origin == this && conn.Destination is IDataNode)
                     {
-                        IDataNode<D> nd = conn.Destination as IDataNode<D>;
-                        if (!nd.DataGoo.IsValid)
+                        if (conn.Destination is IDataNode<D>)
                         {
-                            nd.DataGoo.Clear();
-                            nd.DataGoo.Data = this.DataGoo.Data;
+                            IDataNode<D> ndest = conn.Destination as IDataNode<D>;
+                            if (!ndest.DataGoo.IsValid)
+                            {
+                                ndest.DataGoo.Clear();
+                                ndest.DataGoo.Data = this.DataGoo.Data;
+                            }
+                            else if (!ndest.DataGoo.Data.Equals(this.DataGoo.Data))
+                            {
+                                ndest.DataGoo.Data = this.DataGoo.Data;
+                            }
                         }
-                        else if (!(nd.DataGoo.Data.Equals(this.DataGoo.Data)))
+                        else if ((conn.Destination as IDataNode).DataValueType.IsAssignableFrom(this.DataValueType)
+                            || (conn.Destination as IDataNode).DataValueType.IsAssignableTo(this.DataValueType))
                         {
-                            nd.DataGoo.Data = this.DataGoo.Data;
+                            IDataNode ndestCAST = conn.Destination as IDataNode;
+                            try
+                            {
+                                if (!ndestCAST.DataGoo.IsValid)
+                                {
+                                    ndestCAST.DataGoo.Clear();
+                                    ndestCAST.DataGoo.Data = (D)this.DataGoo.Data;
+                                }
+                                else if (!ndestCAST.DataGoo.Data.Equals(this.DataGoo.Data))
+                                {
+                                    ndestCAST.DataGoo.Data = (D)this.DataGoo.Data;
+                                }
+                                else
+                                {
+                                    ndestCAST.DataGoo.Data = (D)this.DataGoo.Data;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+
+                                throw ex;
+                            }
                         }
-                        //this.NodeContentColor = System.Windows.Media.Brushes.White;
-                        //break;
+                        else
+                        {
+                            throw new Exception("Data type mismatch error");
+                        }
+                        //IDataNode<D> nd = conn.Destination as IDataNode<D>;
+                        //if (!nd.DataGoo.IsValid)
+                        //{
+                        //    nd.DataGoo.Clear();
+                        //    nd.DataGoo.Data = this.DataGoo.Data;
+                        //}
+                        //else if (!(nd.DataGoo.Data.Equals(this.DataGoo.Data)))
+                        //{
+                        //    nd.DataGoo.Data = this.DataGoo.Data;
+                        //}
                     }
                     //OUTGOING CONNECTIONS
                     //else if (conn.Origin == n/* && conn.Destination is NodeElement*/)

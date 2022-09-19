@@ -424,7 +424,11 @@ namespace Core
         public Type GetData(out object output, int index)
         {
             output = this._dataInputNodes[index].DataGoo.Data;
-            return this._dataInputNodes[index].DataGoo.Data.GetType();
+            if (output != null)
+            {
+                return this._dataInputNodes[index].DataGoo.Data.GetType();
+            }
+            else return null;
         }
         public T GetData<T>(int index)
         {
@@ -460,9 +464,18 @@ namespace Core
 
         public bool SetData(object data, int index)
         {
-            if (this._dataOutputNodes[index].DataValueType == data.GetType())
+            if (this._dataOutputNodes[index].DataValueType.IsAssignableFrom(data.GetType()))
             {
                 this._dataOutputNodes[index].DataGoo.Data = data;
+                return true;
+            }
+            else return false;
+        }
+        public bool SetData(DataStructure data, int index)
+        {
+            if (this._dataOutputNodes[index].DataValueType.IsAssignableFrom(data.GetType()))
+            {
+                this._dataOutputNodes[index].DataGoo = data;
                 return true;
             }
             else return false;
@@ -472,6 +485,15 @@ namespace Core
             if (this._dataOutputNodes[index].DataValueType == typeof(T))
             {
                 (this._dataOutputNodes[index].DataGoo as DataStructure<T>).Data = data;
+                return true;
+            }
+            else return false;
+        }
+        public bool SetData<T>(DataStructure<T> data, int index)
+        {
+            if (this._dataOutputNodes[index].DataValueType == data.DataType)
+            {
+                this._dataOutputNodes[index].DataGoo = data;
                 return true;
             }
             else return false;

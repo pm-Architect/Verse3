@@ -43,11 +43,7 @@ namespace CoreInterop
         {
             CoreConsole.Log($"Client {connection.Id} is now connected!");
             ClientConnected.Invoke(connection, new EventArgs());
-            //connection.PushMessage(new IDataGoo
-            //{
-            //    Id = new Random().Next(),
-            //    Text = "Welcome!"
-            //});
+            connection.PushMessage(new DataStructure<string>("Connected to Verse3"));
         }
 
         public event EventHandler ClientDisconnected;
