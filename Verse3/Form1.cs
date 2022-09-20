@@ -149,10 +149,11 @@ namespace Verse3
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                //throw;
                 //throw ex;
+                System.Diagnostics.Debug.WriteLine(ex.Message);
             }
         }
 

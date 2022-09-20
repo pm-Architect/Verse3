@@ -34,7 +34,7 @@ namespace Verse3
             {
                 System.Diagnostics.Trace.WriteLine(type.FullName);
 
-                if (typeof(IElement).IsAssignableFrom(type))
+                if ((typeof(IElement).IsAssignableFrom(type)) || (type.GetInterface("IElement") != null))
                 {
                     System.Diagnostics.Trace.WriteLine($"Loading {type.FullName}");
                     var command = AssemblyCompiler.CreateRunClass(type);
