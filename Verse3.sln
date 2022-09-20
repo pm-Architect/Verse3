@@ -32,7 +32,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeLibrary", "CodeLibrary\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreInterop", "CoreInterop\CoreInterop.csproj", "{27BB1A41-4017-49E4-BA7A-106682FF3B93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteropLibrary", "InteropLibrary\InteropLibrary.csproj", "{236CA088-BAEB-4C9B-966F-F57C5CC236E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InteropLibrary", "InteropLibrary\InteropLibrary.csproj", "{236CA088-BAEB-4C9B-966F-F57C5CC236E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

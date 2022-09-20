@@ -29,6 +29,17 @@ namespace Verse3
 
             Assembly assembly = Assembly.Load(ms.ToArray());
             System.Diagnostics.Trace.WriteLine(assembly.FullName);
+            Module[] modules = assembly.GetModules();
+            foreach (Module module in modules)
+            {
+                System.Diagnostics.Trace.WriteLine(module.Name);
+                AssemblyName[] names = module.Assembly.GetReferencedAssemblies();
+                foreach (AssemblyName name in names)
+                {
+                    //TODO: Find and load referenced assemblies if they are not already loaded in the current domain
+                    
+                }
+            }
 
             foreach (var type in assembly.GetTypes())
             {

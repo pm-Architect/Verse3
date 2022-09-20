@@ -284,6 +284,15 @@ namespace Verse3InteropRhinoPlugin
                             dgt = new InteropDelegate(MakeCubeOfSize);
                             break;
                         }
+                    case Type t when typeof(GeometryBase).IsAssignableFrom(t):
+                        {
+                            if (e.Data is GeometryBase gb)
+                            {
+                                RhinoApp.WriteLine("GeometryBase: " + gb.ObjectType.ToString() + "; Value: " + e.ToString());
+                                dgt = new InteropDelegate(MakeGeometry);
+                            }
+                            break;
+                        }
                     case Type t when typeof(CommonObject).IsAssignableFrom(t):
                         {
                             RhinoApp.WriteLine("CommonObject: " + e.DataType.ToString() + "; Value: " + e.ToString());
@@ -297,10 +306,53 @@ namespace Verse3InteropRhinoPlugin
                 }
                 if (dgt != null)
                 {
-                    object[] args = { e.Data };
+                    object[] args = { e };
+                    if (referencedGeo.Count > 0)
+                    {
+                        lock (referencedGeo)
+                        {
+                            args = new object[] { e, referencedGeo };
+                            RhinoApp.InvokeOnUiThread(dgt, args);
+                        }
+                        return;
+                    }
                     RhinoApp.InvokeOnUiThread(dgt, args);
+                    return;
                 }
             }
+        }
+
+        private dynamic MakeGeometry(params object[] args)
+        {
+            if (args[1] is List<Guid> oldGuids)
+            {
+                if (oldGuids.Count > 0)
+                {
+                    foreach (Guid guid in oldGuids)
+                    {
+                        GeometryBase g = RhinoDoc.ActiveDoc.Objects.FindGeometry(guid);
+                        if (g != null)
+                        {
+                            RhinoDoc.ActiveDoc.Objects.Delete(guid, true);
+                        }
+                    }
+                    oldGuids.Clear();
+                }
+            }
+            if (args[0] is DataStructure ds)
+            {
+                if (ds.Data is GeometryBase gb)
+                {
+                    RhinoApp.WriteLine("MakeGeometry: " + gb.ObjectType.ToString() + "; Value: " + gb.ToString());
+                    Guid guid = RhinoDoc.ActiveDoc.Objects.Add(gb);
+                    if (args[1] is List<Guid> newGuids)
+                    {
+                        newGuids.Add(guid);
+                    }
+                    return guid;
+                }
+            }
+            return null;
         }
 
         private dynamic MakeCubeOfSize(params object[] args)
@@ -321,7 +373,7 @@ namespace Verse3InteropRhinoPlugin
                     oldGuids.Clear();
                 }
             }
-            if (args[0] is double num)
+            if ((args[0] as DataStructure).Data is double num)
             {
                 RhinoApp.WriteLine("Size: " + num.ToString());
                 Box b = new Box(Plane.WorldXY, new Interval((-num), num), new Interval((-num), num), new Interval((-num), num));

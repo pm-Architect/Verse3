@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Verse3RhinoInterop\Verse3RhinoInterop.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Core">
       <HintPath>..\..\..\..\CoreInterop\bin\Debug\netstandard2.0\Core.dll</HintPath>
     </Reference>
