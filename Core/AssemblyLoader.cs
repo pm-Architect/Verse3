@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace Verse3
@@ -34,23 +35,75 @@ namespace Verse3
             {
                 System.Diagnostics.Trace.WriteLine(module.Name);
                 AssemblyName[] names = module.Assembly.GetReferencedAssemblies();
-                foreach (AssemblyName name in names)
+                if (names.Length > 0)
                 {
-                    //TODO: Find and load referenced assemblies if they are not already loaded in the current domain
-                    
+                    foreach (AssemblyName name in names)
+                    {
+                        List<Assembly> loaded = AppDomain.CurrentDomain.GetAssemblies().ToList();
+                        try
+                        {
+                            if (loaded.Any(a => a.FullName == name.FullName))
+                            {
+                                continue;
+                            }
+                            //TODO: Find and load referenced assemblies if they are not already loaded in the current domain
+                            string references = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Verse3\\References\\");
+                            references = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Verse3\\Libraries\\");
+                            //references = Path.GetDirectoryName(assembly.);
+                            //references = Path.GetDirectoryName(assembly.Location);
+                            //for each file in the references folder
+                            //if the file name is the same as the referenced assembly name
+                            //load the file into the current domain
+                            foreach (string file in Directory.GetFiles(references))
+                            {
+                                if (Path.GetFileNameWithoutExtension(file) == name.Name)
+                                {
+                                    Assembly asm = Assembly.LoadFile(file);
+                                    System.Diagnostics.Trace.WriteLine("Adding Reference: " + asm.FullName + " from " + file);
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw ex;
+                        }
+                        loaded = AppDomain.CurrentDomain.GetAssemblies().ToList();
+                        if (loaded.Any(a => a.FullName == name.FullName))
+                        {
+                            System.Diagnostics.Trace.WriteLine("Added Reference: " + name.FullName);
+                        }
+                        else
+                        {
+                            throw new Exception("Loading Error: " + name.FullName);
+                        }
+                    }
                 }
             }
 
-            foreach (var type in assembly.GetTypes())
-            {
-                System.Diagnostics.Trace.WriteLine(type.FullName);
 
-                if ((typeof(IElement).IsAssignableFrom(type)) || (type.GetInterface("IElement") != null))
+            try
+            {
+                if (assembly.DefinedTypes != null)
                 {
-                    System.Diagnostics.Trace.WriteLine($"Loading {type.FullName}");
-                    var command = AssemblyCompiler.CreateRunClass(type);
-                    if (command != null) foundCommands.Add(command);
+                    assembly.ToString();
                 }
+                Type[] types = assembly.GetTypes();
+                foreach (var type in types)
+                {
+                    System.Diagnostics.Trace.WriteLine(type.FullName);
+
+                    if ((typeof(IElement).IsAssignableFrom(type)) || (type.GetInterface("IElement") != null))
+                    {
+                        System.Diagnostics.Trace.WriteLine($"Loading {type.FullName}");
+                        var command = AssemblyCompiler.CreateRunClass(type);
+                        if (command != null) foundCommands.Add(command);
+                    }
+                }
+            }
+            catch (ReflectionTypeLoadException ex1)
+            {
+
+                throw ex1;
             }
             return foundCommands;
         }
@@ -73,5 +126,10 @@ namespace Verse3
             }
             return foundCommands;
         }
+
+        //public static bool LoadReferenceAssembly(Assembly assembly)
+        //{
+
+        //}
     }
 }

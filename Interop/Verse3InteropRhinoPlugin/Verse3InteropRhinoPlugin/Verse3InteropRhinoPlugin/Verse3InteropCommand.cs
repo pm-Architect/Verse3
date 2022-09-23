@@ -293,6 +293,15 @@ namespace Verse3InteropRhinoPlugin
                             }
                             break;
                         }
+                    case Type t when typeof(RhinoGeometryWrapper).IsAssignableFrom(t):
+                        {
+                            if (e.Data is GeometryBase gb)
+                            {
+                                RhinoApp.WriteLine("GeometryBase: " + gb.ObjectType.ToString() + "; Value: " + e.ToString());
+                                dgt = new InteropDelegate(MakeGeometry);
+                            }
+                            break;
+                        }
                     case Type t when typeof(CommonObject).IsAssignableFrom(t):
                         {
                             RhinoApp.WriteLine("CommonObject: " + e.DataType.ToString() + "; Value: " + e.ToString());

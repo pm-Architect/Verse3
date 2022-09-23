@@ -1,4 +1,5 @@
 ﻿using Core;
+using CoreInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using Verse3;
 using Verse3.VanillaElements;
 using Rhino;
 using Rhino.Geometry;
+using Verse3RhinoInterop;
 
 namespace RhinoCommonLibrary
 {
@@ -28,7 +30,7 @@ namespace RhinoCommonLibrary
             double z = this.ChildElementManager.GetData<double>(2, 10);
             Box box = new Box(Plane.WorldXY, new Interval(-(x / 2), (x / 2)), new Interval(-(y / 2), (y / 2)), new Interval(-(z / 2), (z / 2)));
             GeometryBase geo = (GeometryBase)box.ToBrep();
-            this.ChildElementManager.SetData<GeometryBase>(geo, 0);
+            this.ChildElementManager.SetData<RhinoGeometryWrapper>(new RhinoGeometryWrapper(geo), 0);
             textBlock.DisplayedText = box.ToString();
         }
 

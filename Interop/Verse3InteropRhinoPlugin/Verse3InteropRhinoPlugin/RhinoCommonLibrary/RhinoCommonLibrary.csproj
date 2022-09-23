@@ -9,7 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Verse3RhinoInterop\Verse3RhinoInterop.csproj" />
+    <PackageReference Include="Rhino3dm" Version="0.3.0">
+      <IncludeAssets>compile;build</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Verse3InteropRhinoPlugin\Verse3InteropRhinoPlugin.csproj" />
   </ItemGroup>
 
   <ItemGroup>
