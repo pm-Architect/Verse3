@@ -121,6 +121,7 @@ namespace Verse3
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Trace.WriteLine(ex.Message);
                 //throw ex;
                 return null;
             }

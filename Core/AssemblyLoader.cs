@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Verse3
 {
@@ -58,14 +59,24 @@ namespace Verse3
                             {
                                 if (Path.GetFileNameWithoutExtension(file) == name.Name)
                                 {
-                                    Assembly asm = Assembly.LoadFile(file);
-                                    System.Diagnostics.Trace.WriteLine("Adding Reference: " + asm.FullName + " from " + file);
+                                    try
+                                    {
+                                        Assembly asm = Assembly.LoadFile(file);
+                                        System.Diagnostics.Trace.WriteLine("Adding Reference: " + asm.FullName + " from " + file);
+                                    }
+                                    catch (Exception ex0)
+                                    {
+                                        System.Diagnostics.Trace.WriteLine("Error Adding Reference: " + ex0.Message);
+                                        //System.Diagnostics.Trace.WriteLine("Adding Reflection Only Reference from " + file);
+                                        //Assembly asm1 = Assembly.ReflectionOnlyLoadFrom(file);
+                                    }
                                 }
                             }
                         }
                         catch (Exception ex)
                         {
-                            throw ex;
+                            System.Diagnostics.Trace.WriteLine("Error Adding Reference: " + ex.Message);
+                            //throw ex;
                         }
                         loaded = AppDomain.CurrentDomain.GetAssemblies().ToList();
                         if (loaded.Any(a => a.FullName == name.FullName))
@@ -74,7 +85,8 @@ namespace Verse3
                         }
                         else
                         {
-                            throw new Exception("Loading Error: " + name.FullName);
+                            System.Diagnostics.Trace.WriteLine("Failed to Load: " + name.FullName);
+                            //throw new Exception("Loading Error: " + name.FullName);
                         }
                     }
                 }
@@ -102,8 +114,7 @@ namespace Verse3
             }
             catch (ReflectionTypeLoadException ex1)
             {
-
-                throw ex1;
+                System.Diagnostics.Trace.WriteLine("Reflection Type Load Error: " + ex1.Message);
             }
             return foundCommands;
         }

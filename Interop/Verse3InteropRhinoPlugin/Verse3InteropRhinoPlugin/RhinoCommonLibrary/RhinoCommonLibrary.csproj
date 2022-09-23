@@ -6,12 +6,14 @@
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <UseWPF>true</UseWPF>
     <AutoGenerateBindingRedirects>True</AutoGenerateBindingRedirects>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Rhino3dm" Version="0.3.0">
       <IncludeAssets>compile;build</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>

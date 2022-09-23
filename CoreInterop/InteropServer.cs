@@ -31,11 +31,27 @@ namespace CoreInterop
 
         public void Send(DataStructure data)
         {
-            server.PushMessage(data);
+            try
+            {
+                server.PushMessage(data);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
         public void Send(DataStructure data, string clientName)
         {
-            server.PushMessage(data, clientName);
+            try
+            {
+                server.PushMessage(data, clientName);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public event EventHandler ClientConnected;

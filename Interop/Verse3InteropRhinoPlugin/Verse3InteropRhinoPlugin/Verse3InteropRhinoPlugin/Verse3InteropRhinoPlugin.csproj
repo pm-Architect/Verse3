@@ -7,6 +7,7 @@
     <Description>Description of Verse3InteropRhinoPlugin</Description>
     <TargetExt>.rhp</TargetExt>
     <UseWindowsForms>true</UseWindowsForms>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
   </PropertyGroup>
 
   <ItemGroup>
