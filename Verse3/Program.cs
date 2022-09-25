@@ -43,8 +43,8 @@ namespace Verse3
         private static void OnClientConnected(object sender, EventArgs e)
         {
             CoreConsole.Log("Client connected");
-            NamedPipeConnection<DataStructure, DataStructure> connection = (NamedPipeConnection<DataStructure, DataStructure>)sender;
-            connection.PushMessage(new DataStructure<string>("Welcome"));
+            //NamedPipeConnection<DataStructure, DataStructure> connection = (NamedPipeConnection<DataStructure, DataStructure>)sender;
+            //connection.PushMessage(new DataStructure<string>("Welcome"));
         }
 
         private static void OnClientMessage(object sender, DataStructure e)

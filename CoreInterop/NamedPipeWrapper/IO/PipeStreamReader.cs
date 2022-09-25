@@ -5,7 +5,9 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
+using ProtoBuf;
+//using System.Runtime.Serialization.Formatters.Binary;
 
 namespace NamedPipeWrapper.IO
 {
@@ -26,7 +28,7 @@ namespace NamedPipeWrapper.IO
         /// </summary>
         public bool IsConnected { get; private set; }
 
-        private readonly BinaryFormatter _binaryFormatter = new BinaryFormatter();
+        //private readonly BinaryFormatter _binaryFormatter = new BinaryFormatter();
 
         /// <summary>
         /// Constructs a new <c>PipeStreamReader</c> object that reads data from the given <paramref name="stream"/>.
@@ -68,7 +70,18 @@ namespace NamedPipeWrapper.IO
             BaseStream.Read(data, 0, len);
             using (var memoryStream = new MemoryStream(data))
             {
-                return (T) _binaryFormatter.Deserialize(memoryStream);
+                try
+                {
+                    //return Serializer.Deserialize<T>(memoryStream);
+                    XmlSerializer serializer = new XmlSerializer(typeof(T));
+                    return (T)serializer.Deserialize(memoryStream);
+                }
+                catch (Exception ex)
+                {
+                    throw new SerializationException("An object in the graph of type parameter T is not marked as serializable.", ex);
+                    //if any exception in the deserialize, it will stop named pipe wrapper, so there will ignore any exception.
+                    //return null;
+                }
             }
         }
 

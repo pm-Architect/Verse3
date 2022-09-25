@@ -5,7 +5,9 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
+using ProtoBuf;
+//using System.Runtime.Serialization.Formatters.Binary;
 
 namespace NamedPipeWrapper.IO
 {
@@ -21,7 +23,7 @@ namespace NamedPipeWrapper.IO
         /// </summary>
         public PipeStream BaseStream { get; private set; }
 
-        private readonly BinaryFormatter _binaryFormatter = new BinaryFormatter();
+        //private readonly BinaryFormatter _binaryFormatter = new BinaryFormatter();
 
         /// <summary>
         /// Constructs a new <c>PipeStreamWriter</c> object that writes to given <paramref name="stream"/>.
@@ -41,13 +43,19 @@ namespace NamedPipeWrapper.IO
             {
                 using (var memoryStream = new MemoryStream())
                 {
-                    _binaryFormatter.Serialize(memoryStream, obj);
-                    return memoryStream.ToArray();
+                    //Serializer.Serialize(memoryStream, obj);
+                    XmlSerializer serializer = new XmlSerializer(typeof(T));
+                    serializer.Serialize(memoryStream, obj);
+                    if (memoryStream.Length > 0)
+                    {
+                        return memoryStream.ToArray();
+                    }
+                    else throw new SerializationException("Serialized Memory Stream is empty. Check serializability of object.");
                 }
             }
             catch (Exception ex)
             {
-                throw new SerializationException("An object in the graph of type parameter T is not marked as serializable.", ex);
+                throw new SerializationException("An object in the graph of type parameter T could not be serialized.", ex);
                 //if any exception in the serialize, it will stop named pipe wrapper, so there will ignore any exception.
                 //return null;
             }
