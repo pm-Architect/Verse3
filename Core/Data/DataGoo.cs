@@ -1,40 +1,24 @@
-﻿using ProtoBuf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Xml.Serialization;
-//using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Core
 {
-    [ProtoContract]
     public interface IDataGoo : INotifyPropertyChanged, ISerializable
     {
-        [DataMember]
-        [ProtoMember(1)]
-        [XmlElement("Data")]
-        public string DataXml { get; }
-        //public byte[] Bytes { get; }
         public Guid ID { get; }
-        //[ProtoMember(2)]
         public IDataGoo Parent { get; }
-        //[ProtoMember(3)]
         public DataStructure Children { get; }
+        [DataMember]
+        object Data { get; set; }
         bool IsValid { get; }
         string IsValidReason { get; }
-        //[ProtoMember(4)]
         public DataAddress Address { get; }
-        [ProtoMember(5)]
         [DataMember]
-        public DataType DataType { get; }
-        //[DataMember]
-        //[ProtoMember(6)]
-        [IgnoreDataMember]
-        [XmlIgnore]
-        [ProtoIgnore]
-        object Data { get; set; }
+        public Type DataType { get; }
 
         #region INotifyPropertyChanged Members
 
@@ -142,9 +126,7 @@ namespace Core
                     DataChanged(this, new DataChangedEventArgs<D>(old, value));
             }
         }
-        [DataMember]
-        [ProtoMember(5)]
-        public new DataType DataType => typeof(D);
+        public new Type DataType => typeof(D);
 
         public DataStructure() : base()
         {
@@ -167,98 +149,34 @@ namespace Core
 
     [Serializable]
     [DataContract]
-    [ProtoContract]
     public class DataStructure : DataLinkedList<IDataGoo>, IDataGoo, ISerializable
     {
-        #region ISerializable Members
-
-        //[DataMember]
-        //[ProtoMember(1)]
         [DataMember]
-        [ProtoMember(1)]
-        [XmlElement("Data")]
-        public string DataXml
+        public byte[] Bytes
         {
-            get
-            {
-                try
-                {
-                    //Serialize the data to XML string
-                    XmlSerializer serializer = new XmlSerializer(this.Data.GetType());
-                    using (StringWriter writer = new StringWriter())
-                    {
-                        serializer.Serialize(writer, this.Data);
-                        return writer.ToString();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
-                    return ("<deserialization_error>" + ex.Message + "</deserialization_error>");
-                }
-            }
-            set
-            {
-                try
-                {
-                    //Deserialize the data from XML string
-                    XmlSerializer serializer = new XmlSerializer(this.Data.GetType());
-                    using (StringReader reader = new StringReader(value))
-                    {
-                        object temp = serializer.Deserialize(reader);
-                        if (temp.GetType() == this.Data.GetType())
-                        {
-                            this.Data = temp;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    this.Data = "<deserialization_error>" + ex.Message + "</deserialization_error>";
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
-                }
-            }
+            get => ToBytes(this);
         }
-        //public byte[] Bytes
-        //{
-        //    get
-        //    {
-        //        return DataStructure.ToBytes(this.Data);
-        //    }
-        //    set
-        //    {
-        //        try
-        //        {
-        //            this.Data = DataStructure.FromBytes(value, DataType);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            this.Data = "<deserialization_error>" + ex.Message + "</deserialization_error>";
-        //            System.Diagnostics.Debug.WriteLine(ex.Message);
-        //        }
-        //    }
-        //}
         public DataStructure(SerializationInfo info, StreamingContext context)
         {
             if (info.ObjectType == typeof(DataStructure))
             {
                 try
                 {
-                    //byte[] bytes = { };
-                    //bytes = (byte[])info.GetValue("Bytes", bytes.GetType());
-                    //DataStructure temp = DataStructure.FromBytes(bytes);
-                    //this.volatileData = temp.volatileData;
-                    //this.Children = temp.Children;
-                    //this.Parent = temp.Parent;
-                    //this.Address = temp.Address;
-                    //this.DataType = temp.DataType;
-                    //this.ID = temp.ID;
-                    //this.Data = temp.Data;
+                    byte[] bytes = { };
+                    bytes = (byte[])info.GetValue("Bytes", bytes.GetType());
+                    DataStructure temp = DataSerialization.DeserializeFromBytes(bytes);
+                    this.volatileData = temp.volatileData;
+                    this.Children = temp.Children;
+                    this.Parent = temp.Parent;
+                    this.Address = temp.Address;
+                    this.DataType = temp.DataType;
+                    this.ID = temp.ID;
+                    this.Data = temp.Data;
                     Guid checkGuid = (Guid)info.GetValue("ID", typeof(Guid));
                     if (checkGuid != ID)
                         throw new Exception("DataStructure ID does not match");
-                    object checkData = info.GetValue("Data", DataType.Type);
-                    if (checkData.GetType() != DataType.Type)
+                    object checkData = info.GetValue("Data", DataType);
+                    if (checkData.GetType() != DataType)
                         throw new Exception("DataStructure DataType does not match Data");
                     if (checkData != Data)
                         throw new Exception("DataStructure Data does not match");
@@ -275,7 +193,7 @@ namespace Core
         {
             info.AddValue("Data", Data);
             info.AddValue("ID", ID);
-            //info.AddValue("Bytes", Bytes);
+            info.AddValue("Bytes", Bytes);
             //info.AddValue("DataType", DataType);
             //if (this.Data != null)
             //{
@@ -283,32 +201,17 @@ namespace Core
             //}
         }
 
-        #endregion
-
         protected object volatileData = default;
-        //[DataMember]
-        //[ProtoMember(4)]
-        [IgnoreDataMember]
-        [XmlIgnore]
-        [ProtoIgnore]
         public object Data { get => volatileData; set => volatileData = value; }
         public Guid ID { get; set; }
         public bool IsValid { get => (this.Data != default); }
         public string IsValidReason { get; }
-        //[DataMember]
-        //[ProtoMember(2)]
         public IDataGoo Parent { get; }
-        //[DataMember]
-        //[ProtoMember(3)]
         public DataStructure Children { get; }
         public bool IsEmpty { get; }
-        //[DataMember]
-        //[ProtoMember(4)]
         public DataAddress Address { get; }
         private Type overrideDataType = default;
-        //[DataMember]
-        //[ProtoMember(5)]
-        public DataType DataType
+        public Type DataType
         {
             get
             {
@@ -358,58 +261,30 @@ namespace Core
 
         #endregion
 
-        ///// <summary>
-        ///// Called during serialization.
-        ///// Converts an object that inherits from GeometryBase
-        ///// to an array of bytes.
-        ///// </summary>
-        //public static byte[] ToBytes(DataStructure src)
-        //{
-        //    var rc = new byte[0];
-
-        //    if (src == null || src.Data == null)
-        //        return rc;
-
-        //    try
-        //    {
-        //        using (MemoryStream ms = new MemoryStream())
-        //        {
-        //            Serializer.Serialize(ms, src);
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        System.Diagnostics.Debug.WriteLine(e.Message);
-        //    }
-
-        //    return rc;
-        //}
-
         /// <summary>
         /// Called during serialization.
         /// Converts an object that inherits from GeometryBase
         /// to an array of bytes.
         /// </summary>
-        public static byte[] ToBytes(object src)
+        public static byte[] ToBytes(DataStructure src)
         {
             var rc = new byte[0];
 
-            if (src == null)
+            if (src == null || src.Data == null)
                 return rc;
 
             try
             {
-                using (MemoryStream ms = new MemoryStream())
+                var formatter = new BinaryFormatter { Binder = new InteropSerializationBinder<DataStructure>() };
+                using (var stream = new MemoryStream())
                 {
-                    //Serializer.Serialize(ms, src);
-                    XmlSerializer writer = new XmlSerializer(src.GetType());
-                    writer.Serialize(ms, src);
-                    rc = ms.ToArray();
+                    formatter.Serialize(stream, src);
+                    rc = stream.ToArray();
                 }
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(e.Message);
+                //Debug.WriteLine(e.Message);
             }
 
             return rc;
@@ -429,50 +304,16 @@ namespace Core
 
             try
             {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    Serializer.Serialize<D>(ms, src);
-                }
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine(e.Message);
-            }
-
-            return rc;
-        }
-
-        /// <summary>
-        /// Called during de-serialization.
-        /// Creates an object that inherits from GeometryBase
-        /// from an array of bytes.
-        /// </summary>
-        /// <param name="bytes">The array of bytes.</param>
-        /// <returns>The geometry if successful.</returns>
-        public static object FromBytes(byte[] bytes, Type type)
-        {
-            if (null == bytes || 0 == bytes.Length)
-                return null;
-
-            object rc = null;
-            try
-            {
+                var formatter = new BinaryFormatter { Binder = new InteropSerializationBinder<D>() };
                 using (var stream = new MemoryStream())
                 {
-                    XmlSerializer deserializer = new XmlSerializer(type);
-                    stream.Write(bytes, 0, bytes.Length);
-                    stream.Position = 0;
-                    object temp = deserializer.Deserialize(stream);
-                    if (temp.GetType() == type)
-                    {
-                        rc = temp;
-                    }
-                    else throw new InvalidCastException("Deserialized object " + temp.GetType().ToString() + " is not of type " + type.ToString());
+                    formatter.Serialize(stream, src);
+                    rc = stream.ToArray();
                 }
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(e.Message);
+                //Debug.WriteLine(e.Message);
             }
 
             return rc;
@@ -495,48 +336,23 @@ namespace Core
             {
                 using (var stream = new MemoryStream())
                 {
+                    var formatter = new BinaryFormatter { Binder = new InteropSerializationBinder<DataStructure>() };
                     stream.Write(bytes, 0, bytes.Length);
-                    stream.Position = 0;
-                    rc = Serializer.Deserialize<DataStructure>(stream);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    object data = formatter.Deserialize(stream);
+                    if (data != null && data is DataStructure)
+                    {
+                        //TODO: Check for data validity
+                        rc = data as DataStructure;
+                    }
                 }
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(e.Message);
+                //Debug.WriteLine(e.Message);
             }
 
             return rc;
-        }
-
-        /// <summary>
-        /// Called during de-serialization.
-        /// Creates an object that inherits from GeometryBase
-        /// from an array of bytes.
-        /// </summary>
-        /// <param name="bytes">The array of bytes.</param>
-        /// <returns>The geometry if successful.</returns>
-        public static Type FromBytes(byte[] bytes, ref DataStructure deserialized)
-        {
-            if (null == bytes || 0 == bytes.Length)
-                deserialized = null;
-
-            DataStructure rc = null;
-            try
-            {
-                using (var stream = new MemoryStream())
-                {
-                    stream.Write(bytes, 0, bytes.Length);
-                    stream.Position = 0;
-                    rc = Serializer.Deserialize<DataStructure>(stream);
-                }
-                deserialized = rc;
-                return deserialized.GetType();
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine(e.Message);
-                return null;
-            }
         }
 
         /// <summary>
@@ -556,48 +372,49 @@ namespace Core
             {
                 using (var stream = new MemoryStream())
                 {
+                    var formatter = new BinaryFormatter { Binder = new InteropSerializationBinder<D>() };
                     stream.Write(bytes, 0, bytes.Length);
-                    stream.Position = 0;
-                    rc = Serializer.Deserialize<D>(stream);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    object data = formatter.Deserialize(stream);
+                    if (data != null && data is D)
+                    {
+                        //TODO: Check for data validity
+                        rc = data as D;
+                    }
                 }
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(e.Message);
+                //Debug.WriteLine(e.Message);
             }
 
             return rc;
         }
 
-        ///// <summary>
-        ///// RockfishDeserializationBinder class
-        ///// </summary>
-        ///// <remarks>
-        ///// Both RhinoCommon and Rhino3dmIO have a Rhino.Geometry.GeometryBase
-        ///// class. This serialization binder help deserialize the equivalent 
-        ///// objects across the different assemblies.
-        ///// </remarks>
-        //internal class InteropSerializationBinder<D> : SerializationBinder where D : DataStructure
-        //{
-        //    public override Type BindToType(string assemblyName, string typeName)
-        //    {
-        //        var assembly = typeof(D).Assembly;
-        //        if (typeof(D).ContainsGenericParameters)
-        //        {
-        //            //foreach (Type t in typeof(D).GetGenericParameterConstraints())
-        //            //{
-        //            //}
-        //        }
-        //        assemblyName = assembly.ToString();
-        //        var type_to_deserialize = Type.GetType($"{typeName}, {assemblyName}");
-        //        return type_to_deserialize;
-        //    }
-        //}
-    }
-
-    public class SerializableDataWrapper<T>
-    {
-
+        /// <summary>
+        /// RockfishDeserializationBinder class
+        /// </summary>
+        /// <remarks>
+        /// Both RhinoCommon and Rhino3dmIO have a Rhino.Geometry.GeometryBase
+        /// class. This serialization binder help deserialize the equivalent 
+        /// objects across the different assemblies.
+        /// </remarks>
+        internal class InteropSerializationBinder<D> : SerializationBinder where D : DataStructure
+        {
+            public override Type BindToType(string assemblyName, string typeName)
+            {
+                var assembly = typeof(D).Assembly;
+                if (typeof(D).ContainsGenericParameters)
+                {
+                    //foreach (Type t in typeof(D).GetGenericParameterConstraints())
+                    //{
+                    //}
+                }
+                assemblyName = assembly.ToString();
+                var type_to_deserialize = Type.GetType($"{typeName}, {assemblyName}");
+                return type_to_deserialize;
+            }
+        }
     }
 
     public class DataChangedEventArgs<D> : DataChangedEventArgs
@@ -619,71 +436,17 @@ namespace Core
         }
     }
 
-    [ProtoContract]
-    [Serializable]
-    [DataContract]
     public class DataAddress
     {
-        [ProtoMember(1)]
-        [DataMember]
-        public string Address { get => AddressOf.ToString(); set => AddressOf = new Guid(value); }
-        public Guid AddressOf { get; private set; }
+        public IDataGoo AddressOf { get; private set; }
         public DataAddress(IDataGoo goo)
         {
-            this.AddressOf = goo.ID;
+            this.AddressOf = goo;
         }
         public override string ToString()
         {
             //TODO: IMPLEMENT DATA ADDRESS
-            return Address;
-        }
-    }
-
-    [ProtoContract]
-    [Serializable]
-    [DataContract]
-    public class DataType
-    {
-        public Type Type { get; private set; }
-        [ProtoMember(1)]
-        [DataMember]
-        public byte[] Bytes
-        {
-            get
-            {
-                return DataStructure.ToBytes(Type);
-            }
-            set
-            {
-                try
-                {
-                    Type = (Type)DataStructure.FromBytes(value, typeof(Type));
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
-                    this.Type = null;
-                }
-            }
-        }
-
-        public DataType()
-        {
-            //this.Type = null;
-        }
-
-        public DataType(Type type)
-        {
-            this.Type = type;
-        }
-
-        public static implicit operator Type(DataType v)
-        {
-            return v.Type;
-        }
-        public static implicit operator DataType(Type v)
-        {
-            return new DataType(v);
+            return base.ToString();
         }
     }
 

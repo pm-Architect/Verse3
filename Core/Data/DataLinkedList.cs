@@ -15,7 +15,6 @@ namespace Core
     [Serializable]
     [ComVisible(false)]
     [DebuggerDisplay("Count = {Count}")]
-    [DataContract]
     public class DataLinkedList<T> : ObservableCollection<T>, ICollection<T>, IEnumerable<T>, IEnumerable, ICollection, IReadOnlyCollection<T>, ISerializable, IDeserializationCallback where T : IDataGoo
     {
         #region Enumerator
@@ -1153,9 +1152,7 @@ namespace Core
     /// <summary>Represents a node in a <see cref="T:Core.CustomLinkedList<T>" />. This class cannot be inherited.</summary>
     /// <typeparam name="T">Specifies the element type of the linked list.</typeparam>
     [ComVisible(false)]
-    [Serializable]
-    [DataContract]
-    public sealed class DataLinkedListNode<T> : ISerializable where T : IDataGoo
+    public sealed class DataLinkedListNode<T> where T : IDataGoo
     {
         internal DataLinkedList<T> list;
 
@@ -1163,7 +1160,6 @@ namespace Core
 
         internal DataLinkedListNode<T> prev;
 
-        [DataMember]
         internal T item;
 
         /// <summary>Gets the <see cref="T:Core.CustomLinkedList<T>" /> that the <see cref="T:System.Collections.Generic.DataLinkedListNode`1" /> belongs to.</summary>
@@ -1240,21 +1236,12 @@ namespace Core
             this.list = list;
             item = value;
         }
-        internal DataLinkedListNode(SerializationInfo info, StreamingContext context)
-        {
-            item = (T)info.GetValue("Item", typeof(T));
-        }
 
         internal void Invalidate()
         {
             list = null;
             next = null;
             prev = null;
-        }
-
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("item", item);
         }
     }
 }
