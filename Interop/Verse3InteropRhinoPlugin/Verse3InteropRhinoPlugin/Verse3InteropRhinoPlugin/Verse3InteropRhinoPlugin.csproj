@@ -18,9 +18,6 @@
     <PackageReference Include="RhinoCommon" Version="7.0.20314.3001">
       <ExcludeAssets></ExcludeAssets>
     </PackageReference>
-    <PackageReference Include="SharpSerializer" Version="3.0.2">
-      <IncludeAssets>compile;build</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
   
   <ItemGroup>

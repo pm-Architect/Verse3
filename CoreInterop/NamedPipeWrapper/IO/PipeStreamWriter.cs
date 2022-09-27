@@ -1,4 +1,3 @@
-using Polenter.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +5,7 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
-//using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace NamedPipeWrapper.IO
 {
@@ -22,7 +21,7 @@ namespace NamedPipeWrapper.IO
         /// </summary>
         public PipeStream BaseStream { get; private set; }
 
-        //private readonly BinaryFormatter _binaryFormatter = new BinaryFormatter();
+        private readonly BinaryFormatter _binaryFormatter = new BinaryFormatter();
 
         /// <summary>
         /// Constructs a new <c>PipeStreamWriter</c> object that writes to given <paramref name="stream"/>.
@@ -42,9 +41,7 @@ namespace NamedPipeWrapper.IO
             {
                 using (var memoryStream = new MemoryStream())
                 {
-                    //_binaryFormatter.Serialize(memoryStream, obj);
-                    SharpSerializer serializer = new SharpSerializer(true);
-                    serializer.Serialize(obj, memoryStream);
+                    _binaryFormatter.Serialize(memoryStream, obj);
                     return memoryStream.ToArray();
                 }
             }

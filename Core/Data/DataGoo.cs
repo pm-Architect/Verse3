@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization;
-using Polenter.Serialization;
-//using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Core
 {
@@ -13,12 +12,12 @@ namespace Core
         public Guid ID { get; }
         public IDataGoo Parent { get; }
         public DataStructure Children { get; }
-        //[DataMember]
+        [DataMember]
         object Data { get; set; }
         bool IsValid { get; }
         string IsValidReason { get; }
         public DataAddress Address { get; }
-        //[DataMember]
+        [DataMember]
         public Type DataType { get; }
 
         #region INotifyPropertyChanged Members
@@ -276,18 +275,16 @@ namespace Core
 
             try
             {
-                //var formatter = new BinaryFormatter { Binder = new InteropSerializationBinder<DataStructure>() };
+                var formatter = new BinaryFormatter { Binder = new InteropSerializationBinder<DataStructure>() };
                 using (var stream = new MemoryStream())
                 {
-                    SharpSerializer serializer = new SharpSerializer(true);
-                    serializer.Serialize(src, stream);
-                    //formatter.Serialize(stream, src);
+                    formatter.Serialize(stream, src);
                     rc = stream.ToArray();
                 }
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(e.Message);
+                //Debug.WriteLine(e.Message);
             }
 
             return rc;
@@ -307,18 +304,16 @@ namespace Core
 
             try
             {
-                //var formatter = new BinaryFormatter { Binder = new InteropSerializationBinder<D>() };
+                var formatter = new BinaryFormatter { Binder = new InteropSerializationBinder<D>() };
                 using (var stream = new MemoryStream())
                 {
-                    SharpSerializer serializer = new SharpSerializer(true);
-                    serializer.Serialize(src, stream);
-                    //formatter.Serialize(stream, src);
+                    formatter.Serialize(stream, src);
                     rc = stream.ToArray();
                 }
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(e.Message);
+                //Debug.WriteLine(e.Message);
             }
 
             return rc;
@@ -341,12 +336,10 @@ namespace Core
             {
                 using (var stream = new MemoryStream())
                 {
-                    //var formatter = new BinaryFormatter { Binder = new InteropSerializationBinder<DataStructure>() };
+                    var formatter = new BinaryFormatter { Binder = new InteropSerializationBinder<DataStructure>() };
                     stream.Write(bytes, 0, bytes.Length);
                     stream.Seek(0, SeekOrigin.Begin);
-                    //object data = formatter.Deserialize(stream);
-                    SharpSerializer serializer = new SharpSerializer(true);
-                    object data = serializer.Deserialize(stream);
+                    object data = formatter.Deserialize(stream);
                     if (data != null && data is DataStructure)
                     {
                         //TODO: Check for data validity
@@ -356,7 +349,7 @@ namespace Core
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(e.Message);
+                //Debug.WriteLine(e.Message);
             }
 
             return rc;
@@ -379,12 +372,10 @@ namespace Core
             {
                 using (var stream = new MemoryStream())
                 {
-                    //var formatter = new BinaryFormatter { Binder = new InteropSerializationBinder<D>() };
+                    var formatter = new BinaryFormatter { Binder = new InteropSerializationBinder<D>() };
                     stream.Write(bytes, 0, bytes.Length);
                     stream.Seek(0, SeekOrigin.Begin);
-                    //object data = formatter.Deserialize(stream);
-                    SharpSerializer serializer = new SharpSerializer(true);
-                    object data = serializer.Deserialize(stream);
+                    object data = formatter.Deserialize(stream);
                     if (data != null && data is D)
                     {
                         //TODO: Check for data validity
@@ -394,7 +385,7 @@ namespace Core
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(e.Message);
+                //Debug.WriteLine(e.Message);
             }
 
             return rc;
@@ -456,50 +447,6 @@ namespace Core
         {
             //TODO: IMPLEMENT DATA ADDRESS
             return base.ToString();
-        }
-    }
-
-    public class DataType
-    {
-        public Type Type { get; private set; }
-        //[DataMember]
-        //public byte[] Bytes
-        //{
-        //    get
-        //    {
-        //        return DataStructure.ToBytes(Type);
-        //    }
-        //    set
-        //    {
-        //        try
-        //        {
-        //            Type = (Type)DataStructure.FromBytes(value, typeof(Type));
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            System.Diagnostics.Debug.WriteLine(ex.Message);
-        //            this.Type = null;
-        //        }
-        //    }
-        //}
-
-        public DataType()
-        {
-            //this.Type = null;
-        }
-
-        public DataType(Type type)
-        {
-            this.Type = type;
-        }
-
-        public static implicit operator Type(DataType v)
-        {
-            return v.Type;
-        }
-        public static implicit operator DataType(Type v)
-        {
-            return new DataType(v);
         }
     }
 

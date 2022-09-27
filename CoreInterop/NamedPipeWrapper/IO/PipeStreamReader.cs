@@ -1,12 +1,11 @@
-﻿using Polenter.Serialization;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
-//using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace NamedPipeWrapper.IO
 {
@@ -27,7 +26,7 @@ namespace NamedPipeWrapper.IO
         /// </summary>
         public bool IsConnected { get; private set; }
 
-        //private readonly BinaryFormatter _binaryFormatter = new BinaryFormatter();
+        private readonly BinaryFormatter _binaryFormatter = new BinaryFormatter();
 
         /// <summary>
         /// Constructs a new <c>PipeStreamReader</c> object that reads data from the given <paramref name="stream"/>.
@@ -65,28 +64,12 @@ namespace NamedPipeWrapper.IO
         /// <exception cref="SerializationException">An object in the graph of type parameter <typeparamref name="T"/> is not marked as serializable.</exception>
         private T ReadObject(int len)
         {
-            T? dataOut = default(T);
-            try
+            var data = new byte[len];
+            BaseStream.Read(data, 0, len);
+            using (var memoryStream = new MemoryStream(data))
             {
-                var data = new byte[len];
-                BaseStream.Read(data, 0, len);
-                using (var memoryStream = new MemoryStream(data))
-                {
-                    //object temp = _binaryFormatter.Deserialize(memoryStream);
-                    SharpSerializer serializer = new SharpSerializer(true);
-                    object temp = serializer.Deserialize(memoryStream);
-                    if (temp.GetType() == typeof(T))
-                    {
-                        dataOut = (T)temp;
-                    }
-                    else throw new Exception("Deserialized object is not of type " + typeof(T).ToString());
-                }
+                return (T) _binaryFormatter.Deserialize(memoryStream);
             }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
-            return dataOut;
         }
 
         #endregion
