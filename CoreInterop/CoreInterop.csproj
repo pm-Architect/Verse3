@@ -9,8 +9,10 @@
 
   <ItemGroup>
     <PackageReference Include="Rhino3dm" Version="0.3.0" />
+    <PackageReference Include="SharpSerializer" Version="3.0.2">
+      <IncludeAssets>compile;build</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="System.IO.Pipes.AccessControl" Version="5.0.0" />
-    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
