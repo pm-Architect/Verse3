@@ -1,4 +1,4 @@
-﻿using Core;
+using Core;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
@@ -110,6 +110,8 @@ namespace Verse3
         {
             try
             {
+                //TODO: TODO: IMPORTANT!! Implement parameter passing for parametric construction of elements at load time
+                //Use case example: License key for a paid element in a library can be passed as a parameter and checked by the constructor on load
                 var instance = Activator.CreateInstance(type) as IElement;
                 if (instance != null)
                 {
@@ -120,6 +122,7 @@ namespace Verse3
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine(ex.Message);
+                //throw ex;
                 return null;
             }
         }

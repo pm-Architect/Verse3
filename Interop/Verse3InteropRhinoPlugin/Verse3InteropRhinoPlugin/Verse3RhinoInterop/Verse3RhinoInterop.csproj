@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net48</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Rhino3dm" Version="0.3.0">
+      <IncludeAssets>compile;build</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="RhinoCommon" Version="7.0.20314.3001" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Core">
+      <HintPath>..\..\..\..\CoreInterop\bin\Debug\netstandard2.0\Core.dll</HintPath>
+    </Reference>
+    <Reference Include="CoreInterop">
+      <HintPath>..\..\..\..\CoreInterop\bin\Debug\netstandard2.0\CoreInterop.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

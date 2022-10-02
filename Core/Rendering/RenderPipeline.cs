@@ -33,6 +33,8 @@ namespace Core
             try
             {
                 //Parallel.ForEach(DataModel.Instance.Elements, e => { });
+                //TODO: Multithreading
+                //https://medium.com/@alex.puiu/parallel-foreach-async-in-c-36756f8ebe62
                 foreach (IElement e in DataModel.Instance.Elements)
                 {
                     if (e != null && e is IRenderable)

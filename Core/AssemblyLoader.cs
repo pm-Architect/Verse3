@@ -1,9 +1,10 @@
-﻿using Core;
+using Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Verse3
 {
@@ -108,6 +109,7 @@ namespace Verse3
                     }
                 }
             }
+
             catch (ReflectionTypeLoadException ex1)
             {
                 System.Diagnostics.Trace.WriteLine("Reflection Type Load Error: " + ex1.Message);
@@ -133,5 +135,10 @@ namespace Verse3
             }
             return foundCommands;
         }
+
+        //public static bool LoadReferenceAssembly(Assembly assembly)
+        //{
+
+        //}
     }
 }

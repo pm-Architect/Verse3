@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Core
 {
@@ -10,10 +12,12 @@ namespace Core
         public Guid ID { get; }
         public IDataGoo Parent { get; }
         public DataStructure Children { get; }
+        [DataMember]
         object Data { get; set; }
         bool IsValid { get; }
         string IsValidReason { get; }
         public DataAddress Address { get; }
+        [DataMember]
         public Type DataType { get; }
 
         #region INotifyPropertyChanged Members
@@ -142,32 +146,54 @@ namespace Core
             ID = Guid.NewGuid();
         }
     }
-    
+
     [Serializable]
+    [DataContract]
     public class DataStructure : DataLinkedList<IDataGoo>, IDataGoo, ISerializable
     {
-        protected DataStructure(SerializationInfo info, StreamingContext context) : base()
+        [DataMember]
+        public byte[] Bytes
+        {
+            get => ToBytes(this);
+        }
+        public DataStructure(SerializationInfo info, StreamingContext context)
         {
             if (info.ObjectType == typeof(DataStructure))
             {
-                //if (DataType == (Type)info.GetValue("DataType", typeof(Type)))
-                //{
-                //    if (DataType is null)
-                //    {
-                volatileData = info.GetValue("Data", typeof(object));
-                DataType = Data.GetType();
-                //    }
-                //    else
-                //    {
-                //        Data = info.GetValue("Data", DataType);
-                //    }
-                //    //Data = info.GetValue("Data", DataType);
-                //}
+                try
+                {
+                    byte[] bytes = { };
+                    bytes = (byte[])info.GetValue("Bytes", bytes.GetType());
+                    DataStructure temp = DataSerialization.DeserializeFromBytes(bytes);
+                    this.volatileData = temp.volatileData;
+                    this.Children = temp.Children;
+                    this.Parent = temp.Parent;
+                    this.Address = temp.Address;
+                    this.DataType = temp.DataType;
+                    this.ID = temp.ID;
+                    this.Data = temp.Data;
+                    Guid checkGuid = (Guid)info.GetValue("ID", typeof(Guid));
+                    if (checkGuid != ID)
+                        throw new Exception("DataStructure ID does not match");
+                    object checkData = info.GetValue("Data", DataType);
+                    if (checkData.GetType() != DataType)
+                        throw new Exception("DataStructure DataType does not match Data");
+                    if (checkData != Data)
+                        throw new Exception("DataStructure Data does not match");
+                    //TODO: Duplicate DataStructure
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
             }
         }
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Data", Data);
+            info.AddValue("ID", ID);
+            info.AddValue("Bytes", Bytes);
             //info.AddValue("DataType", DataType);
             //if (this.Data != null)
             //{
@@ -184,9 +210,21 @@ namespace Core
         public DataStructure Children { get; }
         public bool IsEmpty { get; }
         public DataAddress Address { get; }
-        //private Type dataType = default;
-        public Type DataType { get; }
-
+        private Type overrideDataType = default;
+        public Type DataType
+        {
+            get
+            {
+                if (overrideDataType != default)
+                    return overrideDataType;
+                return volatileData.GetType();
+            }
+            set
+            {
+                if (overrideDataType == default)
+                    overrideDataType = value;
+            }
+        }
 
         public DataStructure() : base()
         {
@@ -222,6 +260,161 @@ namespace Core
         }
 
         #endregion
+
+        /// <summary>
+        /// Called during serialization.
+        /// Converts an object that inherits from GeometryBase
+        /// to an array of bytes.
+        /// </summary>
+        public static byte[] ToBytes(DataStructure src)
+        {
+            var rc = new byte[0];
+
+            if (src == null || src.Data == null)
+                return rc;
+
+            try
+            {
+                var formatter = new BinaryFormatter { Binder = new InteropSerializationBinder<DataStructure>() };
+                using (var stream = new MemoryStream())
+                {
+                    formatter.Serialize(stream, src);
+                    rc = stream.ToArray();
+                }
+            }
+            catch (Exception e)
+            {
+                //Debug.WriteLine(e.Message);
+            }
+
+            return rc;
+        }
+
+        /// <summary>
+        /// Called during serialization.
+        /// Converts an object that inherits from GeometryBase
+        /// to an array of bytes.
+        /// </summary>
+        public static byte[] ToBytes<D>(D src) where D : DataStructure
+        {
+            var rc = new byte[0];
+
+            if (src == null || src.Data == null)
+                return rc;
+
+            try
+            {
+                var formatter = new BinaryFormatter { Binder = new InteropSerializationBinder<D>() };
+                using (var stream = new MemoryStream())
+                {
+                    formatter.Serialize(stream, src);
+                    rc = stream.ToArray();
+                }
+            }
+            catch (Exception e)
+            {
+                //Debug.WriteLine(e.Message);
+            }
+
+            return rc;
+        }
+
+        /// <summary>
+        /// Called during de-serialization.
+        /// Creates an object that inherits from GeometryBase
+        /// from an array of bytes.
+        /// </summary>
+        /// <param name="bytes">The array of bytes.</param>
+        /// <returns>The geometry if successful.</returns>
+        public static DataStructure FromBytes(byte[] bytes)
+        {
+            if (null == bytes || 0 == bytes.Length)
+                return null;
+
+            DataStructure rc = null;
+            try
+            {
+                using (var stream = new MemoryStream())
+                {
+                    var formatter = new BinaryFormatter { Binder = new InteropSerializationBinder<DataStructure>() };
+                    stream.Write(bytes, 0, bytes.Length);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    object data = formatter.Deserialize(stream);
+                    if (data != null && data is DataStructure)
+                    {
+                        //TODO: Check for data validity
+                        rc = data as DataStructure;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                //Debug.WriteLine(e.Message);
+            }
+
+            return rc;
+        }
+
+        /// <summary>
+        /// Called during de-serialization.
+        /// Creates an object that inherits from GeometryBase
+        /// from an array of bytes.
+        /// </summary>
+        /// <param name="bytes">The array of bytes.</param>
+        /// <returns>The geometry if successful.</returns>
+        public static D FromBytes<D>(byte[] bytes) where D : DataStructure
+        {
+            if (null == bytes || 0 == bytes.Length)
+                return null;
+
+            D rc = null;
+            try
+            {
+                using (var stream = new MemoryStream())
+                {
+                    var formatter = new BinaryFormatter { Binder = new InteropSerializationBinder<D>() };
+                    stream.Write(bytes, 0, bytes.Length);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    object data = formatter.Deserialize(stream);
+                    if (data != null && data is D)
+                    {
+                        //TODO: Check for data validity
+                        rc = data as D;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                //Debug.WriteLine(e.Message);
+            }
+
+            return rc;
+        }
+
+        /// <summary>
+        /// RockfishDeserializationBinder class
+        /// </summary>
+        /// <remarks>
+        /// Both RhinoCommon and Rhino3dmIO have a Rhino.Geometry.GeometryBase
+        /// class. This serialization binder help deserialize the equivalent 
+        /// objects across the different assemblies.
+        /// </remarks>
+        internal class InteropSerializationBinder<D> : SerializationBinder where D : DataStructure
+        {
+            public override Type BindToType(string assemblyName, string typeName)
+            {
+                var assembly = typeof(D).Assembly;
+                if (typeof(D).ContainsGenericParameters)
+                {
+                    //foreach (Type t in typeof(D).GetGenericParameterConstraints())
+                    //{
+                    //}
+                }
+                assemblyName = assembly.ToString();
+                var type_to_deserialize = Type.GetType($"{typeName}, {assemblyName}");
+                return type_to_deserialize;
+            }
+        }
     }
 
     public class DataChangedEventArgs<D> : DataChangedEventArgs

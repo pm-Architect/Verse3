@@ -73,6 +73,8 @@ namespace Core
                     else
                     {
                         computable.CollectData();
+                        //TODO: Create a task to compute and store the task in the computable as part of it's state
+                        //https://medium.com/@alex.puiu/parallel-foreach-async-in-c-36756f8ebe62
                         computable.Compute();
                         computable.DeliverData();
 
@@ -482,7 +484,7 @@ namespace Core
         }
         public bool SetData<T>(T data, int index)
         {
-            if (this._dataOutputNodes[index].DataValueType == typeof(T))
+            if (this._dataOutputNodes[index].DataValueType == data.GetType())
             {
                 (this._dataOutputNodes[index].DataGoo as DataStructure<T>).Data = data;
                 return true;
