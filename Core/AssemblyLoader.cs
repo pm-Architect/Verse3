@@ -1,4 +1,4 @@
-﻿using Core;
+using Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -57,7 +57,7 @@ namespace Verse3
                             //load the file into the current domain
                             foreach (string file in Directory.GetFiles(references))
                             {
-                                if (Path.GetFileNameWithoutExtension(file) == name.Name)
+                                if (Path.GetFileNameWithoutExtension(file) == name.Name && Path.GetExtension(file) == ".dll")
                                 {
                                     try
                                     {
@@ -76,7 +76,6 @@ namespace Verse3
                         catch (Exception ex)
                         {
                             System.Diagnostics.Trace.WriteLine("Error Adding Reference: " + ex.Message);
-                            //throw ex;
                         }
                         loaded = AppDomain.CurrentDomain.GetAssemblies().ToList();
                         if (loaded.Any(a => a.FullName == name.FullName))
@@ -86,15 +85,13 @@ namespace Verse3
                         else
                         {
                             System.Diagnostics.Trace.WriteLine("Failed to Load: " + name.FullName);
-                            //throw new Exception("Loading Error: " + name.FullName);
                         }
                     }
                 }
             }
-
-
             try
             {
+                assembly = Assembly.Load(ms.ToArray());
                 if (assembly.DefinedTypes != null)
                 {
                     assembly.ToString();
@@ -112,6 +109,7 @@ namespace Verse3
                     }
                 }
             }
+
             catch (ReflectionTypeLoadException ex1)
             {
                 System.Diagnostics.Trace.WriteLine("Reflection Type Load Error: " + ex1.Message);

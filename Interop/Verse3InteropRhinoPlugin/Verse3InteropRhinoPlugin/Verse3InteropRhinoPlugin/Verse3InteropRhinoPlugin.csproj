@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
@@ -13,10 +13,13 @@
   <ItemGroup>
     <EmbeddedResource Include="EmbeddedResources\**\*" />
   </ItemGroup>
-  
+
   <ItemGroup>
+    <PackageReference Include="Rhino3dm" Version="0.3.0">
+      <Aliases>R3dmIo</Aliases>
+    </PackageReference>
     <PackageReference Include="RhinoCommon" Version="7.0.20314.3001">
-      <ExcludeAssets></ExcludeAssets>
+      <Aliases>RCommon</Aliases>
     </PackageReference>
   </ItemGroup>
   
