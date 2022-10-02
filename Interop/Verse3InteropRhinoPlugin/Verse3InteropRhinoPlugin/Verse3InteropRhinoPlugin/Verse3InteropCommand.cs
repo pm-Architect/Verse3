@@ -1,15 +1,20 @@
-﻿using Core;
+﻿extern alias R3dmIo;
+extern alias RCommon;
+using Core;
 using CoreInterop;
-using Rhino;
-using Rhino.Commands;
-using Rhino.DocObjects;
-using Rhino.Geometry;
-using Rhino.Input;
-using Rhino.Input.Custom;
-using Rhino.Runtime;
+using RCommon::Rhino;
+using RCommon::Rhino.Commands;
+using RCommon::Rhino.Input;
+using RCommon::Rhino.Input.Custom;
+using RCommon::Rhino.Runtime;
+using RCommon::Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using static CoreInterop.InteropClient;
+
+using R3 = R3dmIo::Rhino.Geometry;
+using RC = RCommon::Rhino.Geometry;
+using RCommon::Rhino.DocObjects;
 
 namespace Verse3InteropRhinoPlugin
 {
@@ -48,7 +53,7 @@ namespace Verse3InteropRhinoPlugin
                 client.Error += Client_Error;
                 RhinoApp.WriteLine("Last Message: " + lastMessage);
             }
-            using (GetNumber gs = new GetNumber())
+            using (GetObject gs = new GetObject())
             {
                 gs.SetCommandPrompt("Enter a message to send to Verse3");
                 gs.AcceptNothing(true);
@@ -86,7 +91,19 @@ namespace Verse3InteropRhinoPlugin
                     case GetResult.Rectangle2d:
                         break;
                     case GetResult.Object:
-                        break;
+                        {
+                            ObjRef obj = gs.Object(0);
+                            RC.GeometryBase geoObj = obj.Geometry();
+                            if (geoObj != null && geoObj.IsValid)
+                            {
+                                R3.GeometryBase geoOut = RhCommon3dmConverterSingleton.ConvertGeometryBaseToR3dm(geoObj);
+                                RhinoApp.WriteLine("Sent Geometry: " + geoOut.ToString());
+                                DataStructure<R3.GeometryBase> goo = new DataStructure<R3.GeometryBase>(geoOut);
+                                client.Send(goo);
+                                return Result.Success;
+                            }
+                            return Result.Failure;
+                        }
                     case GetResult.String:
                         {
                             string outMessage = gs.StringResult();
@@ -139,44 +156,6 @@ namespace Verse3InteropRhinoPlugin
                 //DataStructure<string> goo = new DataStructure<string>(outMessage);
                 //client.Send(goo);
             }
-
-            // TODO: start here modifying the behaviour of your command.
-            // ---
-            //RhinoApp.WriteLine("The {0} command will add a line right now.", EnglishName);
-
-            //Point3d pt0;
-            //using (GetPoint getPointAction = new GetPoint())
-            //{
-            //    getPointAction.SetCommandPrompt("Please select the start point");
-            //    if (getPointAction.Get() != GetResult.Point)
-            //    {
-            //        RhinoApp.WriteLine("No start point was selected.");
-            //        return getPointAction.CommandResult();
-            //    }
-            //    pt0 = getPointAction.Point();
-            //}
-
-            //Point3d pt1;
-            //using (GetPoint getPointAction = new GetPoint())
-            //{
-            //    getPointAction.SetCommandPrompt("Please select the end point");
-            //    getPointAction.SetBasePoint(pt0, true);
-            //    getPointAction.DynamicDraw +=
-            //      (sender, e) => e.Display.DrawLine(pt0, e.CurrentPoint, System.Drawing.Color.DarkRed);
-            //    if (getPointAction.Get() != GetResult.Point)
-            //    {
-            //        RhinoApp.WriteLine("No end point was selected.");
-            //        return getPointAction.CommandResult();
-            //    }
-            //    pt1 = getPointAction.Point();
-            //}
-
-            //doc.Objects.AddLine(pt0, pt1);
-            //doc.Views.Redraw();
-            //RhinoApp.WriteLine("The {0} command added one line to the document.", EnglishName);
-
-            //// ---
-            //return Result.Success;
         }
 
         private void Client_Error(object sender, Exception e)
@@ -289,6 +268,59 @@ namespace Verse3InteropRhinoPlugin
                             RhinoApp.WriteLine("CommonObject: " + e.DataType.ToString() + "; Value: " + e.ToString());
                             break;
                         }
+                    case Type t when typeof(DataStructure).IsAssignableFrom(t):
+                        {
+                            RhinoApp.WriteLine("DataStructure: " + e.DataType.ToString() + "; Value: " + e.ToString());
+                            break;
+                        }
+                    case Type t when typeof(R3.GeometryBase).IsAssignableFrom(t):
+                        {
+                            RhinoApp.WriteLine("Rhino3dm Geometry: " + e.DataType.ToString() + "; Value: " + e.ToString());
+                            //dgt = new InteropDelegate(MakeGeometry);
+                            //if (args[1] is List<Guid> oldGuids)
+                            //{
+                            if (oldGuids.Count > 0)
+                            {
+                                foreach (Guid guid in oldGuids)
+                                {
+                                    GeometryBase g = RhinoDoc.ActiveDoc.Objects.FindGeometry(guid);
+                                    if (g != null)
+                                    {
+                                        RhinoDoc.ActiveDoc.Objects.Delete(guid, true);
+                                    }
+                                }
+                                oldGuids.Clear();
+                            }
+                            //}
+                            if (e.Data is RC.GeometryBase geo)
+                            {
+                                Guid id = RhinoDoc.ActiveDoc.Objects.Add(geo);
+                                oldGuids.Add(id);
+                                //return id;
+                            }
+                            else if (e.Data is R3.GeometryBase geor3)
+                            {
+                                try
+                                {
+                                    RC.GeometryBase geoconv = RhCommon3dmConverterSingleton.ConvertGeometryBaseToRhinoCommon(geor3);
+                                    Guid id = RhinoDoc.ActiveDoc.Objects.Add(geoconv);
+                                    oldGuids.Add(id);
+                                    //return id;
+                                }
+                                catch (Exception ex)
+                                {
+                                    throw ex;
+                                }
+                            }
+                            RhinoDoc.ActiveDoc.Views.Redraw();
+                            break;
+                        }
+                    case Type t when typeof(RC.GeometryBase).IsAssignableFrom(t):
+                        {
+                            RhinoApp.WriteLine("RhinoCommon Geometry: " + e.DataType.ToString() + "; Value: " + e.ToString());
+                            dgt = new InteropDelegate(MakeGeometry);
+                            break;
+                        }
                     default:
                         {
                             RhinoApp.WriteLine("Unhandled Type: " + e.DataType.ToString() + "; Value: " + e.ToString());
@@ -303,6 +335,50 @@ namespace Verse3InteropRhinoPlugin
             }
         }
 
+        //DEV NOTE: Dynamic used here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        private List<Guid> oldGuids = new List<Guid>();
+        private dynamic MakeGeometry(params object[] args)
+        {
+            RhinoApp.WriteLine("MakeGeo: " + args.ToString());
+            //if (args[1] is List<Guid> oldGuids)
+            //{
+            if (oldGuids.Count > 0)
+            {
+                foreach (Guid guid in oldGuids)
+                {
+                    GeometryBase g = RhinoDoc.ActiveDoc.Objects.FindGeometry(guid);
+                    if (g != null)
+                    {
+                        RhinoDoc.ActiveDoc.Objects.Delete(guid, true);
+                    }
+                }
+                oldGuids.Clear();
+            }
+            //}
+            if (args[0] is RC.GeometryBase geo)
+            {
+                Guid id = RhinoDoc.ActiveDoc.Objects.Add(geo);
+                oldGuids.Add(id);
+                return id;
+            }
+            else if (args[0] is R3.GeometryBase geor3)
+            {
+                try
+                {
+                    RC.GeometryBase geoconv = RhCommon3dmConverterSingleton.ConvertGeometryBaseToRhinoCommon(geor3);
+                    Guid id = RhinoDoc.ActiveDoc.Objects.Add(geoconv);
+                    oldGuids.Add(id);
+                    return id;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            return null;
+        }
+
+        //DEV NOTE: Dynamic used here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         private dynamic MakeCubeOfSize(params object[] args)
         {
             RhinoApp.WriteLine("MakeCubeOfSize: " + args.ToString());
@@ -329,41 +405,5 @@ namespace Verse3InteropRhinoPlugin
             }
             return null;
         }
-
-        //public DataStructure MakeCubeOfSize(ref List<Guid> refGeo, double num)
-        //{
-        //    //RhinoDoc.ActiveDoc.Objects.Clear();
-        //    if (refGeo.Count > 0)
-        //    {
-        //        try
-        //        {
-        //            for (int i = 0; i < refGeo.Count; i++)
-        //            {
-
-        //                if (refGeo.Count > 0)
-        //                {
-        //                    Guid guid = new Guid(refGeo[i].ToString());
-        //                    RhinoDoc.ActiveDoc.Objects.Delete(guid, true);
-        //                    refGeo.RemoveAt(i);
-        //                }
-        //                else
-        //                {
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            //RhinoApp.WriteLine(ex.Message);
-        //        }
-        //    }
-        //    refGeo.Add(RhinoDoc.ActiveDoc.Objects.AddBox(new Box(Plane.WorldXY, new Interval((-num), num), new Interval((-num), num), new Interval((-num), num))));
-        //    if (refGeo.Count > 0 && RhinoDoc.ActiveDoc.Objects.Count > 0)
-        //    {
-        //        RhinoDoc.ActiveDoc.Views.Redraw();
-        //        DataStructure<Guid> returnGeo = new DataStructure<Guid>();
-        //    }
-        //    return new DataStructure();
-        //}
     }
 }

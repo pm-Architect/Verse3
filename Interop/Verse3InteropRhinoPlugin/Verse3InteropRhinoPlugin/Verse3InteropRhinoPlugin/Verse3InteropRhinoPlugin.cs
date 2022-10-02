@@ -1,4 +1,4 @@
-﻿using Rhino;
+﻿extern alias RCommon;
 using System;
 
 namespace Verse3InteropRhinoPlugin
@@ -11,7 +11,7 @@ namespace Verse3InteropRhinoPlugin
     /// attributes in AssemblyInfo.cs (you might need to click "Project" ->
     /// "Show All Files" to see it in the "Solution Explorer" window).</para>
     ///</summary>
-    public class Verse3InteropRhinoPlugin : Rhino.PlugIns.PlugIn
+    public class Verse3InteropRhinoPlugin : RCommon::Rhino.PlugIns.PlugIn
     {
         public Verse3InteropRhinoPlugin()
         {
