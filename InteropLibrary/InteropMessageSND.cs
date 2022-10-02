@@ -62,7 +62,8 @@ namespace InteropLibrary
 
         public override void Compute()
         {
-            if (this.ComputationPipelineInfo.IOManager.GetData(out object dataIN, 0) != null)
+            object dataIN = this.ChildElementManager.GetData<object>(0);
+            if (dataIN != null)
             {
                 _lastMessage = dataIN.ToString();
                 DataStructure goo = new DataStructure(dataIN);

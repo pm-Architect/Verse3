@@ -17,7 +17,7 @@ namespace Core
         bool IsValid { get; }
         string IsValidReason { get; }
         public DataAddress Address { get; }
-        [DataMember]
+        //[DataMember]
         public Type DataType { get; }
 
         #region INotifyPropertyChanged Members
@@ -95,10 +95,9 @@ namespace Core
                 info.AddValue("Data", Data);
                 //info.AddValue("DataType", DataType);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                throw ex;
             }
         }
 
@@ -151,7 +150,7 @@ namespace Core
     [DataContract]
     public class DataStructure : DataLinkedList<IDataGoo>, IDataGoo, ISerializable
     {
-        [DataMember]
+        //[DataMember]
         public byte[] Bytes
         {
             get => ToBytes(this);
@@ -162,20 +161,21 @@ namespace Core
             {
                 try
                 {
-                    byte[] bytes = { };
-                    bytes = (byte[])info.GetValue("Bytes", bytes.GetType());
-                    DataStructure temp = DataSerialization.DeserializeFromBytes(bytes);
-                    this.volatileData = temp.volatileData;
-                    this.Children = temp.Children;
-                    this.Parent = temp.Parent;
-                    this.Address = temp.Address;
-                    this.DataType = temp.DataType;
-                    this.ID = temp.ID;
-                    this.Data = temp.Data;
-                    Guid checkGuid = (Guid)info.GetValue("ID", typeof(Guid));
-                    if (checkGuid != ID)
-                        throw new Exception("DataStructure ID does not match");
+                    //byte[] bytes = { };
+                    //bytes = (byte[])info.GetValue("Bytes", bytes.GetType());
+                    //DataStructure temp = DataSerialization.DeserializeFromBytes(bytes);
+                    //this.volatileData = temp.volatileData;
+                    //this.Children = temp.Children;
+                    //this.Parent = temp.Parent;
+                    //this.Address = temp.Address;
+                    //this.DataType = temp.DataType;
+                    //this.ID = temp.ID;
+                    //this.Data = temp.Data;
+                    //Guid checkGuid = (Guid)info.GetValue("ID", typeof(Guid));
+                    //if (checkGuid != ID)
+                        //throw new Exception("DataStructure ID does not match");
                     object checkData = info.GetValue("Data", DataType);
+                    this.Data = checkData;
                     if (checkData.GetType() != DataType)
                         throw new Exception("DataStructure DataType does not match Data");
                     if (checkData != Data)
@@ -184,16 +184,16 @@ namespace Core
                 }
                 catch (Exception ex)
                 {
-
-                    throw ex;
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    //throw ex;
                 }
             }
         }
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("Data", Data);
-            info.AddValue("ID", ID);
-            info.AddValue("Bytes", Bytes);
+            //info.AddValue("ID", ID);
+            //info.AddValue("Bytes", Bytes);
             //info.AddValue("DataType", DataType);
             //if (this.Data != null)
             //{
@@ -202,6 +202,7 @@ namespace Core
         }
 
         protected object volatileData = default;
+        [DataMember]
         public object Data { get => volatileData; set => volatileData = value; }
         public Guid ID { get; set; }
         public bool IsValid { get => (this.Data != default); }
@@ -217,7 +218,9 @@ namespace Core
             {
                 if (overrideDataType != default)
                     return overrideDataType;
-                return volatileData.GetType();
+                if (volatileData != default)
+                    return volatileData.GetType();
+                else return typeof(object);
             }
             set
             {

@@ -37,7 +37,6 @@ namespace CoreInterop
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -49,7 +48,6 @@ namespace CoreInterop
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }

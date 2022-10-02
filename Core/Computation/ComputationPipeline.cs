@@ -484,7 +484,8 @@ namespace Core
         }
         public bool SetData<T>(T data, int index)
         {
-            if (this._dataOutputNodes[index].DataValueType == data.GetType())
+            if (data == null) return false;
+            if (this._dataOutputNodes[index].DataValueType.IsAssignableFrom(data.GetType()))
             {
                 (this._dataOutputNodes[index].DataGoo as DataStructure<T>).Data = data;
                 return true;

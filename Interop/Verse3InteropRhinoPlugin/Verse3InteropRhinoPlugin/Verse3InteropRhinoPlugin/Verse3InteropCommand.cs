@@ -177,7 +177,6 @@ namespace Verse3InteropRhinoPlugin
         private List<Guid> referencedGeo = new List<Guid>();
         private void Client_ServerMessage(object sender, DataStructure e)
         {
-            //label1.Text = e.ToString();
             if (!e.IsValid)
             {
                 RhinoApp.WriteLine("Warning: Invalid Message Data");
@@ -186,32 +185,6 @@ namespace Verse3InteropRhinoPlugin
             {
                 lastMessage = e.ToString();
                 RhinoApp.WriteLine("InteropMessage: " + lastMessage);
-
-                //RunScriptDelegate dgt = new RunScriptDelegate(RhinoApp.RunScript);
-                //RhinoApp.InvokeOnUiThread(dgt, ("-_SelAll _Delete _Sphere 0,0,0 " + lastMessage), true);
-
-                //if (referencedGeo.Count > 0)
-                //{
-                //ClearObjectsDelegate clrdgt = new ClearObjectsDelegate(RhinoDoc.ActiveDoc.Objects.Clear);
-                //RhinoApp.InvokeOnUiThread(clrdgt);
-                //foreach (RhinoObject o in )
-                //{
-                //    RemoveObjectDelegate dgt = new RemoveObjectDelegate(RhinoDoc.ActiveDoc.Objects.Delete);
-                //    RhinoApp.InvokeOnUiThread(dgt, o.Id, true);
-                //    //RhinoDoc.ActiveDoc.Objects.Delete(guid, true);
-                //    //referencedGeo.Remove(o.Id);
-                //}
-                //}
-                //if (double.TryParse(lastMessage, out double num))
-                //{
-                //AddSphereDelegate dgt = new AddSphereDelegate(RhinoDoc.ActiveDoc.Objects.AddSphere);
-                //RhinoApp.InvokeOnUiThread(dgt, new Sphere(new Point3d(0, 0, 0), num));
-                //ProcessMessageDelegate dgt = new ProcessMessageDelegate(ProcessMessage);
-                //RhinoApp.InvokeOnUiThread(dgt, num, referencedGeo);
-                //referencedGeo.Add(RhinoDoc.ActiveDoc.Objects.AddSphere(new Sphere(new Point3d(0, 0, 0), num)));
-                //}
-                //else
-                //{
                 Type dt = e.DataType;
                 if (dt is null)
                 {
@@ -272,15 +245,6 @@ namespace Verse3InteropRhinoPlugin
                             }
                             break;
                         }
-                    case Type t when typeof(RhinoGeometryWrapper).IsAssignableFrom(t):
-                        {
-                            if (e.Data is GeometryBase gb)
-                            {
-                                RhinoApp.WriteLine("GeometryBase: " + gb.ObjectType.ToString() + "; Value: " + e.ToString());
-                                dgt = new InteropDelegate(MakeGeometry);
-                            }
-                            break;
-                        }
                     case Type t when typeof(CommonObject).IsAssignableFrom(t):
                         {
                             RhinoApp.WriteLine("CommonObject: " + e.DataType.ToString() + "; Value: " + e.ToString());
@@ -294,9 +258,6 @@ namespace Verse3InteropRhinoPlugin
                     case Type t when typeof(R3.GeometryBase).IsAssignableFrom(t):
                         {
                             RhinoApp.WriteLine("Rhino3dm Geometry: " + e.DataType.ToString() + "; Value: " + e.ToString());
-                            //dgt = new InteropDelegate(MakeGeometry);
-                            //if (args[1] is List<Guid> oldGuids)
-                            //{
                             if (oldGuids.Count > 0)
                             {
                                 foreach (Guid guid in oldGuids)
@@ -309,14 +270,7 @@ namespace Verse3InteropRhinoPlugin
                                 }
                                 oldGuids.Clear();
                             }
-                            //}
-                            if (e.Data is RC.GeometryBase geo)
-                            {
-                                Guid id = RhinoDoc.ActiveDoc.Objects.Add(geo);
-                                oldGuids.Add(id);
-                                //return id;
-                            }
-                            else if (e.Data is R3.GeometryBase geor3)
+                            if (e.Data is R3.GeometryBase geor3)
                             {
                                 try
                                 {
@@ -347,53 +301,20 @@ namespace Verse3InteropRhinoPlugin
                 }
                 if (dgt != null)
                 {
-                    object[] args = { e };
-                    if (referencedGeo.Count > 0)
-                    {
-                        lock (referencedGeo)
-                        {
-                            args = new object[] { e, referencedGeo };
-                            RhinoApp.InvokeOnUiThread(dgt, args);
-                        }
-                        return;
-                    }
+                    object[] args = { e.Data };
+                    //if (referencedGeo.Count > 0)
+                    //{
+                    //    lock (referencedGeo)
+                    //    {
+                    //        args = new object[] { e, referencedGeo };
+                    //        RhinoApp.InvokeOnUiThread(dgt, args);
+                    //    }
+                    //    return;
+                    //}
                     RhinoApp.InvokeOnUiThread(dgt, args);
                     return;
                 }
             }
-        }
-
-        private dynamic MakeGeometry(params object[] args)
-        {
-            if (args[1] is List<Guid> oldGuids)
-            {
-                if (oldGuids.Count > 0)
-                {
-                    foreach (Guid guid in oldGuids)
-                    {
-                        GeometryBase g = RhinoDoc.ActiveDoc.Objects.FindGeometry(guid);
-                        if (g != null)
-                        {
-                            RhinoDoc.ActiveDoc.Objects.Delete(guid, true);
-                        }
-                    }
-                    oldGuids.Clear();
-                }
-            }
-            if (args[0] is DataStructure ds)
-            {
-                if (ds.Data is GeometryBase gb)
-                {
-                    RhinoApp.WriteLine("MakeGeometry: " + gb.ObjectType.ToString() + "; Value: " + gb.ToString());
-                    Guid guid = RhinoDoc.ActiveDoc.Objects.Add(gb);
-                    if (args[1] is List<Guid> newGuids)
-                    {
-                        newGuids.Add(guid);
-                    }
-                    return guid;
-                }
-            }
-            return null;
         }
 
         //DEV NOTE: Dynamic used here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
