@@ -51,9 +51,22 @@ namespace VanillaElements
         {
             InitializeComponent();
             EmulatedIDEBrowser.WebMessageReceived += WebMessageReceived;
+            EmulatedIDEBrowser.NavigationCompleted += EmulatedIDEBrowser_NavigationCompleted;
             //Get path of MonacoEditor folder in AppData
             string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Verse3\\MonacoEditor";
             this.EmulatedIDEBrowser.Source = new Uri(System.IO.Path.Combine(path, "index.html"));
+        }
+
+        private void EmulatedIDEBrowser_NavigationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e)
+        {
+            SetScript("");
+            string path1 = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Verse3", "DefaultScripts",
+                "CSharpDefaultScript.cs");
+            if (File.Exists(path1))
+            {
+                string script = File.ReadAllText(path1);
+                SetScript(script);
+            }
         }
 
 
@@ -235,11 +248,25 @@ namespace VanillaElements
         {
             RenderingCore.Render(this.Element);
         }
+
+        internal void SetScript(string v)
+        {
+            v = System.Web.HttpUtility.JavaScriptStringEncode(v);
+            ExecuteJS("setValue(\"" + v + "\");");
+        }
     }
 
     public class IDEElement : BaseElement
     {
         public override Type ViewType => typeof(IDEElementView);
+
+        public void SetScript(string v)
+        {
+            if (this.RenderView != null)
+            {
+                (this.RenderView as IDEElementView).SetScript(v);
+            }
+        }
 
         public override ElementType ElementType { get => ElementType.UIElement; set => base.ElementType = ElementType.UIElement; }
 

@@ -2,6 +2,7 @@
 //using EventsLibrary;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 using VanillaElements;
@@ -21,7 +22,7 @@ namespace CodeLibrary
             {
                 string? name = this.GetType().FullName;
                 string? viewname = this.ViewType.FullName;
-                string? dataIN = _script;
+                string? dataIN = "";
                 //string? dataIN = "";
                 if (_log.Count > 1)
                 {
@@ -89,16 +90,12 @@ namespace CodeLibrary
 
         public override void Compute()
         {
-            //double a = this.ChildElementManager.GetData<double>(0, 0);
-            //double b = this.ChildElementManager.GetData<double>(1, 0);
-            //this.ChildElementManager.SetData<double>((a + b), 0);
-            _script = this.ideElement.Script;
-            //TODO: Compile the script and display the output
-
             try
             {
-                Assembly a = AssemblyCompiler.Compile(_script);
-                List<IElement> elements = new List<IElement>(AssemblyLoader.Load(a)); foreach (IElement element in elements)
+                _script = this.ideElement.Script;
+                Assembly a = AssemblyCompiler.Compile(_script, "RuntimeCompiled_CSharp_Verse3");
+                List<IElement> elements = new List<IElement>(AssemblyLoader.Load(a));
+                foreach (IElement element in elements)
                 {
                     CoreConsole.Log(element.ID.ToString());
                     if (element is IRenderable)
@@ -142,7 +139,18 @@ namespace CodeLibrary
                                         IElement? elInst = compInfo.ConstructorInfo.Invoke(args) as IElement;
                                         try
                                         {
-                                            DataModel.Instance.Elements.Add(elInst);
+                                            //TODO: LOAD/INSTANTIATE ASSEMBLY INTO RIBBON AND ON CANVAS
+                                            
+                                            //Application.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
+                                            //{
+                                            //    Main_Verse3.ActiveMain.ActiveEditor.AddToArsenal(compInfo);
+                                            //});
+                                            //DataViewModel.AddElement(elInst);
+                                            //Action addElement = () =>
+                                            //{
+                                            //    DataViewModel.Instance.Elements.Add(elInst);
+                                            //};
+                                            //addElement.Invoke();
                                         }
                                         catch (Exception ex)
                                         {
@@ -174,6 +182,7 @@ namespace CodeLibrary
         private TextElement textBlock = new TextElement();
         private IDEElement ideElement = new IDEElement();
         internal ButtonElement buttonBlock = new ButtonElement();
+        internal ButtonElement buttonBlock1 = new ButtonElement();
         private List<string> _log = new List<string>();
 
         //private ButtonClickedEventNode nodeBlock;
@@ -209,11 +218,30 @@ namespace CodeLibrary
             buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
             this.ChildElementManager.AddElement(buttonBlock);
 
+            buttonBlock1 = new ButtonElement();
+            buttonBlock1.DisplayedText = "Load Instance";
+            buttonBlock1.OnButtonClicked += ButtonBlock1_OnButtonClicked;
+            this.ChildElementManager.AddElement(buttonBlock1);
+
             textBlock = new TextElement();
             textBlock.DisplayedText = this.ElementText;
             textBlock.TextAlignment = TextAlignment.Left;
             textBlock.BoundingBox.Size.Width = 600;
             this.ChildElementManager.AddElement(textBlock);
+        }
+
+        private void ButtonBlock1_OnButtonClicked(object? sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                _log.Add(ex.Message);
+                textBlock.DisplayedText = this.ElementText;
+                //throw ex;
+            }
         }
 
         private void IdeElement_ScriptChanged(object? sender, EventArgs e)

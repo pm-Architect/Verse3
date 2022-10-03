@@ -47,7 +47,7 @@ namespace Verse3
             }
         }
 
-        public static Assembly Compile(string code)
+        public static Assembly Compile(string code, string asmName)
         {
             AssemblyCompiler.Init();
 
@@ -65,7 +65,7 @@ namespace Verse3
 
             CompileLog.Add("Parse SyntaxTree Success");
 
-            CSharpCompilation compilation = CSharpCompilation.Create("Verse3.Vanilla", new[] { syntaxTree },
+            CSharpCompilation compilation = CSharpCompilation.Create(asmName, new[] { syntaxTree },
                 references, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
             using (MemoryStream stream = new MemoryStream())
@@ -97,7 +97,7 @@ namespace Verse3
         {
             AssemblyCompiler.Init();
 
-            var assembly = AssemblyCompiler.Compile(code);
+            var assembly = AssemblyCompiler.Compile(code, ("tmp_" + DateTime.UtcNow.ToFileTimeUtc().ToString()));
             if (assembly != null)
             {
                 return assembly.GetExportedTypes().FirstOrDefault();

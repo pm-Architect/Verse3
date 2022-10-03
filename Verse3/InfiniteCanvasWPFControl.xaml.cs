@@ -123,7 +123,10 @@ namespace Verse3
         /// </summary>
         public void ExpandContent()
         {
-            DataViewModel.InitDataViewModel(this);
+            if (DataViewModel.WPFControl != this)
+            {
+                DataViewModel.InitDataViewModel(this);
+            }
             LBcontent.ItemsSource = DataViewModel.Instance.Elements;
             double xOffset = 0;
             double yOffset = 0;

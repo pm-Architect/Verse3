@@ -92,9 +92,12 @@ namespace Verse3
 
         }
 
+        public EditorForm ActiveEditor { get => (EditorForm)ActiveMdiChild; }
+        public static Main_Verse3 ActiveMain { get => Program.main_; }
+
         private void ShowNewForm(object sender, EventArgs e)
         {
-            Form childForm = new Form1();
+            Form childForm = new EditorForm();
             childForm.MdiParent = this;
             childForm.Text = "Window " + childFormNumber++;
             childForm.Show();
@@ -170,7 +173,7 @@ namespace Verse3
             //#if DEBUG
             if (Debugger.IsAttached)
             {
-                Form childForm = new Form1();
+                Form childForm = new EditorForm();
                 childForm.MdiParent = this;
                 childForm.Text = "Window " + childFormNumber++;
                 childForm.Show();
@@ -182,10 +185,10 @@ namespace Verse3
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (this.ActiveMdiChild is Form1)
+            if (this.ActiveMdiChild is EditorForm)
             {
-                toolStripStatusLabel.Text = (this.ActiveMdiChild as Form1).InfiniteCanvasWPFControl.AverageFPS.ToString();
-                toolStripStatusLabel1.Text = (this.ActiveMdiChild as Form1).InfiniteCanvasWPFControl.GetMouseRelPosition().ToString();
+                toolStripStatusLabel.Text = (this.ActiveMdiChild as EditorForm).InfiniteCanvasWPFControl.AverageFPS.ToString();
+                toolStripStatusLabel1.Text = (this.ActiveMdiChild as EditorForm).InfiniteCanvasWPFControl.GetMouseRelPosition().ToString();
             }
             else
             {
@@ -195,7 +198,7 @@ namespace Verse3
                     toolStripButton2.Enabled = true;
                     if (Core.Core.GetUser() != null)
                     {
-                        Form childForm = new Form1();
+                        Form childForm = new EditorForm();
                         childForm.MdiParent = this;
                         childForm.Text = Core.Core.GetUser().Email;
                         childForm.Show();
@@ -282,7 +285,7 @@ namespace Verse3
             if (Core.Core.GetUser() != null)
             {
                 //TODO:Splash screen?
-                Form childForm = new Form1();
+                Form childForm = new EditorForm();
                 childForm.MdiParent = this;
                 childForm.Text = Core.Core.GetUser().Email;
                 childForm.Show();

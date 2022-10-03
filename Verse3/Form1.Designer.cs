@@ -1,6 +1,6 @@
 ﻿namespace Verse3
 {
-    partial class Form1
+    partial class EditorForm
     {
         /// <summary>
         /// Required designer variable.

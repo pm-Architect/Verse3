@@ -9,6 +9,7 @@ namespace Verse3
     internal static class Program
     {
         private static CoreInterop.InteropServer _server;
+        public static Main_Verse3 main_;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -22,8 +23,8 @@ namespace Verse3
             Core.Core.InitConsole();
             StartServer();
 
-
-            Application.Run(new Main_Verse3());
+            main_ = new Main_Verse3();
+            Application.Run(main_);
         }
 
         //Function that creates a new InteropServer in a new thread

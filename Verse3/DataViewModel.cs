@@ -1,14 +1,17 @@
 ﻿using Core;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Verse3.VanillaElements;
 using static Core.Geometry2D;
 using XamlReader = System.Windows.Markup.XamlReader;
@@ -24,10 +27,59 @@ namespace Verse3
         public static InfiniteCanvasWPFControl WPFControl { get; private set; }
         public static INode ActiveNode { get; internal set; }
         public static IConnection ActiveConnection { get; internal set; }
+
+        private static Dispatcher dispatcher = null;
+        public static Dispatcher Dispatcher { get => dispatcher; }
+
+        //protected static DataViewModel instance = new DataViewModel();
+        public new static DataModel Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new DataViewModel();
+                    DataModel.Instance = instance;
+                }
+                return DataModel.instance;
+            }
+            protected set
+            {
+                instance = value;
+                //DataModel.Instance = instance;
+            }
+        }
+
+        //public static void AddElement(IElement e)
+        //{
+        //    try
+        //    {
+        //        Action addElement = () =>
+        //        {
+        //            DataViewModel.Instance.Elements.Add(e);
+        //        };
+        //        if (dispatcher != null)
+        //        {
+        //            dispatcher.BeginInvoke(addElement);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+        
+        private DataViewModel() : base()
+        {
+            dispatcher = Dispatcher.CurrentDispatcher;
+        }
+
         public static void InitDataViewModel(InfiniteCanvasWPFControl c)
         {
-            DataViewModel.WPFControl = c;
-
+            if (DataViewModel.WPFControl == null)
+                DataViewModel.WPFControl = c;
+            //if (Program.Dispatcher != null && dispatcher == null)
+            //    dispatcher = Program.Dispatcher;
 
 
             //TODO Properly Load all available plugins            
@@ -432,31 +484,32 @@ namespace Verse3
                 if (el.ViewType.IsAssignableTo(typeof(DataNodeElementView)))
                 {
                     DataViewModel.WPFControl.Resources.Add(el.ViewKey, template);
-                    //el.RenderView = (IRenderView)DataViewModel.WPFControl.Resources[el.ViewKey];
                     return true;
                 }
                 else if (el.ViewType.IsAssignableTo(typeof(EventNodeElementView)))
                 {
                     DataViewModel.WPFControl.Resources.Add(el.ViewKey, template);
-                    //el.RenderView = (IRenderView)DataViewModel.WPFControl.Resources[el.ViewKey];
                     return true;
                 }
-                //el.RenderView = (IRenderView)DataViewModel.WPFControl.Resources[el.ViewKey];
                 return false;
             }
             else
             {
                 try
                 {
-                    DataViewModel.WPFControl.Resources.Add(el.ViewKey, template);
+                    Action addTemplate = () =>
+                    {
+                        DataViewModel.WPFControl.Resources.Add(el.ViewKey, template);
+                    };
+                    DataViewModel.WPFControl.Dispatcher.Invoke(addTemplate);
+                    //ERROR: The calling thread cannot access this object because a different thread owns it.
+                    //DataViewModel.WPFControl.Resources.Add(el.ViewKey, template);
                     return true;
                 }
                 catch (Exception ex)
                 {
-
                     throw new Exception(ex.Message);
                 }
-                //el.RenderView = (IRenderView)DataViewModel.WPFControl.Resources[el.ViewKey];
             }
         }
 

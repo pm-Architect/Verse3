@@ -36,7 +36,7 @@ namespace Core
         /// The singleton instance.
         /// This is a singleton for convenience.
         /// </summary>
-        protected static DataModel instance = new DataModel();
+        protected static DataModel instance = null;
 
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
@@ -93,10 +93,10 @@ namespace Core
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new DataModel();
-                }
+                //if (instance == null)
+                //{
+                //    instance = new DataModel();
+                //}
                 return DataModel.instance;
             }
             protected set
@@ -107,18 +107,18 @@ namespace Core
 
         public static double ContentCanvasMarginOffset = 0.0;
 
-        public DataModel() : base()
+        protected DataModel() : base()
         {
             //
             // Initialize the data model.
             //
-            DataModel.instance = this;
+            //DataModel.instance = this;
         }
 
         #endregion
 
         #region Properties
-
+        
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>

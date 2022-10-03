@@ -8,7 +8,7 @@ using System.Windows.Forms;
 namespace Verse3
 {
     //TODO: Create a better Editor Form that can pop up in an MDI container form
-    public partial class Form1 : Form
+    public partial class EditorForm : Form
     {
         private InfiniteCanvasWPFControl infiniteCanvasWPFControl;
 
@@ -23,7 +23,7 @@ namespace Verse3
                 infiniteCanvasWPFControl = value;
             }
         }
-        public Form1()
+        public EditorForm()
         {
             InitializeComponent();
             //TODO: Remove dev open here
@@ -189,14 +189,14 @@ namespace Verse3
                                             int w = 10;
                                             int h = 10;
                                             IElement elInst = compInfo.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
-                                            DataModel.Instance.Elements.Add(elInst);
+                                            DataViewModel.Instance.Elements.Add(elInst);
                                             //DataViewModel.WPFControl.ExpandContent();
                                             x = 9990;
                                             y = 9990;
                                             w = 10;
                                             h = 10;
                                             elInst = compInfo.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
-                                            DataModel.Instance.Elements.Add(elInst);
+                                            DataViewModel.Instance.Elements.Add(elInst);
                                             DataViewModel.WPFControl.ExpandContent();
                                             DataViewModel.WPFControl.InfiniteCanvasControl1.AnimatedSnapTo(new System.Windows.Point(5000.0, 5000.0));
                                             continue;
@@ -216,7 +216,7 @@ namespace Verse3
         private Dictionary<string, TabPage> Tabs = new Dictionary<string, TabPage>();
         private Dictionary<string, GroupBox> Groups = new Dictionary<string, GroupBox>();
         private Dictionary<string, Button> Buttons = new Dictionary<string, Button>();
-        private void AddToArsenal(CompInfo compInfo)
+        public void AddToArsenal(CompInfo compInfo)
         {
             if ((compInfo.ConstructorInfo != null) &&
                 (compInfo.Name != String.Empty) &&
@@ -424,7 +424,7 @@ namespace Verse3
                                     }
                                 }
                                 IElement elInst = ci.ConstructorInfo.Invoke(args) as IElement;
-                                DataModel.Instance.Elements.Add(elInst);
+                                DataViewModel.Instance.Elements.Add(elInst);
                                 //DataViewModel.WPFControl.ExpandContent();
                             }
                             else
