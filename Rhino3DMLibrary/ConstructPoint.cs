@@ -8,12 +8,12 @@ using Rhino.Geometry;
 
 namespace Rhino3DMLibrary
 {
-    public class MakeBox : BaseComp
+    public class ConstructPoint : BaseComp
     {
-        public MakeBox() : base(0, 0)
+        public ConstructPoint() : base(0, 0)
         {
         }
-        public MakeBox(int x, int y) : base(x, y)
+        public ConstructPoint(int x, int y) : base(x, y)
         {
         }
 
@@ -22,10 +22,11 @@ namespace Rhino3DMLibrary
             double x = this.ChildElementManager.GetData<double>(0, 10);
             double y = this.ChildElementManager.GetData<double>(1, 10);
             double z = this.ChildElementManager.GetData<double>(2, 10);
-            Box box = new Box(Plane.WorldXY, new Interval(-(x / 2), (x / 2)), new Interval(-(y / 2), (y / 2)), new Interval(-(z / 2), (z / 2)));
-            GeometryBase geo = (GeometryBase)box.ToBrep();
+            Point3d point = new Point3d(x, y, z);
+            //Box box = new Box(Plane.WorldXY, new Interval(-(x / 2), (x / 2)), new Interval(-(y / 2), (y / 2)), new Interval(-(z / 2), (z / 2)));
+            GeometryBase geo = new Rhino.Geometry.Point(point);
             this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-            textBlock.DisplayedText = box.ToString();
+            textBlock.DisplayedText = point.ToString();
         }
 
         public override CompInfo GetCompInfo()
@@ -34,9 +35,9 @@ namespace Rhino3DMLibrary
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Make Box",
-                Group = "Geometry",
-                Tab = "Rhino",
+                Name = "Construct Point",
+                Group = "Point",
+                Tab = "Vector",
                 Description = "",
                 Author = "",
                 License = "",
@@ -64,11 +65,11 @@ namespace Rhino3DMLibrary
             this.ChildElementManager.AddDataInputNode(nodeBlockZ, "Z");
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Box");
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Point");
 
             textBlock = new TextElement();
             textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.DisplayedText = "NA";
+            textBlock.DisplayedText = "";
             this.ChildElementManager.AddElement(textBlock);
         }
     }
