@@ -47,7 +47,7 @@ namespace Verse3
             }
         }
 
-        public static Assembly Compile(string code, string asmName)
+        public static byte[] Compile(string code, string asmName)
         {
             AssemblyCompiler.Init();
 
@@ -87,20 +87,20 @@ namespace Verse3
 
                 stream.Seek(0, SeekOrigin.Begin);
 
-                //                var context = new CollectibleAssemblyLoadContext();
-                Assembly assembly = AppDomain.CurrentDomain.Load(stream.ToArray());
-                return assembly;
+                //ERROR: Assembly loading on the wrong thread?
+                //Assembly assembly = Assembly.Load(stream.ToArray());
+                return stream.ToArray();
             }
         }
 
-        internal static Type CompileOnly(string code)
+        internal static byte[] CompileOnly(string code)
         {
             AssemblyCompiler.Init();
 
             var assembly = AssemblyCompiler.Compile(code, ("tmp_" + DateTime.UtcNow.ToFileTimeUtc().ToString()));
             if (assembly != null)
             {
-                return assembly.GetExportedTypes().FirstOrDefault();
+                return assembly;
             }
 
             return null;

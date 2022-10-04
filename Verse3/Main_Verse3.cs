@@ -19,6 +19,7 @@ namespace Verse3
     public partial class Main_Verse3 : Form
     {
         private int childFormNumber = 0;
+        public static AppDomain domain_;
 
         public Main_Verse3()
         {

@@ -12,6 +12,9 @@ namespace Verse3
     {
         private InfiniteCanvasWPFControl infiniteCanvasWPFControl;
 
+        public static CompInfo compPendingLoad;
+        public static object[] compPendingLoadArgs;
+
         public InfiniteCanvasWPFControl InfiniteCanvasWPFControl
         {
             get
@@ -32,6 +35,7 @@ namespace Verse3
             InfiniteCanvasWPFControl.MouseDown += Canvas_MouseDown;
             InfiniteCanvasWPFControl.MouseUp += Canvas_MouseUp;
             InfiniteCanvasWPFControl.MouseMove += Canvas_MouseMove;
+            //InfiniteCanvasWPFControl.MouseMove += AddToCanvas_OnCall;
             InfiniteCanvasWPFControl.Loaded += LoadLibraries;
         }
 
@@ -216,6 +220,7 @@ namespace Verse3
         private Dictionary<string, TabPage> Tabs = new Dictionary<string, TabPage>();
         private Dictionary<string, GroupBox> Groups = new Dictionary<string, GroupBox>();
         private Dictionary<string, Button> Buttons = new Dictionary<string, Button>();
+
         public void AddToArsenal(CompInfo compInfo)
         {
             if ((compInfo.ConstructorInfo != null) &&
@@ -315,7 +320,7 @@ namespace Verse3
                     btn.Text = this.Buttons.Count.ToString();
                     btn.Tag = compInfo;
 
-                    btn.Click += Btn_Click;
+                    btn.Click += AddToCanvas_OnCall;
 
                     flp1.Controls.Add(btn);
                     this.Buttons.Add((compInfo.Tab + ".." + compInfo.Group + ".." + compInfo.Name), btn);
@@ -389,8 +394,31 @@ namespace Verse3
         //this.button1.TabIndex = 0;
         //this.button1.UseVisualStyleBackColor = true;
 
-        private void Btn_Click(object sender, EventArgs e)
+        private void AddToCanvas_OnCall(object sender, EventArgs e)
         {
+            if (/*sender is InfiniteCanvasWPFControl && */EditorForm.compPendingLoad.ConstructorInfo != null)
+            {
+                try
+                {
+                    AddToArsenal(EditorForm.compPendingLoad);
+                    //if (EditorForm.compPendingLoadArgs != null)
+                    //{
+                    //    if (EditorForm.compPendingLoad.ConstructorInfo.GetParameters().Length == EditorForm.compPendingLoadArgs.Length)
+                    //    {
+                    //        IElement elInst = EditorForm.compPendingLoad.ConstructorInfo.Invoke(EditorForm.compPendingLoadArgs) as IElement;
+                    //        DataViewModel.Instance.Elements.Add(elInst);
+                    //        //DataViewModel.WPFControl.ExpandContent();
+                    //    }
+                    EditorForm.compPendingLoad = default;
+                    EditorForm.compPendingLoadArgs = default;
+                    //}
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
+            }
             if (sender is Button)
             {
                 Button btn = sender as Button;
@@ -401,13 +429,8 @@ namespace Verse3
                         CompInfo ci = (CompInfo)btn.Tag;
                         if (ci.ConstructorInfo != null)
                         {
-                            //Random rnd = new Random();
                             ////TODO: Invoke constructor based on <PluginName>.cfg json file
                             ////TODO: Allow user to place the comp with MousePosition
-                            //int x = InfiniteCanvasWPFControl.GetMouseRelPosition().X;
-                            //int y = InfiniteCanvasWPFControl.GetMouseRelPosition().Y;
-                            //int w = ci.
-                            //int h = (int)rnd.NextInt64((long)250, (long)350);
                             if (ci.ConstructorInfo.GetParameters().Length > 0)
                             {
                                 ParameterInfo[] pi = ci.ConstructorInfo.GetParameters();

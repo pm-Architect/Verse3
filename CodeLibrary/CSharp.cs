@@ -93,8 +93,9 @@ namespace CodeLibrary
             try
             {
                 _script = this.ideElement.Script;
-                Assembly a = AssemblyCompiler.Compile(_script, "RuntimeCompiled_CSharp_Verse3");
-                List<IElement> elements = new List<IElement>(AssemblyLoader.Load(a));
+                textBlock.DisplayedText = "Compiling...";
+                byte[] ASMbytes = AssemblyCompiler.Compile(_script, "RuntimeCompiled_CSharp_Verse3");
+                List<IElement> elements = new List<IElement>(AssemblyLoader.Load(ASMbytes, Main_Verse3.domain_));
                 foreach (IElement element in elements)
                 {
                     CoreConsole.Log(element.ID.ToString());
@@ -136,11 +137,13 @@ namespace CodeLibrary
                                                 //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().Y;
                                             }
                                         }
-                                        IElement? elInst = compInfo.ConstructorInfo.Invoke(args) as IElement;
+                                        //IElement? elInst = compInfo.ConstructorInfo.Invoke(args) as IElement;
                                         try
                                         {
                                             //TODO: LOAD/INSTANTIATE ASSEMBLY INTO RIBBON AND ON CANVAS
-                                            
+                                            EditorForm.compPendingLoad = compInfo;
+                                            EditorForm.compPendingLoadArgs = args;
+
                                             //Application.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
                                             //{
                                             //    Main_Verse3.ActiveMain.ActiveEditor.AddToArsenal(compInfo);

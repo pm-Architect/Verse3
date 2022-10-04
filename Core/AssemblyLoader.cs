@@ -27,9 +27,23 @@ namespace Verse3
         }
         public static IEnumerable<IElement> Load(MemoryStream ms)
         {
+            return Load(ms.ToArray());
+        }
+
+        public static IEnumerable<IElement> Load(byte[] bytes, AppDomain domain = null)
+        {
             List<IElement> foundCommands = new List<IElement>();
 
-            Assembly assembly = Assembly.Load(ms.ToArray());
+            if (domain != null) domain = AppDomain.CurrentDomain;
+            Assembly assembly;
+            if (domain != null)
+            {
+                assembly = domain.Load(bytes);
+            }
+            else
+            {
+                assembly = Assembly.Load(bytes);
+            }
             System.Diagnostics.Trace.WriteLine(assembly.FullName);
             Module[] modules = assembly.GetModules();
             foreach (Module module in modules)
@@ -48,8 +62,7 @@ namespace Verse3
                                 continue;
                             }
                             //TODO: Find and load referenced assemblies if they are not already loaded in the current domain
-                            string references = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Verse3\\References\\");
-                            references = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Verse3\\Libraries\\");
+                            string references = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Verse3\\Libraries\\");
                             //references = Path.GetDirectoryName(assembly.);
                             //references = Path.GetDirectoryName(assembly.Location);
                             //for each file in the references folder
@@ -62,6 +75,10 @@ namespace Verse3
                                     try
                                     {
                                         Assembly asm = Assembly.LoadFile(file);
+                                        if (domain != AppDomain.CurrentDomain)
+                                        {
+                                            Assembly.Load(asm.GetName());
+                                        }
                                         System.Diagnostics.Trace.WriteLine("Adding Reference: " + asm.FullName + " from " + file);
                                     }
                                     catch (Exception ex0)
@@ -91,7 +108,7 @@ namespace Verse3
             }
             try
             {
-                assembly = Assembly.Load(ms.ToArray());
+                assembly = Assembly.Load(bytes);
                 if (assembly.DefinedTypes != null)
                 {
                     assembly.ToString();

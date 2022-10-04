@@ -24,6 +24,7 @@ namespace Verse3
             StartServer();
 
             main_ = new Main_Verse3();
+            Main_Verse3.domain_ = AppDomain.CurrentDomain;
             Application.Run(main_);
         }
 
