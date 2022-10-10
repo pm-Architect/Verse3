@@ -19,6 +19,13 @@ namespace Verse3.VanillaElements
         {
         }
     }
+
+    public class BooleanDataNode : DataNodeElement<bool>
+    {
+        public BooleanDataNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
+        {
+        }
+    }
     public class TextDataNode : DataNodeElement<string>
     {
         public TextDataNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
