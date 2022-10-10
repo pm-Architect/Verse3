@@ -94,7 +94,7 @@ namespace MathLibrary
             base.titleTextBlock.TextRotation = 0;
             
             sliderBlock = new SliderElement();
-            sliderBlock.Minimum = 0;
+            sliderBlock.Minimum = -100;
             sliderBlock.Maximum = 100;
             sliderBlock.Value = 50;
             sliderBlock.ValueChanged += SliderBlock_OnValueChanged;

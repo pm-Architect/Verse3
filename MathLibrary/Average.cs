@@ -6,7 +6,7 @@ using Verse3.VanillaElements;
 
 namespace MathLibrary
 {
-    public class Minimum : BaseComp
+    public class Average : BaseComp
     {
         public string? ElementText
         {
@@ -35,7 +35,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public Minimum() : base(0, 0)
+        public Average() : base(0, 0)
         {
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             //Random rng = new Random();
@@ -43,7 +43,7 @@ namespace MathLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public Minimum(int x, int y, int width = 250, int height = 350) : base(x, y)
+        public Average(int x, int y, int width = 250, int height = 350) : base(x, y)
         {
             //base.boundingBox = new BoundingBox(x, y, width, height);
 
@@ -61,7 +61,7 @@ namespace MathLibrary
         {
             double a = this.ChildElementManager.GetData<double>(0, 1);
             double b = this.ChildElementManager.GetData<double>(1, 1);
-            this.ChildElementManager.SetData<double>((Math.Min(a, b)), 0);
+            this.ChildElementManager.SetData<double>((a+b)/2, 0);
             textBlock.DisplayedText = this.ElementText;
         }
 
@@ -71,7 +71,7 @@ namespace MathLibrary
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Minimum",
+                Name = "Average",
                 Group = "Intermediate Operations",
                 Tab = "Math",
                 Description = "",

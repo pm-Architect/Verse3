@@ -72,7 +72,7 @@ namespace MathLibrary
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
                 Name = "Maximum",
-                Group = "Advanced Operations",
+                Group = "Intermediate Operations",
                 Tab = "Math",
                 Description = "",
                 Author = "",

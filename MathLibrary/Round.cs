@@ -72,7 +72,7 @@ namespace MathLibrary
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
                 Name = "Round",
-                Group = "Advanced Operations",
+                Group = "Intermediate Operations",
                 Tab = "Math",
                 Description = "",
                 Author = "",
@@ -86,7 +86,6 @@ namespace MathLibrary
 
         private TextElement textBlock = new TextElement();
         private NumberDataNode nodeBlock;
-        private NumberDataNode nodeBlock1;
         private NumberDataNode nodeBlock2;
         public override void Initialize()
         {

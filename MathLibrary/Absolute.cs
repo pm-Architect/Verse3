@@ -6,7 +6,7 @@ using Verse3.VanillaElements;
 
 namespace MathLibrary
 {
-    public class Minimum : BaseComp
+    public class Absolute : BaseComp
     {
         public string? ElementText
         {
@@ -35,7 +35,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public Minimum() : base(0, 0)
+        public Absolute() : base(0, 0)
         {
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             //Random rng = new Random();
@@ -43,7 +43,7 @@ namespace MathLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public Minimum(int x, int y, int width = 250, int height = 350) : base(x, y)
+        public Absolute(int x, int y, int width = 250, int height = 350) : base(x, y)
         {
             //base.boundingBox = new BoundingBox(x, y, width, height);
 
@@ -60,8 +60,8 @@ namespace MathLibrary
         public override void Compute()
         {
             double a = this.ChildElementManager.GetData<double>(0, 1);
-            double b = this.ChildElementManager.GetData<double>(1, 1);
-            this.ChildElementManager.SetData<double>((Math.Min(a, b)), 0);
+            //double b = this.ChildElementManager.GetData<double>(1, 1);
+            this.ChildElementManager.SetData<double>((Math.Abs(a)), 0);
             textBlock.DisplayedText = this.ElementText;
         }
 
@@ -71,7 +71,7 @@ namespace MathLibrary
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Minimum",
+                Name = "Absolute",
                 Group = "Intermediate Operations",
                 Tab = "Math",
                 Description = "",
@@ -86,7 +86,6 @@ namespace MathLibrary
 
         private TextElement textBlock = new TextElement();
         private NumberDataNode nodeBlock;
-        private NumberDataNode nodeBlock1;
         private NumberDataNode nodeBlock2;
         public override void Initialize()
         {
@@ -94,9 +93,9 @@ namespace MathLibrary
             nodeBlock.Width = 50;
             this.ChildElementManager.AddDataInputNode(nodeBlock, "A");
 
-            nodeBlock1 = new NumberDataNode(this, NodeType.Input);
-            nodeBlock1.Width = 50;
-            this.ChildElementManager.AddDataInputNode(nodeBlock1, "B");
+            //nodeBlock1 = new NumberDataNode(this, NodeType.Input);
+            //nodeBlock1.Width = 50;
+            //this.ChildElementManager.AddDataInputNode(nodeBlock1, "B");
 
             nodeBlock2 = new NumberDataNode(this, NodeType.Output);
             nodeBlock2.Width = 50;
