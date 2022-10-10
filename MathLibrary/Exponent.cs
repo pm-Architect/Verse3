@@ -92,11 +92,11 @@ namespace MathLibrary
         {
             nodeBlock = new NumberDataNode(this, NodeType.Input);
             nodeBlock.Width = 50;
-            this.ChildElementManager.AddDataInputNode(nodeBlock, "A");
+            this.ChildElementManager.AddDataInputNode(nodeBlock, "Number");
 
             nodeBlock1 = new NumberDataNode(this, NodeType.Input);
             nodeBlock1.Width = 50;
-            this.ChildElementManager.AddDataInputNode(nodeBlock1, "B");
+            this.ChildElementManager.AddDataInputNode(nodeBlock1, "Power");
 
             nodeBlock2 = new NumberDataNode(this, NodeType.Output);
             nodeBlock2.Width = 50;

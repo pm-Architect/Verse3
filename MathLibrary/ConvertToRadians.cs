@@ -6,7 +6,7 @@ using Verse3.VanillaElements;
 
 namespace MathLibrary
 {
-    public class Logarithm : BaseComp
+    public class ConvertToRadians : BaseComp
     {
         public string? ElementText
         {
@@ -35,7 +35,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public Logarithm() : base(0, 0)
+        public ConvertToRadians() : base(0, 0)
         {
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             //Random rng = new Random();
@@ -43,7 +43,7 @@ namespace MathLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public Logarithm(int x, int y, int width = 250, int height = 350) : base(x, y)
+        public ConvertToRadians(int x, int y, int width = 250, int height = 350) : base(x, y)
         {
             //base.boundingBox = new BoundingBox(x, y, width, height);
 
@@ -59,9 +59,9 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            double a = this.ChildElementManager.GetData<double>(0, 1);
-            double b = this.ChildElementManager.GetData<double>(1, 1);
-            this.ChildElementManager.SetData<double>((Math.Log(a, b)), 0);
+            double a = this.ChildElementManager.GetData<double>(0, 0);
+
+            this.ChildElementManager.SetData<double>((Math.PI/180)*a, 0);
             textBlock.DisplayedText = this.ElementText;
         }
 
@@ -71,8 +71,8 @@ namespace MathLibrary
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Logarithm",
-                Group = "Advanced Operations",
+                Name = "Convert To Radians",
+                Group = "Trigonometry",
                 Tab = "Math",
                 Description = "",
                 Author = "",
@@ -86,21 +86,19 @@ namespace MathLibrary
 
         private TextElement textBlock = new TextElement();
         private NumberDataNode nodeBlock;
-        private NumberDataNode nodeBlock1;
+
         private NumberDataNode nodeBlock2;
         public override void Initialize()
         {
             nodeBlock = new NumberDataNode(this, NodeType.Input);
             nodeBlock.Width = 50;
-            this.ChildElementManager.AddDataInputNode(nodeBlock, "Number");
+            this.ChildElementManager.AddDataInputNode(nodeBlock, "Degrees");
 
-            nodeBlock1 = new NumberDataNode(this, NodeType.Input);
-            nodeBlock1.Width = 50;
-            this.ChildElementManager.AddDataInputNode(nodeBlock1, "Base");
+
 
             nodeBlock2 = new NumberDataNode(this, NodeType.Output);
             nodeBlock2.Width = 50;
-            this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Result");
+            this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Radians");
 
             textBlock = new TextElement();
             textBlock.DisplayedText = this.ElementText;
