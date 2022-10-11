@@ -32,6 +32,12 @@ namespace Verse3.VanillaElements
         {
         }
     }
+    public class DateTimeDataNode : DataNodeElement<DateTime>
+    {
+        public DateTimeDataNode(BaseComp parent, NodeType nodeType) : base(parent, nodeType)
+        {
+        }
+    }
     public class GenericEventNode : EventNodeElement
     {
         public GenericEventNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
