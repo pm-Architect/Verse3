@@ -27,6 +27,7 @@ namespace MathLibrary
                     $"\nID: {this.ID}" +
                     $"\nX: {this.X}" +
                     $"\nY: {this.Y}" +
+                    $"\nnow: {DateTime.Now}" +
                     $"\nOutput Value: {dataIN}";
             }
         }
@@ -80,7 +81,8 @@ namespace MathLibrary
             newdateTime = newdateTime.AddHours(hr);
             newdateTime = newdateTime.AddMinutes(min);
             newdateTime = newdateTime.AddSeconds(sec);
-            this.ChildElementManager.SetData<DateTime>(dateTime, 0);
+
+            this.ChildElementManager.SetData<DateTime>(newdateTime, 0);
             textBlock.DisplayedText = this.ElementText;
         }
         
