@@ -108,7 +108,7 @@ namespace TextLibrary
 
             nodeBlock = new TextDataNode(this, NodeType.Output);
             nodeBlock.Width = 50;
-            this.ChildElementManager.AddDataOutputNode(nodeBlock, "Number");
+            this.ChildElementManager.AddDataOutputNode(nodeBlock, "Text");
 
             textBlock = new TextElement();
             textBlock.DisplayedText = this.ElementText;
