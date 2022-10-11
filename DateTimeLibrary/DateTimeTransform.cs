@@ -6,7 +6,7 @@ using Verse3.VanillaElements;
 
 namespace MathLibrary
 {
-    public class ConstructDateTime : BaseComp
+    public class DateTimeTransform : BaseComp
     {
 
         #region Properties
@@ -35,11 +35,11 @@ namespace MathLibrary
 
         #region Constructors
 
-        public ConstructDateTime() : base(0, 0)
+        public DateTimeTransform() : base(0, 0)
         {
         }
 
-        public ConstructDateTime(int x, int y, int width = 250, int height = 350) : base(x, y)
+        public DateTimeTransform(int x, int y, int width = 250, int height = 350) : base(x, y)
         {
         }
 
@@ -51,7 +51,7 @@ namespace MathLibrary
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct DateTime",
+                Name = "Transform DateTime",
                 Group = "Primitive",
                 Tab = "DateTime",
                 Description = "",
@@ -66,33 +66,43 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            int yr = (int)this.ChildElementManager.GetData<double>(0, 0);
-            int mnt = (int)this.ChildElementManager.GetData<double>(1, 0);
-            int dat = (int)this.ChildElementManager.GetData<double>(2, 0);
-            int hr = (int)this.ChildElementManager.GetData<double>(3, 0);
-            int min = (int)this.ChildElementManager.GetData<double>(4, 0);
-            int sec = (int)this.ChildElementManager.GetData<double>(5, 0);
-            DateTime dateTime = new DateTime(yr, mnt, dat, hr, min, sec);
-            DateTime now = DateTime.Now;
+            
+            DateTime dateTime = this.ChildElementManager.GetData<DateTime>(0, DateTime.Now);
+            int yr = (int)this.ChildElementManager.GetData<double>(1, 0);
+            int mnt = (int)this.ChildElementManager.GetData<double>(2, 0);
+            int dat = (int)this.ChildElementManager.GetData<double>(3, 0);
+            int hr = (int)this.ChildElementManager.GetData<double>(4, 0);
+            int min = (int)this.ChildElementManager.GetData<double>(5, 0);
+            int sec = (int)this.ChildElementManager.GetData<double>(6, 0);
+            DateTime newdateTime = dateTime.AddYears(yr);
+            newdateTime = newdateTime.AddMonths(mnt);
+            newdateTime = newdateTime.AddDays(dat);
+            newdateTime = newdateTime.AddHours(hr);
+            newdateTime = newdateTime.AddMinutes(min);
+            newdateTime = newdateTime.AddSeconds(sec);
             this.ChildElementManager.SetData<DateTime>(dateTime, 0);
-            this.ChildElementManager.SetData<DateTime>(now, 1);
             textBlock.DisplayedText = this.ElementText;
         }
         
         private TextElement textBlock = new TextElement();
-        private NumberDataNode nodeBlock;
+        private DateTimeDataNode nodeBlock;
+        private NumberDataNode nodeBlock0;
         private NumberDataNode nodeBlock1;
         private NumberDataNode nodeBlock2;
         private NumberDataNode nodeBlock3;
         private NumberDataNode nodeBlock4;
         private NumberDataNode nodeBlock5;
         private DateTimeDataNode nodeBlock6;
-        private DateTimeDataNode nodeBlock7;
+
         public override void Initialize()
         {
-            nodeBlock = new NumberDataNode(this, NodeType.Input);
+            nodeBlock = new DateTimeDataNode(this, NodeType.Input);
             //nodeBlock.Width = 50;
-            this.ChildElementManager.AddDataInputNode(nodeBlock, "Year");
+            this.ChildElementManager.AddDataInputNode(nodeBlock, "DateTime");
+
+            nodeBlock0 = new NumberDataNode(this, NodeType.Input);
+            //nodeBlock0.Width = 50;
+            this.ChildElementManager.AddDataInputNode(nodeBlock0, "Year");
 
             nodeBlock1 = new NumberDataNode(this, NodeType.Input);
             //nodeBlock1.Width = 50;
@@ -116,11 +126,8 @@ namespace MathLibrary
 
             nodeBlock6 = new DateTimeDataNode(this, NodeType.Output);
             //nodeBlock6.Width = 50;
-            this.ChildElementManager.AddDataOutputNode(nodeBlock6, "DateTime");
+            this.ChildElementManager.AddDataOutputNode(nodeBlock6, "New DateTime");
 
-            nodeBlock7 = new DateTimeDataNode(this, NodeType.Output);
-            //nodeBlock7.Width = 50;
-            this.ChildElementManager.AddDataOutputNode(nodeBlock7, "Now");
 
             textBlock = new TextElement();
             textBlock.DisplayedText = this.ElementText;
