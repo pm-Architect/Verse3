@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,6 +17,7 @@ using static Core.Geometry2D;
 
 namespace Verse3
 {
+    [Serializable]
     public abstract class BaseComp : IRenderable, IComputable
     {
         #region Data Members
@@ -305,6 +307,29 @@ namespace Verse3
         {
             if (RenderView != null)
                 RenderView.Render();
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            try
+            {
+                //info.AddValue("ID", this.ID);
+                info.AddValue("X", this.X);
+                info.AddValue("Y", this.Y);
+                info.AddValue("Width", this.Width);
+                info.AddValue("Height", this.Height);
+                info.AddValue("ElementType", this.ElementType);
+                info.AddValue("State", this.State);
+                info.AddValue("IsSelected", this.IsSelected);
+                info.AddValue("BoundingBox", this.BoundingBox);
+                info.AddValue("ElementState", this.ElementState);
+                info.AddValue("Parent", this.Parent);
+                info.AddValue("Children", this.Children);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         ~BaseComp() => Dispose();
@@ -1248,6 +1273,30 @@ namespace Verse3
 
         public abstract void ToggleActive();
 
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            try
+            {
+                //info.AddValue("ID", this.ID);
+                info.AddValue("X", this.X);
+                info.AddValue("Y", this.Y);
+                info.AddValue("Width", this.Width);
+                info.AddValue("Height", this.Height);
+                info.AddValue("ElementType", this.ElementType);
+                info.AddValue("State", this.State);
+                info.AddValue("IsSelected", this.IsSelected);
+                info.AddValue("BoundingBox", this.BoundingBox);
+                info.AddValue("ElementState", this.ElementState);
+                info.AddValue("Parent", this.Parent);
+                info.AddValue("Children", this.Children);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public void Dispose()
         {
             if (this.RenderPipelineInfo.Children != null && this.RenderPipelineInfo.Children.Count > 0)
@@ -1667,6 +1716,30 @@ namespace Verse3
             }
         }
 
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            try
+            {
+                //info.AddValue("ID", this.ID);
+                info.AddValue("X", this.X);
+                info.AddValue("Y", this.Y);
+                info.AddValue("Width", this.Width);
+                info.AddValue("Height", this.Height);
+                info.AddValue("ElementType", this.ElementType);
+                info.AddValue("State", this.State);
+                info.AddValue("IsSelected", this.IsSelected);
+                info.AddValue("BoundingBox", this.BoundingBox);
+                info.AddValue("ElementState", this.ElementState);
+                info.AddValue("Parent", this.Parent);
+                info.AddValue("Children", this.Children);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public void Dispose()
         {
             if (this.RenderPipelineInfo.Children != null && this.RenderPipelineInfo.Children.Count > 0)
@@ -1682,9 +1755,7 @@ namespace Verse3
             }
             DataViewModel.Instance.Elements.Remove(this);
             GC.SuppressFinalize(this);
-        }
-
-
+        }        
         ~EventNode() => Dispose();
     }
 

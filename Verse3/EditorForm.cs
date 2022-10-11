@@ -502,5 +502,40 @@ namespace Verse3
         {
             Application.Exit();
         }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            VFSerializable VFfile = new VFSerializable((DataViewModel)DataViewModel.Instance);
+            //show a save file dialog with default file extension *.vf or *.vfx
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Verse3 File (*.vf)|*.vf|Verse3 File Extended (*.vfx)|*.vfx";
+            saveFileDialog.DefaultExt = "vf";
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                //save the file
+                VFfile.Serialize(saveFileDialog.FileName);
+            }
+        }
+
+        private void openToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            //show an open file dialog to pick a *.vf or *.vfx file
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Verse3 File (*.vf)|*.vf|Verse3 File Extended (*.vfx)|*.vfx";
+            openFileDialog.DefaultExt = "vf";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                //load the file
+                try
+                {
+                    VFSerializable VFfile = VFSerializable.Deserialize(openFileDialog.FileName);
+                    DataViewModel.Instance = VFfile.DataViewModel;
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                }
+            }
+        }
     }
 }

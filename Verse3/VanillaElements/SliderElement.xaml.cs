@@ -109,6 +109,7 @@ namespace Verse3.VanillaElements
         }
     }
 
+    [Serializable]
     public class SliderElement : BaseElement
     {
         #region Properties

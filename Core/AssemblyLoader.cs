@@ -101,7 +101,7 @@ namespace Verse3
                         }
                         else
                         {
-                            System.Diagnostics.Trace.WriteLine("Failed to Load: " + name.FullName);
+                            System.Diagnostics.Trace.WriteLine("Error Adding Reference: " + name.FullName);
                         }
                     }
                 }

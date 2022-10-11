@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 using static Core.Geometry2D;
 
 namespace Core
@@ -9,7 +10,9 @@ namespace Core
     /// A simple example of a data-model.  
     /// The purpose of this data-model is to share display data between the main window and overview window.
     /// </summary>
-    public class DataModel : INotifyPropertyChanged
+    [DataContract]
+    [Serializable]
+    public class DataModel : INotifyPropertyChanged, ISerializable
     {
         #region INotifyPropertyChanged Members
 
@@ -114,11 +117,27 @@ namespace Core
             //
             //DataModel.instance = this;
         }
+        
+        protected DataModel(SerializationInfo info, StreamingContext context) : base()
+        {
+            //
+            // Initialize the data model.
+            //
+            //DataModel.instance = this;
+            this.elements = (ElementsLinkedList<IElement>)info.GetValue("elements", typeof(ElementsLinkedList<IElement>));
+            this.contentScale = (double)info.GetValue("contentScale", typeof(double));
+            this.contentOffsetX = (double)info.GetValue("contentOffsetX", typeof(double));
+            this.contentOffsetY = (double)info.GetValue("contentOffsetY", typeof(double));
+            this.contentWidth = (double)info.GetValue("contentWidth", typeof(double));
+            this.contentHeight = (double)info.GetValue("contentHeight", typeof(double));
+            this.contentViewportWidth = (double)info.GetValue("contentViewportWidth", typeof(double));
+            this.contentViewportHeight = (double)info.GetValue("contentViewportHeight", typeof(double));
+        }
 
         #endregion
 
         #region Properties
-        
+
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
@@ -137,6 +156,18 @@ namespace Core
         public IElement GetElementWithGuid(Guid guid)
         {
             return this.Elements.Find(guid).Value;
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("elements", this.elements);
+            info.AddValue("contentScale", this.contentScale);
+            info.AddValue("contentOffsetX", this.contentOffsetX);
+            info.AddValue("contentOffsetY", this.contentOffsetY);
+            info.AddValue("contentWidth", this.contentWidth);
+            info.AddValue("contentHeight", this.contentHeight);
+            info.AddValue("contentViewportWidth", this.contentViewportWidth);
+            info.AddValue("contentViewportHeight", this.contentViewportHeight);
         }
 
         ///
@@ -303,9 +334,11 @@ namespace Core
         }
 
         #endregion
+
+        
     }
 
-    public interface IElement : INotifyPropertyChanged, IDisposable
+    public interface IElement : INotifyPropertyChanged, IDisposable, ISerializable
     {
         #region Properties
 

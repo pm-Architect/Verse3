@@ -105,6 +105,7 @@ namespace Verse3.VanillaElements
         }
     }
 
+    [Serializable]
     public class TextBoxElement : BaseElement
     {
         #region Properties
@@ -129,6 +130,7 @@ namespace Verse3.VanillaElements
         public void OnTextChanged(object sender, TextChangedEventArgs e)
         {
             //TODO: Set the output data of this element
+            
         }
     }
 }

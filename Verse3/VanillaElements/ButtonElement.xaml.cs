@@ -105,6 +105,7 @@ namespace Verse3.VanillaElements
         }
     }
 
+    [Serializable]
     public class ButtonElement : BaseElement
     {
 

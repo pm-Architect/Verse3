@@ -1,9 +1,15 @@
 ﻿using Core;
+using Microsoft.WindowsAPICodePack.Shell;
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+using Supabase;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,10 +24,118 @@ using XamlReader = System.Windows.Markup.XamlReader;
 
 namespace Verse3
 {
+    [Serializable]
+    public class VFSerializable : ISerializable
+    {
+        public DataViewModel DataViewModel { get; set; }
+
+        public VFSerializable(DataViewModel dataViewModel)
+        {
+            DataViewModel = dataViewModel;
+        }
+
+        public VFSerializable(SerializationInfo info, StreamingContext context)
+        {
+            DataViewModel = (DataViewModel)info.GetValue("DataViewModel", typeof(DataViewModel));
+        }
+
+        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("DataViewModel", DataViewModel);
+        }
+        
+        public void Serialize(string path)
+        {
+            try
+            {
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    var formatter = new BinaryFormatter();
+                    formatter.Serialize(stream, this);
+                    stream.Flush();
+                }
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            //finally
+            //{
+            //    try
+            //    {
+            //        Supabase.Gotrue.User user = Client.Instance.Auth.CurrentUser;
+                    
+            //        var file = ShellFile.FromFilePath(path);
+
+            //        // Read and Write:
+
+            //        //string[] oldAuthors = file.Properties.System.Author.Value;
+            //        //string oldTitle = file.Properties.System.Title.Value;
+
+            //        //file.Properties.System.Author.Value = new string[] { "Author #1", "Author #2" };
+            //        //file.Properties.System.Title.Value = "Example Title";
+
+            //        // Alternate way to Write:
+
+            //        ShellPropertyWriter propertyWriter = file.Properties.GetPropertyWriter();
+
+            //        string authorId = "DEVELOPER";
+            //        if (user != null)
+            //        {
+            //            authorId = user.Id;
+            //        }
+            //        propertyWriter.WriteProperty(SystemProperties.System.Author, new string[] { "AuthorID::" + authorId });
+            //        propertyWriter.Close();
+            //    }
+            //    catch (Exception ex1)
+            //    {
+            //        throw ex1;
+            //    }
+            //}
+        }
+
+        public static VFSerializable Deserialize(string path)
+        {
+            try
+            {
+                using (var stream = new FileStream(path, FileMode.Open))
+                {
+                    var formatter = new BinaryFormatter();
+                    formatter.AssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple;
+                    formatter.FilterLevel = System.Runtime.Serialization.Formatters.TypeFilterLevel.Full;
+                    //Supabase.Gotrue.User user = Client.Instance.Auth.CurrentUser;
+
+                    //var file = ShellFile.FromFilePath(path);
+
+                    //string oldAuthor = file.Properties.System.Author.Value[0];
+                    //string authorId = "DEVELOPER";
+                    //if (user != null)
+                    //{
+                    //    authorId = user.Id;
+                    //}
+                    //if (oldAuthor == ("AuthorID::" + authorId))
+                    //{
+                    //    System.Diagnostics.Debug.WriteLine("File created by " + oldAuthor);
+                    //    if (authorId != "DEVELOPER") return null;
+                    //}
+                    return (VFSerializable)formatter.Deserialize(stream);
+                }
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return null;
+            }
+        }
+    }
+    
     /// <summary>
     /// A simple example of a data-model.  
     /// The purpose of this data-model is to share display data between the main window and overview window.
     /// </summary>
+    [Serializable]
     public class DataViewModel : DataModel
     {
         public static InfiniteCanvasWPFControl WPFControl { get; private set; }
@@ -43,7 +157,7 @@ namespace Verse3
                 }
                 return DataModel.instance;
             }
-            protected set
+            internal set
             {
                 instance = value;
                 //DataModel.Instance = instance;
@@ -213,6 +327,8 @@ namespace Verse3
         #endregion
     }
 
+
+    [Serializable]
     public abstract class BaseElement : IRenderable
     {
         #region Data Members
@@ -362,6 +478,30 @@ namespace Verse3
             DataViewModel.Instance.Elements.Remove(this);
             GC.SuppressFinalize(this);
         }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            try
+            {
+                //info.AddValue("ID", this.ID);
+                info.AddValue("X", this.X);
+                info.AddValue("Y", this.Y);
+                info.AddValue("Width", this.Width);
+                info.AddValue("Height", this.Height);
+                info.AddValue("ElementType", this.ElementType);
+                info.AddValue("State", this.State);
+                info.AddValue("IsSelected", this.IsSelected);
+                info.AddValue("BoundingBox", this.BoundingBox);
+                info.AddValue("ElementState", this.ElementState);
+                info.AddValue("Parent", this.Parent);
+                info.AddValue("Children", this.Children);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         ~BaseElement() => Dispose();
     }
 
