@@ -528,8 +528,16 @@ namespace Verse3
                 //load the file
                 try
                 {
-                    VFSerializable VFfile = VFSerializable.Deserialize(openFileDialog.FileName);
-                    DataViewModel.Instance = VFfile.DataViewModel;
+                    if (openFileDialog.FileName.EndsWith(".vf"))
+                    {
+                        VFSerializable VFfile = VFSerializable.Deserialize(openFileDialog.FileName);
+                        DataViewModel.Instance = VFfile.DataViewModel;
+                    }
+                    else if (openFileDialog.FileName.EndsWith(".vfx"))
+                    {
+                        VFSerializable VFfile = VFSerializable.Deserialize(openFileDialog.FileName);
+                        DataViewModel.Instance = VFfile.DataViewModel;
+                    }
                 }
                 catch (Exception ex)
                 {
