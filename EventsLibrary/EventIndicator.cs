@@ -6,6 +6,7 @@ using Verse3.VanillaElements;
 
 namespace EventsLibrary
 {
+    [Serializable]
     public class EventIndicator : BaseComp
     {
         internal int _counter = 0;

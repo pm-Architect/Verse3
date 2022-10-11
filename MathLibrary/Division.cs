@@ -7,6 +7,7 @@ using TextElement = Verse3.VanillaElements.TextElement;
 
 namespace MathLibrary
 {
+    [Serializable]
     public class Division : BaseComp
     {
         public string? ElementText
