@@ -10,7 +10,6 @@ using Verse3.VanillaElements;
 
 namespace TextLibrary
 {
-    [Serializable]
     public class TextPanel : BaseComp
     {
         public TextPanel(int x, int y, int width = 250, int height = 300) : base(x, y)

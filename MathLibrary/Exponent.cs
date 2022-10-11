@@ -6,7 +6,6 @@ using Verse3.VanillaElements;
 
 namespace MathLibrary
 {
-    [Serializable]
     public class Exponent : BaseComp
     {
         public string? ElementText

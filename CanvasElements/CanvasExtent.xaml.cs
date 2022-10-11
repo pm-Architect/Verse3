@@ -2,7 +2,6 @@ using Core;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
 using System.Windows.Controls;
 using Verse3;
 using static Core.Geometry2D;
@@ -27,8 +26,6 @@ namespace CanvasElements
         }
     }
 
-
-    [Serializable]
     public class CanvasExtentElement : IRenderable
     {
         #region Data Members
@@ -202,11 +199,6 @@ namespace CanvasElements
             }
             GC.SuppressFinalize(this);
         }
-
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-        }
-        
         ~CanvasExtentElement() => Dispose();
     }
 }

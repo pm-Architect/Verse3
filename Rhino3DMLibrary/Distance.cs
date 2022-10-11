@@ -8,7 +8,6 @@ using Rhino.Geometry;
 
 namespace Rhino3DMLibrary
 {
-    [Serializable]
     public class Distance : BaseComp
     {
         public Distance() : base(0, 0)

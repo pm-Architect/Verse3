@@ -6,7 +6,6 @@ using Verse3.VanillaElements;
 
 namespace MathLibrary
 {
-    [Serializable]
     public class NumberContainer : BaseComp
     {
         internal double _sliderValue = 0.0;

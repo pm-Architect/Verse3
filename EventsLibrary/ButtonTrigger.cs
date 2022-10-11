@@ -6,7 +6,6 @@ using Verse3.VanillaElements;
 
 namespace EventsLibrary
 {
-    [Serializable]
     public class ButtonTrigger : BaseComp
     {
         internal double _sliderValue = 0.0;

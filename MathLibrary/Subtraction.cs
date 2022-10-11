@@ -6,7 +6,6 @@ using Verse3.VanillaElements;
 
 namespace MathLibrary
 {
-    [Serializable]
     public class Subtraction : BaseComp
     {
         public string? ElementText

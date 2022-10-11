@@ -6,7 +6,6 @@ using Verse3.VanillaElements;
 
 namespace InteropLibrary
 {
-    [Serializable]
     public class InteropMessageSND : BaseComp
     {
         internal string _lastMessage = "";

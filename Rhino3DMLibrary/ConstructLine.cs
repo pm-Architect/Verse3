@@ -8,7 +8,6 @@ using Rhino.Geometry;
 
 namespace Rhino3DMLibrary
 {
-    [Serializable]
     public class ConstructLine : BaseComp
     {
         public ConstructLine() : base(0, 0)

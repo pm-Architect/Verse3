@@ -8,7 +8,6 @@ using Rhino.Geometry;
 
 namespace Rhino3DMLibrary
 {
-    [Serializable]
     public class DeconstructLine : BaseComp
     {
         public DeconstructLine() : base(0, 0)

@@ -11,7 +11,6 @@ using Verse3.VanillaElements;
 
 namespace CodeLibrary
 {
-    [Serializable]
     public class CSharp : BaseComp
     {
 

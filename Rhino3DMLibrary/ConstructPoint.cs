@@ -8,7 +8,6 @@ using Rhino.Geometry;
 
 namespace Rhino3DMLibrary
 {
-    [Serializable]
     public class ConstructPoint : BaseComp
     {
         public ConstructPoint() : base(0, 0)
@@ -75,7 +74,6 @@ namespace Rhino3DMLibrary
         }
     }
 
-    [Serializable]
     public class RhinoGeometryDataNode : DataNodeElement<GeometryBase>
     {
         public RhinoGeometryDataNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)

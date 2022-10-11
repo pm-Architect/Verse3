@@ -6,7 +6,6 @@ using Verse3.VanillaElements;
 
 namespace TextLibrary
 {
-    [Serializable]
     public class TextContainer : BaseComp
     {
         internal string _inputText = "";
