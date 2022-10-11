@@ -42,7 +42,8 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Margin="10"
-            Interval="{Binding Interval}"
+            TickFrequency="{Binding TickFrequency}"
+            IsSnapToTickEnabled="True"
             >
             <hc:PreviewSlider.PreviewContent>
                 <Label

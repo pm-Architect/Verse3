@@ -124,8 +124,8 @@ namespace Verse3.VanillaElements
         private double _value;
         public double Value { get => _value; set => SetProperty(ref _value, value); }
 
-        private int interval;
-        public int Interval { get => interval; set => SetProperty(ref interval, value); }
+        private double tickFrequency;
+        public double TickFrequency { get => tickFrequency; set => SetProperty(ref tickFrequency, value); }
 
         #endregion
 
@@ -138,6 +138,7 @@ namespace Verse3.VanillaElements
             this.Minimum = 0;
             this.Maximum = 100;
             this.Value = 50;
+            this.TickFrequency = 0.001;
         }
 
         #endregion
