@@ -6,9 +6,9 @@ using Verse3.VanillaElements;
 
 namespace EventsLibrary
 {
-    public class ToggleBoolean : BaseComp
+    public class DateTimePicker : BaseComp
     {
-        internal bool? _value = false;
+        internal DateTime? _value = DateTime.Now;
         //private double _inputValue = 0.0;
 
         public string? ElementText
@@ -30,15 +30,10 @@ namespace EventsLibrary
                     $"\nOutput Value: {dataIN}";
             }
         }
-
-        #region Properties
-
-
-        #endregion
-
+        
         #region Constructors
 
-        public ToggleBoolean() : base(0, 0)
+        public DateTimePicker() : base(0, 0)
         {
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             //Random rng = new Random();
@@ -46,7 +41,7 @@ namespace EventsLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public ToggleBoolean(int x, int y, int width = 250, int height = 100) : base(x, y)
+        public DateTimePicker(int x, int y, int width = 250, int height = 100) : base(x, y)
         {
             //base.boundingBox = new BoundingBox(x, y, width, height);
 
@@ -65,8 +60,8 @@ namespace EventsLibrary
             //_value = toggleBlock.Value;
             if (_value.HasValue)
             {
-                this.ChildElementManager.SetData<bool>(_value.Value, 0);
-                toggleBlock.DisplayedText = _value.ToString();
+                this.ChildElementManager.SetData<DateTime>(_value.Value, 0);
+                dateTimeElement.DisplayedText = dateTimeElement.Value.ToString();
             }
         }
         public override CompInfo GetCompInfo()
@@ -75,9 +70,9 @@ namespace EventsLibrary
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Toggle Boolean",
+                Name = "DateTime Picker",
                 Group = "Basic UI",
-                Tab = "Boolean",
+                Tab = "DateTime",
                 Description = "",
                 Author = "",
                 License = "",
@@ -89,44 +84,32 @@ namespace EventsLibrary
         }
 
         internal TextElement textBlock = new TextElement();
-        internal ToggleElement toggleBlock = new ToggleElement();
-        internal GenericEventNode nodeBlock;
+        internal DateTimeElement dateTimeElement = new DateTimeElement();
+        internal DateTimeDataNode nodeBlock;
         internal GenericEventNode nodeBlock1;
-        internal BooleanDataNode nodeBlock2;
         public override void Initialize()
         {
             base.titleTextBlock.TextRotation = 0;
 
-            toggleBlock = new ToggleElement();
-            toggleBlock.Value = _value;
-            toggleBlock.DisplayedText = _value.ToString();
-            toggleBlock.ToggleChecked += ButtonBlock_ToggleChecked;
-            toggleBlock.ToggleUnchecked += ButtonBlock_ToggleUnchecked;
-            toggleBlock.Width = 200;
-            this.ChildElementManager.AddElement(toggleBlock);
+            dateTimeElement = new DateTimeElement();
+            dateTimeElement.Value = _value;
+            dateTimeElement.DisplayedText = dateTimeElement.Value.ToString();
+            dateTimeElement.DateTimeChanged += DateTimeElement_DateTimeChanged;
+            dateTimeElement.Width = 200;
+            this.ChildElementManager.AddElement(dateTimeElement);
 
-            nodeBlock = new GenericEventNode(this, NodeType.Output);
-            this.ChildElementManager.AddEventOutputNode(nodeBlock as IEventNode, "Checked");
+            nodeBlock = new DateTimeDataNode(this, NodeType.Output);
+            this.ChildElementManager.AddDataOutputNode(nodeBlock, "DateTime");
 
             nodeBlock1 = new GenericEventNode(this, NodeType.Output);
-            this.ChildElementManager.AddEventOutputNode(nodeBlock1 as IEventNode, "Unchecked");
-
-            nodeBlock2 = new BooleanDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode<bool>(nodeBlock2 as IDataNode<bool>, "Value");
+            this.ChildElementManager.AddEventOutputNode(nodeBlock1, "Changed");
         }
 
-        private void ButtonBlock_ToggleChecked(object? sender, RoutedEventArgs e)
+        private void DateTimeElement_DateTimeChanged(object? sender, RoutedEventArgs e)
         {
-            _value = true;
+            _value = dateTimeElement.Value;
             ComputationCore.Compute(this);
             this.ChildElementManager.EventOccured(0, new EventArgData(new DataStructure(_value)));
-        }
-
-        private void ButtonBlock_ToggleUnchecked(object? sender, RoutedEventArgs e)
-        {
-            _value = false;
-            ComputationCore.Compute(this);
-            this.ChildElementManager.EventOccured(1, new EventArgData(new DataStructure(_value)));
         }
     }
 }

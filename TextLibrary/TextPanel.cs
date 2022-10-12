@@ -15,20 +15,56 @@ namespace TextLibrary
         public TextPanel() : base(0, 0)
         {
         }
-        public TextPanel(int x, int y, int width = 250, int height = 300) : base(x, y)
+        public TextPanel(int x, int y) : base(x, y)
         {
         }
 
         public override void Compute()
         {
-            //throw new NotImplementedException();
-            this.ComputationPipelineInfo.IOManager.GetData<string>(out string data, 0);
-            textBlock.DisplayedText = data;
+            dynamic data = this.ChildElementManager.GetData<dynamic>(0, null);
+            if (data is null)
+            {
+                textBlock.DisplayedText = "<null>";
+                return;
+            }
+            switch (data.GetType())
+            {
+                case Type t when t == typeof(string):
+                    textBlock.DisplayedText = (string)data;
+                    break;
+                case Type t when t == typeof(int):
+                    textBlock.DisplayedText = ((int)data).ToString();
+                    break;
+                case Type t when t == typeof(double):
+                    textBlock.DisplayedText = ((double)data).ToString();
+                    break;
+                case Type t when t == typeof(float):
+                    textBlock.DisplayedText = ((float)data).ToString();
+                    break;
+                case Type t when t == typeof(bool):
+                    textBlock.DisplayedText = ((bool)data).ToString();
+                    break;
+                case Type t when t == typeof(DateTime):
+                    textBlock.DisplayedText = ((DateTime)data).ToString();
+                    break;
+                default:
+                    {
+                        try
+                        {
+                            textBlock.DisplayedText = data.ToString();
+                        }
+                        catch (Exception ex)
+                        {
+                            textBlock.DisplayedText = ex.Message;
+                        }
+                        break;
+                    }
+            }
         }
 
         public override CompInfo GetCompInfo()
         {
-            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
+            Type[] types = { typeof(int), typeof(int) };
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
@@ -46,15 +82,14 @@ namespace TextLibrary
         }
 
         internal TextElement textBlock = new TextElement();
-        internal TextDataNode nodeBlock;
+        internal GenericDataNode nodeBlock;
         public override void Initialize()
         {
-            nodeBlock = new TextDataNode(this, NodeType.Input);
-            nodeBlock.Width = 50;
-            this.ChildElementManager.AddDataInputNode(nodeBlock, "Text");
+            nodeBlock = new GenericDataNode(this, NodeType.Input);
+            this.ChildElementManager.AddDataInputNode(nodeBlock, "Data");
             
             textBlock = new TextElement();
-            textBlock.DisplayedText = "";
+            textBlock.DisplayedText = "<null>";
             textBlock.TextAlignment = TextAlignment.Left;
             this.ChildElementManager.AddElement(textBlock);
         }

@@ -168,7 +168,8 @@ namespace Core
             }
             catch (Exception ex)
             {
-                throw ex;
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                //throw ex;
             }
         }
     }

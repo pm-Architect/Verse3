@@ -102,12 +102,6 @@ namespace EventsLibrary
             nodeBlock.NodeEvent += NodeBlock_NodeEvent;
             this.ChildElementManager.AddEventInputNode(nodeBlock as IEventNode);
 
-            string? txt = this.ElementText;
-            textBlock = new TextElement();
-            textBlock.DisplayedText = txt;
-            textBlock.TextAlignment = TextAlignment.Center;
-            this.ChildElementManager.AddElement(textBlock);
-
             nodeBlock1 = new GenericEventNode(this, NodeType.Output);
             nodeBlock1.Width = 50;
             this.ChildElementManager.AddEventOutputNode(nodeBlock1 as IEventNode);
@@ -115,6 +109,12 @@ namespace EventsLibrary
             nodeBlock2 = new GenericDataNode(this, NodeType.Output);
             nodeBlock2.Width = 50;
             this.ChildElementManager.AddDataOutputNode(nodeBlock2);
+
+            string? txt = this.ElementText;
+            textBlock = new TextElement();
+            textBlock.DisplayedText = txt;
+            textBlock.TextAlignment = TextAlignment.Center;
+            this.ChildElementManager.AddElement(textBlock);
         }
 
         private void NodeBlock_NodeEvent(IEventNode container, EventArgData e)
@@ -122,7 +122,7 @@ namespace EventsLibrary
             //TODO: FIX EventArgData Null problem
             _counter++;
             nodeBlock1.EventOccured(e);
-            if (e.Count == 1)
+            if (e.Count > 0)
             {
                 _argstring = e[0].Data.ToString();
                 object dataOut = e[0].Data;

@@ -73,9 +73,8 @@ namespace MathLibrary
             int min = (int)this.ChildElementManager.GetData<double>(4, 0);
             int sec = (int)this.ChildElementManager.GetData<double>(5, 0);
             DateTime dateTime = new DateTime(yr, mnt, dat, hr, min, sec);
-            DateTime now = DateTime.Now;
             this.ChildElementManager.SetData<DateTime>(dateTime, 0);
-            this.ChildElementManager.SetData<DateTime>(now, 1);
+            this.ChildElementManager.SetData<DateTime>(DateTime.Now, 1);
             textBlock.DisplayedText = this.ElementText;
         }
         

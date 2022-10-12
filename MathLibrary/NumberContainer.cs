@@ -116,8 +116,8 @@ namespace MathLibrary
         {
             this._sliderValue = sliderBlock.Value;
             this.ChildElementManager.SetData<double>(this._sliderValue, 0);
+            ComputationPipeline.Compute(this);
             textBlock.DisplayedText = this.ElementText;
-            //ComputationPipeline.ComputeComputable(this);
         }
 
         //private IRenderable _parent;
