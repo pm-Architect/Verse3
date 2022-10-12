@@ -97,7 +97,7 @@ namespace Core
                 }
                 else if (origin is IEventNode && destination is IEventNode)
                 {
-                    if ((origin as IEventNode).EventArgData != null)
+                    if ((origin as IEventNode).EventArgData != null && (destination as IEventNode).EventArgData != null)
                     {
                         if ((origin as IEventNode).EventArgData.DataType == (destination as IEventNode).EventArgData.DataType)
                         {
@@ -106,6 +106,8 @@ namespace Core
                     }
                     else
                     {
+                        //TODO: Warn user that event data type does not match or are null!!!!
+                        //DISALLOW if a flag is true
                         return true;
                     }
                 }

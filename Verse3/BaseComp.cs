@@ -573,6 +573,11 @@ namespace Verse3
             return renderables;
         }
 
+        public void EventOccured(int v, EventArgData eventArgData)
+        {
+            this._owner.ComputationPipelineInfo.IOManager.EventOccured(v, eventArgData);
+        }
+
         private ElementsLinkedList<IRenderable> _input = new ElementsLinkedList<IRenderable>();
         public ElementsLinkedList<IRenderable> InputSide
         {

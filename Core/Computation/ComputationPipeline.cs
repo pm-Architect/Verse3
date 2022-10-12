@@ -421,10 +421,16 @@ namespace Core
 
         public object GetData(int index)
         {
+            if (index >= this.DataInputNodes.Count || index < 0) return default;
             return this._dataInputNodes[index].DataGoo.Data;
         }
         public Type GetData(out object output, int index)
         {
+            if (index >= this.DataInputNodes.Count || index < 0)
+            {
+                output = default;
+                return default;
+            }
             output = this._dataInputNodes[index].DataGoo.Data;
             if (output != null)
             {
@@ -434,6 +440,7 @@ namespace Core
         }
         public T GetData<T>(int index)
         {
+            if (index >= this.DataInputNodes.Count || index < 0) return default;
             if (this._dataInputNodes[index].DataValueType == typeof(T))
             {
                 if (this._dataInputNodes[index].DataGoo.IsValid && this._dataInputNodes[index].DataGoo.Data != null)
@@ -452,6 +459,11 @@ namespace Core
         }
         public bool GetData<T>(out T output, int index)
         {
+            if (index >= this.DataInputNodes.Count || index < 0)
+            {
+                output = default;
+                return default;
+            }
             if (this._dataInputNodes[index].DataValueType == typeof(T))
             {
                 output = (this._dataInputNodes[index].DataGoo as DataStructure<T>).Data;
@@ -464,8 +476,12 @@ namespace Core
             }
         }
 
+        //---------------------------
+        
         public bool SetData(object data, int index)
         {
+            if (index >= this.DataOutputNodes.Count || index < 0) return false;
+            if (data is null) return false;
             if (this._dataOutputNodes[index].DataValueType.IsAssignableFrom(data.GetType()))
             {
                 this._dataOutputNodes[index].DataGoo.Data = data;
@@ -475,6 +491,8 @@ namespace Core
         }
         public bool SetData(DataStructure data, int index)
         {
+            if (index >= this.DataOutputNodes.Count || index < 0) return false;
+            if (data is null || !data.IsValid) return false;
             if (this._dataOutputNodes[index].DataValueType.IsAssignableFrom(data.GetType()))
             {
                 this._dataOutputNodes[index].DataGoo = data;
@@ -484,7 +502,9 @@ namespace Core
         }
         public bool SetData<T>(T data, int index)
         {
-            if (data == null) return false;
+            if (index >= this.DataOutputNodes.Count || index < 0) return false;
+            if (data is null) return false;
+            if (typeof(DataStructure<T>).IsAssignableFrom(data.GetType())) return SetData<T>(data as DataStructure<T>, index);
             if (this._dataOutputNodes[index].DataValueType.IsAssignableFrom(data.GetType()))
             {
                 (this._dataOutputNodes[index].DataGoo as DataStructure<T>).Data = data;
@@ -494,6 +514,8 @@ namespace Core
         }
         public bool SetData<T>(DataStructure<T> data, int index)
         {
+            if (index >= this.DataOutputNodes.Count || index < 0) return false;
+            if (data is null || !data.IsValid) return false;
             if (this._dataOutputNodes[index].DataValueType == data.DataType)
             {
                 this._dataOutputNodes[index].DataGoo = data;

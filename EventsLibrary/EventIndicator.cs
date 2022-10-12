@@ -92,7 +92,7 @@ namespace EventsLibrary
         internal SliderElement sliderBlock = new SliderElement();
         internal GenericEventNode nodeBlock;
         internal GenericEventNode nodeBlock1;
-        internal NumberDataNode nodeBlock2;
+        internal GenericDataNode nodeBlock2;
         public override void Initialize()
         {
             base.titleTextBlock.TextRotation = 0;
@@ -112,9 +112,9 @@ namespace EventsLibrary
             nodeBlock1.Width = 50;
             this.ChildElementManager.AddEventOutputNode(nodeBlock1 as IEventNode);
 
-            nodeBlock2 = new NumberDataNode(this, NodeType.Output);
+            nodeBlock2 = new GenericDataNode(this, NodeType.Output);
             nodeBlock2.Width = 50;
-            this.ChildElementManager.AddDataOutputNode<double>(nodeBlock2 as IDataNode<double>);
+            this.ChildElementManager.AddDataOutputNode(nodeBlock2);
         }
 
         private void NodeBlock_NodeEvent(IEventNode container, EventArgData e)
@@ -125,17 +125,12 @@ namespace EventsLibrary
             if (e.Count == 1)
             {
                 _argstring = e[0].Data.ToString();
-                if (double.TryParse(e[0].Data.ToString(), out double num))
-                {
-                    this.ComputationPipelineInfo.IOManager.SetData<double>(num, 0);
-                }
+                object dataOut = e[0].Data;
+                this.ChildElementManager.SetData(dataOut, 0);
+                textBlock.DisplayedText = this.ElementText;
+                ComputationPipeline.Compute(this);
             }
             textBlock.DisplayedText = this.ElementText;
         }
-
-        //private IRenderable _parent;
-        //public IRenderable Parent => _parent;
-        //private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
-        //public ElementsLinkedList<IRenderable> Children => _children;
     }
 }

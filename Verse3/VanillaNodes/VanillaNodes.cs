@@ -50,20 +50,20 @@ namespace Verse3.VanillaElements
         {
         }
     }
-    [Serializable]
-    public class ButtonClickedEventNode : EventNodeElement
-    {
-        public ButtonClickedEventNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
-        {
-        }
+    //[Serializable]
+    //public class ButtonClickedEventNode : EventNodeElement
+    //{
+    //    public ButtonClickedEventNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
+    //    {
+    //    }
 
-        public static implicit operator GenericEventNode(ButtonClickedEventNode v)
-        {
-            GenericEventNode outValue = new GenericEventNode(v.Parent, v.NodeType);
-            outValue = (GenericEventNode)(v as EventNodeElement);
-            return outValue;
-        }
-    }
+    //    public static implicit operator GenericEventNode(ButtonClickedEventNode v)
+    //    {
+    //        GenericEventNode outValue = new GenericEventNode(v.Parent, v.NodeType);
+    //        outValue = (GenericEventNode)(v as EventNodeElement);
+    //        return outValue;
+    //    }
+    //}
     [Serializable]
     public class InteropMessageEventNode : EventNodeElement
     {

@@ -6,9 +6,9 @@ using Verse3.VanillaElements;
 
 namespace EventsLibrary
 {
-    public class ButtonTrigger : BaseComp
+    public class ToggleBoolean : BaseComp
     {
-        internal double _sliderValue = 0.0;
+        internal bool? _value = false;
         //private double _inputValue = 0.0;
 
         public string? ElementText
@@ -17,7 +17,7 @@ namespace EventsLibrary
             {
                 string? name = this.GetType().FullName;
                 string? viewname = this.ViewType.FullName;
-                string? dataIN = "";
+                string? dataIN = _value.ToString();
                 //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
                 //dataIN = ((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0])?.DataGoo.Data.ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
@@ -38,7 +38,7 @@ namespace EventsLibrary
 
         #region Constructors
 
-        public ButtonTrigger() : base(0, 0)
+        public ToggleBoolean() : base(0, 0)
         {
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             //Random rng = new Random();
@@ -46,7 +46,7 @@ namespace EventsLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public ButtonTrigger(int x, int y, int width = 250, int height = 100) : base(x, y)
+        public ToggleBoolean(int x, int y, int width = 250, int height = 100) : base(x, y)
         {
             //base.boundingBox = new BoundingBox(x, y, width, height);
 
@@ -62,12 +62,12 @@ namespace EventsLibrary
 
         public override void Compute()
         {
-            //this.ComputationPipelineInfo.IOManager.SetData<double>(_sliderValue, 0);
-            //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count == 1)
-            //{
-            //    if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
-            //        ((NodeElement)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data = _sliderValue;
-            //}
+            //_value = toggleBlock.Value;
+            if (_value.HasValue)
+            {
+                this.ChildElementManager.SetData<bool>(_value.Value, 0);
+                toggleBlock.DisplayedText = _value.ToString();
+            }
         }
         public override CompInfo GetCompInfo()
         {
@@ -75,9 +75,9 @@ namespace EventsLibrary
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Button Trigger",
+                Name = "Toggle Boolean",
                 Group = "Basic UI",
-                Tab = "Events",
+                Tab = "Boolean",
                 Description = "",
                 Author = "",
                 License = "",
@@ -89,27 +89,47 @@ namespace EventsLibrary
         }
 
         internal TextElement textBlock = new TextElement();
-        internal ButtonElement buttonBlock = new ButtonElement();
+        internal ToggleElement toggleBlock = new ToggleElement();
         internal GenericEventNode nodeBlock;
+        internal GenericEventNode nodeBlock1;
+        internal BooleanDataNode nodeBlock2;
         public override void Initialize()
         {
             base.titleTextBlock.TextRotation = 0;
 
-            buttonBlock = new ButtonElement();
-            buttonBlock.DisplayedText = "Trigger";
-            buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
-            buttonBlock.Width = 200;
-            this.ChildElementManager.AddElement(buttonBlock);
+            toggleBlock = new ToggleElement();
+            toggleBlock.Value = _value;
+            toggleBlock.DisplayedText = _value.ToString();
+            toggleBlock.ToggleChecked += ButtonBlock_ToggleChecked;
+            toggleBlock.ToggleUnchecked += ButtonBlock_ToggleUnchecked;
+            toggleBlock.Width = 200;
+            this.ChildElementManager.AddElement(toggleBlock);
 
             nodeBlock = new GenericEventNode(this, NodeType.Output);
-            nodeBlock.Width = 50;
+            nodeBlock.Name = "Checked";
             this.ChildElementManager.AddEventOutputNode(nodeBlock as IEventNode);
+
+            nodeBlock1 = new GenericEventNode(this, NodeType.Output);
+            nodeBlock1.Name = "Unchecked";
+            this.ChildElementManager.AddEventOutputNode(nodeBlock1 as IEventNode);
+
+            nodeBlock2 = new BooleanDataNode(this, NodeType.Output);
+            nodeBlock2.Name = "Value";
+            this.ChildElementManager.AddDataOutputNode<bool>(nodeBlock2 as IDataNode<bool>);
         }
 
-        private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
+        private void ButtonBlock_ToggleChecked(object? sender, RoutedEventArgs e)
         {
+            _value = true;
             ComputationCore.Compute(this);
-            this.ChildElementManager.EventOccured(0, new EventArgData());
+            this.ChildElementManager.EventOccured(0, new EventArgData(new DataStructure(_value)));
+        }
+
+        private void ButtonBlock_ToggleUnchecked(object? sender, RoutedEventArgs e)
+        {
+            _value = false;
+            ComputationCore.Compute(this);
+            this.ChildElementManager.EventOccured(1, new EventArgData(new DataStructure(_value)));
         }
     }
 }
