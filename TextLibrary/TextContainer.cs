@@ -97,6 +97,7 @@ namespace TextLibrary
         
         private void TextBoxBlock_OnValueChanged(object? sender, EventArgs e)
         {
+            this._inputText = textBoxBlock.InputText;
             ComputationPipeline.ComputeComputable(this);
         }
 

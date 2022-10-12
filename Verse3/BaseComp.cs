@@ -487,7 +487,8 @@ namespace Verse3
 
         public T GetData<T>(int v, T defaultValue)
         {
-            T a = this._owner.ComputationPipelineInfo.IOManager.GetData<T>(v);
+            T a = defaultValue;
+            a = this._owner.ComputationPipelineInfo.IOManager.GetData<T>(v, defaultValue);
             if (a is null) a = defaultValue;
             return a;
         }
@@ -972,10 +973,33 @@ namespace Verse3
                     IComputable c = (this as INode).Parent as IComputable;
                     if (this.NodeType == NodeType.Output)
                     {
+                        if (c.ComputationPipelineInfo.IOManager.EventOutputNodes.Count > 0)
+                        {
+                            for (int indexEvent = 0; indexEvent < c.ComputationPipelineInfo.IOManager.EventOutputNodes.Count; indexEvent++)
+                            {
+                                v += ((EventNode)c.ComputationPipelineInfo.IOManager.EventOutputNodes[indexEvent]).BoundingBox.Size.Height;
+                            }
+                        }
                         if (c.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 1 && c.ComputationPipelineInfo.IOManager.DataOutputNodes.Contains(this))
                         {
-                            int i = c.ComputationPipelineInfo.IOManager.DataOutputNodes.IndexOf(this);
-                            v = v + (i * this.BoundingBox.Size.Height);
+                            for (int indexData = 0; indexData < c.ComputationPipelineInfo.IOManager.DataOutputNodes.Count; indexData++)
+                            {
+                                if (c.ComputationPipelineInfo.IOManager.DataOutputNodes[indexData] != this)
+                                {
+                                    if (c.ComputationPipelineInfo.IOManager.DataOutputNodes[indexData] is IRenderable)
+                                    {
+                                        v += ((IRenderable)c.ComputationPipelineInfo.IOManager.DataOutputNodes[indexData]).BoundingBox.Size.Height;
+                                    }
+                                }
+                                else
+                                {
+                                    //if (c.ComputationPipelineInfo.IOManager.DataOutputNodes[indexData] is IRenderable)
+                                    //{
+                                    //    v += this.BoundingBox.Size.Height;
+                                        break;
+                                    //}
+                                }
+                            }
                         }
                         _hotspot = this.RenderPipelineInfo.Parent.BoundingBox.Location +
                         new CanvasPoint(this.RenderPipelineInfo.Parent.BoundingBox.Size.Width,
@@ -983,10 +1007,33 @@ namespace Verse3
                     }
                     else
                     {
+                        if (c.ComputationPipelineInfo.IOManager.EventInputNodes.Count > 0)
+                        {
+                            for (int indexEvent = 0; indexEvent < c.ComputationPipelineInfo.IOManager.EventInputNodes.Count; indexEvent++)
+                            {
+                                v += ((EventNode)c.ComputationPipelineInfo.IOManager.EventInputNodes[indexEvent]).BoundingBox.Size.Height;
+                            }
+                        }
                         if (c.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 1 && c.ComputationPipelineInfo.IOManager.DataInputNodes.Contains(this))
                         {
-                            int i = c.ComputationPipelineInfo.IOManager.DataInputNodes.IndexOf(this);
-                            v = v + (i * this.BoundingBox.Size.Height);
+                            for (int indexData = 0; indexData < c.ComputationPipelineInfo.IOManager.DataInputNodes.Count; indexData++)
+                            {
+                                if (c.ComputationPipelineInfo.IOManager.DataInputNodes[indexData] != this)
+                                {
+                                    if (c.ComputationPipelineInfo.IOManager.DataInputNodes[indexData] is IRenderable)
+                                    {
+                                        v += ((IRenderable)c.ComputationPipelineInfo.IOManager.DataInputNodes[indexData]).BoundingBox.Size.Height;
+                                    }
+                                }
+                                else
+                                {
+                                    //if (c.ComputationPipelineInfo.IOManager.DataInputNodes[indexData] is IRenderable)
+                                    //{
+                                    //    v += this.BoundingBox.Size.Height;
+                                        break;
+                                    //}
+                                }
+                            }
                         }
                         _hotspot = this.RenderPipelineInfo.Parent.BoundingBox.Location +
                         new CanvasPoint(0.0, ((this.BoundingBox.Size.Height / 2) + v));

@@ -457,6 +457,25 @@ namespace Core
             }
             return default;
         }
+        public T GetData<T>(int index, T defaultValue = default)
+        {
+            if (index >= this.DataInputNodes.Count || index < 0) return defaultValue;
+            if (this._dataInputNodes[index].DataValueType == typeof(T))
+            {
+                if (this._dataInputNodes[index].DataGoo.IsValid && this._dataInputNodes[index].DataGoo.Data != null)
+                {
+                    if (this._dataInputNodes[index].DataGoo.Data is T)
+                    {
+                        return (this._dataInputNodes[index].DataGoo as DataStructure<T>).Data;
+                    }
+                    else
+                    {
+                        throw new Exception("Data type mismatch");
+                    }
+                }
+            }
+            return defaultValue;
+        }
         public bool GetData<T>(out T output, int index)
         {
             if (index >= this.DataInputNodes.Count || index < 0)

@@ -8,7 +8,7 @@ namespace MathLibrary
 {
     public class NumberContainer : BaseComp
     {
-        internal double _sliderValue = 0.0;
+        internal double? _sliderValue = 0.0;
         //private double _inputValue = 0.0;
 
         public string? ElementText
@@ -17,18 +17,13 @@ namespace MathLibrary
             {
                 string? name = this.GetType().FullName;
                 string? viewname = this.ViewType.FullName;
-                string? dataIN = Math.Round(_sliderValue, 2).ToString();
+                string? dataIN = Math.Round(_sliderValue.GetValueOrDefault(), 3).ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
                 //TODO: Z Index control for IRenderable
-                return $"Name: {name}" +
-                    $"\nView: {viewname}" +
-                    $"\nID: {this.ID}" +
-                    $"\nX: {this.X}" +
-                    $"\nY: {this.Y}" +
-                    $"\nOutput Value: {dataIN}";
+                return  $"Value: {dataIN}";
             }
         }
-
+        
         #region Properties
 
 
@@ -60,12 +55,11 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            //this.ChildElementManager.SetData<double>(_sliderValue, 0);
-            //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count == 1)
-            //{
-            //    if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
-            //        ((NodeElement)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data = _sliderValue;
-            //}
+            if (_sliderValue.HasValue)
+            {
+                this.ChildElementManager.SetData<double>(this._sliderValue.Value, 0);
+                textBlock.DisplayedText = this.ElementText;
+            }
         }
         public override CompInfo GetCompInfo()
         {
@@ -89,10 +83,18 @@ namespace MathLibrary
         internal TextElement textBlock = new TextElement();
         internal SliderElement sliderBlock = new SliderElement();
         internal NumberDataNode nodeBlock;
+        internal GenericEventNode nodeBlock1;
         public override void Initialize()
         {
             base.titleTextBlock.TextRotation = 0;
-            
+
+            nodeBlock1 = new GenericEventNode(this, NodeType.Output);
+            this.ChildElementManager.AddEventOutputNode(nodeBlock1, "Changed");
+
+            nodeBlock = new NumberDataNode(this, NodeType.Output);
+            //nodeBlock.Width = 50;
+            this.ChildElementManager.AddDataOutputNode(nodeBlock, "Number");
+
             sliderBlock = new SliderElement();
             sliderBlock.Minimum = -100;
             sliderBlock.Maximum = 100;
@@ -101,10 +103,6 @@ namespace MathLibrary
             sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
             sliderBlock.Width = 200;
             this.ChildElementManager.AddElement(sliderBlock);
-
-            nodeBlock = new NumberDataNode(this, NodeType.Output);
-            //nodeBlock.Width = 50;
-            this.ChildElementManager.AddDataOutputNode(nodeBlock, "Number");
 
             textBlock = new TextElement();
             textBlock.DisplayedText = this.ElementText;
@@ -115,9 +113,9 @@ namespace MathLibrary
         private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
         {
             this._sliderValue = sliderBlock.Value;
-            this.ChildElementManager.SetData<double>(this._sliderValue, 0);
             ComputationPipeline.Compute(this);
-            textBlock.DisplayedText = this.ElementText;
+            nodeBlock1.TriggerEvent(new EventArgData(new DataStructure(_sliderValue)));
+            this.ChildElementManager.EventOccured(0, new EventArgData(new DataStructure(_sliderValue)));
         }
 
         //private IRenderable _parent;

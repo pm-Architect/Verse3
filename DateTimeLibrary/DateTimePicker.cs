@@ -22,12 +22,7 @@ namespace EventsLibrary
                 //dataIN = ((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0])?.DataGoo.Data.ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
                 //TODO: Z Index control for IRenderable
-                return $"Name: {name}" +
-                    $"\nView: {viewname}" +
-                    $"\nID: {this.ID}" +
-                    $"\nX: {this.X}" +
-                    $"\nY: {this.Y}" +
-                    $"\nOutput Value: {dataIN}";
+                return $"Value: {dataIN}";
             }
         }
         
@@ -91,18 +86,18 @@ namespace EventsLibrary
         {
             base.titleTextBlock.TextRotation = 0;
 
+            nodeBlock1 = new GenericEventNode(this, NodeType.Output);
+            this.ChildElementManager.AddEventOutputNode(nodeBlock1, "Changed");
+
+            nodeBlock = new DateTimeDataNode(this, NodeType.Output);
+            this.ChildElementManager.AddDataOutputNode(nodeBlock, "DateTime");
+            
             dateTimeElement = new DateTimeElement();
             dateTimeElement.Value = _value;
             dateTimeElement.DisplayedText = dateTimeElement.Value.ToString();
             dateTimeElement.DateTimeChanged += DateTimeElement_DateTimeChanged;
             dateTimeElement.Width = 200;
             this.ChildElementManager.AddElement(dateTimeElement);
-
-            nodeBlock = new DateTimeDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlock, "DateTime");
-
-            nodeBlock1 = new GenericEventNode(this, NodeType.Output);
-            this.ChildElementManager.AddEventOutputNode(nodeBlock1, "Changed");
         }
 
         private void DateTimeElement_DateTimeChanged(object? sender, RoutedEventArgs e)
