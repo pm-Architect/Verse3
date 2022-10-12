@@ -369,72 +369,7 @@ namespace Verse3
                     _owner.Width = 10000;
                     _owner.Height = 10000;
                     view.UpdateLayout();
-                    //if (view.InputsList.Items.Count > 0)
-                    //{
-                    //    double iWidth = view.InputsList.ActualWidth;
-                    //    foreach (var r in view.InputsList.Items)
-                    //    {
-                    //        if (r != null)
-                    //        {
-                    //            if (r is IRenderable)
-                    //            {
-                    //                IRenderable c = (IRenderable)r;
-                    //                if (c.RenderView is UserControl)
-                    //                {
-                    //                    UserControl control = (UserControl)c.RenderView;
-                    //                    if (control is IRenderView)
-                    //                    {
-                    //                        IRenderView v = control as IRenderView;
-                    //                        if (v.Element is INode)
-                    //                        {
-                    //                            double textWidth = (v.Element as INode).Name.Length * 10.0;
-                    //                            if (control.ActualWidth < textWidth + 50)
-                    //                            {
-                    //                                c.Width = textWidth + 50;
-                    //                            }
-                    //                        }
-                    //                    }
-                    //                    if (control.ActualWidth > view.InputsList.ActualWidth)
-                    //                        view.InputsList.Width = control.ActualWidth;
-                    //                }
-                    //            }
-                    //        }
-                    //    }
-                    //}
-                    //if (view.OutputsList.Items.Count > 0)
-                    //{
-                    //    double oWidth = view.OutputsList.ActualWidth;
-                    //    foreach (var r in view.OutputsList.Items)
-                    //    {
-                    //        if (r != null)
-                    //        {
-                    //            if (r is IRenderable)
-                    //            {
-                    //                IRenderable c = (IRenderable)r;
-                    //                if (c.RenderView is UserControl)
-                    //                {
-                    //                    UserControl control = (UserControl)c.RenderView;
-                    //                    if (control is IRenderView)
-                    //                    {
-                    //                        IRenderView v = control as IRenderView;
-                    //                        if (v.Element is INode)
-                    //                        {
-                    //                            double textWidth = (v.Element as INode).Name.Length * 10.0;
-                    //                            if (control.ActualWidth < textWidth + 50)
-                    //                            {
-                    //                                c.Width = textWidth + 50;
-                    //                            }
-                    //                        }
-                    //                    }
-                    //                    if (control.ActualWidth > view.OutputsList.ActualWidth)
-                    //                        view.OutputsList.Width = control.ActualWidth;
-                    //                }
-                    //            }
-                    //        }
-                    //    }
-                    //}
-                    //view.UpdateLayout();
-                    //view.Render();
+                    //DataViewModel.WPFControl.ExpandContent();
                 }
 
                 //if (view.MainStackPanel.ActualWidth < 50 || view.MainStackPanel.ActualHeight < 50) return;

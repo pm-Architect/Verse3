@@ -66,12 +66,12 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            int yr = (int)this.ChildElementManager.GetData<double>(0, 0);
-            int mnt = (int)this.ChildElementManager.GetData<double>(1, 0);
-            int dat = (int)this.ChildElementManager.GetData<double>(2, 0);
-            int hr = (int)this.ChildElementManager.GetData<double>(3, 0);
-            int min = (int)this.ChildElementManager.GetData<double>(4, 0);
-            int sec = (int)this.ChildElementManager.GetData<double>(5, 0);
+            int yr = (int)this.ChildElementManager.GetData<double>(0, DateTime.Now.Year);
+            int mnt = (int)this.ChildElementManager.GetData<double>(1, DateTime.Now.Month);
+            int dat = (int)this.ChildElementManager.GetData<double>(2, DateTime.Now.Day);
+            int hr = (int)this.ChildElementManager.GetData<double>(3, DateTime.Now.Hour);
+            int min = (int)this.ChildElementManager.GetData<double>(4, DateTime.Now.Minute);
+            int sec = (int)this.ChildElementManager.GetData<double>(5, DateTime.Now.Second);
             DateTime dateTime = new DateTime(yr, mnt, dat, hr, min, sec);
             this.ChildElementManager.SetData<DateTime>(dateTime, 0);
             this.ChildElementManager.SetData<DateTime>(DateTime.Now, 1);
