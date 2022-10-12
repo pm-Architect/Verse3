@@ -1,0 +1,51 @@
+<UserControl x:Class="Verse3.VanillaElements.RangeSliderElementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:local="clr-namespace:Verse3.VanillaElements" d:DataContext="{d:DesignInstance Type=local:RangeSliderElement}"
+             mc:Ignorable="d"
+             d:DesignHeight="50"
+             d:DesignWidth="120"
+             MouseDown="OnMouseDown"
+             MouseMove="OnMouseMove"
+             MouseUp="OnMouseUp"
+             MouseWheel="OnMouseWheel"
+             DataContextChanged="OnDataContextChanged"
+             Loaded="OnLoaded"
+             >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDark.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid
+        Width="{Binding BoundingBox.Size.Width}"
+        Height="{Binding BoundingBox.Size.Height}"
+        MinWidth="100"
+        MinHeight="20"
+        MaxHeight="50"
+        >
+        <hc:RangeSlider
+            x:Name="SliderBlock"
+            Minimum="{Binding Minimum}"
+            Maximum="{Binding Maximum}"
+            ValueChanged="SliderBlock_ValueChanged"
+            ValueStart="{Binding ValueStart, Mode=TwoWay}"
+            ValueEnd="{Binding ValueEnd, Mode=TwoWay}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Margin="10"
+            TickFrequency="{Binding TickFrequency}"
+            IsSnapToTickEnabled="True"
+            hc:TipElement.Placement="Top"
+            hc:TipElement.StringFormat="#0.00"
+            hc:TipElement.Visibility="Visible" 
+            >
+        </hc:RangeSlider>
+    </Grid>
+</UserControl>

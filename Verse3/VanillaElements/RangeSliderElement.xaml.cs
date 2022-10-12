@@ -1,11 +1,11 @@
 using Core;
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using static Core.Geometry2D;
 
 namespace Verse3.VanillaElements
@@ -13,25 +13,24 @@ namespace Verse3.VanillaElements
     /// <summary>
     /// Visual Interaction logic for TestElement.xaml
     /// </summary>
-    public partial class SliderElementView : UserControl, IBaseElementView<SliderElement>
+    public partial class RangeSliderElementView : UserControl, IBaseElementView<RangeSliderElement>
     {
-
         #region IBaseElementView Members
 
-        private SliderElement _element;
-        public SliderElement Element
+        private RangeSliderElement _element;
+        public RangeSliderElement Element
         {
             get
             {
                 if (this._element == null)
                 {
-                    _element = this.DataContext as SliderElement;
+                    _element = this.DataContext as RangeSliderElement;
                 }
                 return _element;
             }
             private set
             {
-                _element = value as SliderElement;
+                _element = value as RangeSliderElement;
             }
         }
         IRenderable IRenderView.Element => Element;
@@ -40,7 +39,7 @@ namespace Verse3.VanillaElements
 
         #region Constructor and Render
 
-        public SliderElementView()
+        public RangeSliderElementView()
         {
             InitializeComponent();
         }
@@ -88,65 +87,75 @@ namespace Verse3.VanillaElements
         void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             //DependencyPropertyChangedEventArgs
-            Element = this.DataContext as SliderElement;
+            Element = this.DataContext as RangeSliderElement;
             Render();
         }
 
         void OnLoaded(object sender, RoutedEventArgs e)
         {
             //RoutedEventArgs
-            Element = this.DataContext as SliderElement;
+            Element = this.DataContext as RangeSliderElement;
             Render();
         }
 
         #endregion
-
-        private void SliderBlock_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        
+        private void SliderBlock_ValueChanged(object sender, RoutedPropertyChangedEventArgs<HandyControl.Data.DoubleRange> e)
         {
-            this.Element.OnValueChanged(sender, e);
-            //ComputationPipeline.ComputeComputable(this.Element.RenderPipelineInfo.Parent as IComputable);
-            //RenderPipeline.Render();
+            this.Element.OnValuesChanged(sender, e);
         }
     }
 
     [Serializable]
-    public class SliderElement : BaseElement
+    public class RangeSliderElement : BaseElement
     {
-        #region Properties
+        public event EventHandler<RoutedEventArgs> ValuesChanged;
 
-        public override Type ViewType => typeof(SliderElementView);
+        #region Properties
         
+        public override Type ViewType => typeof(RangeSliderElementView);
+        
+        #endregion
+
+        #region Constructors
+
+        public RangeSliderElement() : base()
+        {
+            this.minimum = -200.0;
+            this.maximum = 200.0;
+            this.valueStart = -100.0;
+            this.valueEnd = 100.0;
+            this.tickFrequency = 0.001;
+        }
+
+        #endregion
+
+        public void OnValuesChanged(object sender, RoutedPropertyChangedEventArgs<HandyControl.Data.DoubleRange> e)
+        {
+            this.valueStart = e.NewValue.Start;
+            this.valueEnd = e.NewValue.End;
+            ValuesChanged?.Invoke(sender, e);
+        }
+
+        private double valueStart;
+
+        public double ValueStart { get => valueStart; set => SetProperty(ref valueStart, value); }
+
+        private double valueEnd;
+
+        public double ValueEnd { get => valueEnd; set => SetProperty(ref valueEnd, value); }
+
+        private double tickFrequency;
+
+        public double TickFrequency { get => tickFrequency; set => SetProperty(ref tickFrequency, value); }
+
         private double minimum;
+
         public double Minimum { get => minimum; set => SetProperty(ref minimum, value); }
 
         private double maximum;
+
         public double Maximum { get => maximum; set => SetProperty(ref maximum, value); }
 
-        private double _value;
-        public double Value { get => _value; set => SetProperty(ref _value, value); }
-
-        private double tickFrequency;
-        public double TickFrequency { get => tickFrequency; set => SetProperty(ref tickFrequency, value); }
-
-        #endregion
-        
-        #region Constructors
-
-        public SliderElement() : base()
-        {
-            this.Minimum = 0;
-            this.Maximum = 100;
-            this.Value = 50;
-            this.TickFrequency = 0.001;
-        }
-
-        #endregion
-
-        public event EventHandler<RoutedPropertyChangedEventArgs<double>> ValueChanged;
-        public void OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            this.Value = (double)e.NewValue;
-            this.ValueChanged.Invoke(sender, e);
-        }
     }
 }
