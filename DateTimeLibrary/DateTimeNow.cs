@@ -66,11 +66,9 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            DateTime dtOut = DateTime.Now;
-            this.ChildElementManager.SetData<DateTime>(dtOut, 0);
-            textBlock.DisplayedText = this.ElementText;
+            //ComputationCore.Compute(this);
         }
-        
+
         private TextElement textBlock = new TextElement();
         private GenericEventNode nodeBlock;
         private DateTimeDataNode nodeBlock6;
@@ -91,9 +89,13 @@ namespace MathLibrary
 
         private void NodeBlock_NodeEvent(IEventNode container, EventArgData e)
         {
+            //Compute();
             //TODO: BUG: FIGURE OUT WHY THIS DOESN'T WORK VVVVVVVVVVV
-            //ComputationPipeline.ComputeComputable(this);
-            Compute();
+            //ComputationCore.Compute(this);
+            DateTime dtOut = DateTime.Now;
+            this.ChildElementManager.SetData<DateTime>(dtOut, 0);
+            textBlock.DisplayedText = this.ElementText;
+            ComputationCore.Compute(this);
         }
     }
 }

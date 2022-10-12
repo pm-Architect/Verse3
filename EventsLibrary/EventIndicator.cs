@@ -128,7 +128,7 @@ namespace EventsLibrary
                 object dataOut = e[0].Data;
                 this.ChildElementManager.SetData(dataOut, 0);
                 textBlock.DisplayedText = this.ElementText;
-                ComputationPipeline.Compute(this);
+                ComputationCore.Compute(this);
             }
             textBlock.DisplayedText = this.ElementText;
         }

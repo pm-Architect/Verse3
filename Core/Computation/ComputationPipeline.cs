@@ -68,48 +68,48 @@ namespace Core
                 {
 
                     ComputationPipeline.Instance._current = computable;
-                    if (computable.ComputationPipelineInfo.IOManager.EventInputNodes != null &&
-                        computable.ComputationPipelineInfo.IOManager.EventInputNodes.Count > 0)
-                    {
-                        //TODO: Log to console
-                        //Computables with EventUS will only compute when their EventUS computables trigger the event they are listening to
-                        computable.CollectData();
-                    }
-                    else
-                    {
-                        computable.CollectData();
-                        //TODO: Create a task to compute and store the task in the computable as part of it's state
-                        //https://medium.com/@alex.puiu/parallel-foreach-async-in-c-36756f8ebe62
-                        computable.Compute();
-                        computable.DeliverData();
+                    //if (computable.ComputationPipelineInfo.IOManager.EventInputNodes != null &&
+                    //    computable.ComputationPipelineInfo.IOManager.EventInputNodes.Count > 0)
+                    //{
+                    //    //TODO: Log to console
+                    //    //Computables with EventUS will only compute when their EventUS computables trigger the event they are listening to
+                    //    computable.CollectData();
+                    //}
+                    //else
+                    //{
+                    computable.CollectData();
+                    //TODO: Create a task to compute and store the task in the computable as part of it's state
+                    //https://medium.com/@alex.puiu/parallel-foreach-async-in-c-36756f8ebe62
+                    computable.Compute();
+                    computable.DeliverData();
 
-                        count++;
-                        if (recursive)
+                    count++;
+                    if (recursive)
+                    {
+                        //if (!upstream)
+                        //{
+                        if (computable.ComputationPipelineInfo.DataDS != null && computable.ComputationPipelineInfo.DataDS.Count > 0)
                         {
-                            //if (!upstream)
-                            //{
-                            if (computable.ComputationPipelineInfo.DataDS != null && computable.ComputationPipelineInfo.DataDS.Count > 0)
+                            foreach (IComputable compDS in computable.ComputationPipelineInfo.DataDS)
                             {
-                                foreach (IComputable compDS in computable.ComputationPipelineInfo.DataDS)
-                                {
-                                    //TODO: Log to console
-                                    computeSuccess = computeSuccess && (ComputeComputable(compDS) > 0);
-                                }
+                                //TODO: Log to console
+                                computeSuccess = computeSuccess && (ComputeComputable(compDS) > 0);
                             }
-                            //}
-                            //else
-                            //{
-                            //if (computable.ComputationPipelineInfo.DataUS != null && computable.ComputationPipelineInfo.DataUS.Count > 0)
-                            //{
-                            //    foreach (IComputable compUS in computable.ComputationPipelineInfo.DataUS)
-                            //    {
-                            //        //TODO: Log to console
-                            //        computeSuccess = computeSuccess && (ComputeComputable(compUS) > 0);
-                            //    }
-                            //}
-                            //}
                         }
+                        //}
+                        //else
+                        //{
+                        //if (computable.ComputationPipelineInfo.DataUS != null && computable.ComputationPipelineInfo.DataUS.Count > 0)
+                        //{
+                        //    foreach (IComputable compUS in computable.ComputationPipelineInfo.DataUS)
+                        //    {
+                        //        //TODO: Log to console
+                        //        computeSuccess = computeSuccess && (ComputeComputable(compUS) > 0);
+                        //    }
+                        //}
+                        //}
                     }
+                    //}
                 }
                 if (computeSuccess) return count;
                 else return -1;
