@@ -394,19 +394,31 @@ namespace Verse3.VanillaElements
         public ConnectionType ConnectionType { get; }
         public bool TopToBottom => (this.origin.Hotspot.Y < this.destination.Hotspot.Y);
         public bool LeftToRight => (this.origin.Hotspot.X < this.destination.Hotspot.X);
-
+        
         #endregion
 
         public bool SetDestination(INode destination)
         {
-            //TODO: Check whether destination is valid
-            bool check = (destination.GetType().BaseType == this.origin.GetType().BaseType);
-            check = check && (destination.NodeType != this.origin.NodeType);
-            check = NodeUtilities.CheckCompatibility(this.origin, destination);
-            if (!check) return false;
             //TODO: LOOP WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //this.destination.Connections.Remove(this);
-            this.destination = destination;
+            if (this.destination != MousePositionNode.Instance && this.origin == MousePositionNode.Instance)
+            {
+                //TODO: Check whether destination is valid
+                bool check = (destination.GetType().BaseType == this.destination.GetType().BaseType);
+                check = check && (destination.NodeType != this.destination.NodeType);
+                check = NodeUtilities.CheckCompatibility(destination, this.destination);
+                if (!check) return false;
+                this.origin = destination;
+            }
+            else
+            {
+                //TODO: Check whether destination is valid
+                bool check = (destination.GetType().BaseType == this.origin.GetType().BaseType);
+                check = check && (destination.NodeType != this.origin.NodeType);
+                check = NodeUtilities.CheckCompatibility(this.origin, destination);
+                if (!check) return false;
+                this.destination = destination;
+            }
             //this.destination.Connections.Add(this);
             RedrawBezier(this.origin, this.destination);
             if (this.RenderView != null)
@@ -436,9 +448,14 @@ namespace Verse3.VanillaElements
         {
             if (this.origin != start) this.origin = start;
             if (this.destination != end) this.destination = end;
-            if (this.origin.NodeType == NodeType.Input) this.Direction = BezierDirection.ForceRightToLeft;
-            else this.Direction = BezierDirection.ForceLeftToRight;
-            RedrawBezier(start, end);
+            //if (this.origin.NodeType == NodeType.Input) this.Direction = BezierDirection.ForceRightToLeft;
+            //else this.Direction = BezierDirection.ForceLeftToRight;
+            if (this.origin.NodeType == NodeType.Input)
+            {
+                this.destination = start;
+                this.origin = end;
+            }
+            RedrawBezier(this.origin, this.destination);
         }
 
         #endregion

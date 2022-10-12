@@ -509,6 +509,17 @@ namespace Verse3
                     e.Handled = true;
                 }
             }
+            if (e.Key == Key.Escape)
+            {
+                if (DataViewModel.ActiveConnection != default)
+                {
+                    DataViewModel.ActiveConnection.Origin.Connections.Remove(DataViewModel.ActiveConnection);
+                    DataViewModel.ActiveConnection.Destination.Connections.Remove(DataViewModel.ActiveConnection);
+                    DataViewModel.Instance.Elements.Remove(DataViewModel.ActiveConnection);
+                    DataViewModel.ActiveConnection.Dispose();
+                    DataViewModel.ActiveConnection = default;
+                }
+            }
         }
 
 

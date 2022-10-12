@@ -97,7 +97,14 @@ namespace Core
                 }
                 else if (origin is IEventNode && destination is IEventNode)
                 {
-                    if ((origin as IEventNode).EventArgData.DataType == (destination as IEventNode).EventArgData.DataType)
+                    if ((origin as IEventNode).EventArgData != null)
+                    {
+                        if ((origin as IEventNode).EventArgData.DataType == (destination as IEventNode).EventArgData.DataType)
+                        {
+                            return true;
+                        }
+                    }
+                    else
                     {
                         return true;
                     }
