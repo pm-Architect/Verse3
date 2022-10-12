@@ -180,8 +180,6 @@ namespace MathLibrary
                         }
                     }
                 }
-                RenderingCore.Render(this);
-                DataViewModel.WPFControl.ExpandContent();
             }
             catch (Exception ex)
             {

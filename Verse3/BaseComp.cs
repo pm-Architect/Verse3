@@ -436,6 +436,8 @@ namespace Verse3
                         break;
                     }
             }
+            RenderingCore.Render(this._owner);
+            DataViewModel.WPFControl.ExpandContent();
         }
         public void RemoveElement(IRenderable element)
         {
