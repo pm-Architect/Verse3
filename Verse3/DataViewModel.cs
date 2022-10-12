@@ -313,6 +313,8 @@ namespace Verse3
         public static IConnection ActiveConnection { get; internal set; }
 
         private static Dispatcher dispatcher = null;
+        internal static CompInfo SearchBarCompInfo;
+
         [XmlIgnore]
         public static Dispatcher Dispatcher { get => dispatcher; }
 

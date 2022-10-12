@@ -3,6 +3,7 @@ using InfiniteCanvas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -485,40 +486,72 @@ namespace Verse3
 
         private void InfiniteCanvasControl1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Delete)
+            switch (e.Key)
             {
-                if (this.LBcontent.SelectedItems != null && this.LBcontent.SelectedItems.Count > 0)
-                {
-                    List<IRenderable> toBeDeleted = new List<IRenderable>();
-                    for (int i = 0; i < this.LBcontent.SelectedItems.Count; i++)
+                case Key.Delete:
                     {
-                        if (this.LBcontent.SelectedItems.Count > i)
+                        if (this.LBcontent.SelectedItems != null && this.LBcontent.SelectedItems.Count > 0)
                         {
-                            IRenderable renderable = this.LBcontent.SelectedItems[i] as IRenderable;
-                            if (renderable != null)
+                            List<IRenderable> toBeDeleted = new List<IRenderable>();
+                            for (int i = 0; i < this.LBcontent.SelectedItems.Count; i++)
                             {
-                                toBeDeleted.Add(renderable);
+                                if (this.LBcontent.SelectedItems.Count > i)
+                                {
+                                    IRenderable renderable = this.LBcontent.SelectedItems[i] as IRenderable;
+                                    if (renderable != null)
+                                    {
+                                        toBeDeleted.Add(renderable);
+                                    }
+                                }
+                            }
+                            this.ClearSelection();
+                            foreach (IRenderable renderable1 in toBeDeleted)
+                            {
+                                renderable1.Dispose();
+                            }
+                            e.Handled = true;
+                        }
+                        break;
+                    }
+                case Key.Escape:
+                    {
+                        if (DataViewModel.ActiveConnection != default)
+                        {
+                            DataViewModel.ActiveConnection.Origin.Connections.Remove(DataViewModel.ActiveConnection);
+                            DataViewModel.ActiveConnection.Destination.Connections.Remove(DataViewModel.ActiveConnection);
+                            DataViewModel.Instance.Elements.Remove(DataViewModel.ActiveConnection);
+                            DataViewModel.ActiveConnection.Dispose();
+                            DataViewModel.ActiveConnection = default;
+                        }
+                        break;
+                    }
+                case Key.Space:
+                    {
+                        if (DataViewModel.SearchBarCompInfo.ConstructorInfo != null)
+                        {
+                            if (DataViewModel.SearchBarCompInfo.ConstructorInfo.GetParameters().Length > 0)
+                            {
+                                ParameterInfo[] pi = DataViewModel.SearchBarCompInfo.ConstructorInfo.GetParameters();
+                                object[] args = new object[pi.Length];
+                                for (int i = 0; i < pi.Length; i++)
+                                {
+                                    if (!(pi[i].DefaultValue is DBNull)) args[i] = pi[i].DefaultValue;
+                                    else
+                                    {
+                                        if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "x")
+                                            args[i] = DataViewModel.WPFControl.GetMouseRelPosition().X;
+                                        else if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "y")
+                                            args[i] = DataViewModel.WPFControl.GetMouseRelPosition().Y;
+                                    }
+                                }
+                                IElement elInst = DataViewModel.SearchBarCompInfo.ConstructorInfo.Invoke(args) as IElement;
+                                DataViewModel.Instance.Elements.Add(elInst);
                             }
                         }
+                        break;
                     }
-                    this.ClearSelection();
-                    foreach (IRenderable renderable1 in toBeDeleted)
-                    {
-                        renderable1.Dispose();
-                    }
-                    e.Handled = true;
-                }
-            }
-            if (e.Key == Key.Escape)
-            {
-                if (DataViewModel.ActiveConnection != default)
-                {
-                    DataViewModel.ActiveConnection.Origin.Connections.Remove(DataViewModel.ActiveConnection);
-                    DataViewModel.ActiveConnection.Destination.Connections.Remove(DataViewModel.ActiveConnection);
-                    DataViewModel.Instance.Elements.Remove(DataViewModel.ActiveConnection);
-                    DataViewModel.ActiveConnection.Dispose();
-                    DataViewModel.ActiveConnection = default;
-                }
+                default:
+                    break;
             }
         }
 

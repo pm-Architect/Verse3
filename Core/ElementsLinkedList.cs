@@ -806,7 +806,7 @@ namespace Core
             if (ElementsLinkedListNode != null)
             {
                 InternalRemoveNode(ElementsLinkedListNode);
-                return true && base.Remove(value);
+                return base.Remove(value);
             }
             return false;
         }

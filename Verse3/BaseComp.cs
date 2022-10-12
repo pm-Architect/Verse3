@@ -439,7 +439,40 @@ namespace Verse3
         }
         public void RemoveElement(IRenderable element)
         {
-            this._owner.RenderPipelineInfo.Children.Remove(element);
+            switch (element.ElementType)
+            {
+                case ElementType.UIElement:
+                    {
+                        _bottomUI.Remove(element);
+                        break;
+                    }
+                case ElementType.DisplayUIElement:
+                    {
+                        _center.Remove(element);
+                        break;
+                    }
+                case ElementType.Node:
+                    {
+                        if (element is INode)
+                        {
+                            INode node = element as INode;
+                            if (node.NodeType == NodeType.Input)
+                            {
+                                _input.Remove(element);
+                            }
+                            else if (node.NodeType == NodeType.Output)
+                            {
+                                _output.Remove(element);
+                            }
+                        }
+                        break;
+                    }
+                default:
+                    {
+
+                        break;
+                    }
+            }
         }
         public int AddDataOutputNode<T>(IDataNode<T> node, string name = "")
         {

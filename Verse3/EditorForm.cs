@@ -182,28 +182,36 @@ namespace Verse3
                                 {
                                     if (!LoadedLibraries.ContainsValue(compInfo))
                                     {
-                                        if (compInfo.Name == "Extent" && 
-                                            compInfo.Group == "_CanvasElements" && 
+                                        if (compInfo.Group == "_CanvasElements" &&
                                             compInfo.Tab == "_CanvasElements")
                                         {
-                                            LoadedLibraries.Add(path + "._" + compInfo.Name, compInfo);
-                                            //Create two instances of CanvasExtent Element to make the initial/min canvas size 10000x10000
-                                            int x = -5000;
-                                            int y = -5000;
-                                            int w = 10;
-                                            int h = 10;
-                                            IElement elInst = compInfo.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
-                                            DataViewModel.Instance.Elements.Add(elInst);
-                                            //DataViewModel.WPFControl.ExpandContent();
-                                            x = 9990;
-                                            y = 9990;
-                                            w = 10;
-                                            h = 10;
-                                            elInst = compInfo.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
-                                            DataViewModel.Instance.Elements.Add(elInst);
-                                            DataViewModel.WPFControl.ExpandContent();
-                                            DataViewModel.WPFControl.InfiniteCanvasControl1.AnimatedSnapTo(new System.Windows.Point(5000.0, 5000.0));
-                                            continue;
+                                            if (compInfo.Name == "Extent")
+                                            {
+                                                LoadedLibraries.Add(path + "._" + compInfo.Name, compInfo);
+                                                //Create two instances of CanvasExtent Element to make the initial/min canvas size 10000x10000
+                                                int x = -5000;
+                                                int y = -5000;
+                                                int w = 10;
+                                                int h = 10;
+                                                IElement elInst = compInfo.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
+                                                DataViewModel.Instance.Elements.Add(elInst);
+                                                //DataViewModel.WPFControl.ExpandContent();
+                                                x = 9990;
+                                                y = 9990;
+                                                w = 10;
+                                                h = 10;
+                                                elInst = compInfo.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
+                                                DataViewModel.Instance.Elements.Add(elInst);
+                                                DataViewModel.WPFControl.ExpandContent();
+                                                DataViewModel.WPFControl.InfiniteCanvasControl1.AnimatedSnapTo(new System.Windows.Point(5000.0, 5000.0));
+                                                continue;
+                                            }
+                                            else if (compInfo.Name == "Search")
+                                            {
+                                                DataViewModel.SearchBarCompInfo = compInfo;
+                                                LoadedLibraries.Add(path + "._" + compInfo.Name, compInfo);
+                                                continue;
+                                            }
                                         }
                                         //TODO: Check for validity / scan library info
                                         AddToArsenal(compInfo);
@@ -250,6 +258,7 @@ namespace Verse3
                 {
                     //tp.Location = new System.Drawing.Point(4, 24);
                     tp.Name = "Tab" + this.tabControl1.Controls.Count.ToString();
+                    tp.AutoScroll = true;
                     //tp.Size = new System.Drawing.Size(1005, 116);
                     tp.TabIndex = 0;
                     tp.Text = compInfo.Tab;
@@ -279,8 +288,10 @@ namespace Verse3
                 else
                 {
                     gb.AutoSize = true;
+                    gb.AutoSizeMode = AutoSizeMode.GrowAndShrink;
                     //gb.Location = new System.Drawing.Point(3, 3);
                     gb.MinimumSize = new System.Drawing.Size(100, 100);
+                    gb.MaximumSize = new System.Drawing.Size(300, 100);
                     gb.Name = tp.Name + "_GRP" + flp.Controls.Count.ToString();
                     gb.Padding = new System.Windows.Forms.Padding(0);
                     //gb.Size = new System.Drawing.Size(100, 100);
@@ -294,6 +305,10 @@ namespace Verse3
                     if (gb.Controls.Count == 0)
                     {
                         flp1.Dock = System.Windows.Forms.DockStyle.Fill;
+                        flp1.FlowDirection = FlowDirection.LeftToRight;
+                        flp1.MaximumSize = new System.Drawing.Size(0, 100);
+                        flp1.AutoSize = true;
+                        flp1.AutoSizeMode = AutoSizeMode.GrowOnly;
                         //flp1.Location = new System.Drawing.Point(0, 16);
                         flp1.Margin = new System.Windows.Forms.Padding(0);
                         flp1.Name = gb.Name + "_FLP";
@@ -313,11 +328,14 @@ namespace Verse3
                     //btn.Location = new System.Drawing.Point(3, 3);
                     btn.Name = gb.Name + "_BTN" + this.Buttons.Count.ToString();
                     btn.MinimumSize = new System.Drawing.Size(30, 30);
-                    btn.MaximumSize = new System.Drawing.Size(30, 30);
+                    btn.MaximumSize = new System.Drawing.Size(0, 30);
                     btn.Size = new System.Drawing.Size(30, 30);
+                    btn.AutoSize = true;
+                    btn.AutoSizeMode = AutoSizeMode.GrowAndShrink;
                     btn.TabIndex = 0;
                     btn.UseVisualStyleBackColor = true;
-                    btn.Text = this.Buttons.Count.ToString();
+                    //btn.Text = this.Buttons.Count.ToString();
+                    btn.Text = compInfo.Name;
                     btn.Tag = compInfo;
 
                     btn.Click += AddToCanvas_OnCall;

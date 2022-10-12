@@ -61,6 +61,7 @@ namespace MathLibrary
             {
                 this.ChildElementManager.SetData<double>(_valueStart.Value, 0);
                 this.ChildElementManager.SetData<double>(_valueEnd.Value, 1);
+                textBlock.DisplayedText = this.ElementText;
             }
         }
         public override CompInfo GetCompInfo()
@@ -104,6 +105,11 @@ namespace MathLibrary
             sliderBlock.ValuesChanged += SliderBlock_ValuesChanged;
             sliderBlock.Width = 200;
             this.ChildElementManager.AddElement(sliderBlock);
+            
+            textBlock = new TextElement();
+            textBlock.DisplayedText = this.ElementText;
+            textBlock.TextAlignment = TextAlignment.Left;
+            this.ChildElementManager.AddElement(textBlock);
         }
 
         private void SliderBlock_ValuesChanged(object? sender, RoutedEventArgs e)
