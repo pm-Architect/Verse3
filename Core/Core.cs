@@ -159,10 +159,37 @@ namespace Core
                 if (SystemCoreCount >= 8)
                 {
                     Thread t = new Thread(new ThreadStart(() => ComputationPipeline.ComputeComputable(computable)));
-                    t.Name = "_verse_computation_thread_" + threads.Count + "_" + t.ManagedThreadId;
+                    t.Name = "_verse_computation_thread_" + threads.Count + "_" + t.ManagedThreadId + "_" + computable.ID.ToString();
                     t.IsBackground = true;
                     t.Priority = ThreadPriority.AboveNormal;
                     threads.Add(t.Name, t);
+                    if (threads.Count > 1)
+                    {
+                        foreach (Thread thread in threads.Values)
+                        {
+                            if (thread.IsAlive)
+                            {
+                                if (thread.ThreadState != System.Threading.ThreadState.Running)
+                                {
+                                    if (thread.ThreadState == System.Threading.ThreadState.Aborted ||
+                                        thread.ThreadState == System.Threading.ThreadState.Stopped ||
+                                        thread.ThreadState == System.Threading.ThreadState.Unstarted)
+                                    {
+                                        threads.Remove(thread.Name);
+                                    }
+                                }
+                                else
+                                {
+                                    //wait for thread to complete
+                                    thread.Join();
+                                }
+                            }
+                            else
+                            {
+                                threads.Remove(thread.Name);
+                            }
+                        }
+                    }
                     t.Start();
                 }
             }
