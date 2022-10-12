@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -230,6 +231,7 @@ namespace Verse3.VanillaElements
         }
     }
 
+    [Serializable]
     public class DataNodeElement<T> : DataNode<T>
     {
         public override Type ViewType => typeof(DataNodeElementView);
@@ -414,13 +416,16 @@ namespace Verse3.VanillaElements
         }
 
     }
-        
+    
     public class MousePositionNode : INode
     {
         public static readonly MousePositionNode Instance = new MousePositionNode();
         private ElementsLinkedList<IConnection> connections = new ElementsLinkedList<IConnection>();
 
         private MousePositionNode()
+        {
+        }
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
         }
 

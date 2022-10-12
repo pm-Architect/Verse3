@@ -12,6 +12,9 @@ namespace TextLibrary
 {
     public class TextPanel : BaseComp
     {
+        public TextPanel() : base(0, 0)
+        {
+        }
         public TextPanel(int x, int y, int width = 250, int height = 300) : base(x, y)
         {
         }

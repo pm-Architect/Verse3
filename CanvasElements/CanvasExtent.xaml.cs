@@ -2,6 +2,7 @@ using Core;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Windows.Controls;
 using Verse3;
 using static Core.Geometry2D;
@@ -188,6 +189,10 @@ namespace CanvasElements
         }
 
         #endregion
+        
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+        }
         public void Dispose()
         {
             if (this.RenderPipelineInfo.Children != null && this.RenderPipelineInfo.Children.Count > 0)

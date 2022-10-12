@@ -369,6 +369,7 @@ namespace Verse3.VanillaElements
         }
     }
 
+    [Serializable]
     public class BezierElement : BaseElement, IConnection
     {
         #region Data Members

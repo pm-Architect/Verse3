@@ -1,10 +1,11 @@
-﻿using Core;
+using Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Verse3.VanillaElements
 {
+    [Serializable]
     public class GenericDataNode : DataNodeElement<object>
     {
         public GenericDataNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
@@ -13,6 +14,7 @@ namespace Verse3.VanillaElements
     }
 
 
+    [Serializable]
     public class NumberDataNode : DataNodeElement<double>
     {
         public NumberDataNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
@@ -20,30 +22,35 @@ namespace Verse3.VanillaElements
         }
     }
 
+    [Serializable]
     public class BooleanDataNode : DataNodeElement<bool>
     {
         public BooleanDataNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
         {
         }
     }
+    [Serializable]
     public class TextDataNode : DataNodeElement<string>
     {
         public TextDataNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
         {
         }
     }
+    [Serializable]
     public class DateTimeDataNode : DataNodeElement<DateTime>
     {
         public DateTimeDataNode(BaseComp parent, NodeType nodeType) : base(parent, nodeType)
         {
         }
     }
+    [Serializable]
     public class GenericEventNode : EventNodeElement
     {
         public GenericEventNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
         {
         }
     }
+    [Serializable]
     public class ButtonClickedEventNode : EventNodeElement
     {
         public ButtonClickedEventNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
@@ -57,6 +64,7 @@ namespace Verse3.VanillaElements
             return outValue;
         }
     }
+    [Serializable]
     public class InteropMessageEventNode : EventNodeElement
     {
         public InteropMessageEventNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)

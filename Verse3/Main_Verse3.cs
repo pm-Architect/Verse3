@@ -313,21 +313,28 @@ namespace Verse3
             loggedIn = true;
         }
 
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutBox about = new AboutBox();
+            about.ShowDialog();
+        }
+
+
         //List<EmbeddedIDE> ides = new List<EmbeddedIDE>();
 
         //private void toolStripButton3_Click(object sender, EventArgs e)
         //{
-            //EmbeddedIDE ide = new EmbeddedIDE();
-            //ides.Add(ide);
-            //ide.Show();
+        //EmbeddedIDE ide = new EmbeddedIDE();
+        //ides.Add(ide);
+        //ide.Show();
         //}
 
         //private void toolStripButton4_Click(object sender, EventArgs e)
         //{
-            //if (ides.Count == 1)
-            //{
-            //    ides[0].GetScript();
-            //}
+        //if (ides.Count == 1)
+        //{
+        //    ides[0].GetScript();
+        //}
         //}
 
         //private async void P_OutputDataReceived(object sender, DataReceivedEventArgs e)

@@ -106,6 +106,7 @@ namespace Verse3.VanillaElements
         }
     }
 
+    [Serializable]
     public class TextBoxElement : BaseElement
     {
         #region Properties

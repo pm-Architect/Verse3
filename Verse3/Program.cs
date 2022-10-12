@@ -33,6 +33,8 @@ namespace Verse3
         {
             Thread serverThread = new Thread(() =>
             {
+                //TODO: SECURE INTEROP THREAD
+                
                 _server = new CoreInterop.InteropServer("Verse3", "Verse3");
                 _server.ClientMessage += OnClientMessage;
                 _server.ClientConnected += OnClientConnected;

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 using static Core.Geometry2D;
 
 namespace Core
@@ -9,7 +11,11 @@ namespace Core
     /// A simple example of a data-model.  
     /// The purpose of this data-model is to share display data between the main window and overview window.
     /// </summary>
-    public class DataModel : INotifyPropertyChanged
+    [DataContract]
+    [Serializable]
+    [XmlRoot("DataModel")]
+    [XmlType("DataModel")]
+    public class DataModel : INotifyPropertyChanged, ISerializable
     {
         #region INotifyPropertyChanged Members
 
@@ -89,6 +95,7 @@ namespace Core
         /// <summary>
         /// Retreive the singleton instance.
         /// </summary>
+        [XmlIgnore]
         public static DataModel Instance
         {
             get
@@ -114,14 +121,31 @@ namespace Core
             //
             //DataModel.instance = this;
         }
+        
+        protected DataModel(SerializationInfo info, StreamingContext context) : base()
+        {
+            //
+            // Initialize the data model.
+            //
+            //DataModel.instance = this;
+            this.elements = (ElementsLinkedList<IElement>)info.GetValue("elements", typeof(ElementsLinkedList<IElement>));
+            this.contentScale = (double)info.GetValue("contentScale", typeof(double));
+            this.contentOffsetX = (double)info.GetValue("contentOffsetX", typeof(double));
+            this.contentOffsetY = (double)info.GetValue("contentOffsetY", typeof(double));
+            this.contentWidth = (double)info.GetValue("contentWidth", typeof(double));
+            this.contentHeight = (double)info.GetValue("contentHeight", typeof(double));
+            this.contentViewportWidth = (double)info.GetValue("contentViewportWidth", typeof(double));
+            this.contentViewportHeight = (double)info.GetValue("contentViewportHeight", typeof(double));
+        }
 
         #endregion
 
         #region Properties
-        
+
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
+        [XmlIgnore]
         public ElementsLinkedList<IElement> Elements
         {
             get
@@ -139,9 +163,22 @@ namespace Core
             return this.Elements.Find(guid).Value;
         }
 
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("elements", this.elements);
+            info.AddValue("contentScale", this.contentScale);
+            info.AddValue("contentOffsetX", this.contentOffsetX);
+            info.AddValue("contentOffsetY", this.contentOffsetY);
+            info.AddValue("contentWidth", this.contentWidth);
+            info.AddValue("contentHeight", this.contentHeight);
+            info.AddValue("contentViewportWidth", this.contentViewportWidth);
+            info.AddValue("contentViewportHeight", this.contentViewportHeight);
+        }
+
         ///
         /// The current scale at which the content is being viewed.
         /// 
+        [XmlIgnore]
         public double ContentScale
         {
             get
@@ -156,6 +193,7 @@ namespace Core
             }
         }
 
+        [XmlIgnore]
         public CanvasPoint ContentOffset
         {
             get
@@ -172,6 +210,7 @@ namespace Core
         ///
         /// The X coordinate of the offset of the viewport onto the content (in content coordinates).
         /// 
+        [XmlIgnore]
         public double ContentOffsetX
         {
             get
@@ -189,6 +228,7 @@ namespace Core
         ///
         /// The Y coordinate of the offset of the viewport onto the content (in content coordinates).
         /// 
+        [XmlIgnore]
         public double ContentOffsetY
         {
             get
@@ -203,6 +243,7 @@ namespace Core
             }
         }
 
+        [XmlIgnore]
         public CanvasSize ContentSize
         {
             get
@@ -219,6 +260,7 @@ namespace Core
         ///
         /// The width of the content (in content coordinates).
         /// 
+        [XmlIgnore]
         public double ContentWidth
         {
             get
@@ -236,6 +278,7 @@ namespace Core
         ///
         /// The heigth of the content (in content coordinates).
         /// 
+        [XmlIgnore]
         public double ContentHeight
         {
             get
@@ -251,6 +294,7 @@ namespace Core
         }
 
 
+        [XmlIgnore]
         public CanvasSize ContentViewportSize
         {
             get
@@ -269,6 +313,7 @@ namespace Core
         /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
         /// data model so that the value can be shared with the overview window.
         /// 
+        [XmlIgnore]
         public double ContentViewportWidth
         {
             get
@@ -288,6 +333,7 @@ namespace Core
         /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
         /// data model so that the value can be shared with the overview window.
         /// 
+        [XmlIgnore]
         public double ContentViewportHeight
         {
             get
@@ -303,15 +349,18 @@ namespace Core
         }
 
         #endregion
+
+        
     }
 
-    public interface IElement : INotifyPropertyChanged, IDisposable
+    public interface IElement : INotifyPropertyChanged, IDisposable, ISerializable
     {
         #region Properties
 
         /// <summary>
         /// GUID of the element.
         /// </summary>
+        [XmlIgnore]
         public Guid ID { get; }
 
         public ElementState ElementState { get; set; }
