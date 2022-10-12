@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 using static Core.Geometry2D;
 
 namespace Core
@@ -12,6 +13,8 @@ namespace Core
     /// </summary>
     [DataContract]
     [Serializable]
+    [XmlRoot("DataModel")]
+    [XmlType("DataModel")]
     public class DataModel : INotifyPropertyChanged, ISerializable
     {
         #region INotifyPropertyChanged Members
@@ -92,6 +95,7 @@ namespace Core
         /// <summary>
         /// Retreive the singleton instance.
         /// </summary>
+        [XmlIgnore]
         public static DataModel Instance
         {
             get
@@ -141,6 +145,7 @@ namespace Core
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
+        [XmlIgnore]
         public ElementsLinkedList<IElement> Elements
         {
             get
@@ -173,6 +178,7 @@ namespace Core
         ///
         /// The current scale at which the content is being viewed.
         /// 
+        [XmlIgnore]
         public double ContentScale
         {
             get
@@ -187,6 +193,7 @@ namespace Core
             }
         }
 
+        [XmlIgnore]
         public CanvasPoint ContentOffset
         {
             get
@@ -203,6 +210,7 @@ namespace Core
         ///
         /// The X coordinate of the offset of the viewport onto the content (in content coordinates).
         /// 
+        [XmlIgnore]
         public double ContentOffsetX
         {
             get
@@ -220,6 +228,7 @@ namespace Core
         ///
         /// The Y coordinate of the offset of the viewport onto the content (in content coordinates).
         /// 
+        [XmlIgnore]
         public double ContentOffsetY
         {
             get
@@ -234,6 +243,7 @@ namespace Core
             }
         }
 
+        [XmlIgnore]
         public CanvasSize ContentSize
         {
             get
@@ -250,6 +260,7 @@ namespace Core
         ///
         /// The width of the content (in content coordinates).
         /// 
+        [XmlIgnore]
         public double ContentWidth
         {
             get
@@ -267,6 +278,7 @@ namespace Core
         ///
         /// The heigth of the content (in content coordinates).
         /// 
+        [XmlIgnore]
         public double ContentHeight
         {
             get
@@ -282,6 +294,7 @@ namespace Core
         }
 
 
+        [XmlIgnore]
         public CanvasSize ContentViewportSize
         {
             get
@@ -300,6 +313,7 @@ namespace Core
         /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
         /// data model so that the value can be shared with the overview window.
         /// 
+        [XmlIgnore]
         public double ContentViewportWidth
         {
             get
@@ -319,6 +333,7 @@ namespace Core
         /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
         /// data model so that the value can be shared with the overview window.
         /// 
+        [XmlIgnore]
         public double ContentViewportHeight
         {
             get
@@ -345,6 +360,7 @@ namespace Core
         /// <summary>
         /// GUID of the element.
         /// </summary>
+        [XmlIgnore]
         public Guid ID { get; }
 
         public ElementState ElementState { get; set; }

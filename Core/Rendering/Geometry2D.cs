@@ -455,6 +455,11 @@ namespace Core
             #region Constructors
 
             public static readonly CanvasPoint Unset = new CanvasPoint(double.NaN, double.NaN);
+            public CanvasPoint()
+            {
+                this.X = double.NaN;
+                this.Y = double.NaN;
+            }
 
             public CanvasPoint(double x, double y)
             {
@@ -588,6 +593,12 @@ namespace Core
             #region Constructors
 
             public static readonly CanvasSize Unset = new CanvasSize(double.NaN, double.NaN);
+
+            public CanvasSize()
+            {
+                this.Width = double.NaN;
+                this.Height = double.NaN;
+            }
 
             public CanvasSize(double w, double h)
             {

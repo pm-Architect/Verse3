@@ -12,12 +12,15 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Xml.Serialization;
 using Verse3.VanillaElements;
 using static Core.Geometry2D;
 
 namespace Verse3
 {
     [Serializable]
+    [XmlRoot("BaseComp")]
+    [XmlType("BaseComp")]
     public abstract class BaseComp : IRenderable, IComputable
     {
         #region Data Members
@@ -32,8 +35,11 @@ namespace Verse3
 
         #region Properties
 
+        [XmlIgnore]
         public ChildElementManager ChildElementManager => _cEManager;
+        [XmlIgnore]
         public RenderPipelineInfo RenderPipelineInfo => renderPipelineInfo;
+        [XmlIgnore]
         public IRenderView RenderView
         {
             get
@@ -52,14 +58,16 @@ namespace Verse3
                 }
             }
         }
+        [XmlIgnore]
         public Type ViewType => typeof(BaseCompView);
+        [XmlIgnore]
         public object ViewKey { get; set; }
-
-        public Guid ID { get => _id; private set => _id = value; }
+        
+        public Guid ID { get => _id; set => _id = value; }
 
         public bool IsSelected { get; set; }
 
-        public BoundingBox BoundingBox { get => boundingBox; private set => SetProperty(ref boundingBox, value); }
+        public BoundingBox BoundingBox { get => boundingBox; set => SetProperty(ref boundingBox, value); }
 
         public double X { get => boundingBox.Location.X; }
 
@@ -91,12 +99,15 @@ namespace Verse3
 
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get => ElementType.BaseComp; set => ElementType = ElementType.BaseComp; }
+        [XmlIgnore]
         bool IRenderable.Visible { get; set; }
 
         private Brush background;
+        [XmlIgnore]
         public Brush Background { get => background; set => SetProperty(ref background, value); }
 
         private Brush backgroundTint;
+        [XmlIgnore]
         public Brush BackgroundTint { get => backgroundTint; set => SetProperty(ref backgroundTint, value); }
 
         //internal CompOrientation _orientation = CompOrientation.Vertical;
@@ -113,17 +124,20 @@ namespace Verse3
         //}
 
 
+        [XmlIgnore]
         public IRenderable Parent => RenderPipelineInfo.Parent;
+        [XmlIgnore]
         public ElementsLinkedList<IRenderable> Children => RenderPipelineInfo.Children;
 
         private ComputationPipelineInfo computationPipelineInfo;
-
+        [XmlIgnore]
         public ComputationPipelineInfo ComputationPipelineInfo => computationPipelineInfo;
 
         //private ElementsLinkedList<INode> _nodes = new ElementsLinkedList<INode>();
         //public ElementsLinkedList<INode> Nodes => _nodes;
 
         public ComputableElementState ComputableElementState { get; set; } = ComputableElementState.Unset;
+        [XmlIgnore]
         IRenderView IRenderable.RenderView
         {
             get => this.RenderView as IRenderView;

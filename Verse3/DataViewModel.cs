@@ -1,15 +1,19 @@
 ﻿using Core;
 using Microsoft.WindowsAPICodePack.Shell;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+using SaveXML;
 using Supabase;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,20 +22,99 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Xml;
+using System.Xml.Serialization;
 using Verse3.VanillaElements;
 using static Core.Geometry2D;
+using static SaveXML.FileOperations;
 using XamlReader = System.Windows.Markup.XamlReader;
 
 namespace Verse3
 {
     [Serializable]
-    public class VFSerializable : ISerializable
+    public class VFSerializable : XmlAttributesContainer, ISerializable
     {
+        
+        [XmlElement]
         public DataViewModel DataViewModel { get; set; }
+        [XmlIgnore]
+        public XmlSerializer XMLSerializer
+        {
+            get
+            {
 
+                Type[] LoadedComps = (from a in AppDomain.CurrentDomain.GetAssemblies()
+                                      from lType in a.GetTypes()
+                                      where typeof(BaseComp).IsAssignableFrom(lType)
+                                      select lType).ToArray();
+                Type[] FilteredComps = (from lType in LoadedComps
+                                        where lType.IsClass && !lType.IsAbstract
+                                        select lType).ToArray();
+                Dictionary<string, Type> UniqueComps = new Dictionary<string, Type>();
+                foreach (Type lType in LoadedComps)
+                {
+                    if (!UniqueComps.Values.Contains(lType) && !UniqueComps.Keys.Contains(lType.FullName) && lType.FullName != "Verse3.BaseComp")
+                    {
+                        UniqueComps.Add(lType.FullName, lType);
+                    }
+                }
+                //if (this.XMLAttributes == null) System.Diagnostics.Debug.WriteLine("XMLAttributes are null.");
+                //XmlSerializer xmlSerializer = new XmlSerializer(typeof(DataViewModel), this.XMLAttributes);
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(BaseComp), this.XMLAttributes, UniqueComps.Values.ToArray(),
+                    new XmlRootAttribute("BaseComp"), "http://www.w3.org/2001/XMLSchema-instance");
+                return xmlSerializer;
+            }
+        }
+        [XmlIgnore]
+        public override XmlAttributeOverrides XMLAttributes
+        {
+            get
+            {
+                XmlAttributeOverrides overrides = new XmlAttributeOverrides();
+                XmlAttributes attributes = new XmlAttributes();
+
+                foreach (BaseComp comp in DataViewModel.Comps)
+                {
+                    if (!attributes.XmlElements.Contains(new XmlElementAttribute(comp.GetType().FullName, comp.GetType())))
+                    {
+                        attributes.XmlElements.Add(new XmlElementAttribute(comp.GetType().FullName, comp.GetType()));
+                    }
+                }
+
+                overrides.Add(typeof(BaseComp), attributes);
+                return overrides;
+            }
+        }
+        public string ToXMLString()
+        {
+            //if (this.XMLAttributes == null) throw new Exception("XMLAttributes is null.");
+            if (this.XMLSerializer == null) throw new Exception("XMLSerializer is null.");
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (BaseComp comp in DataViewModel.Comps)
+            {
+                XmlDocument xmlDoc = new XmlDocument();   //Represents an XML document.
+
+                // Creates a stream whose backing store is memory. 
+                using (MemoryStream xmlStream = new MemoryStream())
+                {
+                    this.XMLSerializer.Serialize(xmlStream, comp);
+                    xmlStream.Position = 0;
+                    //Loads the XML document from the specified string.
+                    xmlDoc.Load(xmlStream);
+                    sb.AppendLine(xmlDoc.InnerXml);
+                }
+            }
+
+            return sb.ToString();
+        }
         public VFSerializable(DataViewModel dataViewModel)
         {
             DataViewModel = dataViewModel;
+        }
+        public VFSerializable()
+        {
         }
 
         public VFSerializable(SerializationInfo info, StreamingContext context)
@@ -43,8 +126,8 @@ namespace Verse3
         {
             info.AddValue("DataViewModel", DataViewModel);
         }
-        
-        public void Serialize(string path)
+
+        internal void Serialize(string path)
         {
             try
             {
@@ -95,7 +178,7 @@ namespace Verse3
             //}
         }
 
-        public static VFSerializable Deserialize(string path)
+        internal static VFSerializable Deserialize(string path)
         {
             try
             {
@@ -129,23 +212,142 @@ namespace Verse3
                 return null;
             }
         }
+
+        internal void SerializeXML(string fileName)
+        {
+            try
+            {
+                XMLFile file = new XMLFile(fileName);
+                file.SetObject(this);
+                RESPONSE_CODES resp = FileOperations.Save(file, true);
+                if (resp == RESPONSE_CODES.SAVE_SUCCESS)
+                {
+                    Supabase.Gotrue.User user = Client.Instance.Auth.CurrentUser;
+
+                    var file1 = ShellFile.FromFilePath(fileName);
+
+                    // Read and Write:
+
+                    //string[] oldAuthors = file.Properties.System.Author.Value;
+                    //string oldTitle = file.Properties.System.Title.Value;
+
+                    //file.Properties.System.Author.Value = new string[] { "Author #1", "Author #2" };
+                    //file.Properties.System.Title.Value = "Example Title";
+
+                    // Alternate way to Write:
+
+                    ShellPropertyWriter propertyWriter = file1.Properties.GetPropertyWriter();
+
+                    string authorId = "DEVELOPER";
+                    if (user != null)
+                    {
+                        authorId = user.Id;
+                    }
+                    propertyWriter.WriteProperty(SystemProperties.System.Author, new string[] { "AuthorID::" + authorId });
+                    propertyWriter.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
+
+        internal static VFSerializable DeserializeXML(string fileName)
+        {
+            try
+            {
+                using (var stream = new FileStream(fileName, FileMode.Open))
+                {
+                    XMLFile file = FileOperations.Load(fileName);
+                    if (file != null)
+                    {
+                        Supabase.Gotrue.User user = Client.Instance.Auth.CurrentUser;
+
+                        var file1 = ShellFile.FromFilePath(fileName);
+
+                        string oldAuthor = file1.Properties.System.Author.Value[0];
+                        string authorId = "DEVELOPER";
+                        if (user != null)
+                        {
+                            authorId = user.Id;
+                        }
+                        if (oldAuthor == ("AuthorID::" + authorId))
+                        {
+                            System.Diagnostics.Debug.WriteLine("File created by " + oldAuthor);
+                            if (authorId != "DEVELOPER") return null;
+                        }
+                        return (VFSerializable)file.GetObject();
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return null;
+            }
+        }
     }
-    
+
     /// <summary>
     /// A simple example of a data-model.  
     /// The purpose of this data-model is to share display data between the main window and overview window.
     /// </summary>
+    [DataContract]
     [Serializable]
+    [XmlRoot("DataViewModel")]
+    [XmlType("DataViewModel")]
     public class DataViewModel : DataModel
     {
+        [XmlIgnore]
         public static InfiniteCanvasWPFControl WPFControl { get; private set; }
+        [XmlIgnore]
         public static INode ActiveNode { get; internal set; }
+        [XmlIgnore]
         public static IConnection ActiveConnection { get; internal set; }
 
         private static Dispatcher dispatcher = null;
+        [XmlIgnore]
         public static Dispatcher Dispatcher { get => dispatcher; }
 
+        [XmlElement]
+        public ElementsLinkedList<BaseComp> Comps
+        {
+            get
+            {
+                ElementsLinkedList<BaseComp> comps = new ElementsLinkedList<BaseComp>();
+                if (this.Elements.Count > 0)
+                {
+                    foreach (IElement element in this.Elements)
+                    {
+                        if (element is BaseComp)
+                        {
+                            comps.Add((BaseComp)element);
+                        }
+                    }
+                }
+                return comps;
+            }
+            set
+            {
+                if (value != null && value.Count > 0)
+                {
+                    foreach (BaseComp comp in value)
+                    {
+                        this.Elements.Add(comp);
+                    }
+                }
+            }
+        }
+
         //protected static DataViewModel instance = new DataViewModel();
+        [XmlIgnore]
         public new static DataModel Instance
         {
             get
