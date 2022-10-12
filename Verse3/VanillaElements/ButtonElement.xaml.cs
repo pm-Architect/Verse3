@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using static Core.Geometry2D;
 
 namespace Verse3.VanillaElements
@@ -117,7 +118,10 @@ namespace Verse3.VanillaElements
         
         private object displayedText;
         public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
-        
+
+        private System.Windows.Media.Brush backgroundColor;
+        public System.Windows.Media.Brush BackgroundColor { get => backgroundColor; set => SetProperty(ref backgroundColor, value); }
+
         #endregion
 
         #region Constructors
@@ -125,6 +129,7 @@ namespace Verse3.VanillaElements
         public ButtonElement() : base()
         {
             this.DisplayedText = "Button";
+            this.BackgroundColor = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#ff6700"));
         }
 
         #endregion
@@ -133,5 +138,6 @@ namespace Verse3.VanillaElements
         {
             OnButtonClicked.Invoke(sender, e);
         }
+
     }
 }

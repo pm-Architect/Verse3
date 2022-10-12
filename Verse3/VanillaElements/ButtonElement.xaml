@@ -37,7 +37,7 @@
             VerticalAlignment="Stretch"
             FontFamily="Maven Pro"
             Margin="10"
-            Background="#ff6700"
+            Background="{Binding BackgroundColor}"
             Foreground="White"
             Click="Button_Click"
             />
