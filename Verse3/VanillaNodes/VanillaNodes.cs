@@ -1,4 +1,4 @@
-﻿using Core;
+using Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,10 +21,25 @@ namespace Verse3.VanillaElements
         {
         }
     }
+
+    [Serializable]
+    public class BooleanDataNode : DataNodeElement<bool>
+    {
+        public BooleanDataNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
+        {
+        }
+    }
     [Serializable]
     public class TextDataNode : DataNodeElement<string>
     {
         public TextDataNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
+        {
+        }
+    }
+    [Serializable]
+    public class DateTimeDataNode : DataNodeElement<DateTime>
+    {
+        public DateTimeDataNode(BaseComp parent, NodeType nodeType) : base(parent, nodeType)
         {
         }
     }

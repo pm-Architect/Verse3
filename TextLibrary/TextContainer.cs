@@ -9,7 +9,6 @@ namespace TextLibrary
     public class TextContainer : BaseComp
     {
         internal string _inputText = "";
-        //private double _inputValue = 0.0;
 
         public string? ElementText
         {
@@ -29,43 +28,23 @@ namespace TextLibrary
             }
         }
 
-        #region Properties
-
-
-        #endregion
-
         #region Constructors
 
         public TextContainer() : base(0, 0)
         {
-            //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
-            //Random rng = new Random();
-            //byte r = (byte)rng.Next(0, 255);
-            //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
         public TextContainer(int x, int y, int width = 250, int height = 300) : base(x, y)
         {
-            //base.boundingBox = new BoundingBox(x, y, width, height);
-
-            //Random rnd = new Random();
-            //byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
-            //this.Background = new SolidColorBrush(Colors.Gray);
         }
 
         #endregion
 
         public override void Compute()
         {
-            //this.ChildElementManager.SetData<double>(_sliderValue, 0);
-            //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count == 1)
-            //{
-            //    if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
-            //        ((NodeElement)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data = _sliderValue;
-            //}
+            this._inputText = textBoxBlock.InputText;
+            this.ChildElementManager.SetData<string>(this._inputText, 0);
+            textBlock.DisplayedText = this.ElementText;
         }
         public override CompInfo GetCompInfo()
         {
@@ -108,7 +87,7 @@ namespace TextLibrary
 
             nodeBlock = new TextDataNode(this, NodeType.Output);
             nodeBlock.Width = 50;
-            this.ChildElementManager.AddDataOutputNode(nodeBlock, "Number");
+            this.ChildElementManager.AddDataOutputNode(nodeBlock, "Text");
 
             textBlock = new TextElement();
             textBlock.DisplayedText = this.ElementText;
@@ -116,12 +95,9 @@ namespace TextLibrary
             this.ChildElementManager.AddElement(textBlock);
         }
         
-        private void TextBoxBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<string> e)
+        private void TextBoxBlock_OnValueChanged(object? sender, EventArgs e)
         {
-            this._inputText = textBoxBlock.InputText;
-            this.ChildElementManager.SetData<string>(this._inputText, 0);
-            textBlock.DisplayedText = this.ElementText;
-            //ComputationPipeline.ComputeComputable(this);
+            ComputationPipeline.ComputeComputable(this);
         }
 
         //private IRenderable _parent;
