@@ -33,14 +33,19 @@ namespace Core
             int count = 0;
             try
             {
-                if (ComputationPipeline.Instance._current != null)
+                if (sender != null)
+                {
+                    count = ComputeComputable(sender);
+                }
+                else if (ComputationPipeline.Instance._current != null)
                 {
                     count = ComputeComputable(ComputationPipeline.Instance._current);
                 }
             }
-            catch /*(Exception e)*/
+            catch (Exception e)
             {
                 //TODO: Log to console
+                Console.WriteLine(e.Message);
             }
             return count;
         }

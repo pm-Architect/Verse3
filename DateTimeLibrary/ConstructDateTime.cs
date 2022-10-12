@@ -74,7 +74,6 @@ namespace MathLibrary
             int sec = (int)this.ChildElementManager.GetData<double>(5, DateTime.Now.Second);
             DateTime dateTime = new DateTime(yr, mnt, dat, hr, min, sec);
             this.ChildElementManager.SetData<DateTime>(dateTime, 0);
-            this.ChildElementManager.SetData<DateTime>(DateTime.Now, 1);
             textBlock.DisplayedText = this.ElementText;
         }
         
@@ -86,7 +85,6 @@ namespace MathLibrary
         private NumberDataNode nodeBlock4;
         private NumberDataNode nodeBlock5;
         private DateTimeDataNode nodeBlock6;
-        private DateTimeDataNode nodeBlock7;
         public override void Initialize()
         {
             nodeBlock = new NumberDataNode(this, NodeType.Input);
@@ -117,9 +115,9 @@ namespace MathLibrary
             //nodeBlock6.Width = 50;
             this.ChildElementManager.AddDataOutputNode(nodeBlock6, "DateTime");
 
-            nodeBlock7 = new DateTimeDataNode(this, NodeType.Output);
-            //nodeBlock7.Width = 50;
-            this.ChildElementManager.AddDataOutputNode(nodeBlock7, "Now");
+            //nodeBlock7 = new DateTimeDataNode(this, NodeType.Output);
+            ////nodeBlock7.Width = 50;
+            //this.ChildElementManager.AddDataOutputNode(nodeBlock7, "Now");
 
             textBlock = new TextElement();
             textBlock.DisplayedText = this.ElementText;
