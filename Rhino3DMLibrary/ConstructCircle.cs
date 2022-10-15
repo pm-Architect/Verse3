@@ -24,8 +24,8 @@ namespace Rhino3DMLibrary
             if (point1 != null)
             {
                 Circle circle = new Circle(point1.Location, radius);
-                
-                this.ChildElementManager.SetData<Circle>(circle, 0);
+                GeometryBase geo = new Rhino.Geometry.ArcCurve(circle);
+                this.ChildElementManager.SetData<GeometryBase>(geo, 0);
                 textBlock.DisplayedText = circle.ToString();
             }
 

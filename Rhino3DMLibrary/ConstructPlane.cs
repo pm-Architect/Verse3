@@ -25,8 +25,8 @@ namespace Rhino3DMLibrary
             if (point1 != null && point2 != null && point3 != null)
             {
                 Plane plane = new Plane(point1.Location, point2.Location, point3.Location);
- 
-                this.ChildElementManager.SetData<Plane>(plane, 0);
+                GeometryBase geo = new Rhino.Geometry.PlaneSurface(plane, new Interval(-10.0, 10.0), new Interval(-10.0, 10.0));
+                this.ChildElementManager.SetData<GeometryBase>(geo, 0);
                 textBlock.DisplayedText = plane.ToString();
             }
 
