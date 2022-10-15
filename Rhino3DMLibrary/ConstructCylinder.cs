@@ -8,25 +8,26 @@ using Rhino.Geometry;
 
 namespace Rhino3DMLibrary
 {
-    public class ConstructCircle : BaseComp
+    public class ConstructCylinder : BaseComp
     {
-        public ConstructCircle() : base(0, 0)
+        public ConstructCylinder() : base(0, 0)
         {
         }
-        public ConstructCircle(int x, int y) : base(x, y)
+        public ConstructCylinder(int x, int y) : base(x, y)
         {
         }
 
         public override void Compute()
         {
-            Rhino.Geometry.Point point1 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(0);
-            double radius = this.ChildElementManager.GetData<double>(1, 10);
-            if (point1 != null)
+            ((Rhino.Geometry.ArcCurve)this.ChildElementManager.GetData<GeometryBase>(0)).TryGetCircle(out Circle circle); 
+            double height = this.ChildElementManager.GetData<double>(1, 50);
+
+            if (circle.IsValid)
             {
-                Circle circle = new Circle(point1.Location, radius);
-                GeometryBase geo = new Rhino.Geometry.ArcCurve(circle);
+                Cylinder cylinder = new Cylinder(circle, height);
+                GeometryBase geo = cylinder.ToNurbsSurface();
                 this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-                textBlock.DisplayedText = circle.ToString();
+                textBlock.DisplayedText = cylinder.ToString();
             }
 
         }
@@ -37,9 +38,9 @@ namespace Rhino3DMLibrary
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct Circle",
-                Group = "Line",
-                Tab = "Curve",
+                Name = "Construct Cylinder",
+                Group = "Basic",
+                Tab = "Breps",
                 Description = "",
                 Author = "",
                 License = "",
@@ -53,17 +54,18 @@ namespace Rhino3DMLibrary
         private TextElement textBlock = new TextElement();
         private RhinoGeometryDataNode nodeBlockX;
         private NumberDataNode nodeBlockY;
+
         private RhinoGeometryDataNode nodeBlockResult;
         public override void Initialize()
         {
             nodeBlockX = new RhinoGeometryDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlockX, "Point");
+            this.ChildElementManager.AddDataInputNode(nodeBlockX, "Circle");
 
             nodeBlockY = new NumberDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlockY, "Radius");
+            this.ChildElementManager.AddDataInputNode(nodeBlockY, "Height");
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Circle");
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Cylinder");
 
             textBlock = new TextElement();
             textBlock.TextAlignment = TextAlignment.Left;

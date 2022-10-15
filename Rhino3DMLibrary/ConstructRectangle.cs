@@ -8,25 +8,26 @@ using Rhino.Geometry;
 
 namespace Rhino3DMLibrary
 {
-    public class ConstructCircle : BaseComp
+    public class ConstructRectangle : BaseComp
     {
-        public ConstructCircle() : base(0, 0)
+        public ConstructRectangle() : base(0, 0)
         {
         }
-        public ConstructCircle(int x, int y) : base(x, y)
+        public ConstructRectangle(int x, int y) : base(x, y)
         {
         }
 
         public override void Compute()
         {
-            Rhino.Geometry.Point point1 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(0);
-            double radius = this.ChildElementManager.GetData<double>(1, 10);
-            if (point1 != null)
+            ((Rhino.Geometry.PlaneSurface)this.ChildElementManager.GetData<GeometryBase>(0)).TryGetPlane(out Rhino.Geometry.Plane plane);
+            double width = this.ChildElementManager.GetData<double>(1, 20);
+            double height = this.ChildElementManager.GetData<double>(2, 10);
+            if (plane.IsValid)
             {
-                Circle circle = new Circle(point1.Location, radius);
-                GeometryBase geo = new Rhino.Geometry.ArcCurve(circle);
+                Rectangle3d rectangle = new Rectangle3d(plane, width, height);
+                GeometryBase geo = rectangle.ToNurbsCurve();
                 this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-                textBlock.DisplayedText = circle.ToString();
+                textBlock.DisplayedText = rectangle.ToString();
             }
 
         }
@@ -37,7 +38,7 @@ namespace Rhino3DMLibrary
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct Circle",
+                Name = "Construct Rectangle",
                 Group = "Line",
                 Tab = "Curve",
                 Description = "",
@@ -53,17 +54,21 @@ namespace Rhino3DMLibrary
         private TextElement textBlock = new TextElement();
         private RhinoGeometryDataNode nodeBlockX;
         private NumberDataNode nodeBlockY;
+        private NumberDataNode nodeBlockZ;
         private RhinoGeometryDataNode nodeBlockResult;
         public override void Initialize()
         {
             nodeBlockX = new RhinoGeometryDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlockX, "Point");
+            this.ChildElementManager.AddDataInputNode(nodeBlockX, "Plane");
 
             nodeBlockY = new NumberDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlockY, "Radius");
+            this.ChildElementManager.AddDataInputNode(nodeBlockY, "Width");
+
+            nodeBlockY = new NumberDataNode(this, NodeType.Input);
+            this.ChildElementManager.AddDataInputNode(nodeBlockY, "Height");
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Circle");
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Rectangle");
 
             textBlock = new TextElement();
             textBlock.TextAlignment = TextAlignment.Left;

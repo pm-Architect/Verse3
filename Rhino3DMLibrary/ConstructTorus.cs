@@ -20,8 +20,8 @@ namespace Rhino3DMLibrary
         public override void Compute()
         {
             ((Rhino.Geometry.PlaneSurface)this.ChildElementManager.GetData<GeometryBase>(0)).TryGetPlane(out Rhino.Geometry.Plane plane);
-            double majorradius = this.ChildElementManager.GetData<double>(1, 0);
-            double minorradius = this.ChildElementManager.GetData<double>(2, 0);
+            double majorradius = this.ChildElementManager.GetData<double>(1, 50);
+            double minorradius = this.ChildElementManager.GetData<double>(2, 10);
             if (plane.IsValid)
             {
                 Torus torus = new Torus(plane, majorradius, minorradius);
