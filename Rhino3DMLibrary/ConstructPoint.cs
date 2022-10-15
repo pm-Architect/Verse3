@@ -22,11 +22,16 @@ namespace Rhino3DMLibrary
             double x = this.ChildElementManager.GetData<double>(0, 10);
             double y = this.ChildElementManager.GetData<double>(1, 10);
             double z = this.ChildElementManager.GetData<double>(2, 10);
-            Point3d point = new Point3d(x, y, z);
+            Point3d point1 = new Point3d(x, y, z);
             //Box box = new Box(Plane.WorldXY, new Interval(-(x / 2), (x / 2)), new Interval(-(y / 2), (y / 2)), new Interval(-(z / 2), (z / 2)));
-            GeometryBase geo = new Rhino.Geometry.Point(point);
+            GeometryBase geo = new Rhino.Geometry.Point(point1);
             this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-            textBlock.DisplayedText = point.ToString();
+
+            Random random = new Random();
+            Point3d point2 = new Point3d(random.Next(-100, 100), random.Next(-100, 100), random.Next(-100, 100));
+            GeometryBase geo2 = new Rhino.Geometry.Point(point2);
+            this.ChildElementManager.SetData<GeometryBase>(geo2, 1);
+            textBlock.DisplayedText = point1.ToString();
         }
 
         public override CompInfo GetCompInfo()
@@ -52,7 +57,8 @@ namespace Rhino3DMLibrary
         private NumberDataNode nodeBlockX;
         private NumberDataNode nodeBlockY;
         private NumberDataNode nodeBlockZ;
-        private RhinoGeometryDataNode nodeBlockResult;
+        private RhinoGeometryDataNode nodeBlockResult1;
+        private RhinoGeometryDataNode nodeBlockResult2;
         public override void Initialize()
         {
             nodeBlockX = new NumberDataNode(this, NodeType.Input);
@@ -64,8 +70,11 @@ namespace Rhino3DMLibrary
             nodeBlockZ = new NumberDataNode(this, NodeType.Input);
             this.ChildElementManager.AddDataInputNode(nodeBlockZ, "Z");
 
-            nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Point");
+            nodeBlockResult1 = new RhinoGeometryDataNode(this, NodeType.Output);
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult1, "Generated Point");
+
+            nodeBlockResult2 = new RhinoGeometryDataNode(this, NodeType.Output);
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult2, "Random Point");
 
             textBlock = new TextElement();
             textBlock.TextAlignment = TextAlignment.Left;

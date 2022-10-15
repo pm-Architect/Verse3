@@ -8,12 +8,12 @@ using Rhino.Geometry;
 
 namespace Rhino3DMLibrary
 {
-    public class ConstructPlane : BaseComp
+    public class ConstructBoundingBox : BaseComp
     {
-        public ConstructPlane() : base(0, 0)
+        public ConstructBoundingBox() : base(0, 0)
         {
         }
-        public ConstructPlane(int x, int y) : base(x, y)
+        public ConstructBoundingBox(int x, int y) : base(x, y)
         {
         }
 
@@ -21,14 +21,13 @@ namespace Rhino3DMLibrary
         {
             Rhino.Geometry.Point point1 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(0);
             Rhino.Geometry.Point point2 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(1);
-            Rhino.Geometry.Point point3 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(2);
-            if (point1 != null && point2 != null && point3 != null)
+   
+            if (point1 != null && point2 != null)
             {
-                Plane plane = new Plane(point1.Location, point2.Location, point3.Location);
-           
-                GeometryBase geo = new Rhino.Geometry.PlaneSurface(plane, new Interval(-10.0, 10.0), new Interval(-10.0, 10.0));
+                BoundingBox box = new BoundingBox(point1.Location, point2.Location);
+                GeometryBase geo = box.ToBrep();
                 this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-                textBlock.DisplayedText = plane.ToString();
+                textBlock.DisplayedText = box.ToString();
             }
 
         }
@@ -39,9 +38,9 @@ namespace Rhino3DMLibrary
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct Plane",
+                Name = "Construct Bounding Box",
                 Group = "Basic",
-                Tab = "Surface",
+                Tab = "Breps",
                 Description = "",
                 Author = "",
                 License = "",
@@ -53,23 +52,19 @@ namespace Rhino3DMLibrary
         }
 
         private TextElement textBlock = new TextElement();
-        private RhinoGeometryDataNode nodeBlock1;
-        private RhinoGeometryDataNode nodeBlock2;
-        private RhinoGeometryDataNode nodeBlock3;
+        private RhinoGeometryDataNode nodeBlockX;
+        private RhinoGeometryDataNode nodeBlockY;
         private RhinoGeometryDataNode nodeBlockResult;
         public override void Initialize()
         {
-            nodeBlock1 = new RhinoGeometryDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlock1, "Point 1");
+            nodeBlockX = new RhinoGeometryDataNode(this, NodeType.Input);
+            this.ChildElementManager.AddDataInputNode(nodeBlockX, "Point 2");
 
-            nodeBlock2 = new RhinoGeometryDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlock2, "Point 2");
-
-            nodeBlock2 = new RhinoGeometryDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlock2, "Point 3");
+            nodeBlockY = new RhinoGeometryDataNode(this, NodeType.Input);
+            this.ChildElementManager.AddDataInputNode(nodeBlockY, "Point 2");
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Plane");
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Bounding Box");
 
             textBlock = new TextElement();
             textBlock.TextAlignment = TextAlignment.Left;
