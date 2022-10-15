@@ -8,27 +8,27 @@ using Rhino.Geometry;
 
 namespace Rhino3DMLibrary
 {
-    public class ConstructCircle : BaseComp
+    public class CreateExtrusion : BaseComp
     {
-        public ConstructCircle() : base(0, 0)
+        public CreateExtrusion() : base(0, 0)
         {
         }
-        public ConstructCircle(int x, int y) : base(x, y)
+        public CreateExtrusion(int x, int y) : base(x, y)
         {
         }
 
         public override void Compute()
         {
-            Rhino.Geometry.Point point1 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(0);
-            double radius = this.ChildElementManager.GetData<double>(1, 10);
-            if (point1 != null)
+            Rhino.Geometry.Curve curve = (Rhino.Geometry.Curve)this.ChildElementManager.GetData<GeometryBase>(0);
+ 
+            double height = this.ChildElementManager.GetData<double>(1, 50);
+            bool cap = this.ChildElementManager.GetData<bool>(2, true);
+            if (curve.IsValid)
             {
-                Circle circle = new Circle(point1.Location, radius);
-
-                GeometryBase geo = new Rhino.Geometry.ArcCurve(circle);
+      
+                GeometryBase geo = Extrusion.Create(curve, height, cap);
                 this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-               
-                textBlock.DisplayedText = circle.ToString();
+                textBlock.DisplayedText = curve.ToString();
             }
 
         }
@@ -39,8 +39,8 @@ namespace Rhino3DMLibrary
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct Circle",
-                Group = "Line",
+                Name = "Create Extrusion",
+                Group = "Operations",
                 Tab = "Curve",
                 Description = "",
                 Author = "",
@@ -55,17 +55,22 @@ namespace Rhino3DMLibrary
         private TextElement textBlock = new TextElement();
         private RhinoGeometryDataNode nodeBlockX;
         private NumberDataNode nodeBlockY;
+        private BooleanDataNode nodeBlockZ;
         private RhinoGeometryDataNode nodeBlockResult;
         public override void Initialize()
         {
             nodeBlockX = new RhinoGeometryDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlockX, "Point");
+            this.ChildElementManager.AddDataInputNode(nodeBlockX, "Curve");
 
             nodeBlockY = new NumberDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlockY, "Radius");
+            this.ChildElementManager.AddDataInputNode(nodeBlockY, "Height");
+
+            nodeBlockZ = new BooleanDataNode(this, NodeType.Input);
+            this.ChildElementManager.AddDataInputNode(nodeBlockZ, "Is Capped");
+
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Circle");
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Extruded surface");
 
             textBlock = new TextElement();
             textBlock.TextAlignment = TextAlignment.Left;
