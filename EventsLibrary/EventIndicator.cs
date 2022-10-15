@@ -20,7 +20,7 @@ namespace EventsLibrary
                 string? viewname = this.ViewType.FullName;
                 string? dataIN = _counter.ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
-                //TODO: Z Index control for IRenderable
+                
                 return /*$"Name: {name}" +*/
                     //$"\nView: {viewname}" +
                     //$"\nID: {this.ID}" +

@@ -11,6 +11,12 @@
     <Deterministic>false</Deterministic>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="MonacoEditor\**" />
+    <EmbeddedResource Remove="MonacoEditor\**" />
+    <None Remove="MonacoEditor\**" />
+    <Page Remove="MonacoEditor\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
   <ItemGroup>
@@ -74,11 +80,6 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="MonacoEditor\**">
-       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Remove="VanillaElements\vlcsnap-2022-08-21-18h46m17s429.png" />

@@ -111,9 +111,20 @@ namespace Verse3.VanillaElements
 
             if ((Keyboard.Modifiers & ModifierKeys.Control) != 0)
             {
-                //TODO: Delete connection
-                this.Element.Remove();
-                //return;
+                try
+                {
+                    //TODO: Delete connection
+                    IRenderable start = this.Element.Origin as IRenderable;
+                    IRenderable end = this.Element.Destination as IRenderable;
+                    this.Element.Remove();
+                    RenderPipeline.RenderRenderable(start);
+                    RenderPipeline.RenderRenderable(end);
+                    //return;
+                }
+                catch (Exception ex)
+                {
+                    
+                }
             }
 
             DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;

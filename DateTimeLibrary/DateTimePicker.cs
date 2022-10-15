@@ -21,7 +21,7 @@ namespace EventsLibrary
                 //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
                 //dataIN = ((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0])?.DataGoo.Data.ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
-                //TODO: Z Index control for IRenderable
+                
                 return $"Value: {dataIN}";
             }
         }

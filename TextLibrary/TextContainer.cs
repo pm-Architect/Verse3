@@ -18,13 +18,8 @@ namespace TextLibrary
                 string? viewname = this.ViewType.FullName;
                 string? dataIN = _inputText;
                 //string? zindex = DataViewModel.WPFControl.Content.
-                //TODO: Z Index control for IRenderable
-                return $"Name: {name}" +
-                    $"\nView: {viewname}" +
-                    $"\nID: {this.ID}" +
-                    $"\nX: {this.X}" +
-                    $"\nY: {this.Y}" +
-                    $"\nOutput Value: {dataIN}";
+                
+                return $"Output Value: {dataIN}";
             }
         }
 

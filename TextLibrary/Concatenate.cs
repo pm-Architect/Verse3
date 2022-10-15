@@ -18,13 +18,8 @@ namespace MathLibrary
                 if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
                     dataIN = ((TextDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data;
                 //string? zindex = DataViewModel.WPFControl.Content.
-                //TODO: Z Index control for IRenderable
-                return $"Name: {name}" +
-                    $"\nView: {viewname}" +
-                    $"\nID: {this.ID}" +
-                    $"\nX: {this.X}" +
-                    $"\nY: {this.Y}" +
-                    $"\nOutput Value: {dataIN}";
+                
+                return $"Output Value: {dataIN}";
             }
         }
 

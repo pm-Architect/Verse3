@@ -19,7 +19,7 @@ namespace MathLibrary
                 string? viewname = this.ViewType.FullName;
                 string? dataIN = Math.Round(_sliderValue.GetValueOrDefault(), 3).ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
-                //TODO: Z Index control for IRenderable
+                
                 return  $"Value: {dataIN}";
             }
         }

@@ -141,12 +141,25 @@ namespace Verse3.VanillaElements
                             }
                         }
                     }
+                    else
+                    {
+                        try
+                        {
+                            this._element.NodeContentColor = Brushes.Transparent;
+                            //RenderingCore.Render(this._element.Parent);
+                        }
+                        catch (Exception)
+                        {
+                            throw;
+                        }
+                    }
                 }
                 else
                 {
                     try
                     {
                         this._element.NodeContentColor = Brushes.Transparent;
+                        //RenderingCore.Render(this._element.Parent);
                     }
                     catch (Exception)
                     {
