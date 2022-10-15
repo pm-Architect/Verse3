@@ -8,12 +8,12 @@ using Rhino.Geometry;
 
 namespace Rhino3DMLibrary
 {
-    public class ConstructLine : BaseComp
+    public class ConstructPlane : BaseComp
     {
-        public ConstructLine() : base(0, 0)
+        public ConstructPlane() : base(0, 0)
         {
         }
-        public ConstructLine(int x, int y) : base(x, y)
+        public ConstructPlane(int x, int y) : base(x, y)
         {
         }
 
@@ -21,12 +21,13 @@ namespace Rhino3DMLibrary
         {
             Rhino.Geometry.Point point1 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(0);
             Rhino.Geometry.Point point2 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(1);
-            if (point1 != null && point2 != null)
+            Rhino.Geometry.Point point3 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(2);
+            if (point1 != null && point2 != null && point3 != null)
             {
-                Line line = new Line(point1.Location, point2.Location);
-                GeometryBase geo = new Rhino.Geometry.LineCurve(line);
-                this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-                textBlock.DisplayedText = line.ToString();
+                Plane plane = new Plane(point1.Location, point2.Location, point3.Location);
+ 
+                this.ChildElementManager.SetData<Plane>(plane, 0);
+                textBlock.DisplayedText = plane.ToString();
             }
 
         }
@@ -37,9 +38,9 @@ namespace Rhino3DMLibrary
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct Line",
-                Group = "Line",
-                Tab = "Curve",
+                Name = "Construct Plane",
+                Group = "Basic",
+                Tab = "Surface",
                 Description = "",
                 Author = "",
                 License = "",
@@ -51,19 +52,23 @@ namespace Rhino3DMLibrary
         }
 
         private TextElement textBlock = new TextElement();
-        private RhinoGeometryDataNode nodeBlockX;
-        private RhinoGeometryDataNode nodeBlockY;
+        private RhinoGeometryDataNode nodeBlock1;
+        private RhinoGeometryDataNode nodeBlock2;
+        private RhinoGeometryDataNode nodeBlock3;
         private RhinoGeometryDataNode nodeBlockResult;
         public override void Initialize()
         {
-            nodeBlockX = new RhinoGeometryDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlockX, "Start");
+            nodeBlock1 = new RhinoGeometryDataNode(this, NodeType.Input);
+            this.ChildElementManager.AddDataInputNode(nodeBlock1, "Point 1");
 
-            nodeBlockY = new RhinoGeometryDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlockY, "End");
+            nodeBlock2 = new RhinoGeometryDataNode(this, NodeType.Input);
+            this.ChildElementManager.AddDataInputNode(nodeBlock2, "Point 2");
+
+            nodeBlock2 = new RhinoGeometryDataNode(this, NodeType.Input);
+            this.ChildElementManager.AddDataInputNode(nodeBlock2, "Point 3");
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Line");
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Plane");
 
             textBlock = new TextElement();
             textBlock.TextAlignment = TextAlignment.Left;

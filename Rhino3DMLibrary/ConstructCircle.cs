@@ -8,25 +8,25 @@ using Rhino.Geometry;
 
 namespace Rhino3DMLibrary
 {
-    public class ConstructLine : BaseComp
+    public class ConstructCircle : BaseComp
     {
-        public ConstructLine() : base(0, 0)
+        public ConstructCircle() : base(0, 0)
         {
         }
-        public ConstructLine(int x, int y) : base(x, y)
+        public ConstructCircle(int x, int y) : base(x, y)
         {
         }
 
         public override void Compute()
         {
             Rhino.Geometry.Point point1 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(0);
-            Rhino.Geometry.Point point2 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(1);
-            if (point1 != null && point2 != null)
+            double radius = this.ChildElementManager.GetData<double>(1, 0);
+            if (point1 != null)
             {
-                Line line = new Line(point1.Location, point2.Location);
-                GeometryBase geo = new Rhino.Geometry.LineCurve(line);
-                this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-                textBlock.DisplayedText = line.ToString();
+                Circle circle = new Circle(point1.Location, radius);
+                
+                this.ChildElementManager.SetData<Circle>(circle, 0);
+                textBlock.DisplayedText = circle.ToString();
             }
 
         }
@@ -37,7 +37,7 @@ namespace Rhino3DMLibrary
             CompInfo ci = new CompInfo
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct Line",
+                Name = "Construct Circle",
                 Group = "Line",
                 Tab = "Curve",
                 Description = "",
@@ -52,18 +52,18 @@ namespace Rhino3DMLibrary
 
         private TextElement textBlock = new TextElement();
         private RhinoGeometryDataNode nodeBlockX;
-        private RhinoGeometryDataNode nodeBlockY;
+        private NumberDataNode nodeBlockY;
         private RhinoGeometryDataNode nodeBlockResult;
         public override void Initialize()
         {
             nodeBlockX = new RhinoGeometryDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlockX, "Start");
+            this.ChildElementManager.AddDataInputNode(nodeBlockX, "Point");
 
-            nodeBlockY = new RhinoGeometryDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlockY, "End");
+            nodeBlockY = new NumberDataNode(this, NodeType.Input);
+            this.ChildElementManager.AddDataInputNode(nodeBlockY, "Radius");
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Line");
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Circle");
 
             textBlock = new TextElement();
             textBlock.TextAlignment = TextAlignment.Left;
