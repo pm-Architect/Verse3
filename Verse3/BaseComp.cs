@@ -862,7 +862,7 @@ namespace Verse3
     
     public readonly struct CompInfo
     {
-        public CompInfo(BaseComp comp, string name, string group, string tab)
+        public CompInfo(BaseComp comp, string name, string group, string tab, Color accent = default)
         {
             ConstructorInfo = comp.GetType().GetConstructor(new Type[] { typeof(int), typeof(int) });
             Name = name;
@@ -875,14 +875,33 @@ namespace Verse3
             Website = "https://iiterate.de";
             Repository = "https://iiterate.de";
             Icon = null;
-            Random rnd = new Random();
-            byte rc = (byte)Math.Round(rnd.NextDouble() * 125.0);
-            byte gc = (byte)Math.Round(rnd.NextDouble() * 125.0);
-            byte bc = (byte)Math.Round(rnd.NextDouble() * 125.0);
-            Accent = Color.FromRgb(rc, gc, bc);
+            if (accent == default)
+            {
+                Random rnd = new Random();
+                byte rc = (byte)Math.Round(rnd.NextDouble() * 125.0);
+                byte gc = (byte)Math.Round(rnd.NextDouble() * 125.0);
+                byte bc = (byte)Math.Round(rnd.NextDouble() * 125.0);
+                Accent = Color.FromRgb(rc, gc, bc);
+            }
+            else Accent = accent;
             BuiltAgainst = Assembly.GetExecutingAssembly().ImageRuntimeVersion;
         }
-        //TODO: Add more types of constructors eg. Cloud-safe constructor
+        public CompInfo(BaseComp comp, string name, string group, string tab, string description, string author, string version, string license, string website, string repository, BitmapSource icon, Color accent)
+        {
+            ConstructorInfo = comp.GetType().GetConstructor(new Type[] { typeof(int), typeof(int) });
+            Name = name;
+            Group = group;
+            Tab = tab;
+            Description = description;
+            Author = author;
+            Version = version;
+            License = license;
+            Website = website;
+            Repository = repository;
+            Icon = icon;
+            Accent = accent;
+            BuiltAgainst = Assembly.GetExecutingAssembly().ImageRuntimeVersion;
+        }
         public ConstructorInfo ConstructorInfo { get; init; }
         public string Name { get; init; }
         public string Group { get; init; }

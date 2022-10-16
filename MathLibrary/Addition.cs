@@ -1,6 +1,4 @@
 ﻿using Core;
-using System;
-using System.Windows;
 using Verse3;
 using Verse3.VanillaElements;
 
@@ -20,6 +18,9 @@ namespace MathLibrary
         private NumberDataNode Result;
         public override void Initialize()
         {
+            //EVENT NODES
+
+            //DATA NODES
             A = new NumberDataNode(this, NodeType.Input);
             this.ChildElementManager.AddDataInputNode(A, "A");
 
