@@ -190,7 +190,7 @@
                     >
                     <ListBox 
                         x:Name="CenterBar"
-                        Background="{Binding BackgroundTint}"
+                        Background="{Binding Accent}"
                         Foreground="#FFFFFFFF"
                         BorderBrush="#FF000000"
                         ItemsSource="{Binding ChildElementManager.CenterBarItems}"

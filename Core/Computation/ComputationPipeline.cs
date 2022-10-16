@@ -252,7 +252,22 @@ namespace Core
         public ElementsLinkedList<IEventNode> EventInputNodes => _eventInputNodes;
         private ElementsLinkedList<IEventNode> _eventOutputNodes = new ElementsLinkedList<IEventNode>();
         public ElementsLinkedList<IEventNode> EventOutputNodes => _eventOutputNodes;
-
+        private int _primaryDataOutput = -1;
+        public int PrimaryDataOutput
+        {
+            get
+            {
+                return _primaryDataOutput;
+            }
+            set
+            {
+                if (_dataOutputNodes.ItemAtIndex(value) != null)
+                {
+                    _primaryDataOutput = value;
+                }
+                else _primaryDataOutput = -1;
+            }
+        }
         //public int ConnectionCount
         //{
         //    get

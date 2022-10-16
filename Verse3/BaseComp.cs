@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -12,6 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 using Verse3.VanillaElements;
 using static Core.Geometry2D;
@@ -106,9 +108,9 @@ namespace Verse3
         [XmlIgnore]
         public Brush Background { get => background; set => SetProperty(ref background, value); }
 
-        private Brush backgroundTint;
+        private Brush accent;
         [XmlIgnore]
-        public Brush BackgroundTint { get => backgroundTint; set => SetProperty(ref backgroundTint, value); }
+        public Brush Accent { get => accent; set => SetProperty(ref accent, value); }
 
         //internal CompOrientation _orientation = CompOrientation.Vertical;
         //public string Orientation
@@ -159,6 +161,16 @@ namespace Verse3
 
         //#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
+        public BaseComp()
+        {
+            this.boundingBox = new BoundingBox();
+
+            CompInfo ci = this.GetCompInfo();
+
+            this.Accent = new SolidColorBrush(ci.Accent);
+            this.Background = new SolidColorBrush(Colors.Gray);
+        }
+
         public BaseComp(int x, int y)
         {
             _cEManager = new ChildElementManager(this);
@@ -176,17 +188,16 @@ namespace Verse3
 
             this.boundingBox = new BoundingBox(x, y, 0, 0);
 
-            Random rnd = new Random();
-            byte rc = (byte)Math.Round(rnd.NextDouble() * 125.0);
-            byte gc = (byte)Math.Round(rnd.NextDouble() * 125.0);
-            byte bc = (byte)Math.Round(rnd.NextDouble() * 125.0);
-            this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
+            CompInfo ci = this.GetCompInfo();
+
+            this.Accent = new SolidColorBrush(ci.Accent);
             this.Background = new SolidColorBrush(Colors.Gray);
         }
 
         public abstract void Initialize();
 
         protected TextElement titleTextBlock = new TextElement();
+        protected TextElement previewTextBlock = new TextElement();
         /// <summary>
         /// Override only if you know what you're doing
         /// </summary>
@@ -215,6 +226,21 @@ namespace Verse3
 
             Initialize();
 
+            if (this.ComputationPipelineInfo.IOManager.PrimaryDataOutput >= 0)
+            {
+                previewTextBlock = new TextElement();
+                previewTextBlock.TextAlignment = TextAlignment.Left;
+                this.ChildElementManager.AddElement(previewTextBlock);
+                
+                IDataNode node = this.ComputationPipelineInfo.IOManager.DataOutputNodes[this.ComputationPipelineInfo.IOManager.PrimaryDataOutput];
+                string primaryDataName = "Out";
+                if (!string.IsNullOrEmpty(node.Name))
+                {
+                    primaryDataName = node.Name;
+                }
+                this.previewTextBlock.DisplayedText = primaryDataName + " = " + node.DataGoo.ToString();
+            }
+
             //if (this.RenderView is BaseCompView)
             //{
             //    BaseCompView view = this.RenderView as BaseCompView;
@@ -238,6 +264,22 @@ namespace Verse3
             if (this.ComputationPipelineInfo.IOManager.DataInputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 1)
             {
                 this.ComputationPipelineInfo.CollectData();
+                if (this.ComputationPipelineInfo.IOManager.PrimaryDataOutput > -1)
+                {
+                    if (previewTextBlock == null)
+                    {
+                        previewTextBlock = new TextElement();
+                        previewTextBlock.TextAlignment = TextAlignment.Left;
+                        this.ChildElementManager.AddElement(previewTextBlock);
+                    }
+                    IDataNode node = this.ComputationPipelineInfo.IOManager.DataOutputNodes[this.ComputationPipelineInfo.IOManager.PrimaryDataOutput];
+                    string primaryDataName = "Out";
+                    if (!string.IsNullOrEmpty(node.Name))
+                    {
+                        primaryDataName = node.Name;
+                    }
+                    this.previewTextBlock.DisplayedText = primaryDataName + " = " + node.DataGoo.ToString();
+                }
             }
         }
         public virtual void DeliverData()
@@ -282,11 +324,14 @@ namespace Verse3
 
         public void Dispose()
         {
-            if (this.RenderPipelineInfo.Children != null && this.RenderPipelineInfo.Children.Count > 0)
+            if (this.RenderPipelineInfo != null)
             {
-                foreach (var child in this.RenderPipelineInfo.Children)
+                if (this.RenderPipelineInfo.Children != null && this.RenderPipelineInfo.Children.Count > 0)
                 {
-                    if (child != null) child.Dispose();
+                    foreach (var child in this.RenderPipelineInfo.Children)
+                    {
+                        if (child != null) child.Dispose();
+                    }
                 }
             }
             DataViewModel.Instance.Elements.Remove(this);
@@ -436,6 +481,7 @@ namespace Verse3
                         break;
                     }
             }
+            //AdjustBounds();
             RenderingCore.Render(this._owner);
             DataViewModel.WPFControl.ExpandContent();
         }
@@ -476,11 +522,16 @@ namespace Verse3
                     }
             }
         }
-        public int AddDataOutputNode<T>(IDataNode<T> node, string name = "")
+        public int AddDataOutputNode<T>(IDataNode<T> node, string name = "", bool isPrimaryOutput = false)
         {
             node.Name = name;
             if (node is IRenderable) AddElement(node as IRenderable);
-            return this._owner.ComputationPipelineInfo.IOManager.AddDataOutputNode<T>(node);
+            int outInt = this._owner.ComputationPipelineInfo.IOManager.AddDataOutputNode<T>(node);
+            if (isPrimaryOutput)
+            {
+                this._owner.ComputationPipelineInfo.IOManager.PrimaryDataOutput = outInt;
+            }
+            return outInt;
         }
 
         public int AddDataInputNode<T>(IDataNode<T> node, string name = "")
@@ -515,9 +566,39 @@ namespace Verse3
             return this._owner.ComputationPipelineInfo.IOManager.GetData<T>(v);
         }
 
-        public void SetData<T>(T v1, int v2)
+        public T GetData<T>(DataNode<T> node, T defaultValue = default)
         {
-            this._owner.ComputationPipelineInfo.IOManager.SetData<T>(v1, v2);
+            if (node.DataValueType == typeof(T))
+            {
+                if (node.DataGoo.IsValid && node.DataGoo.Data != null)
+                {
+                    if (node.DataGoo.Data is T)
+                    {
+                        return (node.DataGoo as DataStructure<T>).Data;
+                    }
+                    else
+                    {
+                        throw new Exception("Data type mismatch");
+                    }
+                }
+            }
+            return defaultValue;
+        }
+
+        public bool SetData<T>(T v1, int v2)
+        {
+            return this._owner.ComputationPipelineInfo.IOManager.SetData<T>(v1, v2);
+        }
+        
+        public bool SetData<T>(T data, DataNode<T> node)
+        {
+            if (data is null) return false;
+            if (node.DataValueType == data.GetType())
+            {
+                node.DataGoo.Data = data;
+                return true;
+            }
+            else return false;
         }
 
         public T GetData<T>(int v, T defaultValue)
@@ -778,10 +859,30 @@ namespace Verse3
 
         #endregion
     }
-
-
+    
     public readonly struct CompInfo
     {
+        public CompInfo(BaseComp comp, string name, string group, string tab)
+        {
+            ConstructorInfo = comp.GetType().GetConstructor(new Type[] { typeof(int), typeof(int) });
+            Name = name;
+            Group = group;
+            Tab = tab;
+            Description = "DEVELOPMENT BUILD : Define values for all relevant properties before publishing";
+            Author = "DEVELOPMENT_BUILD";
+            Version = "0.0.0.1";
+            License = "DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe";
+            Website = "https://iiterate.de";
+            Repository = "https://iiterate.de";
+            Icon = null;
+            Random rnd = new Random();
+            byte rc = (byte)Math.Round(rnd.NextDouble() * 125.0);
+            byte gc = (byte)Math.Round(rnd.NextDouble() * 125.0);
+            byte bc = (byte)Math.Round(rnd.NextDouble() * 125.0);
+            Accent = Color.FromRgb(rc, gc, bc);
+            BuiltAgainst = Assembly.GetExecutingAssembly().ImageRuntimeVersion;
+        }
+        //TODO: Add more types of constructors eg. Cloud-safe constructor
         public ConstructorInfo ConstructorInfo { get; init; }
         public string Name { get; init; }
         public string Group { get; init; }
@@ -792,10 +893,34 @@ namespace Verse3
         public string License { get; init; }
         public string Website { get; init; }
         public string Repository { get; init; }
-        public string Icon { get; init; }
+        public string BuiltAgainst { get; }
+        //TODO: Try allowing SVGs as Icons
+        public BitmapSource Icon { get; init; }
+        public Color Accent { get; init; }
         //public Type[] ConstructorParamTypes { get; set; }
         //public string[] ConstructorParamNames { get; set; }
         //public object[] ConstructorDefaults { get; set; }
+
+        string ImageToBase64(BitmapSource bitmap)
+        {
+            var encoder = new PngBitmapEncoder();
+            var frame = BitmapFrame.Create(bitmap);
+            encoder.Frames.Add(frame);
+            using (var stream = new MemoryStream())
+            {
+                encoder.Save(stream);
+                return Convert.ToBase64String(stream.ToArray());
+            }
+        }
+
+        BitmapSource Base64ToImage(string base64)
+        {
+            byte[] bytes = Convert.FromBase64String(base64);
+            using (var stream = new MemoryStream(bytes))
+            {
+                return BitmapFrame.Create(stream);
+            }
+        }
     }
 
     public abstract class DataNode<D> : IRenderable, IDataNode<D>

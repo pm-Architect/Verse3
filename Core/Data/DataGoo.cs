@@ -251,7 +251,7 @@ namespace Core
 
         public override string ToString()
         {
-            return this.Data.ToString();
+            return this.Data?.ToString();
         }
 
 
