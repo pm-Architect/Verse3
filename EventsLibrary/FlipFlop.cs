@@ -8,7 +8,8 @@ namespace EventsLibrary
 {
     public class Flipflop : BaseComp
     {
-       
+        private bool _state = false;
+        
         public Flipflop() : base()
         {
         }
@@ -44,7 +45,6 @@ namespace EventsLibrary
 
         private void eventIn_NodeEvent(IEventNode container, EventArgData e)
         {
-            bool _state = this.ChildElementManager.GetData(state, false);
             _state = !_state;
             this.previewTextBlock.DisplayedText = _state.ToString();
             if (_state)
