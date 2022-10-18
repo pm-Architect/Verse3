@@ -39,8 +39,6 @@ namespace EventsLibrary
         private GenericEventNode eventOut;
         public override void Initialize()
         {
-            base.titleTextBlock.TextRotation = 0;
-
             eventIn = new GenericEventNode(this, NodeType.Input);
             eventIn.NodeEvent += NodeBlock_NodeEvent;
             this.ChildElementManager.AddEventInputNode(eventIn);

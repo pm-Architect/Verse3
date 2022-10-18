@@ -54,8 +54,6 @@ namespace EventsLibrary
         private ToggleElement toggleBlock;
         public override void Initialize()
         {
-            base.titleTextBlock.TextRotation = 0;
-
             interval = new NumberDataNode(this, NodeType.Input);
             this.ChildElementManager.AddDataInputNode(interval, "Interval");
 

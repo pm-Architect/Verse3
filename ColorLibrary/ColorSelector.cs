@@ -3,6 +3,7 @@ using HandyControl.Controls;
 using HandyControl.Tools;
 using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media;
 using Verse3;
@@ -56,11 +57,11 @@ namespace ColorLibrary
 
         public override void Compute()
         {
-            //_value = toggleBlock.Value;
             if (_value.HasValue && b != null)
             {
                 buttonBlock.BackgroundColor = b;
                 buttonBlock.DisplayedText = _value.ToString();
+                textBoxElement.InputText = _value.ToString();
                 this.ChildElementManager.SetData<Color>(_value.Value, 0);
             }
         }
@@ -88,6 +89,7 @@ namespace ColorLibrary
 
         internal TextElement textBlock = new TextElement();
         internal ButtonElement buttonBlock = new ButtonElement();
+        internal TextBoxElement textBoxElement = new TextBoxElement();
         internal ColorDataNode nodeBlock;
         internal GenericEventNode nodeBlock1;
         public override void Initialize()
@@ -106,7 +108,34 @@ namespace ColorLibrary
             buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
             buttonBlock.Width = 200;
             this.ChildElementManager.AddElement(buttonBlock);
+
+            textBoxElement = new TextBoxElement();
+            textBoxElement.InputText = _value.GetValueOrDefault(Color.FromArgb(255, 255, 255, 255)).ToString();
+            textBoxElement.ValueChanged += TextBoxElement_ValueChanged;
+            textBoxElement.Width = 200;
+            this.ChildElementManager.AddElement(textBoxElement);
         }
+
+        private void TextBoxElement_ValueChanged(object? sender, TextChangedEventArgs e)
+        {
+            try
+            {
+                object tryColor = ColorConverter.ConvertFromString(textBoxElement.InputText);
+                if (tryColor is Color parsedColor)
+                {
+                    _value = parsedColor;
+                    b = new SolidColorBrush(_value.Value);
+                    ComputationCore.Compute(this, false);
+                    this.ChildElementManager.EventOccured(0, new EventArgData(new DataStructure(_value)));
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                //throw;
+            }
+        }
+
         private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
         {
 
