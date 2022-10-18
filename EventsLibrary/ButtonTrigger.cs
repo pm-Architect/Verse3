@@ -103,8 +103,8 @@ namespace EventsLibrary
 
         private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
         {
+            nodeBlock.EventOccured(new EventArgData());
             ComputationCore.Compute(this);
-            this.ChildElementManager.EventOccured(0, new EventArgData());
         }
     }
 }

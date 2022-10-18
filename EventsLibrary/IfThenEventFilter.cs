@@ -15,6 +15,7 @@ namespace EventsLibrary
         }
         public IfThenEventFilter(int x, int y) : base(x, y)
         {
+            this.previewTextBlock.DisplayedText = _condition.ToString();
         }
 
         public override void Compute()
