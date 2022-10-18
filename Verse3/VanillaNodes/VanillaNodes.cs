@@ -44,6 +44,14 @@ namespace Verse3.VanillaElements
         }
     }
     [Serializable]
+    public class TimeSpanDataNode : DataNodeElement<TimeSpan>
+    {
+        public TimeSpanDataNode(BaseComp parent, NodeType nodeType) : base(parent, nodeType)
+        {
+        }
+    }
+
+    [Serializable]
     public class GenericEventNode : EventNodeElement
     {
         public GenericEventNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)

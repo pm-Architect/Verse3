@@ -21,7 +21,7 @@ namespace MathLibrary
 
         #endregion
 
-        public override CompInfo GetCompInfo() => new CompInfo(this, "DateTime transform", "Primitives", "DateTime");
+        public override CompInfo GetCompInfo() => new CompInfo(this, "DateTime transform", "Operations", "DateTime");
 
         public override void Compute()
         {

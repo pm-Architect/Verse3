@@ -38,13 +38,13 @@ namespace EventsLibrary
 
             nodeBlock = new GenericEventNode(this, NodeType.Input);
             nodeBlock.NodeEvent += NodeBlock_NodeEvent;
-            this.ChildElementManager.AddEventInputNode(nodeBlock as IEventNode);
+            this.ChildElementManager.AddEventInputNode(nodeBlock as IEventNode, "Event input");
 
             nodeBlock1 = new GenericEventNode(this, NodeType.Output);
-            this.ChildElementManager.AddEventOutputNode(nodeBlock1 as IEventNode);
+            this.ChildElementManager.AddEventOutputNode(nodeBlock1 as IEventNode, "Event output");
 
             nodeBlock2 = new GenericDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlock2);
+            this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Event data", true);
         }
 
         private void NodeBlock_NodeEvent(IEventNode container, EventArgData e)
