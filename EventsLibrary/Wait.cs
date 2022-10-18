@@ -12,6 +12,9 @@ namespace EventsLibrary
     {
         private int _duration = 1000;
         private int _counter = 0;
+        private bool _gateCollateMode = true;
+
+        private Task _gateTask;
 
         #region Constructors
 
@@ -51,8 +54,8 @@ namespace EventsLibrary
 
         private void NodeBlock_NodeEvent(IEventNode container, EventArgData e)
         {
-            Task t = Task.Delay(_duration);
-            t.ContinueWith((t) => Wait_Completed(t, e));
+            _gateTask = Task.Delay(_duration);
+            _gateTask.ContinueWith((_gateTask) => Wait_Completed(_gateTask, e));
         }
 
         private void Wait_Completed(Task t, EventArgData e)
@@ -62,6 +65,13 @@ namespace EventsLibrary
                 case TaskStatus.RanToCompletion:
                     {
                         _counter++;
+                        if (_gateCollateMode)
+                        {
+                            if (_gateTask != t)
+                            {
+                                break;
+                            }
+                        }
                         eventOut.EventOccured(e);
                         ComputationCore.Compute(this, false);
                         break;

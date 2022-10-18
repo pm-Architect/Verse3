@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -108,26 +109,34 @@ namespace Verse3
             DataViewModel.WPFControl.ContentElements.Focus();
             Keyboard.Focus(DataViewModel.WPFControl.ContentElements);
 
-            BaseCompView rectangle = (BaseCompView)sender;
-            BaseComp myRectangle = rectangle.Element;
+            BaseCompView compView = (BaseCompView)sender;
+            BaseComp comp = compView.Element;
 
 
 
             if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0 && e.ChangedButton == MouseButton.Left)
             {
-                DataViewModel.WPFControl.AddToSelection(myRectangle);
-                
-                //return;
+                DataViewModel.WPFControl.AddToSelection(comp);
             }
             else if ((Keyboard.Modifiers & ModifierKeys.Control) != 0 && e.ChangedButton == MouseButton.Left)
             {
-                DataViewModel.WPFControl.Deselect(myRectangle);
-
-                //return;
+                DataViewModel.WPFControl.Deselect(comp);
             }
             else
             {
-                DataViewModel.WPFControl.Select(myRectangle);
+                if (!comp.IsSelected) DataViewModel.WPFControl.Select(comp);
+            }
+
+            if ((Keyboard.Modifiers & ModifierKeys.Alt) != 0 && e.ChangedButton == MouseButton.Left && DataViewModel.WPFControl.ContentElements.SelectedItems.Count > 0)
+            {
+                DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.CopyDraggingElements;
+                DataViewModel.WPFControl.origContentMouseDownPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
+                DataViewModel.WPFControl.mouseButtonDown = e.ChangedButton;
+
+                compView.CaptureMouse();
+
+                e.Handled = true;
+                return;
             }
 
             if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.None)
@@ -141,7 +150,7 @@ namespace Verse3
             DataViewModel.WPFControl.origContentMouseDownPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
             DataViewModel.WPFControl.mouseButtonDown = e.ChangedButton;
 
-            rectangle.CaptureMouse();
+            compView.CaptureMouse();
 
             e.Handled = true;
         }
@@ -174,6 +183,38 @@ namespace Verse3
         void OnMouseMove(object sender, MouseEventArgs e)
         {
             //MouseEventArgs
+            if (DataViewModel.WPFControl.MouseHandlingMode == MouseHandlingMode.CopyDraggingElements && DataViewModel.WPFControl.ContentElements.SelectedItems.Count > 0)
+            {
+                List<BaseComp> copiedComps = new List<BaseComp>();
+                foreach (BaseComp comp in DataViewModel.WPFControl.ContentElements.SelectedItems)
+                {
+                    BaseComp comp1 = Activator.CreateInstance(comp.GetType()) as BaseComp;
+                    ParameterInfo[] pi = comp1.GetCompInfo().ConstructorInfo.GetParameters();
+                    object[] args = new object[pi.Length];
+                    for (int i = 0; i < pi.Length; i++)
+                    {
+                        if (!(pi[i].DefaultValue is DBNull)) args[i] = pi[i].DefaultValue;
+                        else
+                        {
+                            if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "x")
+                                args[i] = DataViewModel.WPFControl.GetMouseRelPosition().X;
+                            //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().X;
+                            else if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "y")
+                                args[i] = DataViewModel.WPFControl.GetMouseRelPosition().Y;
+                            //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().Y;
+                        }
+                    }
+                    BaseComp comp1instance = comp1.GetCompInfo().ConstructorInfo.Invoke(args) as BaseComp;
+                    DataTemplateManager.RegisterDataTemplate(comp1instance);
+                    DataViewModel.Instance.Elements.Add(comp1instance);
+
+                    copiedComps.Add(comp1instance);
+                }
+                DataViewModel.WPFControl.ClearSelection();
+                foreach (BaseComp comp in copiedComps) DataViewModel.WPFControl.AddToSelection(comp);
+
+                DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.DraggingElements;
+            }
             if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingElements)
             {
                 //
