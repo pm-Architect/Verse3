@@ -22,7 +22,7 @@ namespace MathLibrary
         #endregion
 
 
-        public override CompInfo GetCompInfo() => new CompInfo(this, "Compare DateTime", "Primitives", "DateTime");
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Compare DateTime", "Boolean", "DateTime");
 
         public override void Compute()
         {
