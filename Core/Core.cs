@@ -125,78 +125,93 @@ namespace Core
             }
         }
         private static Dictionary<string, Thread> threads = new Dictionary<string, Thread>();
-        public static void Compute(IComputable computable)
+        public static void Compute(IComputable computable, bool inNewThread = true)
         {
-            try
+            if (inNewThread)
             {
-                if (threads.Count > 0)
+                try
                 {
-                    foreach (Thread t in threads.Values)
+                    if (threads.Count > 0)
                     {
-                        if (t != null)
+                        foreach (Thread t in threads.Values)
                         {
-                            if (t.IsAlive)
+                            if (t != null)
                             {
-                                if (t.ThreadState != System.Threading.ThreadState.Running)
+                                if (t.IsAlive)
                                 {
-                                    if (t.ThreadState == System.Threading.ThreadState.Aborted ||
-                                        t.ThreadState == System.Threading.ThreadState.Stopped ||
-                                        t.ThreadState == System.Threading.ThreadState.Unstarted)
+                                    if (t.ThreadState != System.Threading.ThreadState.Running)
                                     {
-                                        threads.Remove(t.Name);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                threads.Remove(t.Name);
-                            }
-                        }
-                    }
-                }
-                //TODO: collect system info
-                //TODO: handle core limit reached - i.e. More threads needed than cores available
-                if (SystemCoreCount >= 8)
-                {
-                    Thread t = new Thread(new ThreadStart(() => ComputationPipeline.ComputeComputable(computable)));
-                    t.Name = "_verse_computation_thread_" + threads.Count + "_" + t.ManagedThreadId + "_" + computable.ID.ToString();
-                    t.IsBackground = true;
-                    t.Priority = ThreadPriority.AboveNormal;
-                    threads.Add(t.Name, t);
-                    if (threads.Count > 1)
-                    {
-                        foreach (Thread thread in threads.Values)
-                        {
-                            if (thread.IsAlive)
-                            {
-                                if (thread.ThreadState != System.Threading.ThreadState.Running)
-                                {
-                                    if (thread.ThreadState == System.Threading.ThreadState.Aborted ||
-                                        thread.ThreadState == System.Threading.ThreadState.Stopped ||
-                                        thread.ThreadState == System.Threading.ThreadState.Unstarted)
-                                    {
-                                        threads.Remove(thread.Name);
+                                        if (t.ThreadState == System.Threading.ThreadState.Aborted ||
+                                            t.ThreadState == System.Threading.ThreadState.Stopped ||
+                                            t.ThreadState == System.Threading.ThreadState.Unstarted)
+                                        {
+                                            threads.Remove(t.Name);
+                                        }
                                     }
                                 }
                                 else
                                 {
-                                    //wait for thread to complete
-                                    thread.Join();
+                                    threads.Remove(t.Name);
                                 }
-                            }
-                            else
-                            {
-                                threads.Remove(thread.Name);
                             }
                         }
                     }
-                    t.Start();
+                    //TODO: collect system info
+                    //TODO: handle core limit reached - i.e. More threads needed than cores available
+                    if (SystemCoreCount >= 8)
+                    {
+                        Thread t = new Thread(new ThreadStart(() => ComputationPipeline.ComputeComputable(computable)));
+                        t.Name = "_verse_computation_thread_" + threads.Count + "_" + t.ManagedThreadId + "_" + computable.ID.ToString();
+                        t.IsBackground = true;
+                        t.Priority = ThreadPriority.AboveNormal;
+                        threads.Add(t.Name, t);
+                        if (threads.Count > 1)
+                        {
+                            foreach (Thread thread in threads.Values)
+                            {
+                                if (thread.IsAlive)
+                                {
+                                    if (thread.ThreadState != System.Threading.ThreadState.Running)
+                                    {
+                                        if (thread.ThreadState == System.Threading.ThreadState.Aborted ||
+                                            thread.ThreadState == System.Threading.ThreadState.Stopped ||
+                                            thread.ThreadState == System.Threading.ThreadState.Unstarted)
+                                        {
+                                            threads.Remove(thread.Name);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //wait for thread to complete
+                                        thread.Join();
+                                    }
+                                }
+                                else
+                                {
+                                    threads.Remove(thread.Name);
+                                }
+                            }
+                        }
+                        t.Start();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    //throw ex;
                 }
             }
-            catch (Exception ex)
+            else
             {
-                System.Diagnostics.Debug.WriteLine(ex.ToString());
-                //throw ex;
+                try
+                {
+                    ComputationPipeline.ComputeComputable(computable);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    //throw ex;
+                }
             }
         }
     }
