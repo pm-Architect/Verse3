@@ -11,20 +11,7 @@ namespace EventsLibrary
         internal DateTime? _value = DateTime.Now;
         //private double _inputValue = 0.0;
 
-        public string? ElementText
-        {
-            get
-            {
-                string? name = this.GetType().FullName;
-                string? viewname = this.ViewType.FullName;
-                string? dataIN = _value.ToString();
-                //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
-                //dataIN = ((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0])?.DataGoo.Data.ToString();
-                //string? zindex = DataViewModel.WPFControl.Content.
-                
-                return $"Value: {dataIN}";
-            }
-        }
+
         
         #region Constructors
 
@@ -36,7 +23,7 @@ namespace EventsLibrary
             //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public DateTimePicker(int x, int y, int width = 250, int height = 100) : base(x, y)
+        public DateTimePicker(int x, int y) : base(x, y)
         {
             //base.boundingBox = new BoundingBox(x, y, width, height);
 
@@ -50,35 +37,10 @@ namespace EventsLibrary
 
         #endregion
 
-        public override void Compute()
-        {
-            //_value = toggleBlock.Value;
-            if (_value.HasValue)
-            {
-                this.ChildElementManager.SetData<DateTime>(_value.Value, 0);
-                dateTimeElement.DisplayedText = dateTimeElement.Value.ToString();
-            }
-        }
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "DateTime Picker",
-                Group = "Basic UI",
-                Tab = "DateTime",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
 
-        internal TextElement textBlock = new TextElement();
+        public override CompInfo GetCompInfo() => new CompInfo(this, "DateTime Picker", "Basic UI", "DateTime");
+
+        
         internal DateTimeElement dateTimeElement = new DateTimeElement();
         internal DateTimeDataNode nodeBlock;
         internal GenericEventNode nodeBlock1;
@@ -98,6 +60,16 @@ namespace EventsLibrary
             dateTimeElement.DateTimeChanged += DateTimeElement_DateTimeChanged;
             dateTimeElement.Width = 200;
             this.ChildElementManager.AddElement(dateTimeElement);
+        }
+
+        public override void Compute()
+        {
+            //_value = toggleBlock.Value;
+            if (_value.HasValue)
+            {
+                this.ChildElementManager.SetData(_value.Value, nodeBlock);
+                dateTimeElement.DisplayedText = dateTimeElement.Value.ToString();
+            }
         }
 
         private void DateTimeElement_DateTimeChanged(object? sender, RoutedEventArgs e)

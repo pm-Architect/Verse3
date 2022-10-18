@@ -9,24 +9,7 @@ namespace MathLibrary
     public class DateTimeNow : BaseComp
     {
 
-        #region Properties
-
-        public string? ElementText
-        {
-            get
-            {
-                string? name = this.GetType().FullName;
-                string? viewname = this.ViewType.FullName;
-                string? dataIN = "";
-                if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
-                    dataIN = (((DateTimeDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data).ToString();
-                //string? zindex = DataViewModel.WPFControl.Content.
-                
-                return $"Output Value: {dataIN}";
-            }
-        }
-
-        #endregion
+       
 
         #region Constructors
 
@@ -40,31 +23,14 @@ namespace MathLibrary
 
         #endregion
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "DateTime Now",
-                Group = "Primitive",
-                Tab = "DateTime",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "DateTime Now", "Basic UI", "DateTime");
 
         public override void Compute()
         {
             //ComputationCore.Compute(this);
         }
 
-        private TextElement textBlock = new TextElement();
+   
         private GenericEventNode nodeBlock;
         private DateTimeDataNode nodeBlock6;
         public override void Initialize()
@@ -74,12 +40,9 @@ namespace MathLibrary
             this.ChildElementManager.AddEventInputNode(nodeBlock, "Refresh");
 
             nodeBlock6 = new DateTimeDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlock6, "Now");
+            this.ChildElementManager.AddDataOutputNode(nodeBlock6, "Now", true);
 
-            textBlock = new TextElement();
-            textBlock.DisplayedText = this.ElementText;
-            textBlock.TextAlignment = TextAlignment.Left;
-            this.ChildElementManager.AddElement(textBlock);
+ 
         }
 
         private void NodeBlock_NodeEvent(IEventNode container, EventArgData e)
@@ -88,8 +51,8 @@ namespace MathLibrary
             //TODO: BUG: FIGURE OUT WHY THIS DOESN'T WORK VVVVVVVVVVV
             //ComputationCore.Compute(this);
             DateTime dtOut = DateTime.Now;
-            this.ChildElementManager.SetData<DateTime>(dtOut, 0);
-            textBlock.DisplayedText = this.ElementText;
+            this.ChildElementManager.SetData(dtOut, nodeBlock6);
+
             ComputationCore.Compute(this);
         }
     }

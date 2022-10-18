@@ -9,24 +9,7 @@ namespace MathLibrary
     public class ConstructDateTime : BaseComp
     {
 
-        #region Properties
-
-        public string? ElementText
-        {
-            get
-            {
-                string? name = this.GetType().FullName;
-                string? viewname = this.ViewType.FullName;
-                string? dataIN = "";
-                if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
-                    dataIN = (((DateTimeDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data).ToString();
-                //string? zindex = DataViewModel.WPFControl.Content.
-                
-                return $"Output Value: {dataIN}";
-            }
-        }
-
-        #endregion
+        
 
         #region Constructors
 
@@ -34,45 +17,29 @@ namespace MathLibrary
         {
         }
 
-        public ConstructDateTime(int x, int y, int width = 250, int height = 350) : base(x, y)
+        public ConstructDateTime(int x, int y) : base(x, y)
         {
         }
 
         #endregion
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct DateTime",
-                Group = "Primitive",
-                Tab = "DateTime",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Construct DateTime", "Primitives", "DateTime");
 
         public override void Compute()
         {
-            int yr = (int)this.ChildElementManager.GetData<double>(0, DateTime.Now.Year);
-            int mnt = (int)this.ChildElementManager.GetData<double>(1, DateTime.Now.Month);
-            int dat = (int)this.ChildElementManager.GetData<double>(2, DateTime.Now.Day);
-            int hr = (int)this.ChildElementManager.GetData<double>(3, DateTime.Now.Hour);
-            int min = (int)this.ChildElementManager.GetData<double>(4, DateTime.Now.Minute);
-            int sec = (int)this.ChildElementManager.GetData<double>(5, DateTime.Now.Second);
+            int yr = (int)this.ChildElementManager.GetData(nodeBlock, DateTime.Now.Year);
+            int mnt = (int)this.ChildElementManager.GetData(nodeBlock1, DateTime.Now.Month);
+            int dat = (int)this.ChildElementManager.GetData(nodeBlock2, DateTime.Now.Day);
+            int hr = (int)this.ChildElementManager.GetData(nodeBlock3, DateTime.Now.Hour);
+            int min = (int)this.ChildElementManager.GetData(nodeBlock4, DateTime.Now.Minute);
+            int sec = (int)this.ChildElementManager.GetData(nodeBlock5, DateTime.Now.Second);
             DateTime dateTime = new DateTime(yr, mnt, dat, hr, min, sec);
-            this.ChildElementManager.SetData<DateTime>(dateTime, 0);
-            textBlock.DisplayedText = this.ElementText;
+            this.ChildElementManager.SetData(dateTime, nodeBlock6);
+            
         }
         
-        private TextElement textBlock = new TextElement();
+        
         private NumberDataNode nodeBlock;
         private NumberDataNode nodeBlock1;
         private NumberDataNode nodeBlock2;
@@ -108,16 +75,11 @@ namespace MathLibrary
 
             nodeBlock6 = new DateTimeDataNode(this, NodeType.Output);
             //nodeBlock6.Width = 50;
-            this.ChildElementManager.AddDataOutputNode(nodeBlock6, "DateTime");
+            this.ChildElementManager.AddDataOutputNode(nodeBlock6, "DateTime", true);
 
             //nodeBlock7 = new DateTimeDataNode(this, NodeType.Output);
             ////nodeBlock7.Width = 50;
             //this.ChildElementManager.AddDataOutputNode(nodeBlock7, "Now");
-
-            textBlock = new TextElement();
-            textBlock.DisplayedText = this.ElementText;
-            textBlock.TextAlignment = TextAlignment.Left;
-            this.ChildElementManager.AddElement(textBlock);
         }
     }
 }
