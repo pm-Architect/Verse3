@@ -63,7 +63,7 @@ namespace EventsLibrary
                     {
                         _counter++;
                         eventOut.EventOccured(e);
-                        ComputationCore.Compute(this);
+                        ComputationCore.Compute(this, false);
                         break;
                     }
                 default:

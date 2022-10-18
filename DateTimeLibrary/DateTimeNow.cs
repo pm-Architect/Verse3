@@ -53,7 +53,7 @@ namespace MathLibrary
             DateTime dtOut = DateTime.Now;
             this.ChildElementManager.SetData(dtOut, nodeBlock6);
 
-            ComputationCore.Compute(this);
+            ComputationCore.Compute(this, false);
         }
     }
 }

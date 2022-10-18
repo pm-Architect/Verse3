@@ -104,7 +104,7 @@ namespace EventsLibrary
         private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
         {
             nodeBlock.EventOccured(new EventArgData());
-            ComputationCore.Compute(this);
+            ComputationCore.Compute(this, false);
         }
     }
 }

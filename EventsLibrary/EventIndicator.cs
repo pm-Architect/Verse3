@@ -57,7 +57,7 @@ namespace EventsLibrary
                 object dataOut = e[0].Data;
                 this.ChildElementManager.SetData(dataOut, 0);
             }
-            ComputationCore.Compute(this);
+            ComputationCore.Compute(this, false);
         }
     }
 }

@@ -116,7 +116,7 @@ namespace MathLibrary
         {
             _valueStart = sliderBlock.ValueStart;
             _valueEnd = sliderBlock.ValueEnd;
-            ComputationCore.Compute(this);
+            ComputationCore.Compute(this, false);
             this.ChildElementManager.EventOccured(0, new EventArgData(new DataStructure(new double[] { sliderBlock.ValueStart, sliderBlock.ValueEnd })));
         }
     }

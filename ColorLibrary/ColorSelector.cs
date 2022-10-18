@@ -106,35 +106,9 @@ namespace ColorLibrary
             buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
             buttonBlock.Width = 200;
             this.ChildElementManager.AddElement(buttonBlock);
-
-            //colorPickerElement = new ColorPickerElement();
-            //colorPickerElement.Value = new System.Windows.Media.SolidColorBrush(_value.GetValueOrDefault(Color.FromArgb(255, 255, 255, 255)));
-            //colorPickerElement.DisplayedText = colorPickerElement.Value.ToString();
-            //colorPickerElement.ColorChanged += ColorPickerElement_ColorChanged;
-            //colorPickerElement.Width = 200;
-            //this.ChildElementManager.AddElement(colorPickerElement);
         }
-
-        //private void ColorPickerElement_ColorChanged(object? sender, RoutedEventArgs e)
-        //{
-        //    _value = colorPickerElement.Value.Color;
-        //    ComputationCore.Compute(this);
-        //    this.ChildElementManager.EventOccured(0, new EventArgData(new DataStructure(_value)));
-        //}
         private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
         {
-            //colorPicker = SingleOpenHelper.CreateControl<ColorPicker>();
-            //colorPicker.SelectedBrush = new SolidColorBrush(_value.GetValueOrDefault(Color.FromArgb(255, 255, 255, 255)));
-            //window = new PopupWindow()
-            //{
-            //    PopupElement = colorPicker
-            //};
-            //colorPicker.SelectedColorChanged += ColorPicker_SelectedColorChanged;
-            //colorPicker.Canceled += ColorPicker_Canceled;
-            //window.Show();
-
-            //ComputationCore.Compute(this);
-            //this.ChildElementManager.EventOccured(0, new EventArgData());
 
             //create a winforms color dialog box
             ColorDialog colorDialog = new ColorDialog();
@@ -176,7 +150,7 @@ namespace ColorLibrary
         {
             _value = Color.FromArgb(e.A, e.R, e.G, e.B);
             b = new SolidColorBrush(_value.Value);
-            ComputationCore.Compute(this);
+            ComputationCore.Compute(this, false);
             this.ChildElementManager.EventOccured(0, new EventArgData(new DataStructure(_value)));
         }
     }

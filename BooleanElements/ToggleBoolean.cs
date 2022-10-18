@@ -64,24 +64,7 @@ namespace EventsLibrary
                 toggleBlock.DisplayedText = _value.ToString();
             }
         }
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Toggle Boolean",
-                Group = "Basic UI",
-                Tab = "Boolean",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Toggle Boolean", "Basic UI", "Boolean");
 
         internal TextElement textBlock = new TextElement();
         internal ToggleElement toggleBlock = new ToggleElement();
@@ -113,14 +96,14 @@ namespace EventsLibrary
         private void ButtonBlock_ToggleChecked(object? sender, RoutedEventArgs e)
         {
             _value = true;
-            ComputationCore.Compute(this);
+            ComputationCore.Compute(this, false);
             this.ChildElementManager.EventOccured(0, new EventArgData(new DataStructure(_value)));
         }
 
         private void ButtonBlock_ToggleUnchecked(object? sender, RoutedEventArgs e)
         {
             _value = false;
-            ComputationCore.Compute(this);
+            ComputationCore.Compute(this, false);
             this.ChildElementManager.EventOccured(1, new EventArgData(new DataStructure(_value)));
         }
     }

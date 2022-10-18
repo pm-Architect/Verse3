@@ -20,6 +20,8 @@ namespace EventsLibrary
 
         public override void Compute()
         {
+            _condition = this.ChildElementManager.GetData(condition, false);
+            this.previewTextBlock.DisplayedText = _condition.ToString();
         }
         public override CompInfo GetCompInfo() => new CompInfo(this, "If Then", "Filters", "Events");
         
@@ -43,11 +45,11 @@ namespace EventsLibrary
             eventFalse = new GenericEventNode(this, NodeType.Output);
             this.ChildElementManager.AddEventOutputNode(eventFalse, "False");
         }
-
+        private EventArgData lastEvArgs;
         private void eventIn_NodeEvent(IEventNode container, EventArgData e)
         {
-            _condition = this.ChildElementManager.GetData(condition, false);
-            this.previewTextBlock.DisplayedText = _condition.ToString();
+            lastEvArgs = e;
+            ComputationCore.Compute(this, false);
             if (_condition)
             {
                 eventTrue.EventOccured(e);
@@ -56,7 +58,6 @@ namespace EventsLibrary
             {
                 eventFalse.EventOccured(e);
             }
-            ComputationCore.Compute(this);
         }
     }
 }

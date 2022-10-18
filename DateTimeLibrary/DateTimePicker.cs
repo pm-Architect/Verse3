@@ -75,7 +75,7 @@ namespace EventsLibrary
         private void DateTimeElement_DateTimeChanged(object? sender, RoutedEventArgs e)
         {
             _value = dateTimeElement.Value;
-            ComputationCore.Compute(this);
+            ComputationCore.Compute(this, false);
             this.ChildElementManager.EventOccured(0, new EventArgData(new DataStructure(_value)));
         }
     }

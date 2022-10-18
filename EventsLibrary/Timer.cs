@@ -78,14 +78,14 @@ namespace EventsLibrary
         {
             _enabled = true;
             //if (toggleBlock.Value.HasValue) _enabled = toggleBlock.Value.Value;
-            ComputationCore.Compute(this);
+            ComputationCore.Compute(this, false);
         }
 
         private void ButtonBlock_ToggleUnchecked(object? sender, RoutedEventArgs e)
         {
             _enabled = false;
             //if (toggleBlock.Value.HasValue) _enabled = toggleBlock.Value.Value;
-            ComputationCore.Compute(this);
+            ComputationCore.Compute(this, false);
         }
     }
 }

@@ -113,7 +113,7 @@ namespace MathLibrary
         private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)
         {
             this._sliderValue = sliderBlock.Value;
-            ComputationCore.Compute(this);
+            ComputationCore.Compute(this, false);
             this.ChildElementManager.EventOccured(0, new EventArgData(new DataStructure(_sliderValue)));
         }
 

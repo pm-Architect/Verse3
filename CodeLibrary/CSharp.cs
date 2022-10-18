@@ -244,7 +244,7 @@ namespace CodeLibrary
 
         private void IdeElement_ScriptChanged(object? sender, EventArgs e)
         {
-            ComputationCore.Compute(this);
+            ComputationCore.Compute(this, false);
         }
 
         //private void NodeBlock_NodeEvent(IEventNode container, EventArgData e)

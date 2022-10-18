@@ -56,7 +56,7 @@ namespace EventsLibrary
                 eventFalse.EventOccured(e);
             }
             this.ChildElementManager.SetData<bool>(_state, state);
-            ComputationCore.Compute(this);
+            ComputationCore.Compute(this, false);
         }
     }
 }
