@@ -67,7 +67,7 @@ namespace MathLibrary
             {
                 ConstructorInfo = this.GetType().GetConstructor(types),
                 Name = "Exponent",
-                Group = "Advanced Operations",
+                Group = "Intermediate Operations",
                 Tab = "Math",
                 Description = "",
                 Author = "",

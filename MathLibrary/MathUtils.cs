@@ -52,5 +52,40 @@ namespace MathLibrary
             return result;
         }
 
+        public static string BinomialEquation(double a, double n)
+        {
+            double number = a;
+            double exponent = Math.Abs(Math.Round(n));
+            string result = $"(x+{a})^{n} = ";
+            int k = 0;
+
+            if (exponent <= 18)
+            {
+                while (k <= exponent)
+                {
+                    double numericpart = Combinate(exponent, k) * (Math.Pow(a, n - k));
+                    string textpart;
+                    if (k < number)
+                    {
+                        textpart = $"x^{k} + ";
+                    }
+                    else
+                    {
+                        textpart = $"x^{k}";
+                    }
+
+                    result += numericpart + textpart;
+                    k++;
+                }
+            }
+            else
+            {
+                result = "Please try to keep the exponent n <= 18.";
+            }
+
+
+            return result;
+        }
+
     }
 }
