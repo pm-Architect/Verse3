@@ -18,12 +18,12 @@ namespace ColorLibrary
 
         public override void Compute()
         {
-            Color color = this.ChildElementManager.GetData(nodeBlock, Color.FromArgb(1, 255,255,255));
+            Color color = this.ChildElementManager.GetData(nodeBlock, Color.FromArgb(255,255,255,255));
 
             this.ChildElementManager.SetData(color.A, nodeBlockA);
             this.ChildElementManager.SetData(color.R, nodeBlockR);
             this.ChildElementManager.SetData(color.G, nodeBlockG);
-            this.ChildElementManager.SetData(color.B, nodeBlockB);     
+            this.ChildElementManager.SetData(color.B, nodeBlockB);
         }
 
         public override CompInfo GetCompInfo() => new CompInfo(this, "Deconstruct color", "Primitive", "Color");

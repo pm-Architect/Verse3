@@ -43,6 +43,15 @@ namespace Verse3.VanillaElements
         {
         }
     }
+
+    [Serializable]
+    public class TimeZoneDataNode : DataNodeElement<TimeZoneInfo>
+    {
+        public TimeZoneDataNode(BaseComp parent, NodeType nodeType) : base(parent, nodeType)
+        {
+        }
+    }
+
     [Serializable]
     public class TimeSpanDataNode : DataNodeElement<TimeSpan>
     {
