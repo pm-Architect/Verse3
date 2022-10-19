@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -144,6 +145,44 @@ namespace Core
         {
             ID = Guid.NewGuid();
         }
+
+        public new void Add(D data)
+        {
+            if (data is null) throw new ArgumentNullException(nameof(data));
+            base.Add(new DataStructure<D>(data));
+        }
+        public DataStructure<T> Duplicate<T>()
+        {
+            try
+            {
+                DataStructure<T> dsOut = new DataStructure<T>((T)volatileData);
+                dsOut.ID = ID;
+                if (this.Count > 0)
+                {
+                    foreach (IDataGoo goo in this)
+                    {
+                        if (goo is DataStructure<T>)
+                        {
+                            dsOut.Add(((DataStructure<T>)goo).Duplicate());
+                        }
+                        else if (goo.Data is T)
+                        {
+                            dsOut.Add(new DataStructure<T>((T)goo.Data));
+                        }
+                        else
+                        {
+                            DataStructure<T> gooT = new DataStructure<T>((T)goo.Data);
+                            dsOut.Add(goo);
+                        }
+                    }
+                }
+                return dsOut;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 
     [Serializable]
@@ -203,7 +242,26 @@ namespace Core
 
         protected object volatileData = default;
         [DataMember]
-        public object Data { get => volatileData; set => volatileData = value; }
+        public object Data
+        {
+            get
+            {
+                if (volatileData == null)
+                {
+                    if (Children == null)
+                        return null;
+                    else
+                        return Children.ToArray();
+                }
+                else
+                    return volatileData;
+            }
+            set
+            {
+                if (value == null) throw new ArgumentNullException("value");
+                volatileData = value;
+            }
+        }
         public Guid ID { get; set; }
         public bool IsValid { get => (this.Data != default); }
         public string IsValidReason { get; }
@@ -237,7 +295,7 @@ namespace Core
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
-            Data = data;
+            volatileData = data;
             ID = Guid.NewGuid();
         }
         public DataStructure(IDataGoo data) : base(new List<IDataGoo> { data })
@@ -252,6 +310,57 @@ namespace Core
         public override string ToString()
         {
             return this.Data?.ToString();
+        }
+
+        public new void Add(object data)
+        {
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+            if (data is IDataGoo)
+                base.Add((IDataGoo)data);
+            else
+                base.Add(new DataStructure(data));
+        }
+
+        public DataStructure Duplicate()
+        {
+            DataStructure dsOut = new DataStructure();
+            if (volatileData != null) dsOut = new DataStructure(volatileData);
+            dsOut.ID = ID;
+            dsOut.overrideDataType = overrideDataType;
+            if (this.Count > 0)
+            {
+                foreach (IDataGoo goo in this)
+                {
+                    if (goo is DataStructure)
+                    {
+                        dsOut.Add(((DataStructure)goo).Duplicate());
+                    }
+                }
+            }
+            return dsOut;
+        }
+        public DataStructure<T> Duplicate<T>()
+        {
+            DataStructure<T> dsOut = new DataStructure<T>();
+            if (volatileData != null && volatileData is T) dsOut = new DataStructure<T>((T)volatileData);
+            dsOut.ID = ID;
+            if (this.Count > 0)
+            {
+                foreach (IDataGoo goo in this)
+                {
+                    if (goo is DataStructure<T>)
+                    {
+                        dsOut.Add(((DataStructure<T>)goo).Duplicate());
+                    }
+                    else
+                    {
+                        DataStructure<T> gooT = new DataStructure<T>((T)goo.Data);
+                        dsOut.Add(goo);
+                    }
+                }
+            }
+            return dsOut;
         }
 
 

@@ -526,8 +526,8 @@ namespace Verse3
             VFSerializable VFfile = new VFSerializable((DataViewModel)DataViewModel.Instance);
             //show a save file dialog with default file extension *.vf or *.vfx
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Verse3 File Extended (*.vfx)|*.vfx|Verse3 File (*.vf)|*.vf";
-            saveFileDialog.DefaultExt = "vfx";
+            saveFileDialog.Filter = "Verse3 JSON File (*.vfj)|*.vfj|Verse3 File Extended (*.vfx)|*.vfx|Verse3 File (*.vf)|*.vf";
+            saveFileDialog.DefaultExt = "vfj";
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 //save the file
@@ -541,6 +541,12 @@ namespace Verse3
                     string xml = VFfile.ToXMLString();
                     File.WriteAllText(saveFileDialog.FileName, xml);
                 }
+                else if (saveFileDialog.FileName.EndsWith(".vfj"))
+                {
+                    //Serialize to xml
+                    string xml = VFfile.ToJSONString();
+                    File.WriteAllText(saveFileDialog.FileName, xml);
+                }
             }
         }
 
@@ -548,8 +554,8 @@ namespace Verse3
         {
             //show an open file dialog to pick a *.vf or *.vfx file
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Verse3 File Extended (*.vfx)|*.vfx|Verse3 File (*.vf)|*.vf";
-            openFileDialog.DefaultExt = "vfx";
+            openFileDialog.Filter = "Verse3 JSON File (*.vfj)|*.vfj|Verse3 File Extended (*.vfx)|*.vfx|Verse3 File (*.vf)|*.vf";
+            openFileDialog.DefaultExt = "vfj";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 //load the file
@@ -563,6 +569,11 @@ namespace Verse3
                     else if (openFileDialog.FileName.EndsWith(".vfx"))
                     {
                         VFSerializable VFfile = VFSerializable.DeserializeXML(openFileDialog.FileName);
+                        DataViewModel.Instance = VFfile.DataViewModel;
+                    }
+                    else if (openFileDialog.FileName.EndsWith(".vfj"))
+                    {
+                        VFSerializable VFfile = VFSerializable.DeserializeJSON(openFileDialog.FileName);
                         DataViewModel.Instance = VFfile.DataViewModel;
                     }
                 }

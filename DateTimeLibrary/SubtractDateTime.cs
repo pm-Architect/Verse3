@@ -29,7 +29,7 @@ namespace MathLibrary
 
             DateTime dateTime = (DateTime)this.ChildElementManager.GetData(nodeBlock0, DateTime.Now);
             DateTime dateTime2 = (DateTime)this.ChildElementManager.GetData(nodeBlock1, DateTime.Now);
-            TimeSpan timespan0 = (TimeSpan)this.ChildElementManager.GetData(nodeBlock2);
+            TimeSpan timespan0 = (TimeSpan)this.ChildElementManager.GetData(nodeBlock2).Data;
 
             TimeSpan timespan = dateTime.Subtract(dateTime2);
             DateTime dateTime3 = dateTime.Subtract(timespan0);

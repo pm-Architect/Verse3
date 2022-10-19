@@ -28,6 +28,9 @@ using Verse3.VanillaElements;
 using static Core.Geometry2D;
 using static SaveXML.FileOperations;
 using XamlReader = System.Windows.Markup.XamlReader;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Linq;
 
 namespace Verse3
 {
@@ -293,6 +296,73 @@ namespace Verse3
                 return null;
             }
         }
+
+        internal string ToJSONString()
+        {
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize;
+            settings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
+            return JsonConvert.SerializeObject(this, settings);
+        }
+
+        internal static VFSerializable DeserializeJSON(string filePath)
+        {
+            string text = File.ReadAllText(filePath);
+            return JsonConvert.DeserializeObject<VFSerializable>(text);
+        }
+    }
+
+    public class JsonLibraryClassConverter : DefaultContractResolver
+    {
+        protected override JsonConverter ResolveContractConverter(Type objectType)
+        {
+            if (typeof(BaseComp).IsAssignableFrom(objectType) && !objectType.IsAbstract)
+                return null; // pretend TableSortRuleConvert is not specified (thus avoiding a stack overflow)
+            return base.ResolveContractConverter(objectType);
+        }
+    }
+
+    public class BaseCompConverter : JsonConverter
+    {
+        static JsonSerializerSettings SpecifiedSubclassConversion = new JsonSerializerSettings() { ContractResolver = new JsonLibraryClassConverter() };
+
+        public override bool CanConvert(Type objectType)
+        {
+            return (objectType == typeof(BaseComp));
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            JObject jo = JObject.Load(reader);
+            
+            try
+            {
+                BaseComp bc = JsonConvert.DeserializeObject<BaseComp>(jo.ToString(), SpecifiedSubclassConversion);
+
+                return bc;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return null;
+                //throw ex;
+            }
+            //switch (jo["ObjType"].Value<int>())
+            //{
+            //    case 1:
+            //        return JsonConvert.DeserializeObject<DerivedType1>(jo.ToString(), SpecifiedSubclassConversion);
+            //    case 2:
+            //        return JsonConvert.DeserializeObject<DerivedType2>(jo.ToString(), SpecifiedSubclassConversion);
+            //    default:
+            //        throw new Exception();
+            //}
+            //throw new NotImplementedException();
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            serializer.Serialize(writer, value);
+        }
     }
 
     /// <summary>
@@ -537,16 +607,23 @@ namespace Verse3
     {
         #region Data Members
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         private RenderPipelineInfo renderPipelineInfo;
         protected BoundingBox boundingBox = BoundingBox.Unset;
         private Guid _id = Guid.NewGuid();
+        [JsonIgnore]
         internal IRenderView elView;
 
         #endregion
 
         #region Properties
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public RenderPipelineInfo RenderPipelineInfo => renderPipelineInfo;
+        [JsonIgnore]
+        [IgnoreDataMember]
         public IRenderView RenderView
         {
             get
@@ -565,7 +642,11 @@ namespace Verse3
                 }
             }
         }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public abstract Type ViewType { get; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public object ViewKey { get; set; }
 
         public Guid ID { get => _id; private set => _id = value; }
@@ -574,16 +655,24 @@ namespace Verse3
 
         public BoundingBox BoundingBox { get => boundingBox; private set => SetProperty(ref boundingBox, value); }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public double X { get => boundingBox.Location.X; }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public double Y { get => boundingBox.Location.Y; }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public double Width
         {
             get => boundingBox.Size.Width;
             set => boundingBox.Size.Width = value;
         }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public double Height
         {
             get => boundingBox.Size.Height;
@@ -598,13 +687,23 @@ namespace Verse3
         
         private ElementType _elementType = ElementType.UIElement;
         public virtual ElementType ElementType { get => _elementType; set => _elementType = value; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         bool IRenderable.Visible { get; set; }
         private bool sel = false;
+        [JsonIgnore]
+        [IgnoreDataMember]
         public bool IsSelected { get => sel; set => sel = false; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public bool RenderExpired { get; set; }
-        
+
+        [JsonIgnore]
+        [IgnoreDataMember]
         public IRenderable Parent => this.RenderPipelineInfo.Parent;
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public ElementsLinkedList<IRenderable> Children => this.RenderPipelineInfo.Children;
 
         public void SetX(double x)

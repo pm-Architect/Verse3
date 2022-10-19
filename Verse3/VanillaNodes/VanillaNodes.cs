@@ -17,6 +17,7 @@ namespace Verse3.VanillaElements
     [Serializable]
     public class NumberDataNode : DataNodeElement<double>
     {
+        //TODO: Properties like Accept Integers Only, Accept Decimals Only, etc.
         public NumberDataNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
         {
         }

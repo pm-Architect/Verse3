@@ -23,11 +23,11 @@ namespace InteropLibrary
 
         public override void Compute()
         {
-            object? dataIN = this.ChildElementManager.GetData(dataInput);
+            DataStructure? dataIN = this.ChildElementManager.GetData(dataInput);
             if (dataIN != null && _lastData != dataIN)
             {
                 this.ChildElementManager.SetData<object>(_lastData, lastData);
-                dataChangedEvent.EventOccured(new EventArgData(new DataStructure(dataIN)));
+                dataChangedEvent.EventOccured(new EventArgData(dataIN));
                 this.previewTextBlock.DisplayedText = $"Last Data: {_lastData}\nNew Data: {dataIN}";
                 _lastData = dataIN;
             }

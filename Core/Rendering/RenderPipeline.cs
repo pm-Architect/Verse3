@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using static Core.Geometry2D;
 
 namespace Core
@@ -134,18 +135,21 @@ namespace Core
     public class RenderPipelineInfo
     {
         private IRenderable _renderable;
+        [JsonIgnore]
         public IRenderable Renderable => _renderable;
         //private IRenderable _zPrev;
         //public IRenderable ZPrev => _zPrev;
         //private IRenderable _zNext;
         //public IRenderable ZNext => _zNext;
         private IRenderable _parent;
+        [JsonIgnore]
         public IRenderable Parent
         {
             get { return _parent; }
             set { _parent = value; }
         }
         private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
+        [JsonIgnore]
         public ElementsLinkedList<IRenderable> Children => _children;
 
         public RenderPipelineInfo(IRenderable renderable)
@@ -186,11 +190,14 @@ namespace Core
     {
         #region Render Pipeline Info
 
+        [JsonIgnore]
         public RenderPipelineInfo RenderPipelineInfo { get; }
         //TODO: GUID Lookup in DataModel Instance
         //public IRenderable ZPrev { get; }
         //public IRenderable ZNext { get; }
+        [JsonIgnore]
         public IRenderable Parent { get/* => RenderPipelineInfo.Parent*/; }
+        [JsonIgnore]
         public ElementsLinkedList<IRenderable> Children { get/* => RenderPipelineInfo.Children*/; }
 
         #endregion
@@ -198,9 +205,12 @@ namespace Core
         #region Properties
 
 #nullable enable
+        [JsonIgnore]
         public Type? ViewType { get; }
 #nullable restore
+        [JsonIgnore]
         object ViewKey { get; set; }
+        [JsonIgnore]
         IRenderView RenderView { get; set; }
 
         public bool Visible { get; set; }

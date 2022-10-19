@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
@@ -95,6 +96,7 @@ namespace Core
         /// <summary>
         /// Retreive the singleton instance.
         /// </summary>
+        [JsonIgnore]
         [XmlIgnore]
         public static DataModel Instance
         {
@@ -146,6 +148,7 @@ namespace Core
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
         [XmlIgnore]
+        [JsonIgnore]
         public ElementsLinkedList<IElement> Elements
         {
             get
@@ -179,6 +182,7 @@ namespace Core
         /// The current scale at which the content is being viewed.
         /// 
         [XmlIgnore]
+        [JsonIgnore]
         public double ContentScale
         {
             get
@@ -194,6 +198,7 @@ namespace Core
         }
 
         [XmlIgnore]
+        [JsonIgnore]
         public CanvasPoint ContentOffset
         {
             get
@@ -211,6 +216,7 @@ namespace Core
         /// The X coordinate of the offset of the viewport onto the content (in content coordinates).
         /// 
         [XmlIgnore]
+        [JsonIgnore]
         public double ContentOffsetX
         {
             get
@@ -229,6 +235,7 @@ namespace Core
         /// The Y coordinate of the offset of the viewport onto the content (in content coordinates).
         /// 
         [XmlIgnore]
+        [JsonIgnore]
         public double ContentOffsetY
         {
             get
@@ -244,6 +251,7 @@ namespace Core
         }
 
         [XmlIgnore]
+        [JsonIgnore]
         public CanvasSize ContentSize
         {
             get
@@ -261,6 +269,7 @@ namespace Core
         /// The width of the content (in content coordinates).
         /// 
         [XmlIgnore]
+        [JsonIgnore]
         public double ContentWidth
         {
             get
@@ -279,6 +288,7 @@ namespace Core
         /// The heigth of the content (in content coordinates).
         /// 
         [XmlIgnore]
+        [JsonIgnore]
         public double ContentHeight
         {
             get
@@ -295,6 +305,7 @@ namespace Core
 
 
         [XmlIgnore]
+        [JsonIgnore]
         public CanvasSize ContentViewportSize
         {
             get
@@ -314,6 +325,7 @@ namespace Core
         /// data model so that the value can be shared with the overview window.
         /// 
         [XmlIgnore]
+        [JsonIgnore]
         public double ContentViewportWidth
         {
             get
@@ -334,6 +346,7 @@ namespace Core
         /// data model so that the value can be shared with the overview window.
         /// 
         [XmlIgnore]
+        [JsonIgnore]
         public double ContentViewportHeight
         {
             get

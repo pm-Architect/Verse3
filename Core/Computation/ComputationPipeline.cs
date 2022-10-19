@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Core
@@ -136,6 +137,7 @@ namespace Core
 
     public interface IComputable : IElement
     {
+        [JsonIgnore]
         public ComputationPipelineInfo ComputationPipelineInfo { get; }
 
         //public ElementsLinkedList<INode> Nodes { get; }
@@ -157,6 +159,7 @@ namespace Core
     {
         private IComputable _computable;
         private IOManager _ioManager;
+        [JsonIgnore]
         public IOManager IOManager => _ioManager;
         private ElementsLinkedList<IComputable> _dataDS = new ElementsLinkedList<IComputable>();
         public ElementsLinkedList<IComputable> DataDS => _dataDS;

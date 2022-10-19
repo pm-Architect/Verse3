@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using static Core.Geometry2D;
 
 namespace Core
@@ -7,7 +8,9 @@ namespace Core
 
     public interface INode : IElement
     {
+        [JsonIgnore]
         public IElement Parent { get; set; }
+        [JsonIgnore]
         public ElementsLinkedList<IConnection> Connections { get; }
         public NodeType NodeType { get; }
         public CanvasPoint Hotspot { get; }

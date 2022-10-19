@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 using Verse3.VanillaElements;
+using Newtonsoft.Json;
 using static Core.Geometry2D;
 
 namespace Verse3
@@ -37,11 +38,58 @@ namespace Verse3
 
         #region Properties
 
+        private string _nameOverride;
+        public string Name
+        {
+            get
+            {
+                CompInfo ci = GetCompInfo();
+                if (_nameOverride == ci.Name || (_nameOverride == null))
+                {
+                    return ci.Name;
+                }
+                else
+                {
+                    return _nameOverride;
+                }
+            }
+            set
+            {
+                _nameOverride = value;
+            }
+        }
+
+        private string _metaDataCompInfo;
+        public string MetadataCompInfo
+        {
+            get
+            {
+                return GetCompInfo().ToString();
+            }
+            set
+            {
+                _metaDataCompInfo = value;
+                try
+                {
+                    CompInfo ci = CompInfo.FromString(this, value);
+                    //TODO: Try and get a CompInfo from the string and match it to the current CompInfo
+
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    //throw ex;
+                }
+            }
+        }
         [XmlIgnore]
+        [JsonIgnore]
         public ChildElementManager ChildElementManager => _cEManager;
         [XmlIgnore]
+        [JsonIgnore]
         public RenderPipelineInfo RenderPipelineInfo => renderPipelineInfo;
         [XmlIgnore]
+        [JsonIgnore]
         public IRenderView RenderView
         {
             get
@@ -127,12 +175,15 @@ namespace Verse3
 
 
         [XmlIgnore]
+        [JsonIgnore]
         public IRenderable Parent => RenderPipelineInfo.Parent;
         [XmlIgnore]
+        [JsonIgnore]
         public ElementsLinkedList<IRenderable> Children => RenderPipelineInfo.Children;
 
         private ComputationPipelineInfo computationPipelineInfo;
         [XmlIgnore]
+        [JsonIgnore]
         public ComputationPipelineInfo ComputationPipelineInfo => computationPipelineInfo;
 
         //private ElementsLinkedList<INode> _nodes = new ElementsLinkedList<INode>();
@@ -140,6 +191,7 @@ namespace Verse3
 
         public ComputableElementState ComputableElementState { get; set; } = ComputableElementState.Unset;
         [XmlIgnore]
+        [JsonIgnore]
         IRenderView IRenderable.RenderView
         {
             get => this.RenderView as IRenderView;
@@ -174,17 +226,9 @@ namespace Verse3
         public BaseComp(int x, int y)
         {
             _cEManager = new ChildElementManager(this);
-            //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
-            //Random rng = new Random();
-            //byte r = (byte)rng.Next(0, 255);
-            //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
-
 
             renderPipelineInfo = new RenderPipelineInfo(this);
             computationPipelineInfo = new ComputationPipelineInfo(this);
-
-            //if (this.RenderView == null) return;
-            //_orientation = orientation;
 
             this.boundingBox = new BoundingBox(x, y, 0, 0);
 
@@ -192,6 +236,29 @@ namespace Verse3
 
             this.Accent = new SolidColorBrush(ci.Accent);
             this.Background = new SolidColorBrush(Colors.Gray);
+        }
+
+        public BaseComp(SerializationInfo info, StreamingContext context)
+        {
+            _cEManager = new ChildElementManager(this);
+
+            renderPipelineInfo = new RenderPipelineInfo(this);
+            computationPipelineInfo = new ComputationPipelineInfo(this);
+
+            //this.boundingBox = new BoundingBox();
+
+            CompInfo ci = this.GetCompInfo();
+
+            this.Accent = new SolidColorBrush(ci.Accent);
+            this.Background = new SolidColorBrush(Colors.Gray);
+            
+            Name = info.GetString("Name");
+            MetadataCompInfo = info.GetString("MetadataCompInfo");
+            this.ElementType = (ElementType)info.GetValue("ElementType", typeof(ElementType));
+            this.State = (ElementState)info.GetValue("State", typeof(ElementState));
+            this.boundingBox = (BoundingBox)info.GetValue("BoundingBox", typeof(BoundingBox));
+            this.IsSelected = info.GetBoolean("IsSelected");
+            this.ElementState = (ElementState)info.GetValue("ElementState", typeof(ElementState));
         }
 
         public abstract void Initialize();
@@ -226,12 +293,13 @@ namespace Verse3
 
             Initialize();
 
+
+            previewTextBlock = new TextElement();
+            previewTextBlock.TextAlignment = TextAlignment.Left;
+            previewTextBlock.DisplayedText = string.Empty;
+            this.ChildElementManager.AddElement(previewTextBlock);
             if (this.ComputationPipelineInfo.IOManager.PrimaryDataOutput >= 0)
             {
-                previewTextBlock = new TextElement();
-                previewTextBlock.TextAlignment = TextAlignment.Left;
-                this.ChildElementManager.AddElement(previewTextBlock);
-                
                 IDataNode node = this.ComputationPipelineInfo.IOManager.DataOutputNodes[this.ComputationPipelineInfo.IOManager.PrimaryDataOutput];
                 string primaryDataName = "Out";
                 if (!string.IsNullOrEmpty(node.Name))
@@ -373,17 +441,18 @@ namespace Verse3
             try
             {
                 //info.AddValue("ID", this.ID);
-                info.AddValue("X", this.X);
-                info.AddValue("Y", this.Y);
-                info.AddValue("Width", this.Width);
-                info.AddValue("Height", this.Height);
+                CompInfo ci = GetCompInfo();
+                info.AddValue("Name", ci.Name);
+                info.AddValue("MetadataCompInfo", MetadataCompInfo);
+                //info.AddValue("X", this.X);
+                //info.AddValue("Y", this.Y);
+                //info.AddValue("Width", this.Width);
+                //info.AddValue("Height", this.Height);
                 info.AddValue("ElementType", this.ElementType);
                 info.AddValue("State", this.State);
                 info.AddValue("IsSelected", this.IsSelected);
                 info.AddValue("BoundingBox", this.BoundingBox);
                 info.AddValue("ElementState", this.ElementState);
-                info.AddValue("Parent", this.Parent);
-                info.AddValue("Children", this.Children);
             }
             catch (Exception ex)
             {
@@ -568,13 +637,27 @@ namespace Verse3
 
         public T GetData<T>(DataNode<T> node, T defaultValue = default)
         {
+            try
+            {
+                DataStructure<T> ds = GetData<T>(node);
+                if (ds != null && ds.IsValid)
+                {
+                    defaultValue = GetData<T>(node).Data;
+                }
+            }
+            catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex.Message); }
+            return defaultValue;
+        }
+
+        public DataStructure<T> GetData<T>(DataNode<T> node)
+        {
             if (node.DataValueType == typeof(T))
             {
-                if (node.DataGoo.IsValid && node.DataGoo.Data != null)
+                if (node.DataGoo != null)
                 {
-                    if (node.DataGoo.Data is T)
+                    if (node.DataGoo.DataType.IsAssignableTo(typeof(T)))
                     {
-                        return (node.DataGoo as DataStructure<T>).Data;
+                        return node.DataGoo;
                     }
                     else
                     {
@@ -582,20 +665,31 @@ namespace Verse3
                     }
                 }
             }
-            return defaultValue;
+            return null;
         }
 
         public bool SetData<T>(T v1, int v2)
         {
             return this._owner.ComputationPipelineInfo.IOManager.SetData<T>(v1, v2);
         }
-        
+
         public bool SetData<T>(T data, DataNode<T> node)
         {
             if (data is null) return false;
             if (node.DataValueType == data.GetType())
             {
                 node.DataGoo.Data = data;
+                return true;
+            }
+            else return false;
+        }
+
+        public bool SetData<T>(DataStructure<T> data, DataNode<T> node)
+        {
+            if (data is null) return false;
+            if (node.DataValueType == data.DataType)
+            {
+                node.DataGoo = data;
                 return true;
             }
             else return false;
@@ -628,6 +722,11 @@ namespace Verse3
         public void EventOccured(int v, EventArgData eventArgData)
         {
             this._owner.ComputationPipelineInfo.IOManager.EventOccured(v, eventArgData);
+        }
+
+        public void EventOccured(EventNode node, EventArgData eventArgData)
+        {
+            node.EventOccured(eventArgData);
         }
 
         private ElementsLinkedList<IRenderable> _input = new ElementsLinkedList<IRenderable>();
@@ -859,7 +958,8 @@ namespace Verse3
 
         #endregion
     }
-    
+
+    [Serializable]
     public readonly struct CompInfo
     {
         public CompInfo(BaseComp comp, string name, string group, string tab, Color accent = default)
@@ -884,7 +984,10 @@ namespace Verse3
                 Accent = Color.FromRgb(rc, gc, bc);
             }
             else Accent = accent;
+            TypeName = comp.GetType().FullName;
             BuiltAgainst = Assembly.GetExecutingAssembly().ImageRuntimeVersion;
+            IsValid = true;
+            IsDevelopmentBuild = true;
         }
         public CompInfo(BaseComp comp, string name, string group, string tab, string description, string author, string version, string license, string website, string repository, BitmapSource icon, Color accent)
         {
@@ -900,8 +1003,12 @@ namespace Verse3
             Repository = repository;
             Icon = icon;
             Accent = accent;
+            TypeName = comp.GetType().FullName;
             BuiltAgainst = Assembly.GetExecutingAssembly().ImageRuntimeVersion;
+            IsValid = true;
+            IsDevelopmentBuild = false;
         }
+        [JsonIgnore]
         public ConstructorInfo ConstructorInfo { get; init; }
         public string Name { get; init; }
         public string Group { get; init; }
@@ -912,10 +1019,16 @@ namespace Verse3
         public string License { get; init; }
         public string Website { get; init; }
         public string Repository { get; init; }
+        public string TypeName { get; }
         public string BuiltAgainst { get; }
+        public bool IsValid { get; }
+        public bool IsDevelopmentBuild { get; }
+
         //TODO: Try allowing SVGs as Icons
+        [JsonIgnore]
         public BitmapSource Icon { get; init; }
         public Color Accent { get; init; }
+
         //public Type[] ConstructorParamTypes { get; set; }
         //public string[] ConstructorParamNames { get; set; }
         //public object[] ConstructorDefaults { get; set; }
@@ -940,8 +1053,43 @@ namespace Verse3
                 return BitmapFrame.Create(stream);
             }
         }
-    }
 
+        public override string ToString()
+        {
+            //Serialize CompInfo to JSON string
+            return JsonConvert.SerializeObject(this);
+        }
+
+        internal static CompInfo FromString(BaseComp baseComp, string value)
+        {
+            //Deserialize JSON string to CompInfo
+            CompInfo compInfoDeserialized =  JsonConvert.DeserializeObject<CompInfo>(value);
+
+            CompInfo compInfoOut = new CompInfo(baseComp,
+                compInfoDeserialized.Name,
+                compInfoDeserialized.Group,
+                compInfoDeserialized.Tab,
+                compInfoDeserialized.Description,
+                compInfoDeserialized.Author,
+                compInfoDeserialized.Version,
+                compInfoDeserialized.License,
+                compInfoDeserialized.Website,
+                compInfoDeserialized.Repository,
+                null,
+                compInfoDeserialized.Accent);
+
+            return compInfoOut;
+            //        if (ci.IsValid)
+            //{
+            //    if (ci.Name != GetCompInfo().Name)
+            //    {
+            //        _nameOverride = ci.Name;
+            //        CompInfo.Inject(this);
+            //    }
+            //}
+        }
+    }
+    
     public abstract class DataNode<D> : IRenderable, IDataNode<D>
     {
         #region Data Members
@@ -955,7 +1103,11 @@ namespace Verse3
 
         #region Properties
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public RenderPipelineInfo RenderPipelineInfo => renderPipelineInfo;
+        [JsonIgnore]
+        [IgnoreDataMember]
         public IRenderView RenderView
         {
             get
@@ -974,7 +1126,11 @@ namespace Verse3
                 }
             }
         }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public abstract Type ViewType { get; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public object ViewKey { get; set; }
 
         public Guid ID { get => _id; private set => _id = value; }
@@ -983,16 +1139,24 @@ namespace Verse3
 
         public BoundingBox BoundingBox { get => boundingBox; private set => SetProperty(ref boundingBox, value); }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public double X { get => boundingBox.Location.X; }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public double Y { get => boundingBox.Location.Y; }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public double Width
         {
             get => boundingBox.Size.Width;
             set => boundingBox.Size.Width = value;
         }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public double Height
         {
             get => boundingBox.Size.Height;
@@ -1008,6 +1172,8 @@ namespace Verse3
         bool IRenderable.Visible { get; set; }
 
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public IEnumerable<IElement> ElementDS
         {
             get
@@ -1027,6 +1193,8 @@ namespace Verse3
                 return elements;
             }
         }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public IEnumerable<IElement> ElementUS
         {
             get
@@ -1046,10 +1214,16 @@ namespace Verse3
                 return elements;
             }
         }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public bool RenderExpired { get; set; }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public IRenderable Parent => this.RenderPipelineInfo.Parent;
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public ElementsLinkedList<IRenderable> Children => this.RenderPipelineInfo.Children;
 
         public void SetX(double x)
@@ -1123,6 +1297,8 @@ namespace Verse3
 
         //public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         IElement INode.Parent
         {
             get => this.RenderPipelineInfo.Parent;
@@ -1135,12 +1311,16 @@ namespace Verse3
             }
         }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public ElementsLinkedList<IConnection> Connections => connections;
 
         private NodeType _nodeType = NodeType.Unset;
         public NodeType NodeType { get => _nodeType; }
 
         internal CanvasPoint _hotspot = new CanvasPoint(0, 0);
+        [JsonIgnore]
+        [IgnoreDataMember]
         public CanvasPoint Hotspot
         {
             get
@@ -1221,17 +1401,47 @@ namespace Verse3
                 return _hotspot;
             }
         }
-
-        public double HotspotThresholdRadius { get; }
-
+        
+        [JsonIgnore]
+        [IgnoreDataMember]
         public Type DataValueType => typeof(D);
 
         private DataStructure<D> _dataGoo = new DataStructure<D>();
-        public DataStructure<D> DataGoo { get => _dataGoo; set => _dataGoo = value; }
+        public DataStructure<D> DataGoo
+        {
+            get => _dataGoo;
+            set
+            {
+                try
+                {
+                    if (value != null && value is DataStructure<D>)
+                        _dataGoo = value as DataStructure<D>;
+                    else
+                    {
+                        if (value != null && value.Data != null)
+                        {
+                            if (value.Data.GetType().IsAssignableTo(typeof(D)))
+                            {
+                                _dataGoo = value.Duplicate<D>();
+                            }
+                        }
+                        _dataGoo = new DataStructure<D>();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
 
         private ComputationPipelineInfo _computationPipelineInfo;
+        [JsonIgnore]
+        [IgnoreDataMember]
         public ComputationPipelineInfo ComputationPipelineInfo => _computationPipelineInfo;
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public ElementsLinkedList<INode> Nodes => new ElementsLinkedList<INode>() { this };
         public ComputableElementState ComputableElementState { get; set; }
         DataStructure IDataGooContainer.DataGoo
@@ -1239,21 +1449,25 @@ namespace Verse3
             get => _dataGoo;
             set
             {
-                if (value is DataStructure<D>)
-                    _dataGoo = value as DataStructure<D>;
-                else
+                try
                 {
-                    if (value.Data.GetType().IsAssignableTo(typeof(D)))
+                    if (value != null && value is DataStructure<D>)
+                        _dataGoo = value as DataStructure<D>;
+                    else if (value != null && value is DataStructure)
                     {
-                        try
+                        if (value.DataType.IsAssignableTo(typeof(D)))
                         {
-                            _dataGoo = new DataStructure<D>((D)value.Data);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw ex;
+                            _dataGoo = value.Duplicate<D>();
                         }
                     }
+                    else
+                    {
+                        _dataGoo = new DataStructure<D>();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
                 }
             }
         }
@@ -1329,11 +1543,11 @@ namespace Verse3
                             if (!this.DataGoo.IsValid)
                             {
                                 this.DataGoo.Clear();
-                                this.DataGoo.Data = norigin.DataGoo.Data;
+                                this.DataGoo = norigin.DataGoo;
                             }
                             else if (!this.DataGoo.Data.Equals(norigin.DataGoo.Data))
                             {
-                                this.DataGoo.Data = norigin.DataGoo.Data;
+                                this.DataGoo = norigin.DataGoo;
                             }
                         }
                         else if ((conn.Origin as IDataNode).DataValueType.IsAssignableFrom(this.DataValueType)
@@ -1347,12 +1561,12 @@ namespace Verse3
                                     this.DataGoo.Clear();
                                     if (noriginCAST.DataGoo.Data != null)
                                     {
-                                        this.DataGoo.Data = (D)noriginCAST.DataGoo.Data;
+                                        this.DataGoo = new DataStructure<D>((D)noriginCAST.DataGoo.Data);
                                     }
                                 }
                                 else if (!this.DataGoo.Data.Equals(noriginCAST.DataGoo.Data))
                                 {
-                                    this.DataGoo.Data = (D)noriginCAST.DataGoo.Data;
+                                    this.DataGoo = new DataStructure<D>((D)noriginCAST.DataGoo.Data);
                                 }
                             }
                             catch (Exception ex)
@@ -1392,11 +1606,11 @@ namespace Verse3
                             if (!ndest.DataGoo.IsValid)
                             {
                                 ndest.DataGoo.Clear();
-                                ndest.DataGoo.Data = this.DataGoo.Data;
+                                ndest.DataGoo = this.DataGoo;
                             }
                             else if (!ndest.DataGoo.Data.Equals(this.DataGoo.Data))
                             {
-                                ndest.DataGoo.Data = this.DataGoo.Data;
+                                ndest.DataGoo = this.DataGoo;
                             }
                         }
                         else if ((conn.Destination as IDataNode).DataValueType.IsAssignableFrom(this.DataValueType)
@@ -1408,15 +1622,18 @@ namespace Verse3
                                 if (!ndestCAST.DataGoo.IsValid)
                                 {
                                     ndestCAST.DataGoo.Clear();
-                                    ndestCAST.DataGoo.Data = (D)this.DataGoo.Data;
+                                    ndestCAST.DataGoo = this.DataGoo.Duplicate();
+                                    ndestCAST.DataGoo.ToString();
                                 }
                                 else if (!ndestCAST.DataGoo.Data.Equals(this.DataGoo.Data))
                                 {
-                                    ndestCAST.DataGoo.Data = (D)this.DataGoo.Data;
+                                    ndestCAST.DataGoo = this.DataGoo.Duplicate();
+                                    ndestCAST.DataGoo.ToString();
                                 }
                                 else
                                 {
-                                    ndestCAST.DataGoo.Data = (D)this.DataGoo.Data;
+                                    ndestCAST.DataGoo = this.DataGoo.Duplicate();
+                                    ndestCAST.DataGoo.ToString();
                                 }
                             }
                             catch (Exception ex)
@@ -1513,6 +1730,8 @@ namespace Verse3
 
         //public object DisplayedText { get => displayedText; set => SetProperty(ref displayedText, value); }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         IElement INode.Parent
         {
             get => this.RenderPipelineInfo.Parent;
@@ -1525,12 +1744,16 @@ namespace Verse3
             }
         }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public ElementsLinkedList<IConnection> Connections => connections;
 
         private NodeType _nodeType = NodeType.Unset;
         public NodeType NodeType { get => _nodeType; }
 
         internal CanvasPoint _hotspot = new CanvasPoint(0, 0);
+        [JsonIgnore]
+        [IgnoreDataMember]
         public CanvasPoint Hotspot
         {
             get
@@ -1573,8 +1796,12 @@ namespace Verse3
         //public DataStructure<D> DataGoo { get => _dataGoo; set => _dataGoo = value; }
 
         private ComputationPipelineInfo _computationPipelineInfo;
+        [JsonIgnore]
+        [IgnoreDataMember]
         public ComputationPipelineInfo ComputationPipelineInfo => _computationPipelineInfo;
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public ElementsLinkedList<INode> Nodes => new ElementsLinkedList<INode>() { this };
         public ComputableElementState ComputableElementState { get; set; }
         //DataStructure IDataGooContainer.DataGoo
@@ -1608,7 +1835,11 @@ namespace Verse3
         //public NodeType NodeType { get => _nodeType; }
         //private ComputationPipelineInfo _computationPipelineInfo;
         //public ComputationPipelineInfo ComputationPipelineInfo => _computationPipelineInfo;
+        [JsonIgnore]
+        [IgnoreDataMember]
         public RenderPipelineInfo RenderPipelineInfo => renderPipelineInfo;
+        [JsonIgnore]
+        [IgnoreDataMember]
         public IRenderView RenderView
         {
             get
@@ -1627,7 +1858,11 @@ namespace Verse3
                 }
             }
         }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public abstract Type ViewType { get; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public object ViewKey { get; set; }
 
         public Guid ID { get => _id; private set => _id = value; }
@@ -1636,16 +1871,24 @@ namespace Verse3
 
         public BoundingBox BoundingBox { get => boundingBox; private set => SetProperty(ref boundingBox, value); }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public double X { get => boundingBox.Location.X; }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public double Y { get => boundingBox.Location.Y; }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public double Width
         {
             get => boundingBox.Size.Width;
             set => boundingBox.Size.Width = value;
         }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public double Height
         {
             get => boundingBox.Size.Height;
@@ -1661,6 +1904,8 @@ namespace Verse3
         bool IRenderable.Visible { get; set; }
 
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public IEnumerable<IElement> ElementDS
         {
             get
@@ -1680,6 +1925,8 @@ namespace Verse3
                 return elements;
             }
         }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public IEnumerable<IElement> ElementUS
         {
             get
@@ -1700,7 +1947,11 @@ namespace Verse3
             }
         }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public EventArgData EventArgData { get; set; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public IRenderable Parent { get => this.RenderPipelineInfo.Parent; set => this.RenderPipelineInfo.SetParent(value); }
         public abstract string Name { get; set; }
 
@@ -1713,6 +1964,8 @@ namespace Verse3
 
         //public IRenderable Parent => this.RenderPipelineInfo.Parent;
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public ElementsLinkedList<IRenderable> Children => this.RenderPipelineInfo.Children;
 
         public void SetX(double x)
@@ -1779,7 +2032,7 @@ namespace Verse3
             NodeEvent.Invoke(this, e);
             if (this.Parent is IComputable)
             {
-                ComputationCore.Compute(this.Parent as IComputable);
+                ComputationCore.Compute(this.Parent as IComputable, false);
             }
         }
 

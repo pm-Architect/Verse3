@@ -21,37 +21,49 @@ namespace TextLibrary
 
         public override void Compute()
         {
-            dynamic data = this.ChildElementManager.GetData<dynamic>(0, null);
+            DataStructure data = this.ChildElementManager.GetData(nodeBlock);
             if (data is null)
             {
                 textBlock.DisplayedText = "<null>";
                 return;
             }
-            switch (data.GetType())
+            switch (data.DataType)
             {
                 case Type t when t == typeof(string):
-                    textBlock.DisplayedText = (string)data;
+                    textBlock.DisplayedText = (string)data.Data;
                     break;
                 case Type t when t == typeof(int):
-                    textBlock.DisplayedText = ((int)data).ToString();
+                    textBlock.DisplayedText = ((int)data.Data).ToString();
                     break;
                 case Type t when t == typeof(double):
-                    textBlock.DisplayedText = ((double)data).ToString();
+                    textBlock.DisplayedText = ((double)data.Data).ToString();
                     break;
                 case Type t when t == typeof(float):
-                    textBlock.DisplayedText = ((float)data).ToString();
+                    textBlock.DisplayedText = ((float)data.Data).ToString();
                     break;
                 case Type t when t == typeof(bool):
-                    textBlock.DisplayedText = ((bool)data).ToString();
+                    textBlock.DisplayedText = ((bool)data.Data).ToString();
                     break;
                 case Type t when t == typeof(DateTime):
-                    textBlock.DisplayedText = ((DateTime)data).ToString();
+                    textBlock.DisplayedText = ((DateTime)data.Data).ToString();
                     break;
                 default:
                     {
                         try
                         {
-                            textBlock.DisplayedText = data.ToString();
+                            if (data.Count > 0)
+                            {
+                                textBlock.DisplayedText = "[";
+                                foreach (IDataGoo goo in data)
+                                {
+                                    textBlock.DisplayedText += (goo.Data.ToString() + ", ");
+                                }
+                                textBlock.DisplayedText += "]";
+                            }
+                            else
+                            {
+                                textBlock.DisplayedText = data.ToString();
+                            }
                         }
                         catch (Exception ex)
                         {

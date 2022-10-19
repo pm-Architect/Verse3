@@ -1,7 +1,9 @@
 using Core;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -396,14 +398,28 @@ namespace Verse3.VanillaElements
         #region Properties
 
         public BoundingBox InnerBoundingBox { get => this.innerBoundingBox; private set => this.innerBoundingBox = value; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public Point StartPoint => new Point(this.Origin.Hotspot.X, this.Origin.Hotspot.Y);
-        public Point EndPoint => new Point(this.Destination.Hotspot.X, this.Destination.Hotspot.Y);        
-        public override Type ViewType => typeof(BezierElementView);        
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public Point EndPoint => new Point(this.Destination.Hotspot.X, this.Destination.Hotspot.Y);
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public override Type ViewType => typeof(BezierElementView);
         public BezierDirection Direction { get; private set; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public INode Origin { get => this.origin; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public INode Destination { get => this.destination; }
         public ConnectionType ConnectionType { get; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public bool TopToBottom => (this.origin.Hotspot.Y < this.destination.Hotspot.Y);
+        [JsonIgnore]
+        [IgnoreDataMember]
         public bool LeftToRight => (this.origin.Hotspot.X < this.destination.Hotspot.X);
         
         #endregion

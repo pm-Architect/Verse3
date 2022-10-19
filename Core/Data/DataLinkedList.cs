@@ -728,6 +728,24 @@ namespace Core
             base.Add(value);
         }
 
+        /// <summary>Adds an item at the end of the <see cref="T:System.Collections.Generic.ICollection" />.</summary>
+        /// <param name="value">The value to add at the end of the <see cref="T:System.Collections.Generic.ICollection" />.</param>
+        public new void Add(object value)
+        {
+            try
+            {
+                if (value is T)
+                {
+                    this.AddLast((T)value);
+                    base.Add((T)value);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         /// <summary>Adds an item at the given index (Before the existing item) <see cref="T:System.Collections.Generic.ICollection" />.</summary>
         /// <param name="value">The value to add at the specified index in the <see cref="T:System.Collections.Generic.ICollection" />.</param>
         //DONE
