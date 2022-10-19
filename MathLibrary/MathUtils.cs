@@ -87,5 +87,41 @@ namespace MathLibrary
             return result;
         }
 
+        public static bool IsPrime(double num)
+        {
+            int number = (int)Math.Round(num);
+            bool result = true;
+            if (number <= 0)
+            {
+                return false;
+            }
+
+            if (number > 2)
+            {
+                int k = 2;
+                while (k <= (number - 1))
+                {
+                    if (number % k == 0)
+                    {
+                        result = false;
+                        break;
+                    }
+                    k++;
+                }
+            }
+
+            return result;
+
+        }
+
+        public static bool IsOdd(double num)
+        {
+            int number = (int)Math.Round(num);
+            if (number % 2 == 0)
+            { return false; }
+            else
+            { return true; }
+        }
     }
+
 }

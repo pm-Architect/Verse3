@@ -32,7 +32,6 @@ namespace MathLibrary
 
             this.ChildElementManager.SetData(MathUtils.BinomialEquation(a, n), nodeBlock2);
 
-
         }
 
         public override CompInfo GetCompInfo() => new CompInfo(this, "Binomial Equation", "Advanced Operations", "Math");
