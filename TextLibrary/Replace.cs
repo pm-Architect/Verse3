@@ -4,7 +4,7 @@ using System.Windows;
 using Verse3;
 using Verse3.VanillaElements;
 
-namespace MathLibrary
+namespace TextLibrary
 {
     public class Replace : BaseComp
     {
