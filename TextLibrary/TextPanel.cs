@@ -25,52 +25,57 @@ namespace TextLibrary
             if (data is null)
             {
                 textBlock.DisplayedText = "<null>";
+                this.ChildElementManager.AdjustBounds(true);
                 return;
             }
-            switch (data.DataType)
+            else
             {
-                case Type t when t == typeof(string):
-                    textBlock.DisplayedText = (string)data.Data;
-                    break;
-                case Type t when t == typeof(int):
-                    textBlock.DisplayedText = ((int)data.Data).ToString();
-                    break;
-                case Type t when t == typeof(double):
-                    textBlock.DisplayedText = ((double)data.Data).ToString();
-                    break;
-                case Type t when t == typeof(float):
-                    textBlock.DisplayedText = ((float)data.Data).ToString();
-                    break;
-                case Type t when t == typeof(bool):
-                    textBlock.DisplayedText = ((bool)data.Data).ToString();
-                    break;
-                case Type t when t == typeof(DateTime):
-                    textBlock.DisplayedText = ((DateTime)data.Data).ToString();
-                    break;
-                default:
-                    {
-                        try
-                        {
-                            if (data.Count > 0)
-                            {
-                                textBlock.DisplayedText = "[";
-                                foreach (IDataGoo goo in data)
-                                {
-                                    textBlock.DisplayedText += (goo.Data.ToString() + ", ");
-                                }
-                                textBlock.DisplayedText += "]";
-                            }
-                            else
-                            {
-                                textBlock.DisplayedText = data.ToString();
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            textBlock.DisplayedText = ex.Message;
-                        }
+                switch (data.DataType)
+                {
+                    case Type t when t == typeof(string):
+                        textBlock.DisplayedText = (string)data.Data;
                         break;
-                    }
+                    case Type t when t == typeof(int):
+                        textBlock.DisplayedText = ((int)data.Data).ToString();
+                        break;
+                    case Type t when t == typeof(double):
+                        textBlock.DisplayedText = ((double)data.Data).ToString();
+                        break;
+                    case Type t when t == typeof(float):
+                        textBlock.DisplayedText = ((float)data.Data).ToString();
+                        break;
+                    case Type t when t == typeof(bool):
+                        textBlock.DisplayedText = ((bool)data.Data).ToString();
+                        break;
+                    case Type t when t == typeof(DateTime):
+                        textBlock.DisplayedText = ((DateTime)data.Data).ToString();
+                        break;
+                    default:
+                        {
+                            try
+                            {
+                                if (data.Count > 0)
+                                {
+                                    textBlock.DisplayedText = "[";
+                                    foreach (IDataGoo goo in data)
+                                    {
+                                        textBlock.DisplayedText += (goo.Data.ToString() + ", ");
+                                    }
+                                    textBlock.DisplayedText += "]";
+                                }
+                                else
+                                {
+                                    textBlock.DisplayedText = data.ToString();
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                textBlock.DisplayedText = ex.Message;
+                            }
+                            break;
+                        }
+                }
+                this.ChildElementManager.AdjustBounds(true);
             }
         }
 

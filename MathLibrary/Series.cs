@@ -32,10 +32,10 @@ namespace MathLibrary
             this.ChildElementManager.AddDataInputNode(Count, "Count");
 
             Result = new NumberDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(Result, "Result", true);
+            this.ChildElementManager.AddDataOutputNode(Result, "AP", true);
         }
 
-        public override CompInfo GetCompInfo() => new CompInfo(this, "Arithmetic Progression", "Series", "Maths 2");
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Arithmetic Progression", "Series", "Data");
         
         public override void Compute()
         {
