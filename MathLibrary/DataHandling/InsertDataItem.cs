@@ -39,7 +39,7 @@ namespace MathLibrary
 
         }
 
-        public override CompInfo GetCompInfo() => new CompInfo(this, "Insert Data Item", "Data Details", "Data");
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Insert Data Item", "Modification", "Data");
         
         public override void Compute()
         {

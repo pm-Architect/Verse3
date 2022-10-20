@@ -15,9 +15,9 @@ namespace MathLibrary
         }
         
         private NumberDataNode DataStructureNode;
-  
         private NumberDataNode Result;
         private NumberDataNode Averaged;
+
         public override void Initialize()
         {
             //EVENT NODES
@@ -25,7 +25,6 @@ namespace MathLibrary
             //DATA NODES
             DataStructureNode = new NumberDataNode(this, NodeType.Input);
             this.ChildElementManager.AddDataInputNode(DataStructureNode, "Data Structure");
-
 
             Result = new NumberDataNode(this, NodeType.Output);
             this.ChildElementManager.AddDataOutputNode(Result, "Sum of Data", true);

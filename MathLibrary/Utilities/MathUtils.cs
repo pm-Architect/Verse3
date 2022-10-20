@@ -145,6 +145,29 @@ namespace MathLibrary
             }
             return result;
         }
+
+        public static DataStructure Flattendata(DataStructure data)
+        {
+
+            DataStructure result = new DataStructure();
+
+
+            for (int i = 0; i < data.Count; i++)
+            {
+                DataStructure temp = new DataStructure(data[i]);
+                if (data[i].Children != null)
+                {
+                    Flattendata(temp);
+                }
+                else
+                {
+                    result.Add(temp[i]);
+                }
+            }
+
+            return result;
+
+        }
     }
 
 }
