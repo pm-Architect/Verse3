@@ -68,7 +68,7 @@ namespace MathLibrary
                 ConstructorInfo = this.GetType().GetConstructor(types),
                 Name = "Cosine",
                 Group = "Trigonometry",
-                Tab = "Math",
+                Tab = "Math 2",
                 Description = "",
                 Author = "",
                 License = "",

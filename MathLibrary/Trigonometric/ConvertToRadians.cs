@@ -32,7 +32,7 @@ namespace MathLibrary
             
         }
 
-        public override CompInfo GetCompInfo() => new CompInfo(this, "Convert to Radians", "Trigonometry", "Math");
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Convert to Radians", "Trigonometry", "Math 2");
 
         private NumberDataNode nodeBlock;
         private NumberDataNode nodeBlock2;
@@ -44,7 +44,7 @@ namespace MathLibrary
 
 
             nodeBlock2 = new NumberDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Radians");
+            this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Radians", true);
 
 
         }

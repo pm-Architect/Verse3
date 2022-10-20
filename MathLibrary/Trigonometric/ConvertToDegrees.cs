@@ -32,7 +32,7 @@ namespace MathLibrary
             
         }
 
-        public override CompInfo GetCompInfo() => new CompInfo(this, "Convert to Degrees", "Trigonometry", "Math");
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Convert to Degrees", "Trigonometry", "Math 2");
 
         private NumberDataNode nodeBlock;
         private NumberDataNode nodeBlock2;
@@ -43,9 +43,8 @@ namespace MathLibrary
             this.ChildElementManager.AddDataInputNode(nodeBlock, "Radians");
 
 
-
             nodeBlock2 = new NumberDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Degrees");
+            this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Degrees", true);
 
 
         }
