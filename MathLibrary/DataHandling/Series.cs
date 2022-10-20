@@ -49,6 +49,7 @@ namespace MathLibrary
                 result.Add(start + i * step);
             }
             this.ChildElementManager.SetData(result, Result);
+            if (count > 0)
             this.previewTextBlock.DisplayedText = $"Last number = {result.Last.Value.Data.ToString()}";
         }
     }

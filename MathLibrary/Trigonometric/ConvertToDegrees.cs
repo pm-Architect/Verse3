@@ -6,19 +6,19 @@ using Verse3.VanillaElements;
 
 namespace MathLibrary
 {
-    public class ConvertToRadians : BaseComp
+    public class ConvertToDegrees : BaseComp
     {
 
 
 
         #region Constructors
 
-        public ConvertToRadians() : base(0, 0)
+        public ConvertToDegrees() : base(0, 0)
         {
           
         }
 
-        public ConvertToRadians(int x, int y) : base(x, y)
+        public ConvertToDegrees(int x, int y) : base(x, y)
         {
    
         }
@@ -28,23 +28,24 @@ namespace MathLibrary
         public override void Compute()
         {
             double a = this.ChildElementManager.GetData(nodeBlock, 0);
-            this.ChildElementManager.SetData((Math.PI/180)*a, nodeBlock2);
+            this.ChildElementManager.SetData<double>((180/Math.PI) *a, 0);
             
         }
 
-        public override CompInfo GetCompInfo() => new CompInfo(this, "Convert to Radians", "Trigonometry", "Math");
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Convert to Degrees", "Trigonometry", "Math");
 
         private NumberDataNode nodeBlock;
         private NumberDataNode nodeBlock2;
         public override void Initialize()
         {
             nodeBlock = new NumberDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlock, "Degrees");
+      
+            this.ChildElementManager.AddDataInputNode(nodeBlock, "Radians");
 
 
 
             nodeBlock2 = new NumberDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Radians");
+            this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Degrees");
 
 
         }
