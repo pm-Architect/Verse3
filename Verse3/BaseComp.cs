@@ -687,7 +687,7 @@ namespace Verse3
         public bool SetData<T>(DataStructure<T> data, DataNode<T> node)
         {
             if (data is null) return false;
-            if (node.DataValueType == data.DataType)
+            if (node.DataValueType.IsAssignableFrom(data.DataType))
             {
                 node.DataGoo = data;
                 return true;
@@ -1545,7 +1545,7 @@ namespace Verse3
                                 this.DataGoo.Clear();
                                 this.DataGoo = norigin.DataGoo;
                             }
-                            else if (!this.DataGoo.Data.Equals(norigin.DataGoo.Data))
+                            else if (!this.DataGoo.Equals(norigin.DataGoo))
                             {
                                 this.DataGoo = norigin.DataGoo;
                             }
@@ -1559,14 +1559,14 @@ namespace Verse3
                                 if (!this.DataGoo.IsValid)
                                 {
                                     this.DataGoo.Clear();
-                                    if (noriginCAST.DataGoo.Data != null)
+                                    if (noriginCAST.DataGoo != null)
                                     {
-                                        this.DataGoo = new DataStructure<D>((D)noriginCAST.DataGoo.Data);
+                                        this.DataGoo = noriginCAST.DataGoo.Duplicate<D>();
                                     }
                                 }
-                                else if (!this.DataGoo.Data.Equals(noriginCAST.DataGoo.Data))
+                                else if (!this.DataGoo.Equals(noriginCAST.DataGoo))
                                 {
-                                    this.DataGoo = new DataStructure<D>((D)noriginCAST.DataGoo.Data);
+                                    this.DataGoo = noriginCAST.DataGoo.Duplicate<D>();
                                 }
                             }
                             catch (Exception ex)
@@ -1608,7 +1608,7 @@ namespace Verse3
                                 ndest.DataGoo.Clear();
                                 ndest.DataGoo = this.DataGoo;
                             }
-                            else if (!ndest.DataGoo.Data.Equals(this.DataGoo.Data))
+                            else if (!ndest.DataGoo.Equals(this.DataGoo))
                             {
                                 ndest.DataGoo = this.DataGoo;
                             }
@@ -1625,7 +1625,7 @@ namespace Verse3
                                     ndestCAST.DataGoo = this.DataGoo.Duplicate();
                                     ndestCAST.DataGoo.ToString();
                                 }
-                                else if (!ndestCAST.DataGoo.Data.Equals(this.DataGoo.Data))
+                                else if (!ndestCAST.DataGoo.Equals(this.DataGoo))
                                 {
                                     ndestCAST.DataGoo = this.DataGoo.Duplicate();
                                     ndestCAST.DataGoo.ToString();

@@ -51,7 +51,7 @@ namespace MathLibrary
             this.ChildElementManager.SetData(result[0].Data, StartElement);
             this.ChildElementManager.SetData(result[index].Data, ElementAtI);
             this.ChildElementManager.SetData(result.Last.Value.Data, EndElement);
-            this.previewTextBlock.DisplayedText = $"Item at index = {result[index]}";
+            this.previewTextBlock.DisplayedText = $"Item at Index:{index} = {result[index]}";
         }
     }
 }

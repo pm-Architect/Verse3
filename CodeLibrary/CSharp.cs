@@ -14,44 +14,6 @@ namespace CodeLibrary
     public class CSharp : BaseComp
     {
 
-        #region Properties
-
-        public string? ElementText
-        {
-            get
-            {
-                string? name = this.GetType().FullName;
-                string? viewname = this.ViewType.FullName;
-                string? dataIN = "";
-                //string? dataIN = "";
-                if (_log.Count > 1)
-                {
-                    dataIN = "";
-                    if (_log.Count <= 5)
-                    {
-                        foreach (string entry in _log)
-                        {
-                            dataIN += (entry + "\n");
-                        }
-                    }
-                    else
-                    {
-                        foreach (string entry in (_log.GetRange((_log.Count - 5), 5)))
-                        {
-                            dataIN += (entry + "\n");
-                        }
-                    }
-                }
-                //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
-                //    dataIN = (Math.Round((((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data), 2)).ToString();
-                //string? zindex = DataViewModel.WPFControl.Content.
-                
-                return $"Output Value: {dataIN}";
-            }
-        }
-
-        #endregion
-
         #region Constructors
 
         public CSharp() : base(0, 0)
@@ -94,6 +56,7 @@ namespace CodeLibrary
                 foreach (IElement element in elements)
                 {
                     CoreConsole.Log(element.ID.ToString());
+                    //AssemblyCompiler.CompileLog.Add("Compiled ID: " + element.ID.ToString());
                     if (element is IRenderable)
                     {
                         try
@@ -112,50 +75,10 @@ namespace CodeLibrary
                         {
                             if (mi.ReturnType == typeof(CompInfo))
                             {
-                                CompInfo compInfo = (CompInfo)mi.Invoke(element, null);
-                                if (compInfo.ConstructorInfo != null)
+                                compiledCompInfo = (CompInfo)mi.Invoke(element, null);
+                                if (compiledCompInfo.ConstructorInfo != null)
                                 {
-                                    if (compInfo.ConstructorInfo.GetParameters().Length > 0)
-                                    {
-                                        ParameterInfo[] pi = compInfo.ConstructorInfo.GetParameters();
-                                        object[] args = new object[pi.Length];
-                                        for (int i = 0; i < pi.Length; i++)
-                                        {
-                                            if (!(pi[i].DefaultValue is DBNull)) args[i] = pi[i].DefaultValue;
-                                            else
-                                            {
-                                                if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "x")
-                                                    args[i] = DataViewModel.WPFControl.GetMouseRelPosition().X;
-                                                //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().X;
-                                                else if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "y")
-                                                    args[i] = DataViewModel.WPFControl.GetMouseRelPosition().Y;
-                                                //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().Y;
-                                            }
-                                        }
-                                        //IElement? elInst = compInfo.ConstructorInfo.Invoke(args) as IElement;
-                                        try
-                                        {
-                                            //TODO: LOAD/INSTANTIATE ASSEMBLY INTO RIBBON AND ON CANVAS
-                                            EditorForm.compPendingLoad = compInfo;
-                                            EditorForm.compPendingLoadArgs = args;
-
-                                            //Application.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
-                                            //{
-                                            //    Main_Verse3.ActiveMain.ActiveEditor.AddToArsenal(compInfo);
-                                            //});
-                                            //DataViewModel.AddElement(elInst);
-                                            //Action addElement = () =>
-                                            //{
-                                            //    DataViewModel.Instance.Elements.Add(elInst);
-                                            //};
-                                            //addElement.Invoke();
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            CoreConsole.Log(ex.Message);
-                                            //throw;
-                                        }
-                                    }
+                                    AssemblyCompiler.CompileLog.Add("Compiled Name: " + compiledCompInfo.Name + " @ ID: " + element.ID.ToString());
                                 }
                             }
                         }
@@ -169,18 +92,38 @@ namespace CodeLibrary
             }
             
             _log = AssemblyCompiler.CompileLog;
-
-            textBlock.DisplayedText = this.ElementText;
-            this.ChildElementManager.AdjustBounds();
+            
+            //string? dataIN = "";
+            if (_log.Count > 1)
+            {
+                textBlock.DisplayedText = "";
+                if (_log.Count <= 5)
+                {
+                    foreach (string entry in _log)
+                    {
+                        textBlock.DisplayedText += (entry + "\n");
+                    }
+                }
+                else
+                {
+                    foreach (string entry in (_log.GetRange((_log.Count - 5), 5)))
+                    {
+                        textBlock.DisplayedText += (entry + "\n");
+                    }
+                }
+            }
+            this.ChildElementManager.AdjustBounds(true);
             RenderingCore.Render(this);
         }
 
         private string _script = "";
+        private CompInfo compiledCompInfo;
 
         private TextElement textBlock = new TextElement();
         private IDEElement ideElement = new IDEElement();
         internal ButtonElement buttonBlock = new ButtonElement();
         internal ButtonElement buttonBlock1 = new ButtonElement();
+        internal ButtonElement buttonBlock2 = new ButtonElement();
         private List<string> _log = new List<string>();
 
         //private ButtonClickedEventNode nodeBlock;
@@ -188,63 +131,159 @@ namespace CodeLibrary
         //private NumberDataNode nodeBlock2;
         public override void Initialize()
         {
-            //nodeBlock = new NumberDataNode(this, NodeType.Input);
-            ////nodeBlock.Width = 50;
-            //this.ChildElementManager.AddDataInputNode(nodeBlock, "A");
-
-            //nodeBlock1 = new NumberDataNode(this, NodeType.Input);
-            ////nodeBlock1.Width = 50;
-            //this.ChildElementManager.AddDataInputNode(nodeBlock1, "B");
-
-            //nodeBlock2 = new NumberDataNode(this, NodeType.Output);
-            ////nodeBlock2.Width = 50;
-            //this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Result");
-            
-            //nodeBlock = new ButtonClickedEventNode(this, NodeType.Input);
-            //nodeBlock.Width = 50;
-            //nodeBlock.NodeEvent += NodeBlock_NodeEvent;
-            //this.ChildElementManager.AddEventInputNode(nodeBlock as IEventNode, "Compile");
-
             ideElement = new IDEElement();
             ideElement.ScriptChanged += IdeElement_ScriptChanged;
-            //ideElement.BoundingBox.Size.Width = 600;
-            //ideElement.BoundingBox.Size.Height = 350;
+            ideElement.Width = 600;
+            ideElement.Height = 350;
             this.ChildElementManager.AddElement(ideElement);
 
             buttonBlock = new ButtonElement();
             buttonBlock.DisplayedText = "Compile";
             buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
+            buttonBlock.Width = 200;
             this.ChildElementManager.AddElement(buttonBlock);
 
             buttonBlock1 = new ButtonElement();
             buttonBlock1.DisplayedText = "Load Instance";
             buttonBlock1.OnButtonClicked += ButtonBlock1_OnButtonClicked;
+            buttonBlock1.Width = 200;
             this.ChildElementManager.AddElement(buttonBlock1);
 
+            buttonBlock2 = new ButtonElement();
+            buttonBlock2.DisplayedText = "Add to Arsenal";
+            buttonBlock2.OnButtonClicked += ButtonBlock2_OnButtonClicked;
+            buttonBlock2.Width = 200;
+            this.ChildElementManager.AddElement(buttonBlock2);
+
             textBlock = new TextElement();
-            textBlock.DisplayedText = this.ElementText;
+            textBlock.DisplayedText = "";
             textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.BoundingBox.Size.Width = 600;
+            textBlock.Width = 600;
             this.ChildElementManager.AddElement(textBlock);
         }
 
         private void ButtonBlock1_OnButtonClicked(object? sender, RoutedEventArgs e)
         {
+            ComputationCore.Compute(this, false);
             try
             {
 
+                if (compiledCompInfo.ConstructorInfo != null)
+                {
+                    if (compiledCompInfo.ConstructorInfo.GetParameters().Length > 0)
+                    {
+                        ParameterInfo[] pi = compiledCompInfo.ConstructorInfo.GetParameters();
+                        object[] args = new object[pi.Length];
+                        for (int i = 0; i < pi.Length; i++)
+                        {
+                            if (!(pi[i].DefaultValue is DBNull)) args[i] = pi[i].DefaultValue;
+                            else
+                            {
+                                if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "x")
+                                    args[i] = DataViewModel.WPFControl.GetMouseRelPosition().X;
+                                else if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "y")
+                                    args[i] = DataViewModel.WPFControl.GetMouseRelPosition().Y;
+                            }
+                        }
+                        //IElement? elInst = compInfo.ConstructorInfo.Invoke(args) as IElement;
+                        try
+                        {
+                            //TODO: LOAD/INSTANTIATE ASSEMBLY INTO RIBBON AND ON CANVAS
+                            EditorForm.compsPendingInst.Add(compiledCompInfo, args);
+
+                            //Application.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
+                            //{
+                            Main_Verse3.ActiveMain.ActiveEditor.AddToCanvas_OnCall(this, new EventArgs());
+                            //});
+                            //DataViewModel.AddElement(elInst);
+                            //Action addElement = () =>
+                            //{
+                            //    DataViewModel.Instance.Elements.Add(elInst);
+                            //};
+                            //addElement.Invoke();
+                        }
+                        catch (Exception ex)
+                        {
+                            CoreConsole.Log(ex.Message);
+                            //throw;
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
                 _log.Add(ex.Message);
-                textBlock.DisplayedText = this.ElementText;
+                if (_log.Count > 1)
+                {
+                    textBlock.DisplayedText = "";
+                    if (_log.Count <= 5)foreach (string entry in _log) textBlock.DisplayedText += (entry + "\n");
+                    else foreach (string entry in (_log.GetRange((_log.Count - 5), 5))) textBlock.DisplayedText += (entry + "\n");
+                }
+                //throw ex;
+            }
+        }
+
+        private void ButtonBlock2_OnButtonClicked(object? sender, RoutedEventArgs e)
+        {
+            ComputationCore.Compute(this, false);
+            try
+            {
+
+                if (compiledCompInfo.ConstructorInfo != null)
+                {
+                    if (compiledCompInfo.ConstructorInfo.GetParameters().Length > 0)
+                    {
+                        ParameterInfo[] pi = compiledCompInfo.ConstructorInfo.GetParameters();
+                        object[] args = new object[pi.Length];
+                        for (int i = 0; i < pi.Length; i++)
+                        {
+                            if (!(pi[i].DefaultValue is DBNull)) args[i] = pi[i].DefaultValue;
+                            else
+                            {
+                                if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "x")
+                                    args[i] = DataViewModel.WPFControl.GetMouseRelPosition().X;
+                                else if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "y")
+                                    args[i] = DataViewModel.WPFControl.GetMouseRelPosition().Y;
+                            }
+                        }
+                        //IElement? elInst = compInfo.ConstructorInfo.Invoke(args) as IElement;
+                        try
+                        {
+                            //TODO: LOAD/INSTANTIATE ASSEMBLY INTO RIBBON AND ON CANVAS
+                            EditorForm.compsPendingAddToArsenal.Add(compiledCompInfo);
+                            Main_Verse3.ActiveMain.ActiveEditor.AddToCanvas_OnCall(this, new EventArgs());
+                            //});
+                            //DataViewModel.AddElement(elInst);
+                            //Action addElement = () =>
+                            //{
+                            //    DataViewModel.Instance.Elements.Add(elInst);
+                            //};
+                            //addElement.Invoke();
+                        }
+                        catch (Exception ex)
+                        {
+                            CoreConsole.Log(ex.Message);
+                            //throw;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.Add(ex.Message);
+                if (_log.Count > 1)
+                {
+                    textBlock.DisplayedText = "";
+                    if (_log.Count <= 5) foreach (string entry in _log) textBlock.DisplayedText += (entry + "\n");
+                    else foreach (string entry in (_log.GetRange((_log.Count - 5), 5))) textBlock.DisplayedText += (entry + "\n");
+                }
                 //throw ex;
             }
         }
 
         private void IdeElement_ScriptChanged(object? sender, EventArgs e)
         {
-            ComputationCore.Compute(this, false);
+            ComputationCore.Compute(this);
         }
 
         //private void NodeBlock_NodeEvent(IEventNode container, EventArgData e)

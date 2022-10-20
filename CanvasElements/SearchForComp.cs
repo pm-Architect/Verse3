@@ -193,11 +193,12 @@ namespace MathLibrary
                     if (btnElement is null) return;
                     if (buttonDictionary[btnElement].ConstructorInfo != null)
                     {
+                        CompInfo ci = buttonDictionary[btnElement];
                         ////TODO: Invoke constructor based on <PluginName>.cfg json file
                         ////TODO: Allow user to place the comp with MousePosition
-                        if (buttonDictionary[btnElement].ConstructorInfo.GetParameters().Length > 0)
+                        if (ci.ConstructorInfo.GetParameters().Length > 0)
                         {
-                            ParameterInfo[] pi = buttonDictionary[btnElement].ConstructorInfo.GetParameters();
+                            ParameterInfo[] pi = ci.ConstructorInfo.GetParameters();
                             object[] args = new object[pi.Length];
                             for (int i = 0; i < pi.Length; i++)
                             {
@@ -210,9 +211,11 @@ namespace MathLibrary
                                         args[i] = DataViewModel.WPFControl.GetMouseRelPosition().Y;
                                 }
                             }
-                            IElement? elInst = buttonDictionary[btnElement].ConstructorInfo.Invoke(args) as IElement;
-                            DataTemplateManager.RegisterDataTemplate(elInst as IRenderable);
-                            DataViewModel.Instance.Elements.Add(elInst);
+                            EditorForm.compsPendingInst.Add(ci, args);
+                            Main_Verse3.ActiveMain.ActiveEditor.AddToCanvas_OnCall(this, new EventArgs());
+                            //IElement? elInst = buttonDictionary[btnElement].ConstructorInfo.Invoke(args) as IElement;
+                            //DataTemplateManager.RegisterDataTemplate(elInst as IRenderable);
+                            //DataViewModel.Instance.Elements.Add(elInst);
                             //DataViewModel.WPFControl.ExpandContent();
                         }
                     }

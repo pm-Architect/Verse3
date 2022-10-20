@@ -535,7 +535,7 @@ namespace Core
         {
             if (index >= this.DataOutputNodes.Count || index < 0) return false;
             if (data is null || !data.IsValid) return false;
-            if (this._dataOutputNodes[index].DataValueType.IsAssignableFrom(data.GetType()))
+            if (this._dataOutputNodes[index].DataValueType.IsAssignableFrom(data.DataType))
             {
                 this._dataOutputNodes[index].DataGoo = data;
                 return true;

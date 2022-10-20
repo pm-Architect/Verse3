@@ -367,24 +367,6 @@ namespace Verse3.VanillaElements
         {
             get
             {
-                //if (this.Connections != null && this.Connections.Count > 0)
-                //{
-                //    if (nodeContentColor != System.Windows.Media.Brushes.White)
-                //    {
-                //        nodeContentColor = System.Windows.Media.Brushes.White;
-                //        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.White);
-                //        //OnPropertyChanged("NodeContentColor");
-                //    }
-                //}
-                //else
-                //{
-                //    if (nodeContentColor != System.Windows.Media.Brushes.Transparent)
-                //    {
-                //        nodeContentColor = System.Windows.Media.Brushes.Transparent;
-                //        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.Transparent);
-                //        //OnPropertyChanged("NodeContentColor");
-                //    }
-                //}
                 return nodeColor;
             }
             internal set => SetProperty(ref nodeColor, value);
@@ -395,24 +377,6 @@ namespace Verse3.VanillaElements
         {
             get
             {
-                //if (this.Connections != null && this.Connections.Count > 0)
-                //{
-                //    if (nodeContentColor != System.Windows.Media.Brushes.White)
-                //    {
-                //        nodeContentColor = System.Windows.Media.Brushes.White;
-                //        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.White);
-                //        //OnPropertyChanged("NodeContentColor");
-                //    }
-                //}
-                //else
-                //{
-                //    if (nodeContentColor != System.Windows.Media.Brushes.Transparent)
-                //    {
-                //        nodeContentColor = System.Windows.Media.Brushes.Transparent;
-                //        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.Transparent);
-                //        //OnPropertyChanged("NodeContentColor");
-                //    }
-                //}
                 return nodeContentColor;
             }
             internal set => SetProperty(ref nodeContentColor, value);

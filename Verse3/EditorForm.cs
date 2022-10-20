@@ -11,9 +11,9 @@ namespace Verse3
     public partial class EditorForm : Form
     {
         private InfiniteCanvasWPFControl infiniteCanvasWPFControl;
-
-        public static CompInfo compPendingLoad;
-        public static object[] compPendingLoadArgs;
+        
+        public static Dictionary<CompInfo, object[]> compsPendingInst = new Dictionary<CompInfo, object[]>();
+        public static List<CompInfo> compsPendingAddToArsenal = new List<CompInfo>();
 
         public InfiniteCanvasWPFControl InfiniteCanvasWPFControl
         {
@@ -209,6 +209,14 @@ namespace Verse3
                                             else if (compInfo.Name == "Search")
                                             {
                                                 DataViewModel.SearchBarCompInfo = compInfo;
+                                                LoadedLibraries.Add(path + "._" + compInfo.Name, compInfo);
+                                                continue;
+                                            }
+                                        }
+                                        else if (compInfo.Group == "" && compInfo.Tab == "")
+                                        {
+                                            if (compInfo.Name == "Callback")
+                                            {
                                                 LoadedLibraries.Add(path + "._" + compInfo.Name, compInfo);
                                                 continue;
                                             }
@@ -412,31 +420,8 @@ namespace Verse3
         //this.button1.TabIndex = 0;
         //this.button1.UseVisualStyleBackColor = true;
 
-        private void AddToCanvas_OnCall(object sender, EventArgs e)
+        public void AddToCanvas_OnCall(object sender, EventArgs e)
         {
-            if (/*sender is InfiniteCanvasWPFControl && */EditorForm.compPendingLoad.ConstructorInfo != null)
-            {
-                try
-                {
-                    AddToArsenal(EditorForm.compPendingLoad);
-                    //if (EditorForm.compPendingLoadArgs != null)
-                    //{
-                    //    if (EditorForm.compPendingLoad.ConstructorInfo.GetParameters().Length == EditorForm.compPendingLoadArgs.Length)
-                    //    {
-                    //        IElement elInst = EditorForm.compPendingLoad.ConstructorInfo.Invoke(EditorForm.compPendingLoadArgs) as IElement;
-                    //        DataViewModel.Instance.Elements.Add(elInst);
-                    //        //DataViewModel.WPFControl.ExpandContent();
-                    //    }
-                    EditorForm.compPendingLoad = default;
-                    EditorForm.compPendingLoadArgs = default;
-                    //}
-                }
-                catch (Exception ex)
-                {
-
-                    throw ex;
-                }
-            }
             if (sender is Button)
             {
                 Button btn = sender as Button;
@@ -477,6 +462,44 @@ namespace Verse3
                             //DataModel.Instance.Elements.Add(elInst);
                             //DataViewModel.WPFControl.ExpandContent();
                         }
+                    }
+                }
+            }
+            else
+            {
+
+                if (EditorForm.compsPendingInst.Count > 0)
+                {
+                    try
+                    {
+                        foreach (CompInfo compInfo in EditorForm.compsPendingInst.Keys)
+                        {
+                            BaseComp elInst = compInfo.ConstructorInfo.Invoke(EditorForm.compsPendingInst[compInfo]) as BaseComp;
+                            DataTemplateManager.RegisterDataTemplate(elInst);
+                            DataViewModel.Instance.Elements.Add(elInst);
+                            EditorForm.compsPendingInst.Remove(compInfo);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw ex;
+                    }
+                }
+                if (EditorForm.compsPendingAddToArsenal.Count > 0)
+                {
+                    try
+                    {
+                        foreach (CompInfo compInfo in EditorForm.compsPendingAddToArsenal)
+                        {
+                            AddToArsenal(compInfo);
+                            EditorForm.compsPendingAddToArsenal.Remove(compInfo);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw ex;
                     }
                 }
             }
