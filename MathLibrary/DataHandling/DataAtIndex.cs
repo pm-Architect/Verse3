@@ -48,9 +48,9 @@ namespace MathLibrary
             
             int index = (int)this.ChildElementManager.GetData(Index, 0.0);
             
-            this.ChildElementManager.SetData(result[0].Data, StartElement);
-            this.ChildElementManager.SetData(result[index].Data, ElementAtI);
-            this.ChildElementManager.SetData(result.Last.Value.Data, EndElement);
+            this.ChildElementManager.SetData(result[0], StartElement);
+            this.ChildElementManager.SetData(result[index], ElementAtI);
+            this.ChildElementManager.SetData(result.Last.Value, EndElement);
             this.previewTextBlock.DisplayedText = $"Item at Index:{index} = {result[index]}";
         }
     }

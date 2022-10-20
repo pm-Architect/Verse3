@@ -683,6 +683,25 @@ namespace Verse3
             }
             else return false;
         }
+        
+        public bool SetData<T>(object data, DataNode<T> node)
+        {
+            if (data is null) return false;
+            if (data is DataStructure) SetData(((DataStructure)data).Duplicate<T>(), node);
+            if (data is T || data.GetType().IsAssignableTo(typeof(T)))
+            {
+                try
+                {
+                    node.DataGoo.Data = (T)data;
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            else return false;
+        }
 
         public bool SetData<T>(DataStructure<T> data, DataNode<T> node)
         {

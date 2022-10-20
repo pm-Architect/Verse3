@@ -189,6 +189,22 @@ namespace Core
     [DataContract]
     public class DataStructure : DataLinkedList<IDataGoo>, IDataGoo, ISerializable
     {
+        public object[] ToArray()
+        {
+            if (this.Count > 0)
+            {
+                object[] objectsOut = new object[this.Count];
+                for (int i = 0; i < this.Count; i++)
+                {
+                    objectsOut[i] = this[i].Data;
+                }
+                return objectsOut;
+            }
+            else
+            {
+                return null;
+            }
+        }
         //[DataMember]
         public byte[] Bytes
         {
@@ -254,12 +270,34 @@ namespace Core
                         return Children.ToArray();
                 }
                 else
-                    return volatileData;
+                {
+                    if (Children == null) return volatileData;
+                    else
+                    {
+                        if (volatileData is DSMetadata)
+                        {
+                            return Children.ToArray();
+                        }
+                        else
+                        {
+                            //Children.Clear();
+                            return volatileData;
+                        }
+                    }
+                }
             }
             set
             {
                 if (value == null) throw new ArgumentNullException("value");
-                volatileData = value;
+                if (value is DataStructure)
+                {
+                    DataStructure ds = ((DataStructure)value);
+                    this.Children.Add(ds);
+                }
+                else
+                {
+                    volatileData = value;
+                }
             }
         }
         public Guid ID { get; set; }
@@ -320,6 +358,10 @@ namespace Core
                 base.Add((IDataGoo)data);
             else
                 base.Add(new DataStructure(data));
+            if (this.Count > 0)
+            {
+                volatileData = new DSMetadata();
+            }
         }
 
         public DataStructure Duplicate()
@@ -527,6 +569,17 @@ namespace Core
                 return type_to_deserialize;
             }
         }
+    }
+
+    internal class DSMetadata
+    {
+        public DSMetadata()
+        {
+            CreatedAt = DateTime.Now;
+            EditedAt = DateTime.Now;
+        }
+        public DateTime CreatedAt { get; set; }
+        public DateTime EditedAt { get; set; }
     }
 
     public class DataChangedEventArgs<D> : DataChangedEventArgs
