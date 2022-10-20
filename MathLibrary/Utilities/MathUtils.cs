@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core;
+using Verse3;
+using Verse3.VanillaElements;
 
 namespace MathLibrary
 {
@@ -121,6 +124,26 @@ namespace MathLibrary
             { return false; }
             else
             { return true; }
+        }
+
+        public static DataStructure<double> FibonacciSequence(int num)
+        {
+           
+            double iterator = 1;
+            DataStructure<double> result = new DataStructure<double>();
+            result.Add(iterator);
+
+            if (num > 1)
+            {
+                result.Add(iterator);
+
+                for (int i = 1; i < num - 1; i++)
+                {
+                    iterator = (double)result[i].Data + (double)result[i - 1].Data;
+                    result.Add(iterator);
+                }              
+            }
+            return result;
         }
     }
 
