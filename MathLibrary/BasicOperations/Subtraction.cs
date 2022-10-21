@@ -15,7 +15,7 @@ namespace MathLibrary
         {
         }
 
-        public Subtraction(int x, int y, int width = 250, int height = 350) : base(x, y)
+        public Subtraction(int x, int y) : base(x, y)
         {
         }
 
