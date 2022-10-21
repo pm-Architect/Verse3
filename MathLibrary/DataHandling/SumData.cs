@@ -33,7 +33,7 @@ namespace MathLibrary
             this.ChildElementManager.AddDataOutputNode(Averaged, "Average");
         }
 
-        public override CompInfo GetCompInfo() => new CompInfo(this, "Sum & Average", "Series", "Data");
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Sum & Average", "Data Details", "Data");
         
         public override void Compute()
         {

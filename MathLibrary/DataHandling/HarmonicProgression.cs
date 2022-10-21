@@ -56,6 +56,7 @@ namespace MathLibrary
                 }
                 result.Add(1/supporter);
             }
+
             this.ChildElementManager.SetData(result, Result);
             if (count > 0)
             this.previewTextBlock.DisplayedText = $"Last number = {result.Last.Value.Data.ToString()}";
