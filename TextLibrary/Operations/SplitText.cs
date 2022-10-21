@@ -29,8 +29,14 @@ namespace TextLibrary
             string a = this.ChildElementManager.GetData(nodeBlock, "Hello, You");
             string splitter = this.ChildElementManager.GetData(nodeBlock2, ",");
             
+
             string[] splitArray = a.Split(splitter);
-            this.ChildElementManager.SetData(new DataStructure(splitArray).Data, nodeBlock2);    
+            DataStructure result = new DataStructure(); 
+            foreach (string item in splitArray)
+            {
+                result.Add(item);
+            }
+            this.ChildElementManager.SetData(result, nodeBlock2);    
         }
 
         public override CompInfo GetCompInfo() => new CompInfo(this, "Split Text", "Operations", "Text");
