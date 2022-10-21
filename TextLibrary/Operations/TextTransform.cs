@@ -8,25 +8,6 @@ namespace TextLibrary
 {
     public class TextTransform : BaseComp
     {
-        public string? ElementText
-        {
-            get
-            {
-                string? name = this.GetType().FullName;
-                string? viewname = this.ViewType.FullName;
-                string? dataIN = "";
-                if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
-                    dataIN = ((TextDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data;
-                //string? zindex = DataViewModel.WPFControl.Content.
-                
-                return $"Output Value: {dataIN}";
-            }
-        }
-
-        #region Properties
-
-
-        #endregion
 
         #region Constructors
 
@@ -57,29 +38,10 @@ namespace TextLibrary
             string a = this.ChildElementManager.GetData<string>(0, "");
             this.ChildElementManager.SetData<string>(a.ToUpper(), 0);
             this.ChildElementManager.SetData<string>(a.ToLower(), 1);
-            textBlock.DisplayedText = this.ElementText;
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Text Transform",
-                Group = "Operations",
-                Tab = "Text",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
-
-        private TextElement textBlock = new TextElement();
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Text Transform", "Operations", "Text");
+        
         private TextDataNode nodeBlock;
         private TextDataNode nodeBlock2;
         private TextDataNode nodeBlock3;
@@ -92,17 +54,11 @@ namespace TextLibrary
 
             nodeBlock2 = new TextDataNode(this, NodeType.Output);
             nodeBlock2.Width = 50;
-            this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Upper");
+            this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Upper", true);
 
             nodeBlock3 = new TextDataNode(this, NodeType.Output);
             nodeBlock3.Width = 50;
             this.ChildElementManager.AddDataOutputNode(nodeBlock3, "Lower");
-
-
-            textBlock = new TextElement();
-            textBlock.DisplayedText = this.ElementText;
-            textBlock.TextAlignment = TextAlignment.Left;
-            this.ChildElementManager.AddElement(textBlock);
         }
     }
 }

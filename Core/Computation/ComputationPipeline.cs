@@ -468,9 +468,24 @@ namespace Core
             {
                 if (this._dataInputNodes[index].DataGoo.IsValid && this._dataInputNodes[index].DataGoo.Data != null)
                 {
-                    if (this._dataInputNodes[index].DataGoo.Data is T)
+                    object ret = this._dataInputNodes[index].DataGoo.Data;
+                    if (ret is T castData)
                     {
-                        return (this._dataInputNodes[index].DataGoo as DataStructure<T>).Data;
+                        return castData;
+                    }
+                    else if (ret is IDataGoo<T> goo)
+                    {
+                        return goo.Data;
+                    }
+                    else if (ret is object[] array)
+                    {
+                        if (array.Length == 1)
+                        {
+                            if (array[0] is T)
+                            {
+                                return (T)array[0];
+                            }
+                        }
                     }
                     else
                     {
@@ -489,7 +504,29 @@ namespace Core
                 {
                     if (this._dataInputNodes[index].DataGoo.Data is T)
                     {
-                        return (this._dataInputNodes[index].DataGoo as DataStructure<T>).Data;
+                        object ret = this._dataInputNodes[index].DataGoo.Data;
+                        if (ret is T castData)
+                        {
+                            return castData;
+                        }
+                        else if (ret is IDataGoo<T> goo)
+                        {
+                            return goo.Data;
+                        }
+                        else if (ret is object[] array)
+                        {
+                            if (array.Length == 1)
+                            {
+                                if (array[0] is T)
+                                {
+                                    return (T)array[0];
+                                }
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("Data type mismatch");
+                        }
                     }
                     else
                     {
@@ -499,22 +536,56 @@ namespace Core
             }
             return defaultValue;
         }
-        public bool GetData<T>(out T output, int index)
+        public bool GetData<T>(out object output, int index)
         {
-            if (index >= this.DataInputNodes.Count || index < 0)
+            try
             {
-                output = default;
-                return default;
+                if (index >= this.DataInputNodes.Count || index < 0)
+                {
+                    output = default;
+                    return default;
+                }
+                if (this._dataInputNodes[index].DataValueType == typeof(T))
+                {
+                    output = (this._dataInputNodes[index].DataGoo as DataStructure<T>).Data;
+                    object ret = this._dataInputNodes[index].DataGoo.Data;
+                    if (ret is T castData)
+                    {
+                        output = castData;
+                        return true;
+                    }
+                    else if (ret is IDataGoo<T> goo)
+                    {
+                        output = goo.Data;
+                        return true;
+                    }
+                    else if (ret is object[] array)
+                    {
+                        if (array.Length == 1)
+                        {
+                            if (array[0] is T)
+                            {
+                                output = (T)array[0];
+                                return true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Data type mismatch");
+                    }
+                    return false;
+                }
+                else
+                {
+                    output = default;
+                    return false;
+                }
             }
-            if (this._dataInputNodes[index].DataValueType == typeof(T))
+            catch (Exception)
             {
-                output = (this._dataInputNodes[index].DataGoo as DataStructure<T>).Data;
-                return true;
-            }
-            else
-            {
-                output = default;
-                return false;
+
+                throw;
             }
         }
 

@@ -105,26 +105,85 @@ namespace Core
         //Fire an event when Data is set
         public delegate void DataChangedEventHandler(DataStructure<D> sender, DataChangedEventArgs<D> e);
         public DataChangedEventHandler DataChanged;
-        public new D Data
+        public new object Data
         {
             get
             {
-                if (base.volatileData == null)
-                    return default(D);
-                if (base.volatileData is D)
-                    return (D)base.volatileData;
+                if (volatileData == default)
+                {
+                    if (Children == default || Children.Count == 0)
+                        return default;
+                    else
+                        return Children.ToArray();
+                }
                 else
-                    throw new Exception("Data is not of type " + typeof(D).Name);
+                {
+                    if (Children == default || Children.Count == 0) return volatileData;
+                    else
+                    {
+                        if (volatileData is DSMetadata)
+                        {
+                            return Children.ToArray();
+                        }
+                        else
+                        {
+                            //Children.Clear();
+                            return volatileData;
+                        }
+                    }
+                }
             }
             set
             {
                 if (value == null) throw new ArgumentNullException("value");
-                D old = default;
-                if (base.volatileData != null && base.volatileData is D) old = (D)base.volatileData;
-                base.volatileData = value;
-                if (DataChanged != null && DataChanged.GetInvocationList().Length > 0)
-                    DataChanged(this, new DataChangedEventArgs<D>(old, value));
+                if (value is D castData)
+                {
+                    D old = default;
+                    if (base.volatileData != null && base.volatileData is D castOldData) old = castOldData;
+                    base.volatileData = castData;
+                    if (DataChanged != null && DataChanged.GetInvocationList().Length > 0)
+                        DataChanged(this, new DataChangedEventArgs<D>(old, castData));
+                }
             }
+            //get
+            //{
+            //    if (volatileData == default)
+            //    {
+            //        if (Children == default || Children.Count == 0)
+            //            return default;
+            //        else
+            //            return Children.ToArray();
+            //    }
+            //    else
+            //    {
+            //        if (Children == default || Children.Count == 0) return volatileData;
+            //        else
+            //        {
+            //            if (volatileData is DSMetadata)
+            //            {
+            //                return Children.ToArray();
+            //            }
+            //            else
+            //            {
+            //                //Children.Clear();
+            //                return volatileData;
+            //            }
+            //        }
+            //    }
+            //}
+            //set
+            //{
+            //    if (value == null) throw new ArgumentNullException("value");
+            //    if (value is DataStructure)
+            //    {
+            //        DataStructure ds = ((DataStructure)value);
+            //        this.Children.Add(ds);
+            //    }
+            //    else
+            //    {
+            //        volatileData = value;
+            //    }
+            //}
         }
         public new Type DataType => typeof(D);
 
@@ -262,16 +321,16 @@ namespace Core
         {
             get
             {
-                if (volatileData == null)
+                if (volatileData == default)
                 {
-                    if (Children == null)
-                        return null;
+                    if (Children == default || Children.Count == 0)
+                        return default;
                     else
                         return Children.ToArray();
                 }
                 else
                 {
-                    if (Children == null) return volatileData;
+                    if (Children == default || Children.Count == 0) return volatileData;
                     else
                     {
                         if (volatileData is DSMetadata)

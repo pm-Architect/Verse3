@@ -36,7 +36,11 @@ namespace MathLibrary
         public override void Compute()
         {
             double a = this.ChildElementManager.GetData(A, 0.0);
+            //DataStructure<double> aDS = this.ChildElementManager.GetData(A);
+            //if (aDS is null || aDS.Data == default) aDS = new DataStructure<double>(0.0);
             double b = this.ChildElementManager.GetData(B, 0.0);
+            //DataStructure<double> bDS = this.ChildElementManager.GetData(B);
+            //if (bDS is null || bDS.Data == default) bDS = new DataStructure<double>(0.0);
             this.ChildElementManager.SetData((a + b), Result);
         }
     }

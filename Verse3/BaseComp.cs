@@ -640,9 +640,27 @@ namespace Verse3
             try
             {
                 DataStructure<T> ds = GetData<T>(node);
-                if (ds != null && ds.IsValid)
+                if (ds != null/* && ds.IsValid*/)
                 {
-                    defaultValue = GetData<T>(node).Data;
+                    object data = GetData<T>(node).Data;
+                    if (data is T castData)
+                    {
+                        return castData;
+                    }
+                    else if (data is object[] array)
+                    {
+                        if (array.Length == 1)
+                        {
+                            if (array[0] is T castArrayData)
+                            {
+                                return castArrayData;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception("Data is not a single item / type mismatch");
+                    }
                 }
             }
             catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex.Message); }

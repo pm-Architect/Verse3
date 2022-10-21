@@ -75,7 +75,7 @@ namespace TextLibrary
                             break;
                         }
                 }
-                this.ChildElementManager.AdjustBounds(true);
+                //this.ChildElementManager.AdjustBounds(true);
             }
         }
 

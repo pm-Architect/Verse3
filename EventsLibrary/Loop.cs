@@ -70,11 +70,15 @@ namespace EventsLibrary
             ButtonBlock = new ButtonElement();
             ButtonBlock.DisplayedText = "Force Stop Loop";
             ButtonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
+            this.ChildElementManager.AddElement(ButtonBlock);
         }
 
         private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
         {
             _loopRunning = false;
+            _count = 0;
+            this.ChildElementManager.SetData(_count, Count);
+            ComputationCore.Compute(this, false);
         }
 
         private void EventCallbackNode_NodeEvent(IEventNode container, EventArgData e)
@@ -94,6 +98,7 @@ namespace EventsLibrary
                     _count = 0;
                     this.ChildElementManager.SetData(_count, Count);
                 }
+                ComputationCore.Compute(this, false);
             }
         }
 
@@ -113,6 +118,7 @@ namespace EventsLibrary
                     _count++;
                     this.ChildElementManager.SetData(_count, Count);
                 }
+                ComputationCore.Compute(this, false);
             }
         }
     }
@@ -121,6 +127,8 @@ namespace EventsLibrary
     {
         public EventCallbackNode(IRenderable parent) : base(parent, NodeType.Output)
         {
+            Color c = (Color)ColorConverter.ConvertFromString("#FFFF6700");
+            this.NodeColor = new SolidColorBrush(c);
             if (parent is Loop loop)
             {
                 //Callback callback = new Callback(DataViewModel.WPFControl.GetMouseRelPosition().X, DataViewModel.WPFControl.GetMouseRelPosition().Y, parent as BaseComp);
@@ -131,13 +139,16 @@ namespace EventsLibrary
                 using (Callback callback = new Callback(0, 0, parent as BaseComp))
                     EditorForm.compsPendingInst.Add(callback.GetCompInfo(), args);
                 //Main_Verse3.ActiveMain.ActiveEditor.AddToCanvas_OnCall(this, new EventArgs());
-
             }
         }
 
         public override void ToggleActive()
         {
-            //base.ToggleActive();
+            //ComputationCore.Compute(this.Parent as BaseComp, false);
+            if (this.Parent is Loop loop && (loop.CallbackComp != null))
+            {
+                ComputationCore.Compute(loop.CallbackComp, false);
+            }
         }
     }
 }

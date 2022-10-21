@@ -33,7 +33,7 @@ namespace EventsLibrary
         
         public override void Compute()
         {
-            _loopData = this.ChildElementManager.GetData(LoopDataNode);
+            //_loopData = this.ChildElementManager.GetData(LoopDataNode);
             try
             {
                 if (_eventCallbackNodeFromcbComp != null && _callbackToComp != null)
@@ -132,6 +132,7 @@ namespace EventsLibrary
                 }
                 this.ChildElementManager.SetData(_loopData, DataOut);
                 this.ChildElementManager.SetData(loop._count, LoopIterationCount);
+                ComputationCore.Compute(this, false);
             }
         }
     }
@@ -140,7 +141,6 @@ namespace EventsLibrary
     {
         public CallbackNode(Callback parent) : base(parent, NodeType.Input)
         {
-            this.IsActive = false;
             Color c = (Color)ColorConverter.ConvertFromString("#FFFF6700");
             this.NodeColor = new SolidColorBrush(c);
         }

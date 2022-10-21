@@ -8,25 +8,6 @@ namespace TextLibrary
 {
     public class Replace : BaseComp
     {
-        public string? ElementText
-        {
-            get
-            {
-                string? name = this.GetType().FullName;
-                string? viewname = this.ViewType.FullName;
-                string? dataIN = "";
-                if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
-                    dataIN = ((TextDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data;
-                //string? zindex = DataViewModel.WPFControl.Content.
-                
-                return $"Output Value: {dataIN}";
-            }
-        }
-
-        #region Properties
-
-
-        #endregion
 
         #region Constructors
 
@@ -58,29 +39,10 @@ namespace TextLibrary
             string b = this.ChildElementManager.GetData<string>(1, "");
             string c = this.ChildElementManager.GetData<string>(2, "");
             this.ChildElementManager.SetData<string>(a.Replace(b,c), 0);
-            textBlock.DisplayedText = this.ElementText;
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Replace",
-                Group = "Operations",
-                Tab = "Text",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
-
-        private TextElement textBlock = new TextElement();
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Replace", "Operations", "Text");
+        
         private TextDataNode nodeBlock;
         private TextDataNode nodeBlock1;
         private TextDataNode nodeBlock2;
@@ -88,25 +50,16 @@ namespace TextLibrary
         public override void Initialize()
         {
             nodeBlock = new TextDataNode(this, NodeType.Input);
-            nodeBlock.Width = 50;
             this.ChildElementManager.AddDataInputNode(nodeBlock, "Text");
 
             nodeBlock1 = new TextDataNode(this, NodeType.Input);
-            nodeBlock1.Width = 50;
             this.ChildElementManager.AddDataInputNode(nodeBlock1, "Replace");
 
             nodeBlock2 = new TextDataNode(this, NodeType.Input);
-            nodeBlock2.Width = 50;
             this.ChildElementManager.AddDataInputNode(nodeBlock2, "By");
-
+            
             nodeBlock3 = new TextDataNode(this, NodeType.Output);
-            nodeBlock3.Width = 50;
-            this.ChildElementManager.AddDataOutputNode(nodeBlock3, "Result");
-
-            textBlock = new TextElement();
-            textBlock.DisplayedText = this.ElementText;
-            textBlock.TextAlignment = TextAlignment.Left;
-            this.ChildElementManager.AddElement(textBlock);
+            this.ChildElementManager.AddDataOutputNode(nodeBlock3, "Result", true);
         }
     }
 }

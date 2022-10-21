@@ -15,38 +15,10 @@ namespace MathLibrary
 
         public static SearchForComp Instance = null;
 
-        #region Properties
-
-        public string? ElementText
-        {
-            get
-            {
-                string? name = this.GetType().FullName;
-                string? viewname = this.ViewType.FullName;
-                string? dataIN = "";
-                if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
-                    dataIN = (Math.Round((((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data), 2)).ToString();
-                //string? zindex = DataViewModel.WPFControl.Content.
-                
-                return $"Output Value: {dataIN}";
-            }
-        }
-
-        #endregion
-
         #region Constructors
-
-        public SearchForComp() : base(0, 0)
+        
+        public SearchForComp() : base()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                DataViewModel.Instance.Elements.Remove(Instance);
-                Instance = this;
-            }
         }
 
         public SearchForComp(int x, int y) : base(x, y)
@@ -64,24 +36,7 @@ namespace MathLibrary
 
         #endregion
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Search",
-                Group = "_CanvasElements",
-                Tab = "_CanvasElements",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Search", "_CanvasElements", "_CanvasElements");
 
         public override void Compute()
         {
