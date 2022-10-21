@@ -238,7 +238,7 @@ namespace Verse3.VanillaElements
     {
         public override Type ViewType => typeof(EventNodeElementView);
 
-        #region Constructor and Compute
+        #region Constructor
 
         public EventNodeElement(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
         {
@@ -276,6 +276,14 @@ namespace Verse3.VanillaElements
 
         public override void ToggleActive()
         {
+            //if (this.IsActive)
+            //{
+            //    this.IsActive = false;
+            //}
+            //else
+            //{
+            //    this.IsActive = true;
+            //}
             //Set as active Node
             BezierElement b = (BezierElement)DataViewModel.ActiveConnection;
             if (DataViewModel.ActiveConnection == default)
@@ -305,7 +313,7 @@ namespace Verse3.VanillaElements
                             {
                                 if (DataViewModel.ActiveNode is IComputable && DataViewModel.ActiveNode != this && DataViewModel.ActiveNode.NodeType == NodeType.Output)
                                 {
-                                    this.ComputationPipelineInfo.AddDataUpStream(DataViewModel.ActiveNode as IComputable);
+                                    this.ComputationPipelineInfo.AddEventUpStream(DataViewModel.ActiveNode as IComputable);
                                 }
                                 DataViewModel.ActiveNode = this as INode;
                                 if (MousePositionNode.Instance.Connections.Contains(b))
@@ -369,7 +377,7 @@ namespace Verse3.VanillaElements
             {
                 return nodeColor;
             }
-            internal set => SetProperty(ref nodeColor, value);
+            set => SetProperty(ref nodeColor, value);
         }
 
         private System.Windows.Media.Brush nodeContentColor = System.Windows.Media.Brushes.Transparent;
@@ -379,8 +387,10 @@ namespace Verse3.VanillaElements
             {
                 return nodeContentColor;
             }
-            internal set => SetProperty(ref nodeContentColor, value);
+            set => SetProperty(ref nodeContentColor, value);
         }
+
+        public bool IsActive { get; protected set; }
     }
 
     //public class NodeNameDisplaySideConverter : IValueConverter

@@ -132,7 +132,8 @@ namespace Verse3
             double xOffset = 0;
             double yOffset = 0;
             Rect contentRect = new Rect(0, 0, 0, 0);
-            foreach (IRenderable elementsData in DataViewModel.Instance.Elements)
+            ElementsLinkedList<IElement> _elementsBuffer = DataViewModel.Instance.Elements;
+            foreach (IRenderable elementsData in _elementsBuffer)
             {
                 if (elementsData.X < xOffset)
                 {
@@ -152,8 +153,7 @@ namespace Verse3
             //
             xOffset = Math.Abs(xOffset);
             yOffset = Math.Abs(yOffset);
-
-            foreach (IRenderable el in DataViewModel.Instance.Elements)
+            foreach (IRenderable el in _elementsBuffer)
             {
                 if (el != null)
                 {
@@ -822,7 +822,8 @@ namespace Verse3
             if (!add) this.ClearSelection();
             
             BoundingBox selectionBounds = new BoundingBox(contentX, contentY, contentWidth, contentHeight);
-            foreach (IRenderable renderable in DataViewModel.Instance.Elements)
+            ElementsLinkedList<IElement> _elementsBuffer = DataViewModel.Instance.Elements;
+            foreach (IRenderable renderable in _elementsBuffer)
             {
                 if (renderable != null)
                 {

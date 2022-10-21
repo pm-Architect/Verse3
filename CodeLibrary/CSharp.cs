@@ -131,6 +131,8 @@ namespace CodeLibrary
         //private NumberDataNode nodeBlock2;
         public override void Initialize()
         {
+            this.titleTextBlock.TextRotation = 0;
+
             ideElement = new IDEElement();
             ideElement.ScriptChanged += IdeElement_ScriptChanged;
             ideElement.Width = 600;
@@ -190,17 +192,7 @@ namespace CodeLibrary
                         {
                             //TODO: LOAD/INSTANTIATE ASSEMBLY INTO RIBBON AND ON CANVAS
                             EditorForm.compsPendingInst.Add(compiledCompInfo, args);
-
-                            //Application.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
-                            //{
                             Main_Verse3.ActiveMain.ActiveEditor.AddToCanvas_OnCall(this, new EventArgs());
-                            //});
-                            //DataViewModel.AddElement(elInst);
-                            //Action addElement = () =>
-                            //{
-                            //    DataViewModel.Instance.Elements.Add(elInst);
-                            //};
-                            //addElement.Invoke();
                         }
                         catch (Exception ex)
                         {
@@ -252,13 +244,6 @@ namespace CodeLibrary
                             //TODO: LOAD/INSTANTIATE ASSEMBLY INTO RIBBON AND ON CANVAS
                             EditorForm.compsPendingAddToArsenal.Add(compiledCompInfo);
                             Main_Verse3.ActiveMain.ActiveEditor.AddToCanvas_OnCall(this, new EventArgs());
-                            //});
-                            //DataViewModel.AddElement(elInst);
-                            //Action addElement = () =>
-                            //{
-                            //    DataViewModel.Instance.Elements.Add(elInst);
-                            //};
-                            //addElement.Invoke();
                         }
                         catch (Exception ex)
                         {

@@ -651,6 +651,7 @@ namespace Verse3
 
         public DataStructure<T> GetData<T>(DataNode<T> node)
         {
+            if (node == null) return null;
             if (node.DataValueType == typeof(T))
             {
                 if (node.DataGoo != null)
@@ -676,6 +677,7 @@ namespace Verse3
         public bool SetData<T>(T data, DataNode<T> node)
         {
             if (data is null) return false;
+            if (node is null) return false;
             if (node.DataValueType == data.GetType())
             {
                 node.DataGoo.Data = data;
@@ -981,9 +983,13 @@ namespace Verse3
     [Serializable]
     public readonly struct CompInfo
     {
-        public CompInfo(BaseComp comp, string name, string group, string tab, Color accent = default)
+        public CompInfo(BaseComp comp, string name, string group, string tab, Color accent = default, Type[] ArgumentTypes = default)
         {
             ConstructorInfo = comp.GetType().GetConstructor(new Type[] { typeof(int), typeof(int) });
+            if (ArgumentTypes != default)
+            {
+                ConstructorInfo = comp.GetType().GetConstructor(ArgumentTypes);
+            }
             Name = name;
             Group = group;
             Tab = tab;
@@ -2055,6 +2061,81 @@ namespace Verse3
             }
         }
 
+        public bool EventOccured(EventArgData e, bool upstreamCallback = false)
+        {
+            this.EventArgData = e;
+            if (this.Parent is IComputable)
+            {
+                IComputable computable = this.Parent as IComputable;
+                //TODO: Call a delegate method that triggers a call-back once complete
+                if (upstreamCallback)
+                {
+                    foreach (IComputable compUS in this.ElementUS)
+                    {
+                        if (compUS != null)
+                        {
+                            if (compUS.ComputationPipelineInfo.IOManager.EventOutputNodes != null &&
+                                compUS.ComputationPipelineInfo.IOManager.EventOutputNodes.Count > 0)
+                            {
+                                foreach (IEventNode en in compUS.ComputationPipelineInfo.IOManager.EventOutputNodes)
+                                {
+                                    if (en.Connections != null && en.Connections.Count > 0)
+                                    {
+                                        foreach (IConnection connection in en.Connections)
+                                        {
+                                            if (connection.Destination == this)
+                                            {
+                                                if (connection.Origin is EventNode d)
+                                                {
+                                                    d.TriggerEvent(e);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (IComputable compDS in this.ElementDS)
+                    {
+                        if (compDS != null)
+                        {
+                            if (compDS.ComputationPipelineInfo.IOManager.EventInputNodes != null &&
+                                compDS.ComputationPipelineInfo.IOManager.EventInputNodes.Count > 0)
+                            {
+                                foreach (IEventNode en in compDS.ComputationPipelineInfo.IOManager.EventInputNodes)
+                                {
+                                    if (en.Connections != null && en.Connections.Count > 0)
+                                    {
+                                        foreach (IConnection connection in en.Connections)
+                                        {
+                                            if (connection.Origin == this)
+                                            {
+                                                if (connection.Destination is EventNode d)
+                                                {
+                                                    d.TriggerEvent(e);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                //if (computable.ComputationPipelineInfo.IOManager.EventInputNodes.Contains(this))
+                //{
+                //    int i = computable.ComputationPipelineInfo.IOManager.EventInputNodes.IndexOf(this);
+                //    computable.ComputationPipelineInfo.IOManager.EventDelegates[i].Invoke(this, new EventArgData());
+                //    return true;
+                //}
+                //ComputationPipeline.ComputeComputable(computable);
+            }
+            return false;
+        }
         public bool EventOccured(EventArgData e)
         {
             this.EventArgData = e;
@@ -2077,9 +2158,8 @@ namespace Verse3
                                     {
                                         if (connection.Origin == this)
                                         {
-                                            if (connection.Destination is EventNode)
+                                            if (connection.Destination is EventNode d)
                                             {
-                                                EventNode d = connection.Destination as EventNode;
                                                 d.TriggerEvent(e);
                                             }
                                         }

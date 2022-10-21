@@ -53,7 +53,7 @@ namespace EventsLibrary
             nodeBlock1.EventOccured(e);
             if (e.Count > 0)
             {
-                _argstring = e[0].Data.ToString();
+                _argstring = e[0].ToString();
                 object dataOut = e[0].Data;
                 this.ChildElementManager.SetData(dataOut, 0);
             }

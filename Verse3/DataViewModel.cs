@@ -393,10 +393,11 @@ namespace Verse3
         {
             get
             {
+                ElementsLinkedList<IElement> _elementsBuffer = this.Elements;
                 ElementsLinkedList<BaseComp> comps = new ElementsLinkedList<BaseComp>();
                 if (this.Elements.Count > 0)
                 {
-                    foreach (IElement element in this.Elements)
+                    foreach (IElement element in _elementsBuffer)
                     {
                         if (element is BaseComp)
                         {

@@ -219,37 +219,45 @@ namespace Core
     public static class RenderingCore
     {
         private static Thread renderThread;
-        public static void Render(IRenderable renderable)
+        public static void Render(IRenderable renderable, bool inNewThread = true)
         {
-            if (renderThread != null)
+            if (inNewThread)
             {
-                if (renderThread.IsAlive)
+                if (renderThread != null)
                 {
-                    if (renderThread.ThreadState != System.Threading.ThreadState.Aborted &&
-                        renderThread.ThreadState != System.Threading.ThreadState.Stopped &&
-                        renderThread.ThreadState != System.Threading.ThreadState.Unstarted)
+                    if (renderThread.IsAlive)
                     {
-                        renderable.RenderExpired = true;
-                        Thread renderAwait = new Thread(new ThreadStart(() =>
+                        if (renderThread.ThreadState != System.Threading.ThreadState.Aborted &&
+                            renderThread.ThreadState != System.Threading.ThreadState.Stopped &&
+                            renderThread.ThreadState != System.Threading.ThreadState.Unstarted)
                         {
-                            while (renderThread.ThreadState != System.Threading.ThreadState.Aborted &&
-                                renderThread.ThreadState != System.Threading.ThreadState.Stopped &&
-                                renderThread.ThreadState != System.Threading.ThreadState.Unstarted)
+                            renderable.RenderExpired = true;
+                            Thread renderAwait = new Thread(new ThreadStart(() =>
                             {
-                                Thread.Sleep(1);
-                            }
-                        }));
+                                while (renderThread.ThreadState != System.Threading.ThreadState.Aborted &&
+                                    renderThread.ThreadState != System.Threading.ThreadState.Stopped &&
+                                    renderThread.ThreadState != System.Threading.ThreadState.Unstarted)
+                                {
+                                    Thread.Sleep(1);
+                                }
+                            }));
+                        }
                     }
+                }
+                else
+                {
+                    renderThread = new Thread(new ThreadStart(() => RenderPipeline.RenderRenderable(renderable)));
+                    renderThread.Name = "_verse_render_thread_0_" + renderThread.ManagedThreadId;
+                    renderThread.IsBackground = true;
+                    renderThread.Priority = ThreadPriority.AboveNormal;
+                    renderable.RenderExpired = false;
+                    renderThread.Start();
                 }
             }
             else
             {
-                renderThread = new Thread(new ThreadStart(() => RenderPipeline.RenderRenderable(renderable)));
-                renderThread.Name = "_verse_render_thread_0_" + renderThread.ManagedThreadId;
-                renderThread.IsBackground = true;
-                renderThread.Priority = ThreadPriority.AboveNormal;
+                RenderPipeline.RenderRenderable(renderable);
                 renderable.RenderExpired = false;
-                renderThread.Start();
             }
         }
     }

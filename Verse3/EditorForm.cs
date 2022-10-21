@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using Verse3.VanillaElements;
 
 namespace Verse3
 {
@@ -14,6 +15,7 @@ namespace Verse3
         
         public static Dictionary<CompInfo, object[]> compsPendingInst = new Dictionary<CompInfo, object[]>();
         public static List<CompInfo> compsPendingAddToArsenal = new List<CompInfo>();
+        public static List<BezierElement> connectionsPending = new List<BezierElement>();
 
         public InfiniteCanvasWPFControl InfiniteCanvasWPFControl
         {
@@ -49,6 +51,10 @@ namespace Verse3
             if (DataViewModel.ActiveConnection != default)
             {
                 //DataViewModel.ActiveConnection.Destination.
+            }
+            if (compsPendingInst.Count > 0)
+            {
+                AddToCanvas_OnCall(sender, e);
             }
         }
 
@@ -213,7 +219,7 @@ namespace Verse3
                                                 continue;
                                             }
                                         }
-                                        else if (compInfo.Group == "" && compInfo.Tab == "")
+                                        else if (compInfo.Group == "`" && compInfo.Tab == "`")
                                         {
                                             if (compInfo.Name == "Callback")
                                             {
@@ -451,6 +457,7 @@ namespace Verse3
                                 }
                                 IElement elInst = ci.ConstructorInfo.Invoke(args) as IElement;
                                 DataViewModel.Instance.Elements.Add(elInst);
+                                if (elInst is BaseComp) ComputationCore.Compute(elInst as BaseComp);
                                 //DataViewModel.WPFControl.ExpandContent();
                             }
                             else
@@ -467,18 +474,41 @@ namespace Verse3
             }
             else
             {
-
                 if (EditorForm.compsPendingInst.Count > 0)
                 {
                     try
                     {
                         foreach (CompInfo compInfo in EditorForm.compsPendingInst.Keys)
                         {
-                            BaseComp elInst = compInfo.ConstructorInfo.Invoke(EditorForm.compsPendingInst[compInfo]) as BaseComp;
-                            DataTemplateManager.RegisterDataTemplate(elInst);
-                            DataViewModel.Instance.Elements.Add(elInst);
-                            EditorForm.compsPendingInst.Remove(compInfo);
+                            if (compInfo.ConstructorInfo != null)
+                            {
+                                BaseComp elInst = compInfo.ConstructorInfo.Invoke(EditorForm.compsPendingInst[compInfo]) as BaseComp;
+                                DataTemplateManager.RegisterDataTemplate(elInst);
+                                DataViewModel.Instance.Elements.Add(elInst);
+                                //EditorForm.compsPendingInst.Remove(compInfo);
+                                ComputationCore.Compute(elInst);
+                            }
                         }
+                        EditorForm.compsPendingInst.Clear();
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw ex;
+                    }
+                }
+                if (EditorForm.connectionsPending.Count > 0)
+                {
+                    try
+                    {
+                        foreach (BezierElement b in EditorForm.connectionsPending)
+                        {
+                            DataTemplateManager.RegisterDataTemplate(b);
+                            DataViewModel.Instance.Elements.Add(b);
+                            //EditorForm.connectionsPending.Remove(b);
+                            b.RedrawBezier(b.Origin, b.Destination);
+                        }
+                        EditorForm.connectionsPending.Clear();
                     }
                     catch (Exception ex)
                     {
@@ -495,6 +525,7 @@ namespace Verse3
                             AddToArsenal(compInfo);
                             EditorForm.compsPendingAddToArsenal.Remove(compInfo);
                         }
+                        EditorForm.compsPendingAddToArsenal.Clear();
                     }
                     catch (Exception ex)
                     {
