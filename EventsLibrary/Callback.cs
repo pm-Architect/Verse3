@@ -84,7 +84,6 @@ namespace EventsLibrary
         private GenericDataNode LoopDataNode;
         private GenericDataNode DataOut;
         private NumberDataNode LoopIterationCount;
-        internal DataStructure _loopData;
 
         public override void Initialize()
         {
@@ -117,7 +116,7 @@ namespace EventsLibrary
         {
             if (_callbackToComp is Loop loop)
             {
-                _loopData = this.ChildElementManager.GetData(LoopDataNode);
+                loop._loopData = this.ChildElementManager.GetData(LoopDataNode);
                 if (loop._count < loop._iterations)
                 {
                     //loop._loopData = _loopData;
@@ -130,7 +129,7 @@ namespace EventsLibrary
                     CallbackEventNode.EventOccured(e, true);
                     LoopEndNode.EventOccured(e);
                 }
-                this.ChildElementManager.SetData(_loopData, DataOut);
+                this.ChildElementManager.SetData(loop._loopData, DataOut);
                 this.ChildElementManager.SetData(loop._count, LoopIterationCount);
                 ComputationCore.Compute(this, false);
             }

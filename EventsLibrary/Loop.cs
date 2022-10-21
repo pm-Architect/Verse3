@@ -87,8 +87,7 @@ namespace EventsLibrary
             {
                 if (_count < _iterations && _count > 0 && _loopRunning)
                 {
-                    DataStructure data = CallbackComp._loopData;
-                    this.ChildElementManager.SetData(data, DataToLoopNode);
+                    this.ChildElementManager.SetData(_loopData, DataToLoopNode);
                     _count++;
                     this.ChildElementManager.SetData(_count, Count);
                     LoopBeginNode.EventOccured(e);
