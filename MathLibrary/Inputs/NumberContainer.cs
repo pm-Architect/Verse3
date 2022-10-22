@@ -14,22 +14,12 @@ namespace MathLibrary
 
         public NumberContainer() : base()
         {
-            //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
-            //Random rng = new Random();
-            //byte r = (byte)rng.Next(0, 255);
-            //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
+   
         }
 
-        public NumberContainer(int x, int y, int width = 250, int height = 300) : base(x, y)
+        public NumberContainer(int x, int y) : base(x, y)
         {
-            //base.boundingBox = new BoundingBox(x, y, width, height);
 
-            //Random rnd = new Random();
-            //byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
-            //this.Background = new SolidColorBrush(Colors.Gray);
         }
 
         #endregion
@@ -58,9 +48,9 @@ namespace MathLibrary
             this.ChildElementManager.AddDataOutputNode(nodeBlock, "Number");
 
             sliderBlock = new SliderElement();
-            sliderBlock.Minimum = -100;
-            sliderBlock.Maximum = 100;
-            sliderBlock.Value = 50;
+            sliderBlock.Minimum = -200;
+            sliderBlock.Maximum = 200;
+            sliderBlock.Value = 10;
             sliderBlock.TickFrequency = 1;
             sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
             this.ChildElementManager.AddElement(sliderBlock);
