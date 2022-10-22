@@ -12,7 +12,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public Factorial() : base(0, 0)
+        public Factorial() : base()
         {
 
         }
@@ -29,18 +29,11 @@ namespace MathLibrary
             double a = this.ChildElementManager.GetData<double>(0, 1);
 
             this.ChildElementManager.SetData<double>((MathUtils.GetFactorial(a)), 0);
-
         }
 
- 
-
-
-
         public override CompInfo GetCompInfo() => new CompInfo(this, "Factorial", "Advanced Operations", "Math");
-
        
         private NumberDataNode nodeBlock;
-
         private NumberDataNode nodeBlock2;
         public override void Initialize()
         {
@@ -51,7 +44,6 @@ namespace MathLibrary
             nodeBlock2 = new NumberDataNode(this, NodeType.Output);
             nodeBlock2.Width = 50;
             this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Result", true);
-
         }
     }
 }

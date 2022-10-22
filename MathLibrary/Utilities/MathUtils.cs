@@ -11,6 +11,40 @@ namespace MathLibrary
 {
     public static class MathUtils
     {
+        //TODO: Data Structure Traversal Utilities
+        //    DataStructure<double> result = new DataStructure<double>();
+        //    if (aDS.Count > 0)
+        //    {
+        //        foreach (IDataGoo<double> goo in aDS)
+        //        {
+        //            if (bDS.Count > 0)
+        //            {
+        //                foreach (IDataGoo<double> goo2 in bDS)
+        //                {
+        //                    result.Add(goo.Data + goo2.Data);
+        //                }
+        //            }
+        //            else if (bDS.Data is double b)
+        //            {
+        //                result.Add(goo.Data + b);
+        //            }
+        //        }
+        //    }
+        //    else if (aDS.Data is double a)
+        //    {
+        //        if (bDS.Count > 0)
+        //        {
+        //            foreach (IDataGoo<double> goo2 in bDS)
+        //            {
+        //                result.Add(a + goo2.Data);
+        //            }
+        //        }
+        //        else if (bDS.Data is double b)
+        //        {
+        //            result.Add(a + b);
+        //        }
+        //    }
+
         public static double GetFactorial(double num)
         {
             double number = Math.Abs(Math.Round(num));

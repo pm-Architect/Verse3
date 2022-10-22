@@ -12,7 +12,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public ArcTangent() : base(0, 0)
+        public ArcTangent() : base()
         {
 
         }

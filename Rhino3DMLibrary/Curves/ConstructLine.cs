@@ -10,7 +10,7 @@ namespace Rhino3DMLibrary
 {
     public class ConstructLine : BaseComp
     {
-        public ConstructLine() : base(0, 0)
+        public ConstructLine() : base()
         {
         }
         public ConstructLine(int x, int y) : base(x, y)
@@ -26,31 +26,12 @@ namespace Rhino3DMLibrary
                 Line line = new Line(point1.Location, point2.Location);
                 GeometryBase geo = new Rhino.Geometry.LineCurve(line);
                 this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-                textBlock.DisplayedText = line.ToString();
             }
 
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct Line",
-                Group = "Line",
-                Tab = "Curve",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Construct Line", "Line", "Curve");
 
-        private TextElement textBlock = new TextElement();
         private RhinoGeometryDataNode nodeBlockX;
         private RhinoGeometryDataNode nodeBlockY;
         private RhinoGeometryDataNode nodeBlockResult;
@@ -63,12 +44,7 @@ namespace Rhino3DMLibrary
             this.ChildElementManager.AddDataInputNode(nodeBlockY, "End");
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Line");
-
-            textBlock = new TextElement();
-            textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.DisplayedText = "";
-            this.ChildElementManager.AddElement(textBlock);
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Line", true);
         }
     }
 }

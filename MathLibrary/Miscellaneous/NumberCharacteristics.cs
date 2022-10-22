@@ -12,7 +12,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public NumberCharacteristics() : base(0, 0)
+        public NumberCharacteristics() : base()
         {
 
         }

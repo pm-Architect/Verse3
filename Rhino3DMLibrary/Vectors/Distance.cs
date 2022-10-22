@@ -10,7 +10,7 @@ namespace Rhino3DMLibrary
 {
     public class Distance : BaseComp
     {
-        public Distance() : base(0, 0)
+        public Distance() : base()
         {
         }
         public Distance(int x, int y) : base(x, y)
@@ -23,29 +23,10 @@ namespace Rhino3DMLibrary
             Rhino.Geometry.Point p2 = this.ChildElementManager.GetData<Rhino.Geometry.Point>(1);
             double dist = (p2.Location - p1.Location).Length;
             this.ChildElementManager.SetData<double>(dist, 0);
-            textBlock.DisplayedText = dist.ToString();
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Distance",
-                Group = "Point",
-                Tab = "Vector",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Distance", "Point", "Vector");
 
-        private TextElement textBlock = new TextElement();
         private NumberDataNode nodeBlockDistance;
         private RhinoGeometryDataNode nodeBlock1;
         private RhinoGeometryDataNode nodeBlock2;
@@ -58,12 +39,7 @@ namespace Rhino3DMLibrary
             this.ChildElementManager.AddDataInputNode(nodeBlock2, "Point B");
 
             nodeBlockDistance = new NumberDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockDistance, "Distance");
-
-            textBlock = new TextElement();
-            textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.DisplayedText = "";
-            this.ChildElementManager.AddElement(textBlock);
+            this.ChildElementManager.AddDataOutputNode(nodeBlockDistance, "Distance", true);
         }
     }
 }

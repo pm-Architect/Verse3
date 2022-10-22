@@ -129,40 +129,15 @@ namespace CanvasElements
 
         public CanvasExtentElement() : base()
         {
-            renderPipelineInfo = new RenderPipelineInfo(this);
         }
 
-        public CanvasExtentElement(int x, int y, int width = 10, int height = 10) : base()
+        public CanvasExtentElement(int x, int y) : base()
         {
             renderPipelineInfo = new RenderPipelineInfo(this);
-            this.boundingBox = new BoundingBox(x, y, width, height);
-
-            //this.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
-            //Random rnd = new Random();
-            //byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
+            this.boundingBox = new BoundingBox(x, y, 10, 10);
         }
 
-        public CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Extent",
-                Group = "_CanvasElements",
-                Tab = "_CanvasElements",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public CompInfo GetCompInfo() => new CompInfo(this, "Extent", "_CanvasElements", "_CanvasElements");
 
         #region INotifyPropertyChanged Members
 

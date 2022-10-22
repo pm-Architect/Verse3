@@ -14,7 +14,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public Sine() : base(0, 0)
+        public Sine() : base()
         {
        
         }

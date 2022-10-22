@@ -12,7 +12,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public Division() : base(0, 0)
+        public Division() : base()
         {
         }
 

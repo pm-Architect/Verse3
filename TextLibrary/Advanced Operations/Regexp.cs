@@ -31,16 +31,13 @@ namespace MathLibrary
 
         #region Constructors
 
-        public Regexp() : base(0, 0)
+        public Regexp() : base()
         {
 
         }
 
-        public Regexp(int x, int y, int width = 250, int height = 350) : base(x, y)
+        public Regexp(int x, int y) : base(x, y)
         {
-            //base.boundingBox = new BoundingBox(x, y, width, height);
-
-
         }
 
         #endregion
@@ -52,50 +49,23 @@ namespace MathLibrary
             string pattern = @$"{b}";
 
             this.ChildElementManager.SetData<bool>(Regex.Match(a, pattern).Success, 0);
-            textBlock.DisplayedText = this.ElementText;
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Regex",
-                Group = "Advanced Operations",
-                Tab = "Text",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Regex", "Advanced Operations", "Text");
 
-        private TextElement textBlock = new TextElement();
         private TextDataNode nodeBlock;
         private TextDataNode nodeBlock1;
         private BooleanDataNode nodeBlock2;
         public override void Initialize()
         {
             nodeBlock = new TextDataNode(this, NodeType.Input);
-            nodeBlock.Width = 50;
             this.ChildElementManager.AddDataInputNode(nodeBlock, "Text");
 
             nodeBlock1 = new TextDataNode(this, NodeType.Input);
-            nodeBlock1.Width = 50;
             this.ChildElementManager.AddDataInputNode(nodeBlock1, "Regex pattern");
 
             nodeBlock2 = new BooleanDataNode(this, NodeType.Output);
-            nodeBlock2.Width = 50;
-            this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Result");
-
-            textBlock = new TextElement();
-            textBlock.DisplayedText = this.ElementText;
-            textBlock.TextAlignment = TextAlignment.Left;
-            this.ChildElementManager.AddElement(textBlock);
+            this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Result", true);
         }
     }
 }

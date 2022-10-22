@@ -11,7 +11,7 @@ namespace TextLibrary
 
         #region Constructors
 
-        public TextTransform() : base(0, 0)
+        public TextTransform() : base()
         {
             
         }

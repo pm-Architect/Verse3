@@ -33,24 +33,12 @@ namespace ColorLibrary
         
         #region Constructors
 
-        public ColorSelector() : base(0, 0)
+        public ColorSelector() : base()
         {
-            //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
-            //Random rng = new Random();
-            //byte r = (byte)rng.Next(0, 255);
-            //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public ColorSelector(int x, int y, int width = 250, int height = 100) : base(x, y)
+        public ColorSelector(int x, int y) : base(x, y)
         {
-            //base.boundingBox = new BoundingBox(x, y, width, height);
-
-            //Random rnd = new Random();
-            //byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
-            //this.Background = new SolidColorBrush(Colors.Gray);
         }
 
         #endregion
@@ -65,29 +53,11 @@ namespace ColorLibrary
                 this.ChildElementManager.SetData<Color>(_value.Value, 0);
             }
         }
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Color Picker",
-                Group = "Basic UI",
-                Tab = "Color",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Color Picker", "Basic UI", "Color");
 
         internal ColorPicker colorPicker;
         internal PopupWindow window;
 
-        internal TextElement textBlock = new TextElement();
         internal ButtonElement buttonBlock = new ButtonElement();
         internal TextBoxElement textBoxElement = new TextBoxElement();
         internal ColorDataNode nodeBlock;
@@ -106,13 +76,11 @@ namespace ColorLibrary
             buttonBlock.DisplayedText = _value.GetValueOrDefault(Color.FromArgb(255, 255, 255, 255)).ToString();
             buttonBlock.BackgroundColor = new System.Windows.Media.SolidColorBrush(_value.GetValueOrDefault(Color.FromArgb(255, 255, 255, 255)));
             buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
-            buttonBlock.Width = 200;
             this.ChildElementManager.AddElement(buttonBlock);
 
             textBoxElement = new TextBoxElement();
             textBoxElement.InputText = _value.GetValueOrDefault(Color.FromArgb(255, 255, 255, 255)).ToString();
             textBoxElement.ValueChanged += TextBoxElement_ValueChanged;
-            textBoxElement.Width = 200;
             this.ChildElementManager.AddElement(textBoxElement);
         }
 

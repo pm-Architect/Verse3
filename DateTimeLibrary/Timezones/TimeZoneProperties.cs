@@ -11,7 +11,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public TimeZoneProperties() : base(0, 0)
+        public TimeZoneProperties() : base()
         {
         }
 

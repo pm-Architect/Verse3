@@ -10,7 +10,7 @@ namespace Rhino3DMLibrary
 {
     public class DeconstructPoint : BaseComp
     {
-        public DeconstructPoint() : base(0, 0)
+        public DeconstructPoint() : base()
         {
         }
         public DeconstructPoint(int x, int y) : base(x, y)
@@ -30,30 +30,12 @@ namespace Rhino3DMLibrary
                     this.ChildElementManager.SetData<double>(p.Z, 2);
                 }
                 else return;
-                textBlock.DisplayedText = point.ToString();
+                this.previewTextBlock.DisplayedText = point.ToString();
             }
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Deconstruct Point",
-                Group = "Point",
-                Tab = "Vector",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Deconstruct Point", "Point", "Vector");
 
-        private TextElement textBlock = new TextElement();
         private NumberDataNode nodeBlockX;
         private NumberDataNode nodeBlockY;
         private NumberDataNode nodeBlockZ;
@@ -71,11 +53,6 @@ namespace Rhino3DMLibrary
 
             nodeBlockZ = new NumberDataNode(this, NodeType.Output);
             this.ChildElementManager.AddDataOutputNode(nodeBlockZ, "Z");
-
-            textBlock = new TextElement();
-            textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.DisplayedText = "";
-            this.ChildElementManager.AddElement(textBlock);
         }
     }
 }

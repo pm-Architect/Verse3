@@ -112,48 +112,38 @@ namespace Verse3
 
             BaseCompView compView = (BaseCompView)sender;
             BaseComp comp = compView.Element;
-
-
-
-            if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0 && e.ChangedButton == MouseButton.Left)
+            
+            if (e.ChangedButton == MouseButton.Left)
             {
-                DataViewModel.WPFControl.AddToSelection(comp);
-            }
-            else if ((Keyboard.Modifiers & ModifierKeys.Control) != 0 && e.ChangedButton == MouseButton.Left)
-            {
-                DataViewModel.WPFControl.Deselect(comp);
-            }
-            else
-            {
-                if (!comp.IsSelected) DataViewModel.WPFControl.Select(comp);
-            }
+                if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0) DataViewModel.WPFControl.AddToSelection(comp);
+                else if ((Keyboard.Modifiers & ModifierKeys.Control) != 0) DataViewModel.WPFControl.Deselect(comp);
+                else if (!comp.IsSelected) DataViewModel.WPFControl.Select(comp);
 
-            if ((Keyboard.Modifiers & ModifierKeys.Alt) != 0 && e.ChangedButton == MouseButton.Left && DataViewModel.WPFControl.ContentElements.SelectedItems.Count > 0)
-            {
-                DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.CopyDraggingElements;
+                if ((Keyboard.Modifiers & ModifierKeys.Alt) != 0 && DataViewModel.WPFControl.ContentElements.SelectedItems.Count > 0)
+                {
+                    DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.CopyDraggingElements;
+                    DataViewModel.WPFControl.origContentMouseDownPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
+                    DataViewModel.WPFControl.mouseButtonDown = e.ChangedButton;
+
+                    compView.CaptureMouse();
+
+                    e.Handled = true;
+                    return;
+                }
+                if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.None)
+                {
+                    // We are in some other mouse handling mode, don't do anything.
+                    return;
+                }
+
+                DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.DraggingElements;
                 DataViewModel.WPFControl.origContentMouseDownPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
                 DataViewModel.WPFControl.mouseButtonDown = e.ChangedButton;
 
                 compView.CaptureMouse();
 
                 e.Handled = true;
-                return;
             }
-
-            if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.None)
-            {
-                //
-                // We are in some other mouse handling mode, don't do anything.
-                return;
-            }
-
-            DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.DraggingElements;
-            DataViewModel.WPFControl.origContentMouseDownPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
-            DataViewModel.WPFControl.mouseButtonDown = e.ChangedButton;
-
-            compView.CaptureMouse();
-
-            e.Handled = true;
         }
 
         /// <summary>
@@ -161,21 +151,32 @@ namespace Verse3
         /// </summary>
         void OnMouseUp(object sender, MouseButtonEventArgs e)
         {
-            //MouseButtonEventArgs
-            if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingElements)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                //
-                // We are not in rectangle dragging mode.
-                //
-                return;
+                //MouseButtonEventArgs
+                if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingElements)
+                {
+                    // We are not in rectangle dragging mode.
+                    return;
+                }
+
+                DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
+
+                if (sender is BaseCompView compView)
+                {
+                    compView.ReleaseMouseCapture();
+                }
+
+                e.Handled = true;
             }
-
-            DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
-
-            BaseCompView rectangle = (BaseCompView)sender;
-            rectangle.ReleaseMouseCapture();
-
-            e.Handled = true;
+            else if (e.ChangedButton == MouseButton.Right)
+            {
+                if (this.Element.ContextMenu != null)
+                {
+                    this.Element.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.MousePoint;
+                    this.Element.ContextMenu.IsOpen = true;
+                }
+            }
         }
 
         /// <summary>

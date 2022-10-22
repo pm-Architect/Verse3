@@ -12,7 +12,7 @@ namespace TextLibrary
 {
     public class TextPanel : BaseComp
     {
-        public TextPanel() : base(0, 0)
+        public TextPanel() : base()
         {
         }
         public TextPanel(int x, int y) : base(x, y)
@@ -24,7 +24,7 @@ namespace TextLibrary
             DataStructure data = this.ChildElementManager.GetData(nodeBlock);
             if (data is null)
             {
-                textBlock.DisplayedText = "<null>";
+                this.previewTextBlock.DisplayedText = "<null>";
                 this.ChildElementManager.AdjustBounds(true);
                 return;
             }
@@ -33,22 +33,22 @@ namespace TextLibrary
                 switch (data.DataType)
                 {
                     case Type t when t == typeof(string):
-                        textBlock.DisplayedText = (string)data.Data;
+                        this.previewTextBlock.DisplayedText = (string)data.Data;
                         break;
                     case Type t when t == typeof(int):
-                        textBlock.DisplayedText = ((int)data.Data).ToString();
+                        this.previewTextBlock.DisplayedText = ((int)data.Data).ToString();
                         break;
                     case Type t when t == typeof(double):
-                        textBlock.DisplayedText = ((double)data.Data).ToString();
+                        this.previewTextBlock.DisplayedText = ((double)data.Data).ToString();
                         break;
                     case Type t when t == typeof(float):
-                        textBlock.DisplayedText = ((float)data.Data).ToString();
+                        this.previewTextBlock.DisplayedText = ((float)data.Data).ToString();
                         break;
                     case Type t when t == typeof(bool):
-                        textBlock.DisplayedText = ((bool)data.Data).ToString();
+                        this.previewTextBlock.DisplayedText = ((bool)data.Data).ToString();
                         break;
                     case Type t when t == typeof(DateTime):
-                        textBlock.DisplayedText = ((DateTime)data.Data).ToString();
+                        this.previewTextBlock.DisplayedText = ((DateTime)data.Data).ToString();
                         break;
                     default:
                         {
@@ -56,21 +56,21 @@ namespace TextLibrary
                             {
                                 if (data.Count > 0)
                                 {
-                                    textBlock.DisplayedText = "[";
+                                    this.previewTextBlock.DisplayedText = "[";
                                     foreach (IDataGoo goo in data)
                                     {
-                                        textBlock.DisplayedText += (goo.Data.ToString() + ", ");
+                                        this.previewTextBlock.DisplayedText += (goo.Data.ToString() + ", ");
                                     }
-                                    textBlock.DisplayedText += "]";
+                                    this.previewTextBlock.DisplayedText += "]";
                                 }
                                 else
                                 {
-                                    textBlock.DisplayedText = data.ToString();
+                                    this.previewTextBlock.DisplayedText = data.ToString();
                                 }
                             }
                             catch (Exception ex)
                             {
-                                textBlock.DisplayedText = ex.Message;
+                                this.previewTextBlock.DisplayedText = ex.Message;
                             }
                             break;
                         }
@@ -79,36 +79,13 @@ namespace TextLibrary
             }
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Text Panel",
-                Group = "Display",
-                Tab = "Text",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Text Panel", "Display", "Text");
 
-        internal TextElement textBlock = new TextElement();
         internal GenericDataNode nodeBlock;
         public override void Initialize()
         {
             nodeBlock = new GenericDataNode(this, NodeType.Input);
             this.ChildElementManager.AddDataInputNode(nodeBlock, "Data");
-            
-            textBlock = new TextElement();
-            textBlock.DisplayedText = "<null>";
-            textBlock.TextAlignment = TextAlignment.Left;
-            this.ChildElementManager.AddElement(textBlock);
         }
     }
 }

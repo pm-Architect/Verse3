@@ -13,7 +13,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public DateTimeNow() : base(0, 0)
+        public DateTimeNow() : base()
         {
         }
 

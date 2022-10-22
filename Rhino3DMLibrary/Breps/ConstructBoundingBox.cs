@@ -10,7 +10,7 @@ namespace Rhino3DMLibrary
 {
     public class ConstructBoundingBox : BaseComp
     {
-        public ConstructBoundingBox() : base(0, 0)
+        public ConstructBoundingBox() : base()
         {
         }
         public ConstructBoundingBox(int x, int y) : base(x, y)
@@ -27,31 +27,12 @@ namespace Rhino3DMLibrary
                 BoundingBox box = new BoundingBox(point1.Location, point2.Location);
                 GeometryBase geo = box.ToBrep();
                 this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-                textBlock.DisplayedText = box.ToString();
             }
 
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct Bounding Box",
-                Group = "Basic",
-                Tab = "Breps",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Construct Bounding Box", "Basic", "Breps");
 
-        private TextElement textBlock = new TextElement();
         private RhinoGeometryDataNode nodeBlockX;
         private RhinoGeometryDataNode nodeBlockY;
         private RhinoGeometryDataNode nodeBlockResult;
@@ -64,12 +45,7 @@ namespace Rhino3DMLibrary
             this.ChildElementManager.AddDataInputNode(nodeBlockY, "Point 2");
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Bounding Box");
-
-            textBlock = new TextElement();
-            textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.DisplayedText = "";
-            this.ChildElementManager.AddElement(textBlock);
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Bounding Box", true);
         }
     }
 }

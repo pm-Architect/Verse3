@@ -33,57 +33,21 @@ namespace EventsLibrary
 
         #region Constructors
 
-        public ButtonTrigger() : base(0, 0)
+        public ButtonTrigger() : base()
         {
-            //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
-            //Random rng = new Random();
-            //byte r = (byte)rng.Next(0, 255);
-            //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
 
-        public ButtonTrigger(int x, int y, int width = 250, int height = 100) : base(x, y)
+        public ButtonTrigger(int x, int y) : base(x, y)
         {
-            //base.boundingBox = new BoundingBox(x, y, width, height);
-
-            //Random rnd = new Random();
-            //byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
-            //this.Background = new SolidColorBrush(Colors.Gray);
         }
 
         #endregion
 
         public override void Compute()
         {
-            //this.ComputationPipelineInfo.IOManager.SetData<double>(_sliderValue, 0);
-            //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count == 1)
-            //{
-            //    if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
-            //        ((NodeElement)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data = _sliderValue;
-            //}
         }
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Button Trigger",
-                Group = "Basic UI",
-                Tab = "Events",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Button Trigger", "Basic UI", "Events");
 
-        internal TextElement textBlock = new TextElement();
         internal ButtonElement buttonBlock = new ButtonElement();
         internal GenericEventNode nodeBlock;
         public override void Initialize()

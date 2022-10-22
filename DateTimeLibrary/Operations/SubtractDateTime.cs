@@ -11,7 +11,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public SubtractDateTime() : base(0, 0)
+        public SubtractDateTime() : base()
         {
         }
 

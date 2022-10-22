@@ -10,7 +10,7 @@ namespace Rhino3DMLibrary
 {
     public class CreateExtrusion : BaseComp
     {
-        public CreateExtrusion() : base(0, 0)
+        public CreateExtrusion() : base()
         {
         }
         public CreateExtrusion(int x, int y) : base(x, y)
@@ -20,39 +20,20 @@ namespace Rhino3DMLibrary
         public override void Compute()
         {
             Rhino.Geometry.Curve curve = (Rhino.Geometry.Curve)this.ChildElementManager.GetData<GeometryBase>(0);
- 
+
             double height = this.ChildElementManager.GetData<double>(1, 50);
             bool cap = this.ChildElementManager.GetData<bool>(2, true);
             if (curve.IsValid)
             {
-      
+
                 GeometryBase geo = Extrusion.Create(curve, height, cap);
                 this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-                textBlock.DisplayedText = curve.ToString();
             }
 
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Create Extrusion",
-                Group = "Operations",
-                Tab = "Curve",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Create Extrusion", "Operations", "Curve");
 
-        private TextElement textBlock = new TextElement();
         private RhinoGeometryDataNode nodeBlockX;
         private NumberDataNode nodeBlockY;
         private BooleanDataNode nodeBlockZ;
@@ -70,12 +51,7 @@ namespace Rhino3DMLibrary
 
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Extruded surface");
-
-            textBlock = new TextElement();
-            textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.DisplayedText = "";
-            this.ChildElementManager.AddElement(textBlock);
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Extruded surface", true);
         }
     }
 }

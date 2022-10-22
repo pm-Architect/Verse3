@@ -10,7 +10,7 @@ namespace Rhino3DMLibrary
 {
     public class ConstructPlane : BaseComp
     {
-        public ConstructPlane() : base(0, 0)
+        public ConstructPlane() : base()
         {
         }
         public ConstructPlane(int x, int y) : base(x, y)
@@ -28,31 +28,12 @@ namespace Rhino3DMLibrary
            
                 GeometryBase geo = new Rhino.Geometry.PlaneSurface(plane, new Interval(-10.0, 10.0), new Interval(-10.0, 10.0));
                 this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-                textBlock.DisplayedText = plane.ToString();
             }
 
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct Plane",
-                Group = "Basic",
-                Tab = "Surface",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Construct Plane", "Basic", "Surface");
 
-        private TextElement textBlock = new TextElement();
         private RhinoGeometryDataNode nodeBlock1;
         private RhinoGeometryDataNode nodeBlock2;
         private RhinoGeometryDataNode nodeBlock3;
@@ -69,12 +50,7 @@ namespace Rhino3DMLibrary
             this.ChildElementManager.AddDataInputNode(nodeBlock2, "Point 3");
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Plane");
-
-            textBlock = new TextElement();
-            textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.DisplayedText = "";
-            this.ChildElementManager.AddElement(textBlock);
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Plane", true);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace TextLibrary
 
         #region Constructors
 
-        public Replace() : base(0, 0)
+        public Replace() : base()
         {
             
         }

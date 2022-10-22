@@ -10,7 +10,7 @@ namespace Rhino3DMLibrary
 {
     public class ConstructPoint : BaseComp
     {
-        public ConstructPoint() : base(0, 0)
+        public ConstructPoint() : base()
         {
         }
         public ConstructPoint(int x, int y) : base(x, y)
@@ -31,29 +31,10 @@ namespace Rhino3DMLibrary
             Point3d point2 = new Point3d(random.Next(-100, 100), random.Next(-100, 100), random.Next(-100, 100));
             GeometryBase geo2 = new Rhino.Geometry.Point(point2);
             this.ChildElementManager.SetData<GeometryBase>(geo2, 1);
-            textBlock.DisplayedText = point1.ToString();
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct Point",
-                Group = "Point",
-                Tab = "Vector",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Construct Point", "Point", "Vector");
 
-        private TextElement textBlock = new TextElement();
         private NumberDataNode nodeBlockX;
         private NumberDataNode nodeBlockY;
         private NumberDataNode nodeBlockZ;
@@ -71,15 +52,7 @@ namespace Rhino3DMLibrary
             this.ChildElementManager.AddDataInputNode(nodeBlockZ, "Z");
 
             nodeBlockResult1 = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult1, "Generated Point");
-
-            nodeBlockResult2 = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult2, "Random Point");
-
-            textBlock = new TextElement();
-            textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.DisplayedText = "";
-            this.ChildElementManager.AddElement(textBlock);
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult1, "Generated Point", true);
         }
     }
 

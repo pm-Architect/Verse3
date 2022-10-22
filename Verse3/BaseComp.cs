@@ -205,7 +205,24 @@ namespace Verse3
         }
 
         public bool RenderExpired { get; set; }
+        public ContextMenu ContextMenu
+        {
+            get
+            {
+                ContextMenu contextMenu = new ContextMenu();
+                
+                //Delete
+                MenuItem menuItem = new MenuItem();
+                menuItem.Header = "Delete";
+                menuItem.Click += (s, e) =>
+                {
+                    DataViewModel.Instance.Elements.Remove(this);
+                };
+                contextMenu.Items.Add(menuItem);
 
+                return contextMenu;
+            }
+        }
 
         #endregion
 
@@ -727,14 +744,11 @@ namespace Verse3
         public bool SetData<T>(DataStructure<T> data, DataNode<T> node)
         {
             if (data is null) return false;
-            if (node != null)
-            { 
-                if (node.DataValueType.IsAssignableFrom(data.DataType))
-                {
-                    node.DataGoo = data;
-                    return true;
-                }
-                else return false;
+            if (node is null) return false;
+            if (node.DataValueType.IsAssignableFrom(data.DataType))
+            {
+                node.DataGoo = data;
+                return true;
             }
             else return false;
         }
@@ -1032,6 +1046,24 @@ namespace Verse3
                 Accent = Color.FromRgb(rc, gc, bc);
             }
             else Accent = accent;
+            TypeName = comp.GetType().FullName;
+            BuiltAgainst = Assembly.GetExecutingAssembly().ImageRuntimeVersion;
+            IsValid = true;
+            IsDevelopmentBuild = true;
+        }
+        public CompInfo(IRenderable comp, string name, string group, string tab)
+        {
+            ConstructorInfo = comp.GetType().GetConstructor(new Type[] { typeof(int), typeof(int) });
+            Name = name;
+            Group = group;
+            Tab = tab;
+            Description = "DEVELOPMENT BUILD : Define values for all relevant properties before publishing";
+            Author = "DEVELOPMENT_BUILD";
+            Version = "0.0.0.1";
+            License = "DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe";
+            Website = "https://iiterate.de";
+            Repository = "https://iiterate.de";
+            Icon = null;
             TypeName = comp.GetType().FullName;
             BuiltAgainst = Assembly.GetExecutingAssembly().ImageRuntimeVersion;
             IsValid = true;

@@ -16,41 +16,24 @@ namespace CodeLibrary
 
         #region Constructors
 
-        public CSharp() : base(0, 0)
+        public CSharp() : base()
         {
         }
 
-        public CSharp(int x, int y, int width = 250, int height = 350) : base(x, y)
+        public CSharp(int x, int y) : base(x, y)
         {
         }
 
         #endregion
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "CSharp",
-                Group = "CSharp",
-                Tab = "Code",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "CSharp", "CSharp", "Code");
 
         public override void Compute()
         {
             try
             {
                 _script = this.ideElement.Script;
-                textBlock.DisplayedText = "Compiling...";
+                this.previewTextBlock.DisplayedText = "Compiling...";
                 byte[] ASMbytes = AssemblyCompiler.Compile(_script, "RuntimeCompiled_CSharp_Verse3");
                 List<IElement> elements = new List<IElement>(AssemblyLoader.Load(ASMbytes, Main_Verse3.domain_));
                 foreach (IElement element in elements)
@@ -96,30 +79,29 @@ namespace CodeLibrary
             //string? dataIN = "";
             if (_log.Count > 1)
             {
-                textBlock.DisplayedText = "";
+                this.previewTextBlock.DisplayedText = "";
                 if (_log.Count <= 5)
                 {
                     foreach (string entry in _log)
                     {
-                        textBlock.DisplayedText += (entry + "\n");
+                        this.previewTextBlock.DisplayedText += (entry + "\n");
                     }
                 }
                 else
                 {
                     foreach (string entry in (_log.GetRange((_log.Count - 5), 5)))
                     {
-                        textBlock.DisplayedText += (entry + "\n");
+                        this.previewTextBlock.DisplayedText += (entry + "\n");
                     }
                 }
             }
-            this.ChildElementManager.AdjustBounds(true);
+            //this.ChildElementManager.AdjustBounds(true);
             RenderingCore.Render(this);
         }
 
         private string _script = "";
         private CompInfo compiledCompInfo;
 
-        private TextElement textBlock = new TextElement();
         private IDEElement ideElement = new IDEElement();
         internal ButtonElement buttonBlock = new ButtonElement();
         internal ButtonElement buttonBlock1 = new ButtonElement();
@@ -156,12 +138,6 @@ namespace CodeLibrary
             buttonBlock2.OnButtonClicked += ButtonBlock2_OnButtonClicked;
             buttonBlock2.Width = 200;
             this.ChildElementManager.AddElement(buttonBlock2);
-
-            textBlock = new TextElement();
-            textBlock.DisplayedText = "";
-            textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.Width = 600;
-            this.ChildElementManager.AddElement(textBlock);
         }
 
         private void ButtonBlock1_OnButtonClicked(object? sender, RoutedEventArgs e)
@@ -207,9 +183,9 @@ namespace CodeLibrary
                 _log.Add(ex.Message);
                 if (_log.Count > 1)
                 {
-                    textBlock.DisplayedText = "";
-                    if (_log.Count <= 5)foreach (string entry in _log) textBlock.DisplayedText += (entry + "\n");
-                    else foreach (string entry in (_log.GetRange((_log.Count - 5), 5))) textBlock.DisplayedText += (entry + "\n");
+                    this.previewTextBlock.DisplayedText = "";
+                    if (_log.Count <= 5)foreach (string entry in _log) this.previewTextBlock.DisplayedText += (entry + "\n");
+                    else foreach (string entry in (_log.GetRange((_log.Count - 5), 5))) this.previewTextBlock.DisplayedText += (entry + "\n");
                 }
                 //throw ex;
             }
@@ -258,9 +234,9 @@ namespace CodeLibrary
                 _log.Add(ex.Message);
                 if (_log.Count > 1)
                 {
-                    textBlock.DisplayedText = "";
-                    if (_log.Count <= 5) foreach (string entry in _log) textBlock.DisplayedText += (entry + "\n");
-                    else foreach (string entry in (_log.GetRange((_log.Count - 5), 5))) textBlock.DisplayedText += (entry + "\n");
+                    this.previewTextBlock.DisplayedText = "";
+                    if (_log.Count <= 5) foreach (string entry in _log) this.previewTextBlock.DisplayedText += (entry + "\n");
+                    else foreach (string entry in (_log.GetRange((_log.Count - 5), 5))) this.previewTextBlock.DisplayedText += (entry + "\n");
                 }
                 //throw ex;
             }
@@ -270,11 +246,6 @@ namespace CodeLibrary
         {
             ComputationCore.Compute(this);
         }
-
-        //private void NodeBlock_NodeEvent(IEventNode container, EventArgData e)
-        //{
-        //    ComputationCore.Compute(this);
-        //}
 
         private void ButtonBlock_OnButtonClicked(object? sender, RoutedEventArgs e)
         {

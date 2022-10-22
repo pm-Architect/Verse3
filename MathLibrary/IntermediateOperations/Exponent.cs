@@ -11,7 +11,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public Exponent() : base(0, 0)
+        public Exponent() : base()
         {
          
         }

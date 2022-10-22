@@ -34,26 +34,8 @@ namespace RhinoCommonLibrary
             textBlock.DisplayedText = box.ToString();
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Make Box",
-                Group = "Geometry",
-                Tab = "Rhino",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Make Box" "Geometry", "Rhino" );
 
-        private TextElement textBlock = new TextElement();
         private NumberDataNode nodeBlockX;
         private NumberDataNode nodeBlockY;
         private NumberDataNode nodeBlockZ;

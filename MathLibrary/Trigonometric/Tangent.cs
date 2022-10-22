@@ -12,7 +12,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public Tangent() : base(0, 0)
+        public Tangent() : base()
         {
 
         }

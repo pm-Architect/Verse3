@@ -11,7 +11,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public Concatenate() : base(0, 0)
+        public Concatenate() : base()
         {
             
         }

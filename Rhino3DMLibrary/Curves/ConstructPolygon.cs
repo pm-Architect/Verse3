@@ -10,7 +10,7 @@ namespace Rhino3DMLibrary
 {
     public class ConstructPolygon : BaseComp
     {
-        public ConstructPolygon() : base(0, 0)
+        public ConstructPolygon() : base()
         {
         }
         public ConstructPolygon(int x, int y) : base(x, y)
@@ -29,32 +29,12 @@ namespace Rhino3DMLibrary
                 Polyline polyline = Polyline.CreateInscribedPolygon(circle, Math.Abs((int)sideCount));
                 GeometryBase geo = polyline.ToPolylineCurve();
                 this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-               
-                textBlock.DisplayedText = circle.ToString();
             }
 
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct Polygon",
-                Group = "Line",
-                Tab = "Curve",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Construct Polygon", "Line", "Curve");
 
-        private TextElement textBlock = new TextElement();
         private RhinoGeometryDataNode nodeBlockX;
         private NumberDataNode nodeBlockY;
         private NumberDataNode nodeBlockZ;
@@ -71,12 +51,7 @@ namespace Rhino3DMLibrary
             this.ChildElementManager.AddDataInputNode(nodeBlockY, "Side Count");
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Polygon");
-
-            textBlock = new TextElement();
-            textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.DisplayedText = "";
-            this.ChildElementManager.AddElement(textBlock);
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Polygon", true);
         }
     }
 }

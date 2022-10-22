@@ -12,7 +12,7 @@ namespace TextLibrary
 
         #region Constructors
 
-        public TextTrim() : base(0, 0)
+        public TextTrim() : base()
         {
 
         }

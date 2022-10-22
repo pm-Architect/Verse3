@@ -197,16 +197,11 @@ namespace Verse3
                                                 //Create two instances of CanvasExtent Element to make the initial/min canvas size 10000x10000
                                                 int x = -5000;
                                                 int y = -5000;
-                                                int w = 10;
-                                                int h = 10;
-                                                IElement elInst = compInfo.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
+                                                IElement elInst = compInfo.ConstructorInfo.Invoke(new object[] { x, y }) as IElement;
                                                 DataViewModel.Instance.Elements.Add(elInst);
-                                                //DataViewModel.WPFControl.ExpandContent();
                                                 x = 9990;
                                                 y = 9990;
-                                                w = 10;
-                                                h = 10;
-                                                elInst = compInfo.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
+                                                elInst = compInfo.ConstructorInfo.Invoke(new object[] { x, y }) as IElement;
                                                 DataViewModel.Instance.Elements.Add(elInst);
                                                 DataViewModel.WPFControl.ExpandContent();
                                                 DataViewModel.WPFControl.InfiniteCanvasControl1.AnimatedSnapTo(new System.Windows.Point(5000.0, 5000.0));
@@ -332,24 +327,18 @@ namespace Verse3
                         gb.Controls.Add(flp1);
                     }
                 }
-                if (this.Buttons.ContainsKey(compInfo.Tab + ".." + compInfo.Group + ".." + compInfo.Name))
-                {
-                    //TODO: Throw error, log to console
-                }
-                else
+                if (!this.Buttons.ContainsKey(compInfo.Tab + ".." + compInfo.Group + ".." + compInfo.Name))
                 {
                     btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-                    //btn.Location = new System.Drawing.Point(3, 3);
                     btn.Name = gb.Name + "_BTN" + this.Buttons.Count.ToString();
                     btn.MinimumSize = new System.Drawing.Size(30, 30);
                     btn.MaximumSize = new System.Drawing.Size(0, 30);
                     btn.Size = new System.Drawing.Size(30, 30);
+                    btn.Text = compInfo.Name;
                     btn.AutoSize = true;
                     btn.AutoSizeMode = AutoSizeMode.GrowAndShrink;
                     btn.TabIndex = 0;
                     btn.UseVisualStyleBackColor = true;
-                    //btn.Text = this.Buttons.Count.ToString();
-                    btn.Text = compInfo.Name;
                     btn.Tag = compInfo;
 
                     btn.Click += AddToCanvas_OnCall;

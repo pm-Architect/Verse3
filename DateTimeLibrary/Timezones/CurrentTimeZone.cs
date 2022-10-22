@@ -11,7 +11,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public CurrentTimeZone() : base(0, 0)
+        public CurrentTimeZone() : base()
         {
         }
 

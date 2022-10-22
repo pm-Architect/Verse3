@@ -10,7 +10,7 @@ namespace Rhino3DMLibrary
 {
     public class ConstructEllipse : BaseComp
     {
-        public ConstructEllipse() : base(0, 0)
+        public ConstructEllipse() : base()
         {
         }
         public ConstructEllipse(int x, int y) : base(x, y)
@@ -28,31 +28,12 @@ namespace Rhino3DMLibrary
                 Ellipse ellipse = new Ellipse(point1.Location, point2.Location, point3.Location);
                 GeometryBase geo = ellipse.ToNurbsCurve();
                 this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-                textBlock.DisplayedText = ellipse.ToString();
             }
 
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct Ellipse",
-                Group = "Line",
-                Tab = "Curve",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Construct Ellipse", "Line", "Curve");
 
-        private TextElement textBlock = new TextElement();
         private RhinoGeometryDataNode nodeBlockX;
         private RhinoGeometryDataNode nodeBlockY;
         private RhinoGeometryDataNode nodeBlockZ;
@@ -70,12 +51,7 @@ namespace Rhino3DMLibrary
             this.ChildElementManager.AddDataInputNode(nodeBlockZ, "Point 3");
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Ellipse");
-
-            textBlock = new TextElement();
-            textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.DisplayedText = "";
-            this.ChildElementManager.AddElement(textBlock);
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Ellipse", true);
         }
     }
 }

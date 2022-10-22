@@ -11,7 +11,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public Minimum() : base(0, 0)
+        public Minimum() : base()
         {
             
         }

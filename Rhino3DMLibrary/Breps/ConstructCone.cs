@@ -10,7 +10,7 @@ namespace Rhino3DMLibrary
 {
     public class ConstructCone : BaseComp
     {
-        public ConstructCone() : base(0, 0)
+        public ConstructCone() : base()
         {
         }
         public ConstructCone(int x, int y) : base(x, y)
@@ -27,31 +27,12 @@ namespace Rhino3DMLibrary
                 Cone cone= new Cone(plane, height, radius);
                 GeometryBase geo = cone.ToNurbsSurface();
                 this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-                textBlock.DisplayedText = cone.ToString();
             }
 
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct Cone",
-                Group = "Basic",
-                Tab = "Breps",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Construct Cone", "Basic", "Breps");
 
-        private TextElement textBlock = new TextElement();
         private RhinoGeometryDataNode nodeBlockX;
         private NumberDataNode nodeBlockY;
         private NumberDataNode nodeBlockZ;
@@ -69,12 +50,7 @@ namespace Rhino3DMLibrary
 
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Cone");
-
-            textBlock = new TextElement();
-            textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.DisplayedText = "";
-            this.ChildElementManager.AddElement(textBlock);
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Cone", true);
         }
     }
 }

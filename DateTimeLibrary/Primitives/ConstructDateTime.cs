@@ -13,7 +13,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public ConstructDateTime() : base(0, 0)
+        public ConstructDateTime() : base()
         {
         }
 

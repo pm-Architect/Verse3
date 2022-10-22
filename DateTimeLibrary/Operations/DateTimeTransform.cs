@@ -11,7 +11,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public DateTimeTransform() : base(0, 0)
+        public DateTimeTransform() : base()
         {
         }
 

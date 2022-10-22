@@ -11,7 +11,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public ConvertTimeZone() : base(0, 0)
+        public ConvertTimeZone() : base()
         {
         }
 

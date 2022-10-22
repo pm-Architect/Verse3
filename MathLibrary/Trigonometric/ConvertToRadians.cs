@@ -13,7 +13,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public ConvertToRadians() : base(0, 0)
+        public ConvertToRadians() : base()
         {
           
         }

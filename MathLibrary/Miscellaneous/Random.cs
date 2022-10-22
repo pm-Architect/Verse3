@@ -12,7 +12,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public RandomNumber() : base(0, 0)
+        public RandomNumber() : base()
         {
         }
 

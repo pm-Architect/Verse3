@@ -10,7 +10,7 @@ namespace Rhino3DMLibrary
 {
     public class RotatePlane : BaseComp
     {
-        public RotatePlane() : base(0, 0)
+        public RotatePlane() : base()
         {
         }
         public RotatePlane(int x, int y) : base(x, y)
@@ -41,34 +41,14 @@ namespace Rhino3DMLibrary
                 plane.Rotate(angledegreesX, plane.XAxis);
                 GeometryBase geo3 = new Rhino.Geometry.PlaneSurface(plane, new Interval(-10.0, 10.0), new Interval(-10.0, 10.0));
                 this.ChildElementManager.SetData<GeometryBase>(geo3, 0);
-
-                textBlock.DisplayedText = plane.ToString();
             }
 
 
         }
 
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Rotate Plane",
-                Group = "Operations",
-                Tab = "Surface",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Rotate Plane", "Operations", "Surface");
 
-        private TextElement textBlock = new TextElement();
         private RhinoGeometryDataNode nodeBlock1;
         private NumberDataNode nodeBlock2;
         private NumberDataNode nodeBlock3;
@@ -91,12 +71,7 @@ namespace Rhino3DMLibrary
             this.ChildElementManager.AddDataInputNode(nodeBlock4, "Rotation X");
 
             nodeBlock5 = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlock5, "Rotated Plane");
-
-            textBlock = new TextElement();
-            textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.DisplayedText = "";
-            this.ChildElementManager.AddElement(textBlock);
+            this.ChildElementManager.AddDataOutputNode(nodeBlock5, "Rotated Plane", true);
         }
     }
 }

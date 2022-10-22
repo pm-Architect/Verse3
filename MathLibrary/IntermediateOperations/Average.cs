@@ -11,7 +11,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public Average() : base(0, 0)
+        public Average() : base()
         {
             
         }

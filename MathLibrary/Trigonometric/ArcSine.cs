@@ -12,7 +12,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public ArcSine() : base(0, 0)
+        public ArcSine() : base()
         {
 
         }

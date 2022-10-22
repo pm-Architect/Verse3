@@ -12,7 +12,7 @@ namespace TextLibrary
 
         #region Constructors
 
-        public SplitText() : base(0, 0)
+        public SplitText() : base()
         {
 
         }

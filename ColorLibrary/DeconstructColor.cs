@@ -9,7 +9,7 @@ namespace ColorLibrary
 {
     public class DeconstructColor : BaseComp
     {
-        public DeconstructColor() : base(0, 0)
+        public DeconstructColor() : base()
         {
         }
         public DeconstructColor(int x, int y) : base(x, y)

@@ -13,7 +13,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public PermutationCombination() : base(0, 0)
+        public PermutationCombination() : base()
         {
 
         }

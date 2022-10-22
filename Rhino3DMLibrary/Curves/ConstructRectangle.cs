@@ -10,7 +10,7 @@ namespace Rhino3DMLibrary
 {
     public class ConstructRectangle : BaseComp
     {
-        public ConstructRectangle() : base(0, 0)
+        public ConstructRectangle() : base()
         {
         }
         public ConstructRectangle(int x, int y) : base(x, y)
@@ -27,31 +27,12 @@ namespace Rhino3DMLibrary
                 Rectangle3d rectangle = new Rectangle3d(plane, width, height);
                 GeometryBase geo = rectangle.ToNurbsCurve();
                 this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-                textBlock.DisplayedText = rectangle.ToString();
             }
 
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct Rectangle",
-                Group = "Line",
-                Tab = "Curve",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Construct Rectangle", "Line", "Curve");
 
-        private TextElement textBlock = new TextElement();
         private RhinoGeometryDataNode nodeBlockX;
         private NumberDataNode nodeBlockY;
         private NumberDataNode nodeBlockZ;
@@ -68,12 +49,7 @@ namespace Rhino3DMLibrary
             this.ChildElementManager.AddDataInputNode(nodeBlockY, "Height");
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Rectangle");
-
-            textBlock = new TextElement();
-            textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.DisplayedText = "";
-            this.ChildElementManager.AddElement(textBlock);
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Rectangle", true);
         }
     }
 }

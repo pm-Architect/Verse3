@@ -12,7 +12,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public Contains() : base(0, 0)
+        public Contains() : base()
         {
          
         }

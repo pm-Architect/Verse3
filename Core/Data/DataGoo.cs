@@ -196,6 +196,15 @@ namespace Core
                 throw new ArgumentNullException(nameof(data));
             Data = data;
         }
+        public DataStructure(D[] data) : base()
+        {
+            if (data == null || data.Length == 0)
+                throw new ArgumentNullException(nameof(data));
+            foreach (D d in data)
+            {
+                this.Add(new DataStructure<D>(d));
+            }
+        }
         public DataStructure(IDataGoo<D> data) : base(new List<IDataGoo<D>> { data })
         {
             ID = Guid.NewGuid();
@@ -326,7 +335,7 @@ namespace Core
                     if (Children == default || Children.Count == 0)
                         return default;
                     else
-                        return Children.ToArray();
+                        return this.ToArray();
                 }
                 else
                 {
@@ -335,7 +344,7 @@ namespace Core
                     {
                         if (volatileData is DSMetadata)
                         {
-                            return Children.ToArray();
+                            return this.ToArray();
                         }
                         else
                         {
@@ -351,7 +360,7 @@ namespace Core
                 if (value is DataStructure)
                 {
                     DataStructure ds = ((DataStructure)value);
-                    this.Children.Add(ds);
+                    this.Add(ds);
                 }
                 else
                 {
@@ -392,7 +401,31 @@ namespace Core
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
+            if (data.GetType().IsArray)
+            {
+                if (data is object[] dataArray)
+                {
+                    foreach (object o in dataArray)
+                    {
+                        if (o == null)
+                            throw new ArgumentNullException(nameof(o));
+                        this.Add(new DataStructure(o));
+                    }
+                }
+            }
             volatileData = data;
+            ID = Guid.NewGuid();
+        }
+        public DataStructure(object[] data) : base()
+        {
+            if (data == null || data.Length == 0)
+                throw new ArgumentNullException(nameof(data));
+            foreach (object o in data)
+            {
+                if (o == null)
+                    throw new ArgumentNullException(nameof(data));
+                this.Add(new DataStructure(o));
+            }
             ID = Guid.NewGuid();
         }
         public DataStructure(IDataGoo data) : base(new List<IDataGoo> { data })

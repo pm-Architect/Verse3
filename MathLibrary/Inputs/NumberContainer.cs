@@ -9,29 +9,10 @@ namespace MathLibrary
     public class NumberContainer : BaseComp
     {
         internal double? _sliderValue = 0.0;
-        //private double _inputValue = 0.0;
-
-        public string? ElementText
-        {
-            get
-            {
-                string? name = this.GetType().FullName;
-                string? viewname = this.ViewType.FullName;
-                string? dataIN = Math.Round(_sliderValue.GetValueOrDefault(), 3).ToString();
-                //string? zindex = DataViewModel.WPFControl.Content.
-                
-                return  $"Value: {dataIN}";
-            }
-        }
-        
-        #region Properties
-
-
-        #endregion
 
         #region Constructors
 
-        public NumberContainer() : base(0, 0)
+        public NumberContainer() : base()
         {
             //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
             //Random rng = new Random();
@@ -58,29 +39,11 @@ namespace MathLibrary
             if (_sliderValue.HasValue)
             {
                 this.ChildElementManager.SetData<double>(this._sliderValue.Value, 0);
-                textBlock.DisplayedText = this.ElementText;
+                this.previewTextBlock.DisplayedText = $"Value = {_sliderValue.Value}";
             }
         }
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Number Slider",
-                Group = "Inputs",
-                Tab = "Math",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Number Slider", "Inputs", "Math");
 
-        internal TextElement textBlock = new TextElement();
         internal SliderElement sliderBlock = new SliderElement();
         internal NumberDataNode nodeBlock;
         internal GenericEventNode nodeBlock1;
@@ -92,7 +55,6 @@ namespace MathLibrary
             this.ChildElementManager.AddEventOutputNode(nodeBlock1, "Changed");
 
             nodeBlock = new NumberDataNode(this, NodeType.Output);
-            //nodeBlock.Width = 50;
             this.ChildElementManager.AddDataOutputNode(nodeBlock, "Number");
 
             sliderBlock = new SliderElement();
@@ -101,13 +63,7 @@ namespace MathLibrary
             sliderBlock.Value = 50;
             sliderBlock.TickFrequency = 1;
             sliderBlock.ValueChanged += SliderBlock_OnValueChanged;
-            sliderBlock.Width = 200;
             this.ChildElementManager.AddElement(sliderBlock);
-
-            textBlock = new TextElement();
-            textBlock.DisplayedText = this.ElementText;
-            textBlock.TextAlignment = TextAlignment.Left;
-            this.ChildElementManager.AddElement(textBlock);
         }
 
         private void SliderBlock_OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<double> e)

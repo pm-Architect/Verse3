@@ -11,7 +11,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public DateCharacteristics() : base(0, 0)
+        public DateCharacteristics() : base()
         {
         }
 

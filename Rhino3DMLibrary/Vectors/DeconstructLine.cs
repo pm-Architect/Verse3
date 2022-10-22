@@ -10,7 +10,7 @@ namespace Rhino3DMLibrary
 {
     public class DeconstructLine : BaseComp
     {
-        public DeconstructLine() : base(0, 0)
+        public DeconstructLine() : base()
         {
         }
         public DeconstructLine(int x, int y) : base(x, y)
@@ -26,30 +26,12 @@ namespace Rhino3DMLibrary
                 Rhino.Geometry.Point p2 = new Rhino.Geometry.Point(line.PointAtEnd);
                 this.ChildElementManager.SetData<GeometryBase>(p1, 0);
                 this.ChildElementManager.SetData<GeometryBase>(p2, 1);
-                textBlock.DisplayedText = p1.ToString() + " to " + p2.ToString();
+                this.previewTextBlock.DisplayedText = p1.ToString() + " to " + p2.ToString();
             }
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Deconstruct Line",
-                Group = "Line",
-                Tab = "Curve",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Deconstruct Line", "Line", "Curve");
 
-        private TextElement textBlock = new TextElement();
         private RhinoGeometryDataNode nodeBlockLine;
         private RhinoGeometryDataNode nodeBlockp1;
         private RhinoGeometryDataNode nodeBlockp2;
@@ -63,11 +45,6 @@ namespace Rhino3DMLibrary
 
             nodeBlockp2 = new RhinoGeometryDataNode(this, NodeType.Output);
             this.ChildElementManager.AddDataOutputNode(nodeBlockp2, "End");
-
-            textBlock = new TextElement();
-            textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.DisplayedText = "";
-            this.ChildElementManager.AddElement(textBlock);
         }
     }
 }

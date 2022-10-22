@@ -10,7 +10,7 @@ namespace Rhino3DMLibrary
 {
     public class ConstructSphere : BaseComp
     {
-        public ConstructSphere() : base(0, 0)
+        public ConstructSphere() : base()
         {
         }
         public ConstructSphere(int x, int y) : base(x, y)
@@ -26,31 +26,12 @@ namespace Rhino3DMLibrary
                 Sphere sphere = new Sphere(point1.Location, radius);
                 GeometryBase geo = sphere.ToBrep();
                 this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-                textBlock.DisplayedText = sphere.ToString();
             }
 
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct Sphere",
-                Group = "Basic",
-                Tab = "Breps",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Construct Sphere", "Basic", "Breps");
 
-        private TextElement textBlock = new TextElement();
         private RhinoGeometryDataNode nodeBlockX;
         private NumberDataNode nodeBlockY;
         private RhinoGeometryDataNode nodeBlockResult;
@@ -63,12 +44,7 @@ namespace Rhino3DMLibrary
             this.ChildElementManager.AddDataInputNode(nodeBlockY, "Radius");
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Sphere");
-
-            textBlock = new TextElement();
-            textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.DisplayedText = "";
-            this.ChildElementManager.AddElement(textBlock);
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Sphere", true);
         }
     }
 }

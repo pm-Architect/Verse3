@@ -10,7 +10,7 @@ namespace MathLibrary
     {
         #region Constructors
 
-        public Multiplication() : base(0, 0)
+        public Multiplication() : base()
         {
            
         }

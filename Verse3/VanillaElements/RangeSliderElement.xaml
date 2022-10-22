@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:Verse3.VanillaElements" d:DataContext="{d:DesignInstance Type=local:RangeSliderElement}"
              mc:Ignorable="d"
              d:DesignHeight="50"
-             d:DesignWidth="120"
+             d:DesignWidth="200"
              MouseDown="OnMouseDown"
              MouseMove="OnMouseMove"
              MouseUp="OnMouseUp"
@@ -26,8 +26,9 @@
     <Grid
         Width="{Binding BoundingBox.Size.Width}"
         Height="{Binding BoundingBox.Size.Height}"
-        MinWidth="100"
-        MinHeight="20"
+        MinWidth="200"
+        MaxWidth="200"
+        MinHeight="50"
         MaxHeight="50"
         >
         <hc:RangeSlider
@@ -44,7 +45,13 @@
             IsSnapToTickEnabled="True"
             hc:TipElement.Placement="Top"
             hc:TipElement.StringFormat="#0.00"
-            hc:TipElement.Visibility="Visible" 
+            hc:TipElement.Visibility="Visible"
+            MinWidth="180"
+            MaxWidth="180"
+            MinHeight="30"
+            MaxHeight="30"
+            Background="#ff6700"
+            Foreground="#ffffff"
             >
         </hc:RangeSlider>
     </Grid>

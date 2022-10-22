@@ -11,7 +11,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public Round() : base(0, 0)
+        public Round() : base()
         {
           
         }

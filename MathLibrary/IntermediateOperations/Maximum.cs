@@ -11,7 +11,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public Maximum() : base(0, 0)
+        public Maximum() : base()
         {
             
         }

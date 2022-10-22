@@ -11,7 +11,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public CompareDateTime() : base(0, 0)
+        public CompareDateTime() : base()
         {
         }
 

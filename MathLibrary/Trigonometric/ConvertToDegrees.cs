@@ -13,7 +13,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public ConvertToDegrees() : base(0, 0)
+        public ConvertToDegrees() : base()
         {
           
         }

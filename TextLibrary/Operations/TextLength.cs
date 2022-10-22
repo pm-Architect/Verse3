@@ -12,7 +12,7 @@ namespace TextLibrary
 
         #region Constructors
 
-        public TextLength() : base(0, 0)
+        public TextLength() : base()
         {
 
         }

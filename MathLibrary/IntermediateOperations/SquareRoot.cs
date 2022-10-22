@@ -11,7 +11,7 @@ namespace MathLibrary
 
         #region Constructors
 
-        public SquareRoot() : base(0, 0)
+        public SquareRoot() : base()
         {
            
         }

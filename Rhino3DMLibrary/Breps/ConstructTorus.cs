@@ -10,7 +10,7 @@ namespace Rhino3DMLibrary
 {
     public class ConstructTorus : BaseComp
     {
-        public ConstructTorus() : base(0, 0)
+        public ConstructTorus() : base()
         {
         }
         public ConstructTorus(int x, int y) : base(x, y)
@@ -19,10 +19,17 @@ namespace Rhino3DMLibrary
 
         public override void Compute()
         {
-            if (!((Rhino.Geometry.PlaneSurface)this.ChildElementManager.GetData<GeometryBase>(0)).TryGetPlane(out Rhino.Geometry.Plane plane))
+            GeometryBase geoPlane = this.ChildElementManager.GetData<GeometryBase>(0, ((new PlaneSurface(Plane.WorldXY, new Interval(-10, 10), new Interval(-10, 10)) as GeometryBase)));
+            if (geoPlane is null) return;
+            Plane plane = Plane.WorldXY;
+            if (geoPlane is PlaneSurface planeSrf)
             {
-                plane = Plane.WorldXY;
+                if (!planeSrf.TryGetPlane(out plane))
+                {
+                    //return;
+                }
             }
+            //else return;
             double majorradius = this.ChildElementManager.GetData<double>(1, 50);
             double minorradius = this.ChildElementManager.GetData<double>(2, 10);
             if (plane.IsValid)
@@ -30,30 +37,11 @@ namespace Rhino3DMLibrary
                 Torus torus = new Torus(plane, majorradius, minorradius);
                 GeometryBase geo = torus.ToNurbsSurface();
                 this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-                textBlock.DisplayedText = torus.ToString();
             }
         }
 
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Construct Torus",
-                Group = "Basic",
-                Tab = "Breps",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Construct Torus", "Basic", "Breps");
 
-        private TextElement textBlock = new TextElement();
         private RhinoGeometryDataNode nodeBlockX;
         private NumberDataNode nodeBlockY;
         private NumberDataNode nodeBlockZ;
@@ -71,12 +59,7 @@ namespace Rhino3DMLibrary
 
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Torus");
-
-            textBlock = new TextElement();
-            textBlock.TextAlignment = TextAlignment.Left;
-            textBlock.DisplayedText = "";
-            this.ChildElementManager.AddElement(textBlock);
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Torus", true);
         }
     }
 }
