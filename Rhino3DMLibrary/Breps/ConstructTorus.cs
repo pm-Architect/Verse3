@@ -19,7 +19,10 @@ namespace Rhino3DMLibrary
 
         public override void Compute()
         {
-            ((Rhino.Geometry.PlaneSurface)this.ChildElementManager.GetData<GeometryBase>(0)).TryGetPlane(out Rhino.Geometry.Plane plane);
+            if (!((Rhino.Geometry.PlaneSurface)this.ChildElementManager.GetData<GeometryBase>(0)).TryGetPlane(out Rhino.Geometry.Plane plane))
+            {
+                plane = Plane.WorldXY;
+            }
             double majorradius = this.ChildElementManager.GetData<double>(1, 50);
             double minorradius = this.ChildElementManager.GetData<double>(2, 10);
             if (plane.IsValid)
@@ -29,7 +32,6 @@ namespace Rhino3DMLibrary
                 this.ChildElementManager.SetData<GeometryBase>(geo, 0);
                 textBlock.DisplayedText = torus.ToString();
             }
-
         }
 
         public override CompInfo GetCompInfo()
