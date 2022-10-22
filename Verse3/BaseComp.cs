@@ -708,6 +708,7 @@ namespace Verse3
         {
             if (data is null) return false;
             if (data is DataStructure) SetData(((DataStructure)data).Duplicate<T>(), node);
+            if (node is null) return false;
             if (data is T || data.GetType().IsAssignableTo(typeof(T)))
             {
                 try
@@ -726,10 +727,14 @@ namespace Verse3
         public bool SetData<T>(DataStructure<T> data, DataNode<T> node)
         {
             if (data is null) return false;
-            if (node.DataValueType.IsAssignableFrom(data.DataType))
-            {
-                node.DataGoo = data;
-                return true;
+            if (node != null)
+            { 
+                if (node.DataValueType.IsAssignableFrom(data.DataType))
+                {
+                    node.DataGoo = data;
+                    return true;
+                }
+                else return false;
             }
             else return false;
         }

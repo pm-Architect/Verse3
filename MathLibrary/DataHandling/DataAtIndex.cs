@@ -48,10 +48,14 @@ namespace MathLibrary
             
             int index = (int)this.ChildElementManager.GetData(Index, 0.0);
             
-            this.ChildElementManager.SetData(result[0], StartElement);
-            this.ChildElementManager.SetData(result[index], ElementAtI);
-            this.ChildElementManager.SetData(result.Last.Value, EndElement);
-            this.previewTextBlock.DisplayedText = $"Item at Index:{index} = {result[index]}";
+            if (result is not null)
+            {
+                this.ChildElementManager.SetData(result[0], StartElement);
+                this.ChildElementManager.SetData(result[index], ElementAtI);
+                this.ChildElementManager.SetData(result.Last.Value, EndElement);
+                this.previewTextBlock.DisplayedText = $"Item at Index:{index} = {result[index]}";
+            }
+            
         }
     }
 }
