@@ -53,6 +53,9 @@ namespace Rhino3DMLibrary
 
             nodeBlockResult1 = new RhinoGeometryDataNode(this, NodeType.Output);
             this.ChildElementManager.AddDataOutputNode(nodeBlockResult1, "Generated Point", true);
+
+            nodeBlockResult2 = new RhinoGeometryDataNode(this, NodeType.Output);
+            this.ChildElementManager.AddDataOutputNode(nodeBlockResult2, "Random Point");
         }
     }
 

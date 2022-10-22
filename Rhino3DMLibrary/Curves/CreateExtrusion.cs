@@ -23,7 +23,7 @@ namespace Rhino3DMLibrary
 
             double height = this.ChildElementManager.GetData<double>(1, 50);
             bool cap = this.ChildElementManager.GetData<bool>(2, true);
-            if (curve.IsValid)
+            if (curve != null)
             {
 
                 GeometryBase geo = Extrusion.Create(curve, height, cap);
