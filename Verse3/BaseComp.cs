@@ -373,6 +373,16 @@ namespace Verse3
             {
                 this.ComputationPipelineInfo.DeliverData();
             }
+            if (this.ComputationPipelineInfo.IOManager.PrimaryDataOutput >= 0)
+            {
+                IDataNode node = this.ComputationPipelineInfo.IOManager.DataOutputNodes[this.ComputationPipelineInfo.IOManager.PrimaryDataOutput];
+                string primaryDataName = "Out";
+                if (!string.IsNullOrEmpty(node.Name))
+                {
+                    primaryDataName = node.Name;
+                }
+                this.previewTextBlock.DisplayedText = primaryDataName + " = " + node.DataGoo.ToString();
+            }
         }
 
         //#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.

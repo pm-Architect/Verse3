@@ -32,7 +32,7 @@ namespace MathLibrary
             
         }
 
-        public override CompInfo GetCompInfo() => new CompInfo(this, "Convert to Radians", "Conversions", "Math 2");
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Convert to Radians", "Conversions", "Math");
 
         private NumberDataNode nodeBlock;
         private NumberDataNode nodeBlock2;

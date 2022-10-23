@@ -31,7 +31,7 @@ namespace MathLibrary
   
         }
 
-        public override CompInfo GetCompInfo() => new CompInfo(this, "Arc Sine", "Trigonometry", "Math 2");
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Arc Sine", "Trigonometry", "Math");
 
 
         private NumberDataNode nodeBlock;

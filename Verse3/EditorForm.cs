@@ -267,7 +267,9 @@ namespace Verse3
                 {
                     //tp.Location = new System.Drawing.Point(4, 24);
                     tp.Name = "Tab" + this.tabControl1.Controls.Count.ToString();
-                    tp.AutoScroll = true;
+                    //tp.AutoScroll = true;
+                    //tp.HorizontalScroll.Enabled = true;
+                    //tp.HorizontalScroll.Visible = true;
                     //tp.Size = new System.Drawing.Size(1005, 116);
                     tp.TabIndex = 0;
                     tp.Text = compInfo.Tab;
@@ -279,9 +281,14 @@ namespace Verse3
                     if (tp.Controls.Count == 0)
                     {
                         flp.Dock = System.Windows.Forms.DockStyle.Fill;
-                        //flp.Location = new System.Drawing.Point(0, 0);
+                        flp.FlowDirection = FlowDirection.LeftToRight;
                         flp.Margin = new System.Windows.Forms.Padding(0);
                         flp.Name = tp.Name + "_FLP";
+                        flp.MaximumSize = new System.Drawing.Size(0, 125);
+                        flp.WrapContents = false;
+                        flp.AutoScroll = true;
+                        //flp.HorizontalScroll.Enabled = true;
+                        //flp.HorizontalScroll.Visible = true;
                         //flp.Size = new System.Drawing.Size(1005, 116);
                         flp.TabIndex = 0;
 
@@ -300,7 +307,7 @@ namespace Verse3
                     gb.AutoSizeMode = AutoSizeMode.GrowAndShrink;
                     //gb.Location = new System.Drawing.Point(3, 3);
                     gb.MinimumSize = new System.Drawing.Size(100, 100);
-                    gb.MaximumSize = new System.Drawing.Size(300, 100);
+                    gb.MaximumSize = new System.Drawing.Size(350, 100);
                     gb.Name = tp.Name + "_GRP" + flp.Controls.Count.ToString();
                     gb.Padding = new System.Windows.Forms.Padding(0);
                     //gb.Size = new System.Drawing.Size(100, 100);
@@ -316,8 +323,10 @@ namespace Verse3
                         flp1.Dock = System.Windows.Forms.DockStyle.Fill;
                         flp1.FlowDirection = FlowDirection.LeftToRight;
                         flp1.MaximumSize = new System.Drawing.Size(0, 100);
+                        flp1.AutoScroll = true;
                         flp1.AutoSize = true;
                         flp1.AutoSizeMode = AutoSizeMode.GrowOnly;
+                        flp1.WrapContents = true;
                         //flp1.Location = new System.Drawing.Point(0, 16);
                         flp1.Margin = new System.Windows.Forms.Padding(0);
                         flp1.Name = gb.Name + "_FLP";
@@ -346,6 +355,19 @@ namespace Verse3
                     flp1.Controls.Add(btn);
                     this.Buttons.Add((compInfo.Tab + ".." + compInfo.Group + ".." + compInfo.Name), btn);
                 }
+
+                //if (gb.Width > 300 && gb.Width < 350)
+                //{
+                //    gb.MaximumSize = new System.Drawing.Size(350, 100);
+                //}
+                //else if (gb.Width >= 350 && gb.Width < 550)
+                //{
+                //    gb.MaximumSize = new System.Drawing.Size(550, 100);
+                //}
+                //else if (gb.Width >= 550)
+                //{
+                //    gb.MaximumSize = new System.Drawing.Size()
+                //}
                 btn.ResumeLayout(false);
                 flp1.ResumeLayout(false);
                 gb.ResumeLayout(false);
