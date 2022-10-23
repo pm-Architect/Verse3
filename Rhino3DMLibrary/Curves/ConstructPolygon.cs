@@ -19,11 +19,13 @@ namespace Rhino3DMLibrary
 
         public override void Compute()
         {
-            ((Rhino.Geometry.PlaneSurface)this.ChildElementManager.GetData<GeometryBase>(0)).TryGetPlane(out Rhino.Geometry.Plane plane);
-            double radius = this.ChildElementManager.GetData<double>(1, 50);
-            double sideCount = this.ChildElementManager.GetData<double>(2, 10);
+            Plane plane = new Plane();
 
-            if (plane.IsValid)
+            ((Rhino.Geometry.PlaneSurface)this.ChildElementManager.GetData<GeometryBase>(0)).TryGetPlane(out plane);
+            double radius = Math.Abs(this.ChildElementManager.GetData<double>(1, 50));
+            double sideCount = (int)Math.Abs(this.ChildElementManager.GetData<double>(2, 10));
+
+            if (plane.IsValid && sideCount >= 3 && radius > 0)
             {
                 Circle circle = new Circle(plane, radius);
                 Polyline polyline = Polyline.CreateInscribedPolygon(circle, Math.Abs((int)sideCount));
@@ -47,8 +49,8 @@ namespace Rhino3DMLibrary
             nodeBlockY = new NumberDataNode(this, NodeType.Input);
             this.ChildElementManager.AddDataInputNode(nodeBlockY, "Radius");
 
-            nodeBlockY = new NumberDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlockY, "Side Count");
+            nodeBlockZ = new NumberDataNode(this, NodeType.Input);
+            this.ChildElementManager.AddDataInputNode(nodeBlockZ, "Side Count");
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
             this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Polygon", true);
