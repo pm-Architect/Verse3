@@ -205,7 +205,7 @@ namespace Verse3
         }
 
         public bool RenderExpired { get; set; }
-        public ContextMenu ContextMenu
+        public virtual ContextMenu ContextMenu
         {
             get
             {
@@ -703,7 +703,7 @@ namespace Verse3
                 {
                     if (node.DataGoo.DataType.IsAssignableTo(typeof(T)))
                     {
-                        return node.DataGoo;
+                        return node.DataGoo.Duplicate<T>();
                     }
                     else
                     {
@@ -734,7 +734,8 @@ namespace Verse3
         public bool SetData<T>(object data, DataNode<T> node)
         {
             if (data is null) return false;
-            if (data is DataStructure) SetData(((DataStructure)data).Duplicate<T>(), node);
+            if (data is DataStructure)
+                SetData(((DataStructure)data).Duplicate<T>(), node);
             if (node is null) return false;
             if (data is T || data.GetType().IsAssignableTo(typeof(T)))
             {
@@ -753,14 +754,17 @@ namespace Verse3
 
         public bool SetData<T>(DataStructure<T> data, DataNode<T> node)
         {
-            if (data is null) return false;
-            if (node is null) return false;
-            if (node.DataValueType.IsAssignableFrom(data.DataType))
+            try
             {
-                node.DataGoo = data;
+                if (data is null) return false;
+                if (node is null) return false;
+                node.DataGoo = data.Duplicate<T>();
                 return true;
             }
-            else return false;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public T GetData<T>(int v, T defaultValue)
@@ -1514,6 +1518,11 @@ namespace Verse3
                             {
                                 _dataGoo = value.Duplicate<D>();
                             }
+                            else if (value.DataType.IsAssignableTo(typeof(DataStructure<D>)))
+                            {
+                                //TODO: Improve DataStructure depth with a while loop to iterate into branches
+                                _dataGoo = ((DataStructure<D>)value.Data).Duplicate<D>();
+                            }
                         }
                         _dataGoo = new DataStructure<D>();
                     }
@@ -1712,8 +1721,14 @@ namespace Verse3
                                 if (!ndestCAST.DataGoo.IsValid)
                                 {
                                     ndestCAST.DataGoo.Clear();
-                                    ndestCAST.DataGoo = this.DataGoo.Duplicate();
-                                    ndestCAST.DataGoo.ToString();
+                                    //ndestCAST.DataGoo = this.DataGoo.Duplicate<ndestCAST.DataValueType>;
+                                    MethodInfo mi = typeof(DataStructure<>).MakeGenericType(this.DataValueType).GetMethod("Duplicate").MakeGenericMethod(ndestCAST.DataValueType);
+                                    object result = mi.Invoke(this.DataGoo, null);
+                                    if (result != null && result is DataStructure resultDs && resultDs.DataType == ndestCAST.DataValueType)
+                                    {
+                                        ndestCAST.DataGoo = resultDs.Duplicate();
+                                        ndestCAST.DataGoo.ToString();
+                                    }
                                 }
                                 else if (!ndestCAST.DataGoo.Equals(this.DataGoo))
                                 {

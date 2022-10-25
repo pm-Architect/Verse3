@@ -1,6 +1,8 @@
 ﻿using Core;
+using MathLibrary.Inputs;
 using System;
 using System.Windows;
+using System.Windows.Controls;
 using Verse3;
 using Verse3.VanillaElements;
 
@@ -63,6 +65,37 @@ namespace MathLibrary
             this.ChildElementManager.EventOccured(0, new EventArgData(new DataStructure(_sliderValue)));
         }
 
+        public override ContextMenu ContextMenu
+        {
+            get
+            {
+                ContextMenu contextMenu = new ContextMenu();
+
+                //Delete
+                MenuItem menuItem = new MenuItem();
+                menuItem.Header = "Delete";
+                menuItem.Click += (s, e) =>
+                {
+                    DataViewModel.Instance.Elements.Remove(this);
+                };
+                contextMenu.Items.Add(menuItem);
+
+                //Show EditNumberSliderDialog
+                MenuItem menuItem1 = new MenuItem();
+                menuItem1.Header = "Edit";
+                menuItem1.Click += (s, e) =>
+                {
+                    EditNumberSliderDialog editNumberSliderDialog = new EditNumberSliderDialog(this);
+                    if (editNumberSliderDialog.ShowDialog() == true)
+                    {
+                        
+                    }
+                };
+                contextMenu.Items.Add(menuItem1);
+
+                return contextMenu;
+            }
+        }
         //private IRenderable _parent;
         //public IRenderable Parent => _parent;
         //private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();

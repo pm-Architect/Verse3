@@ -123,7 +123,8 @@ namespace Verse3.VanillaElements
         public double Maximum { get => maximum; set => SetProperty(ref maximum, value); }
 
         private double _value;
-        public double Value { get => _value; set => SetProperty(ref _value, value); }
+        public double Value { get => _value;
+            set => SetProperty(ref _value, value); }
 
         private double tickFrequency;
         public double TickFrequency { get => tickFrequency; set => SetProperty(ref tickFrequency, value); }
