@@ -19,15 +19,15 @@ namespace Rhino3DMLibrary
 
         public override void Compute()
         {
-            Rhino.Geometry.Point point1 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(0);
-            Rhino.Geometry.Point point2 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(1);
-            Rhino.Geometry.Point point3 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(2);
+            Rhino.Geometry.Point point1 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(nodeBlockX, default);
+            Rhino.Geometry.Point point2 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(nodeBlockY, default);
+            Rhino.Geometry.Point point3 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(nodeBlockZ, default);
 
             if (point1 != null && point2 != null && point3 != null)
             {
                 Ellipse ellipse = new Ellipse(point1.Location, point2.Location, point3.Location);
                 GeometryBase geo = ellipse.ToNurbsCurve();
-                this.ChildElementManager.SetData<GeometryBase>(geo, 0);
+                this.ChildElementManager.SetData<GeometryBase>(geo, nodeBlockResult);
             }
 
         }

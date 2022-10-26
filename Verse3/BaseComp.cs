@@ -657,10 +657,10 @@ namespace Verse3
             this._owner.ComputationPipelineInfo.IOManager.RemoveNode(node);
         }
 
-        public T GetData<T>(int v)
-        {
-            return this._owner.ComputationPipelineInfo.IOManager.GetData<T>(v);
-        }
+        //public T GetData<T>(int v)
+        //{
+        //    return this._owner.ComputationPipelineInfo.IOManager.GetData<T>(v);
+        //}
 
         public T GetData<T>(DataNode<T> node, T defaultValue = default)
         {
@@ -714,10 +714,10 @@ namespace Verse3
             return null;
         }
 
-        public bool SetData<T>(T v1, int v2)
-        {
-            return this._owner.ComputationPipelineInfo.IOManager.SetData<T>(v1, v2);
-        }
+        //public bool SetData<T>(T v1, int v2)
+        //{
+        //    return this._owner.ComputationPipelineInfo.IOManager.SetData<T>(v1, v2);
+        //}
 
         public bool SetData<T>(T data, DataNode<T> node)
         {
@@ -734,10 +734,10 @@ namespace Verse3
         public bool SetData<T>(object data, DataNode<T> node)
         {
             if (data is null) return false;
-            if (data is DataStructure)
-                SetData(((DataStructure)data).Duplicate<T>(), node);
             if (node is null) return false;
-            if (data is T || data.GetType().IsAssignableTo(typeof(T)))
+            if (data is DataStructure)
+                return SetData(((DataStructure)data).Duplicate<T>(), node);
+            else if (data is T || data.GetType().IsAssignableTo(typeof(T)))
             {
                 try
                 {
@@ -749,7 +749,7 @@ namespace Verse3
                     throw ex;
                 }
             }
-            else return false;
+            return false;
         }
 
         public bool SetData<T>(DataStructure<T> data, DataNode<T> node)
@@ -758,7 +758,17 @@ namespace Verse3
             {
                 if (data is null) return false;
                 if (node is null) return false;
-                node.DataGoo = data.Duplicate<T>();
+                //if (data is EventArgData eData)
+                //{
+                //    if (eData.Data is DataStructure eds)
+                //    {
+                //        node.DataGoo = eds.Duplicate<T>();
+                //    }
+                //}
+                else
+                {
+                    node.DataGoo = data.Duplicate<T>();
+                }
                 return true;
             }
             catch (Exception ex)
@@ -767,13 +777,13 @@ namespace Verse3
             }
         }
 
-        public T GetData<T>(int v, T defaultValue)
-        {
-            T a = defaultValue;
-            a = this._owner.ComputationPipelineInfo.IOManager.GetData<T>(v, defaultValue);
-            if (a is null) a = defaultValue;
-            return a;
-        }
+        //public T GetData<T>(int v, T defaultValue)
+        //{
+        //    T a = defaultValue;
+        //    a = this._owner.ComputationPipelineInfo.IOManager.GetData<T>(v, defaultValue);
+        //    if (a is null) a = defaultValue;
+        //    return a;
+        //}
 
         public ElementsLinkedList<IRenderable> FilterChildElementsByType(ElementType elementType)
         {
@@ -791,10 +801,10 @@ namespace Verse3
             return renderables;
         }
 
-        public void EventOccured(int v, EventArgData eventArgData)
-        {
-            this._owner.ComputationPipelineInfo.IOManager.EventOccured(v, eventArgData);
-        }
+        //public void EventOccured(int v, EventArgData eventArgData)
+        //{
+        //    this._owner.ComputationPipelineInfo.IOManager.EventOccured(v, eventArgData);
+        //}
 
         public void EventOccured(EventNode node, EventArgData eventArgData)
         {
@@ -1724,7 +1734,7 @@ namespace Verse3
                                     //ndestCAST.DataGoo = this.DataGoo.Duplicate<ndestCAST.DataValueType>;
                                     MethodInfo mi = typeof(DataStructure<>).MakeGenericType(this.DataValueType).GetMethod("Duplicate").MakeGenericMethod(ndestCAST.DataValueType);
                                     object result = mi.Invoke(this.DataGoo, null);
-                                    if (result != null && result is DataStructure resultDs && resultDs.DataType == ndestCAST.DataValueType)
+                                    if (result != null && result is DataStructure resultDs)
                                     {
                                         ndestCAST.DataGoo = resultDs.Duplicate();
                                         ndestCAST.DataGoo.ToString();

@@ -25,9 +25,9 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            double a = this.ChildElementManager.GetData<double>(0, 1);
-            double b = this.ChildElementManager.GetData<double>(1, 1);
-            this.ChildElementManager.SetData<double>((a+b)/2, 0);
+            double a = this.ChildElementManager.GetData<double>(nodeBlock, 1);
+            double b = this.ChildElementManager.GetData<double>(nodeBlock1, 1);
+            this.ChildElementManager.SetData<double>((a+b)/2, nodeBlock2);
         }
 
         public override CompInfo GetCompInfo() => new CompInfo(this, "Average", "Intermediate Operations", "Math");

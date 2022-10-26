@@ -19,14 +19,14 @@ namespace Rhino3DMLibrary
 
         public override void Compute()
         {
-            ((Rhino.Geometry.ArcCurve)this.ChildElementManager.GetData<GeometryBase>(0)).TryGetCircle(out Circle circle); 
-            double height = this.ChildElementManager.GetData<double>(1, 50);
+            ((Rhino.Geometry.ArcCurve)this.ChildElementManager.GetData<GeometryBase>(nodeBlockX, default)).TryGetCircle(out Circle circle); 
+            double height = this.ChildElementManager.GetData<double>(nodeBlockY, 50);
 
             if (circle.IsValid)
             {
                 Cylinder cylinder = new Cylinder(circle, height);
                 GeometryBase geo = cylinder.ToNurbsSurface();
-                this.ChildElementManager.SetData<GeometryBase>(geo, 0);
+                this.ChildElementManager.SetData<GeometryBase>(geo, nodeBlockResult);
             }
 
         }

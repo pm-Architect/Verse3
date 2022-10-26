@@ -25,7 +25,7 @@ namespace TextLibrary
         public override void Compute()
         {
             this._inputText = textBoxBlock.InputText;
-            this.ChildElementManager.SetData<string>(this._inputText, 0);
+            this.ChildElementManager.SetData<string>(this._inputText, nodeBlock);
         }
         public override CompInfo GetCompInfo() => new CompInfo(this, "Text Input", "Inputs", "Text");
 

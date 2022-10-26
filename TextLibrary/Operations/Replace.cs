@@ -25,10 +25,10 @@ namespace TextLibrary
 
         public override void Compute()
         {
-            string a = this.ChildElementManager.GetData<string>(0, "");
-            string b = this.ChildElementManager.GetData<string>(1, "");
-            string c = this.ChildElementManager.GetData<string>(2, "");
-            this.ChildElementManager.SetData<string>(a.Replace(b,c), 0);
+            string a = this.ChildElementManager.GetData<string>(nodeBlock, "");
+            string b = this.ChildElementManager.GetData<string>(nodeBlock1, "");
+            string c = this.ChildElementManager.GetData<string>(nodeBlock2, "");
+            this.ChildElementManager.SetData<string>(a.Replace(b,c), nodeBlock3);
         }
 
         public override CompInfo GetCompInfo() => new CompInfo(this, "Replace", "Operations", "Text");

@@ -64,7 +64,7 @@ namespace EventsLibrary
         {
             _value = dateTimeElement.Value;
             ComputationCore.Compute(this, false);
-            this.ChildElementManager.EventOccured(0, new EventArgData(new DataStructure(_value)));
+            this.ChildElementManager.EventOccured(nodeBlock1, new EventArgData(new DataStructure(_value)));
         }
     }
 }

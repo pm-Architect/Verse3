@@ -24,7 +24,7 @@ namespace InteropLibrary
 
         public override void Compute()
         {
-            object dataIN = this.ChildElementManager.GetData<object>(0);
+            object dataIN = this.ChildElementManager.GetData<object>(nodeBlock);
             if (dataIN != null)
             {
                 _lastMessage = dataIN.ToString();

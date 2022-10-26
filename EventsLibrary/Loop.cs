@@ -36,7 +36,7 @@ namespace EventsLibrary
 
         private EventCallbackNode EventCallbackNode;
         private GenericEventNode LoopBeginNode;
-        private GenericDataNode DataToLoopNode;
+        //private GenericDataNode DataToLoopNode;
         private NumberDataNode Count;
         private ButtonElement ButtonBlock;
         
@@ -61,8 +61,8 @@ namespace EventsLibrary
             Iterations = new NumberDataNode(this, NodeType.Input, 0);
             this.ChildElementManager.AddDataInputNode(Iterations, "Iterations");
 
-            DataToLoopNode = new GenericDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(DataToLoopNode, "Data");
+            //DataToLoopNode = new GenericDataNode(this, NodeType.Output);
+            //this.ChildElementManager.AddDataOutputNode(DataToLoopNode, "Data");
 
             Count = new NumberDataNode(this, NodeType.Output);
             this.ChildElementManager.AddDataOutputNode(Count, "Count", true);
@@ -87,10 +87,10 @@ namespace EventsLibrary
             {
                 if (_count < _iterations && _count > 0 && _loopRunning)
                 {
-                    this.ChildElementManager.SetData(_loopData, DataToLoopNode);
+                    //this.ChildElementManager.SetData(_loopData, DataToLoopNode);
                     _count++;
                     this.ChildElementManager.SetData(_count, Count);
-                    LoopBeginNode.EventOccured(e);
+                    LoopBeginNode.EventOccured(new EventArgData(_loopData));
                 }
                 else if (_count == _iterations)
                 {
@@ -111,7 +111,7 @@ namespace EventsLibrary
             {
                 if (!_loopRunning && _count == 0)
                 {
-                    this.ChildElementManager.SetData(_loopData, DataToLoopNode);
+                    //this.ChildElementManager.SetData(_loopData, DataToLoopNode);
                     _loopRunning = true;
                     LoopBeginNode.EventOccured(new EventArgData(_loopData));
                     _count++;

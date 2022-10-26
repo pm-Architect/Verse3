@@ -19,15 +19,15 @@ namespace Rhino3DMLibrary
 
         public override void Compute()
         {
-            Rhino.Geometry.Curve curve = (Rhino.Geometry.Curve)this.ChildElementManager.GetData<GeometryBase>(0);
+            Rhino.Geometry.Curve curve = (Rhino.Geometry.Curve)this.ChildElementManager.GetData<GeometryBase>(nodeBlockX, default);
 
-            double height = this.ChildElementManager.GetData<double>(1, 50);
-            bool cap = this.ChildElementManager.GetData<bool>(2, true);
+            double height = this.ChildElementManager.GetData<double>(nodeBlockY, 50);
+            bool cap = this.ChildElementManager.GetData<bool>(nodeBlockZ, true);
             if (curve != null)
             {
 
                 GeometryBase geo = Extrusion.Create(curve, height, cap);
-                this.ChildElementManager.SetData<GeometryBase>(geo, 0);
+                this.ChildElementManager.SetData<GeometryBase>(geo, nodeBlockResult);
             }
 
         }

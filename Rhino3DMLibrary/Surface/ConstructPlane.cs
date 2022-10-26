@@ -19,15 +19,15 @@ namespace Rhino3DMLibrary
 
         public override void Compute()
         {
-            Rhino.Geometry.Point point1 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(0);
-            Rhino.Geometry.Point point2 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(1);
-            Rhino.Geometry.Point point3 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(2);
+            Rhino.Geometry.Point point1 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(nodeBlock1, default);
+            Rhino.Geometry.Point point2 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(nodeBlock2, default);
+            Rhino.Geometry.Point point3 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(nodeBlock3, default);
             if (point1 != null && point2 != null && point3 != null)
             {
                 Plane plane = new Plane(point1.Location, point2.Location, point3.Location);
            
                 GeometryBase geo = new Rhino.Geometry.PlaneSurface(plane, new Interval(-10.0, 10.0), new Interval(-10.0, 10.0));
-                this.ChildElementManager.SetData<GeometryBase>(geo, 0);
+                this.ChildElementManager.SetData<GeometryBase>(geo, nodeBlockResult);
             }
 
         }
@@ -46,8 +46,8 @@ namespace Rhino3DMLibrary
             nodeBlock2 = new RhinoGeometryDataNode(this, NodeType.Input);
             this.ChildElementManager.AddDataInputNode(nodeBlock2, "Point 2");
 
-            nodeBlock2 = new RhinoGeometryDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlock2, "Point 3");
+            nodeBlock3 = new RhinoGeometryDataNode(this, NodeType.Input);
+            this.ChildElementManager.AddDataInputNode(nodeBlock3, "Point 3");
 
             nodeBlockResult = new RhinoGeometryDataNode(this, NodeType.Output);
             this.ChildElementManager.AddDataOutputNode(nodeBlockResult, "Plane", true);

@@ -20,7 +20,7 @@ namespace Rhino3DMLibrary
 
         public override void Compute()
         {
-            Rhino.Geometry.Curve curve = (Rhino.Geometry.Curve)this.ChildElementManager.GetData<GeometryBase>(0);
+            Rhino.Geometry.Curve curve = (Rhino.Geometry.Curve)this.ChildElementManager.GetData<GeometryBase>(nodeBlockX, default);
 
             int count = (int)this.ChildElementManager.GetData(nodeBlockY, 5);
             bool includeEnds = this.ChildElementManager.GetData(nodeBlockZ, true);
@@ -29,7 +29,7 @@ namespace Rhino3DMLibrary
 
                 //TODO: DivideByCount in r3dm
                 GeometryBase geo = curve;
-                this.ChildElementManager.SetData<GeometryBase>(geo, 0);
+                this.ChildElementManager.SetData<GeometryBase>(geo, nodeBlockResult);
             }
 
         }

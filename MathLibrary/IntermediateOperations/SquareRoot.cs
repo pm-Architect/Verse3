@@ -25,14 +25,13 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            double a = this.ChildElementManager.GetData<double>(0, 1);
-            this.ChildElementManager.SetData<double>((Math.Sqrt(a)), 0);
+            double a = this.ChildElementManager.GetData<double>(nodeBlock, 1);
+            this.ChildElementManager.SetData<double>((Math.Sqrt(a)), nodeBlock2);
         }
 
         public override CompInfo GetCompInfo() => new CompInfo(this, "Square Root", "Advanced Operations", "Math");
         
         private NumberDataNode nodeBlock;
-        private NumberDataNode nodeBlock1;
         private NumberDataNode nodeBlock2;
         public override void Initialize()
         {

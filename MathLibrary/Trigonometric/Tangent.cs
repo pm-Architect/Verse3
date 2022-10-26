@@ -39,11 +39,9 @@ namespace MathLibrary
         public override void Initialize()
         {
             nodeBlock = new NumberDataNode(this, NodeType.Input);
-            nodeBlock.Width = 50;
             this.ChildElementManager.AddDataInputNode(nodeBlock, "Radians");
 
             nodeBlock2 = new NumberDataNode(this, NodeType.Output);
-            nodeBlock2.Width = 50;
             this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Result");
 
   

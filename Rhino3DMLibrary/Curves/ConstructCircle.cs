@@ -19,14 +19,14 @@ namespace Rhino3DMLibrary
 
         public override void Compute()
         {
-            Rhino.Geometry.Point point1 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(0);
-            double radius = this.ChildElementManager.GetData<double>(1, 10);
+            Rhino.Geometry.Point point1 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(nodeBlockX, default);
+            double radius = this.ChildElementManager.GetData<double>(nodeBlockY, 10);
             if (point1 != null)
             {
                 Circle circle = new Circle(point1.Location, radius);
 
                 GeometryBase geo = new Rhino.Geometry.ArcCurve(circle);
-                this.ChildElementManager.SetData<GeometryBase>(geo, 0);
+                this.ChildElementManager.SetData<GeometryBase>(geo, nodeBlockResult);
             }
 
         }

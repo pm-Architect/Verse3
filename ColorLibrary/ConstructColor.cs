@@ -18,12 +18,12 @@ namespace ColorLibrary
 
         public override void Compute()
         {
-            int a = (int)this.ChildElementManager.GetData<double>(0, 10);
-            int r = (int)this.ChildElementManager.GetData<double>(1, 10);
-            int g = (int)this.ChildElementManager.GetData<double>(2, 10);
-            int b = (int)this.ChildElementManager.GetData<double>(3, 10);
+            int a = (int)this.ChildElementManager.GetData<double>(nodeBlockA, 10);
+            int r = (int)this.ChildElementManager.GetData<double>(nodeBlockR, 10);
+            int g = (int)this.ChildElementManager.GetData<double>(nodeBlockG, 10);
+            int b = (int)this.ChildElementManager.GetData<double>(nodeBlockB, 10);
             Color color = Color.FromArgb((byte)a, (byte)r, (byte)g, (byte)b);
-            this.ChildElementManager.SetData<Color>(color, 0);
+            this.ChildElementManager.SetData<Color>(color, nodeBlockResult);
         }
 
         public override CompInfo GetCompInfo() => new CompInfo(this, "Construct Color", "Primitive", "Color");

@@ -19,13 +19,13 @@ namespace Rhino3DMLibrary
 
         public override void Compute()
         {
-            Rhino.Geometry.LineCurve line = (Rhino.Geometry.LineCurve)this.ChildElementManager.GetData<GeometryBase>(0);
+            Rhino.Geometry.LineCurve line = (Rhino.Geometry.LineCurve)this.ChildElementManager.GetData<GeometryBase>(nodeBlockLine, default);
             if (line != null)
             {
                 Rhino.Geometry.Point p1 = new Rhino.Geometry.Point(line.PointAtStart);
                 Rhino.Geometry.Point p2 = new Rhino.Geometry.Point(line.PointAtEnd);
-                this.ChildElementManager.SetData<GeometryBase>(p1, 0);
-                this.ChildElementManager.SetData<GeometryBase>(p2, 1);
+                this.ChildElementManager.SetData<GeometryBase>(p1, nodeBlockp1);
+                this.ChildElementManager.SetData<GeometryBase>(p2, nodeBlockp2);
                 this.previewTextBlock.DisplayedText = p1.ToString() + " to " + p2.ToString();
             }
         }

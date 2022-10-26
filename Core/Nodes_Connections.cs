@@ -42,26 +42,49 @@ namespace Core
         void ToggleActive();
     }
 
-    public class EventArgData : DataStructure<EventArgs>
+    public class EventArgData : DataStructure<object>
     {
-        //TODO: Implement relevant fields
         public EventArgData() : base()
         {
         }
-        public EventArgData(EventArgs eventargs) : base(eventargs)
+        public EventArgData(object eventargs) : base(eventargs)
         {
+            this.Add(new DataStructure(eventargs));
+            if (this.volatileData is DSMetadata metadata)
+            {
+                metadata.DataStructurePattern = DataStructurePattern.EventArgData;
+            }
         }
         public EventArgData(DataStructure argdata) : base()
         {
             this.Add(argdata);
-            //if (this.Count > 0)
-            //{
-            //    string data = this[0].Data.ToString();
-            //}
+            if (this.volatileData is DSMetadata metadata)
+            {
+                metadata.DataStructurePattern = DataStructurePattern.EventArgData;
+            }
         }
-        public EventArgData(EventArgs eventargs, DataStructure argdata) : base(eventargs)
+
+        public new DataStructure Data
         {
-            this.Add(argdata);
+            get
+            {
+                if (base.Count == 1 && base.Data is DataStructure data)
+                    return data;
+                else return null;
+                //{
+                //    if (this.volatileData != null)
+                //    {
+                //        this.Add(this.volatileData);
+                //    }
+                //    this.volatileData = new DSMetadata(this);
+                //    return this.ToArray();
+                //}
+            }
+        }
+
+        public override string ToString()
+        {
+            return base[0].ToString();
         }
     }
 

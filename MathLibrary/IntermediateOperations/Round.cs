@@ -25,8 +25,8 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            double a = this.ChildElementManager.GetData<double>(0, 1);
-            this.ChildElementManager.SetData<double>((Math.Round(a)), 0);
+            double a = this.ChildElementManager.GetData<double>(nodeBlock, 1);
+            this.ChildElementManager.SetData<double>((Math.Round(a)), nodeBlock2);
         }
 
         public override CompInfo GetCompInfo() => new CompInfo(this, "Round", "Intermediate Operations", "Math");

@@ -19,7 +19,7 @@ namespace Rhino3DMLibrary
 
         public override void Compute()
         {
-            Rhino.Geometry.Point point = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(0);
+            Rhino.Geometry.Point point = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(nodeBlock1, default);
 
             Vector3d vectorz = new Vector3d(0.0, 0.0, 1.0);
             Vector3d vectory = new Vector3d(0.0, 1.0, 0.0);
@@ -34,15 +34,15 @@ namespace Rhino3DMLibrary
 
                 Plane planeXY = new Plane(point.Location, vectorz);
                 GeometryBase geoXY = new Rhino.Geometry.PlaneSurface(planeXY, new Interval(-10.0, 10.0), new Interval(-10.0, 10.0));
-                this.ChildElementManager.SetData<GeometryBase>(geoXY, 0);
+                this.ChildElementManager.SetData<GeometryBase>(geoXY, nodeBlock2);
 
                 Plane planeYZ = new Plane(point.Location, vectorx);
                 GeometryBase geoYZ = new Rhino.Geometry.PlaneSurface(planeYZ, new Interval(-10.0, 10.0), new Interval(-10.0, 10.0));
-                this.ChildElementManager.SetData<GeometryBase>(geoYZ, 1);
+                this.ChildElementManager.SetData<GeometryBase>(geoYZ, nodeBlock3);
 
                 Plane planeZX = new Plane(point.Location, vectory);
                 GeometryBase geoZX = new Rhino.Geometry.PlaneSurface(planeZX, new Interval(-10.0, 10.0), new Interval(-10.0, 10.0));
-                this.ChildElementManager.SetData<GeometryBase>(geoZX, 2);
+                this.ChildElementManager.SetData<GeometryBase>(geoZX, nodeBlock4);
 
         }
 

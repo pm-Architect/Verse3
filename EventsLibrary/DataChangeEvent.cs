@@ -26,7 +26,7 @@ namespace InteropLibrary
             DataStructure? dataIN = this.ChildElementManager.GetData(dataInput);
             if (dataIN != null && _lastData != dataIN)
             {
-                this.ChildElementManager.SetData<object>(_lastData, lastData);
+                this.ChildElementManager.SetData(_lastData, lastData);
                 dataChangedEvent.EventOccured(new EventArgData(dataIN));
                 this.previewTextBlock.DisplayedText = $"Last Data: {_lastData}\nNew Data: {dataIN}";
                 _lastData = dataIN;

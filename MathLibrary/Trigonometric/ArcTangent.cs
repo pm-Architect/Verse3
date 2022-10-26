@@ -39,7 +39,7 @@ namespace MathLibrary
         public override void Initialize()
         {
             nodeBlock = new NumberDataNode(this, NodeType.Input);
-            nodeBlock.Width = 50;
+            
             this.ChildElementManager.AddDataInputNode(nodeBlock, "Number");
 
             nodeBlock2 = new NumberDataNode(this, NodeType.Output);

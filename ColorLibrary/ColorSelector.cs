@@ -50,7 +50,7 @@ namespace ColorLibrary
                 buttonBlock.BackgroundColor = b;
                 buttonBlock.DisplayedText = _value.ToString();
                 textBoxElement.InputText = _value.ToString();
-                this.ChildElementManager.SetData<Color>(_value.Value, 0);
+                this.ChildElementManager.SetData<Color>(_value.Value, nodeBlock);
             }
         }
         public override CompInfo GetCompInfo() => new CompInfo(this, "Color Picker", "Basic UI", "Color");
@@ -94,7 +94,7 @@ namespace ColorLibrary
                     _value = parsedColor;
                     b = new SolidColorBrush(_value.Value);
                     ComputationCore.Compute(this, false);
-                    this.ChildElementManager.EventOccured(0, new EventArgData(new DataStructure(_value)));
+                    this.ChildElementManager.EventOccured(nodeBlock1, new EventArgData(new DataStructure(_value)));
                 }
             }
             catch (Exception ex)
@@ -148,7 +148,7 @@ namespace ColorLibrary
             _value = Color.FromArgb(e.A, e.R, e.G, e.B);
             b = new SolidColorBrush(_value.Value);
             ComputationCore.Compute(this, false);
-            this.ChildElementManager.EventOccured(0, new EventArgData(new DataStructure(_value)));
+            this.ChildElementManager.EventOccured(nodeBlock1, new EventArgData(new DataStructure(_value)));
         }
     }
 }

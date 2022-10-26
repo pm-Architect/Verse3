@@ -28,7 +28,7 @@ namespace MathLibrary
         public override void Compute()
         {
             double a = this.ChildElementManager.GetData(nodeBlock, 0);
-            this.ChildElementManager.SetData<double>((180/Math.PI) *a, 0);
+            this.ChildElementManager.SetData<double>((180/Math.PI) *a, nodeBlock2);
             
         }
 

@@ -44,11 +44,11 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            string a = this.ChildElementManager.GetData<string>(0, "Some very random text");
-            string b = this.ChildElementManager.GetData<string>(1, "No pattern");
+            string a = this.ChildElementManager.GetData<string>(nodeBlock, "Some very random text");
+            string b = this.ChildElementManager.GetData<string>(nodeBlock1, "No pattern");
             string pattern = @$"{b}";
 
-            this.ChildElementManager.SetData<bool>(Regex.Match(a, pattern).Success, 0);
+            this.ChildElementManager.SetData<bool>(Regex.Match(a, pattern).Success, nodeBlock2);
         }
 
         public override CompInfo GetCompInfo() => new CompInfo(this, "Regex", "Advanced Operations", "Text");

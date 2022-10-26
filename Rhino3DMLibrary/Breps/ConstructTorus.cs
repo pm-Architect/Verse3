@@ -19,7 +19,7 @@ namespace Rhino3DMLibrary
 
         public override void Compute()
         {
-            GeometryBase geoPlane = this.ChildElementManager.GetData<GeometryBase>(0, ((new PlaneSurface(Plane.WorldXY, new Interval(-10, 10), new Interval(-10, 10)) as GeometryBase)));
+            GeometryBase geoPlane = this.ChildElementManager.GetData<GeometryBase>(nodeBlockX, ((new PlaneSurface(Plane.WorldXY, new Interval(-10, 10), new Interval(-10, 10)) as GeometryBase)));
             if (geoPlane is null) return;
             Plane plane = Plane.WorldXY;
             if (geoPlane is PlaneSurface planeSrf)
@@ -30,13 +30,13 @@ namespace Rhino3DMLibrary
                 }
             }
             //else return;
-            double majorradius = this.ChildElementManager.GetData<double>(1, 50);
-            double minorradius = this.ChildElementManager.GetData<double>(2, 10);
+            double majorradius = this.ChildElementManager.GetData<double>(nodeBlockY, 50);
+            double minorradius = this.ChildElementManager.GetData<double>(nodeBlockZ, 10);
             if (plane.IsValid)
             {
                 Torus torus = new Torus(plane, majorradius, minorradius);
                 GeometryBase geo = torus.ToNurbsSurface();
-                this.ChildElementManager.SetData<GeometryBase>(geo, 0);
+                this.ChildElementManager.SetData<GeometryBase>(geo, nodeBlockResult);
             }
         }
 

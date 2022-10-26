@@ -19,14 +19,14 @@ namespace Rhino3DMLibrary
 
         public override void Compute()
         {
-            ((Rhino.Geometry.PlaneSurface)this.ChildElementManager.GetData<GeometryBase>(0)).TryGetPlane(out Rhino.Geometry.Plane plane);
-            double height = this.ChildElementManager.GetData<double>(1, 0);
-            double radius = this.ChildElementManager.GetData<double>(2, 0);
+            ((Rhino.Geometry.PlaneSurface)this.ChildElementManager.GetData<GeometryBase>(nodeBlockX, default)).TryGetPlane(out Rhino.Geometry.Plane plane);
+            double height = this.ChildElementManager.GetData<double>(nodeBlockY, 0);
+            double radius = this.ChildElementManager.GetData<double>(nodeBlockZ, 0);
             if (plane.IsValid)
             {
                 Cone cone= new Cone(plane, height, radius);
                 GeometryBase geo = cone.ToNurbsSurface();
-                this.ChildElementManager.SetData<GeometryBase>(geo, 0);
+                this.ChildElementManager.SetData<GeometryBase>(geo, nodeBlockResult);
             }
 
         }

@@ -56,35 +56,27 @@ namespace MathLibrary
         public override void Initialize()
         {
             nodeBlock = new DateTimeDataNode(this, NodeType.Input);
-            //nodeBlock.Width = 50;
             this.ChildElementManager.AddDataInputNode(nodeBlock, "DateTime");
 
             nodeBlock0 = new NumberDataNode(this, NodeType.Input);
-            //nodeBlock0.Width = 50;
             this.ChildElementManager.AddDataInputNode(nodeBlock0, "Year");
 
             nodeBlock1 = new NumberDataNode(this, NodeType.Input);
-            //nodeBlock1.Width = 50;
             this.ChildElementManager.AddDataInputNode(nodeBlock1, "Month");
 
             nodeBlock2 = new NumberDataNode(this, NodeType.Input);
-            //nodeBlock2.Width = 50;
             this.ChildElementManager.AddDataInputNode(nodeBlock2, "Day");
 
             nodeBlock3 = new NumberDataNode(this, NodeType.Input);
-            //nodeBlock3.Width = 50;
             this.ChildElementManager.AddDataInputNode(nodeBlock3, "Hour");
 
             nodeBlock4 = new NumberDataNode(this, NodeType.Input);
-            //nodeBlock4.Width = 50;
             this.ChildElementManager.AddDataInputNode(nodeBlock4, "Minute");
 
             nodeBlock5 = new NumberDataNode(this, NodeType.Input);
-            //nodeBlock5.Width = 50;
             this.ChildElementManager.AddDataInputNode(nodeBlock5, "Second");
 
             nodeBlock6 = new DateTimeDataNode(this, NodeType.Output);
-            //nodeBlock6.Width = 50;
             this.ChildElementManager.AddDataOutputNode(nodeBlock6, "New DateTime", true);
 
         }

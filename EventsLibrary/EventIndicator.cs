@@ -25,7 +25,7 @@ namespace EventsLibrary
 
         public override void Compute()
         {
-            this.previewTextBlock.DisplayedText = $"Counter: {_counter}\nArgs: {_argstring}";
+            this.previewTextBlock.DisplayedText = $"Counter = {_counter}\nArgs = {_argstring}";
         }
         public override CompInfo GetCompInfo() => new CompInfo(this, "Event Indicator", "Event Utilities", "Events");
         
@@ -44,7 +44,7 @@ namespace EventsLibrary
             this.ChildElementManager.AddEventOutputNode(nodeBlock1);
 
             nodeBlock2 = new GenericDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Args", true);
+            this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Args");
         }
 
         private void NodeBlock_NodeEvent(IEventNode container, EventArgData e)
@@ -53,9 +53,8 @@ namespace EventsLibrary
             nodeBlock1.EventOccured(e);
             if (e.Count > 0)
             {
-                _argstring = e[0].ToString();
-                object dataOut = e[0].Data;
-                this.ChildElementManager.SetData(dataOut, 0);
+                _argstring = e.ToString();
+                this.ChildElementManager.SetData(e.Data, nodeBlock2);
             }
             ComputationCore.Compute(this, false);
         }

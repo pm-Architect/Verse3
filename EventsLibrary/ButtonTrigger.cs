@@ -61,7 +61,7 @@ namespace EventsLibrary
             this.ChildElementManager.AddElement(buttonBlock);
 
             nodeBlock = new GenericEventNode(this, NodeType.Output);
-            nodeBlock.Width = 50;
+            
             this.ChildElementManager.AddEventOutputNode(nodeBlock as IEventNode);
         }
 

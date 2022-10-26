@@ -19,18 +19,18 @@ namespace Rhino3DMLibrary
 
         public override void Compute()
         {
-            double x = this.ChildElementManager.GetData<double>(0, 10);
-            double y = this.ChildElementManager.GetData<double>(1, 10);
-            double z = this.ChildElementManager.GetData<double>(2, 10);
+            double x = this.ChildElementManager.GetData<double>(nodeBlockX, 10);
+            double y = this.ChildElementManager.GetData<double>(nodeBlockY, 10);
+            double z = this.ChildElementManager.GetData<double>(nodeBlockZ, 10);
             Point3d point1 = new Point3d(x, y, z);
-            //Box box = new Box(Plane.WorldXY, new Interval(-(x / 2), (x / 2)), new Interval(-(y / 2), (y / 2)), new Interval(-(z / 2), (z / 2)));
+            
             GeometryBase geo = new Rhino.Geometry.Point(point1);
-            this.ChildElementManager.SetData<GeometryBase>(geo, 0);
+            this.ChildElementManager.SetData<GeometryBase>(geo, nodeBlockResult1);
 
             Random random = new Random();
             Point3d point2 = new Point3d(random.Next(-100, 100), random.Next(-100, 100), random.Next(-100, 100));
             GeometryBase geo2 = new Rhino.Geometry.Point(point2);
-            this.ChildElementManager.SetData<GeometryBase>(geo2, 1);
+            this.ChildElementManager.SetData<GeometryBase>(geo2, nodeBlockResult2);
         }
 
         public override CompInfo GetCompInfo() => new CompInfo(this, "Construct Point", "Point", "Vector");

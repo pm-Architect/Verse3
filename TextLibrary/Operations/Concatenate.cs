@@ -25,9 +25,9 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            string a = this.ChildElementManager.GetData<string>(0, "");
-            string b = this.ChildElementManager.GetData<string>(1, "");
-            this.ChildElementManager.SetData<string>((a + b), 0);
+            string a = this.ChildElementManager.GetData<string>(nodeBlock, "");
+            string b = this.ChildElementManager.GetData<string>(nodeBlock1, "");
+            this.ChildElementManager.SetData<string>((a + b), nodeBlock2);
         }
 
         public override CompInfo GetCompInfo() => new CompInfo(this, "Concatenate", "Operations", "Text");

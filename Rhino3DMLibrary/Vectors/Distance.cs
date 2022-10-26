@@ -19,10 +19,10 @@ namespace Rhino3DMLibrary
 
         public override void Compute()
         {
-            Rhino.Geometry.Point p1 = this.ChildElementManager.GetData<Rhino.Geometry.Point>(0);
-            Rhino.Geometry.Point p2 = this.ChildElementManager.GetData<Rhino.Geometry.Point>(1);
+            Rhino.Geometry.Point p1 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(nodeBlock1, default);
+            Rhino.Geometry.Point p2 = (Rhino.Geometry.Point)this.ChildElementManager.GetData<GeometryBase>(nodeBlock2, default);
             double dist = (p2.Location - p1.Location).Length;
-            this.ChildElementManager.SetData<double>(dist, 0);
+            this.ChildElementManager.SetData<double>(dist, nodeBlockDistance);
         }
 
         public override CompInfo GetCompInfo() => new CompInfo(this, "Distance", "Point", "Vector");

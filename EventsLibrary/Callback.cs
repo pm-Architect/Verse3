@@ -102,8 +102,8 @@ namespace EventsLibrary
             LoopEndNode = new GenericEventNode(this, NodeType.Output);
             this.ChildElementManager.AddEventOutputNode(LoopEndNode, "End");
 
-            LoopDataNode = new GenericDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(LoopDataNode, "Data");
+            //LoopDataNode = new GenericDataNode(this, NodeType.Input);
+            //this.ChildElementManager.AddDataInputNode(LoopDataNode, "Data");
 
             DataOut = new GenericDataNode(this, NodeType.Output);
             this.ChildElementManager.AddDataOutputNode(DataOut, "Data");
@@ -116,18 +116,25 @@ namespace EventsLibrary
         {
             if (_callbackToComp is Loop loop)
             {
-                loop._loopData = this.ChildElementManager.GetData(LoopDataNode);
+                //loop._loopData = this.ChildElementManager.GetData(LoopDataNode);
+                if (e.Count > 0)
+                {
+                    if (e[0] is DataStructure eData)
+                    {
+                        loop._loopData = eData;
+                    }
+                }
                 if (loop._count < loop._iterations)
                 {
                     //loop._loopData = _loopData;
                     //loop._count++;
-                    CallbackEventNode.EventOccured(e, true);
+                    CallbackEventNode.EventOccured(new EventArgData(loop._loopData), true);
                 }
                 else if (loop._count == loop._iterations)
                 {
                     loop._loopRunning = false;
-                    CallbackEventNode.EventOccured(e, true);
-                    LoopEndNode.EventOccured(e);
+                    CallbackEventNode.EventOccured(new EventArgData(loop._loopData), true);
+                    LoopEndNode.EventOccured(new EventArgData(loop._loopData));
                 }
                 this.ChildElementManager.SetData(loop._loopData, DataOut);
                 this.ChildElementManager.SetData(loop._count, LoopIterationCount);

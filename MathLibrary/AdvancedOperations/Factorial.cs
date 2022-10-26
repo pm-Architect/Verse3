@@ -26,9 +26,9 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            double a = this.ChildElementManager.GetData<double>(0, 1);
+            double a = this.ChildElementManager.GetData<double>(nodeBlock, 1);
 
-            this.ChildElementManager.SetData<double>((MathUtils.GetFactorial(a)), 0);
+            this.ChildElementManager.SetData<double>((MathUtils.GetFactorial(a)), nodeBlock2);
         }
 
         public override CompInfo GetCompInfo() => new CompInfo(this, "Factorial", "Advanced Operations", "Math");
@@ -38,7 +38,7 @@ namespace MathLibrary
         public override void Initialize()
         {
             nodeBlock = new NumberDataNode(this, NodeType.Input);
-            nodeBlock.Width = 50;
+            
             this.ChildElementManager.AddDataInputNode(nodeBlock, "A");
 
             nodeBlock2 = new NumberDataNode(this, NodeType.Output);

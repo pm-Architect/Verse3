@@ -25,9 +25,9 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            double a = this.ChildElementManager.GetData<double>(0, 1);
+            double a = this.ChildElementManager.GetData<double>(nodeBlock, 1);
          
-            this.ChildElementManager.SetData<double>((Math.Abs(a)), 0);
+            this.ChildElementManager.SetData<double>((Math.Abs(a)), nodeBlock2);
 
         }
 
@@ -40,7 +40,7 @@ namespace MathLibrary
         public override void Initialize()
         {
             nodeBlock = new NumberDataNode(this, NodeType.Input);
-            nodeBlock.Width = 50;
+            
             this.ChildElementManager.AddDataInputNode(nodeBlock, "A");
 
  

@@ -27,9 +27,9 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            bool a = this.ChildElementManager.GetData<bool>(0, false);
-            bool b = this.ChildElementManager.GetData<bool>(1, false);
-            this.ChildElementManager.SetData<bool>((a || b), 0);
+            bool a = this.ChildElementManager.GetData<bool>(nodeBlock, false);
+            bool b = this.ChildElementManager.GetData<bool>(nodeBlock1, false);
+            this.ChildElementManager.SetData<bool>((a || b), nodeBlock2);
         }
         
         private BooleanDataNode nodeBlock;

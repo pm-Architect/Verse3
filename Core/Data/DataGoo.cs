@@ -219,11 +219,56 @@ namespace Core
             if (data is null) throw new ArgumentNullException(nameof(data));
             base.Add(new DataStructure<D>(data));
         }
+        public new void Add(object data)
+        {
+            if (data is null) throw new ArgumentNullException(nameof(data));
+            if (data is D castData)
+            {
+                base.Add(new DataStructure<D>(castData));
+            }
+            else if (data is DataStructure ds)
+            {
+                base.Add(ds);
+            }
+            else if (data.GetType().IsArray)
+            {
+                Type arrayType = data.GetType().GetElementType();
+                if (arrayType == typeof(D))
+                {
+                    foreach (D d in (D[])data)
+                    {
+                        base.Add(new DataStructure<D>(d));
+                    }
+                }
+                else
+                {
+                    //TODO: TryCast
+                    throw new ArgumentException("Data type mismatch");
+                }
+            }
+            else
+            {
+                //TODO: TryCast
+                throw new ArgumentException("Data is not of type " + typeof(D).ToString());
+            }
+        }
         public DataStructure<T> Duplicate<T>()
         {
             try
             {
-                DataStructure<T> dsOut = new DataStructure<T>((T)volatileData);
+                DataStructure<T> dsOut;
+                if (volatileData is T castData)
+                {
+                    return new DataStructure<T>(castData);
+                }
+                else if (volatileData is DataStructure ds)
+                {
+                    dsOut = ds.Duplicate<T>();
+                }
+                else
+                {
+                    dsOut = new DataStructure<T>();
+                }
                 dsOut.ID = ID;
                 if (this.Count > 0)
                 {
@@ -334,24 +379,27 @@ namespace Core
                 {
                     if (Children == default || Children.Count == 0)
                         return default;
+                    else if (Children.Count > 1)
+                    {
+                        volatileData = new DSMetadata(this);
+                        return this.ToArray();
+                    }
                     else
                         return this.ToArray();
                 }
                 else
                 {
-                    if (Children == default || Children.Count == 0) return volatileData;
-                    else
+                    if (Children != default)
                     {
-                        if (volatileData is DSMetadata)
+                        if (Children.Count > 0)
                         {
+                            Children.Add(volatileData);
+                            volatileData = new DSMetadata(this);
                             return this.ToArray();
                         }
-                        else
-                        {
-                            //Children.Clear();
-                            return volatileData;
-                        }
+                        else return volatileData;
                     }
+                    else return volatileData;
                 }
             }
             set
@@ -452,7 +500,7 @@ namespace Core
                 base.Add(new DataStructure(data));
             if (this.Count > 0)
             {
-                volatileData = new DSMetadata();
+                volatileData = new DSMetadata(this);
             }
         }
 
@@ -472,6 +520,7 @@ namespace Core
                     }
                 }
             }
+            //TODO: update DSMetadata's EditedAt timestamp
             return dsOut;
         }
         public DataStructure<T> Duplicate<T>()
@@ -486,6 +535,19 @@ namespace Core
                     if (goo is DataStructure<T>)
                     {
                         dsOut.Add(((DataStructure<T>)goo).Duplicate());
+                    }
+                    else if ((typeof(DataStructure)).IsAssignableFrom(this.DataType))
+                    {
+                        //TODO: Improve DataStructure depth with a while loop to iterate into branches
+                        DataStructure currDS = (DataStructure)this.Data;
+                        while ((typeof(DataStructure)).IsAssignableFrom(currDS.DataType))
+                        {
+                            currDS = (DataStructure)currDS.Data;
+                        }
+                        if (currDS.Data is T)
+                        {
+                            dsOut = currDS.Duplicate<T>();
+                        }
                     }
                     else
                     {
@@ -670,8 +732,42 @@ namespace Core
             CreatedAt = DateTime.Now;
             EditedAt = DateTime.Now;
         }
-        public DateTime CreatedAt { get; set; }
-        public DateTime EditedAt { get; set; }
+        public DSMetadata(DataStructure dataReference)
+        {
+            CreatedAt = DateTime.Now;
+            EditedAt = DateTime.Now;
+            if (dataReference != null)
+            {
+                if (dataReference is EventArgData eData)
+                {
+                    //DSType = DataStructureType.EventArgData;
+                    
+                    //Iterate into DataStructure
+                    DataStructure currDS = eData as DataStructure;
+                    
+                    if (currDS.Data is DSMetadata)
+                    {
+                        while (currDS.Data is DSMetadata)
+                        {
+                            if (currDS.Data is DataStructure innerDS)
+                                currDS = innerDS;
+                        }
+                    }
+                    
+                    //if (eData.Data is DataStructure ds)
+                    //{
+
+                    //}
+                    //else if (eData.Data is DSMetadata)
+                    //{
+
+                    //}
+                }
+            }
+        }
+        public DateTime CreatedAt { get; internal set; }
+        public DateTime EditedAt { get; internal set; }
+        public DataStructurePattern DataStructurePattern { get; internal set; }
     }
 
     public class DataChangedEventArgs<D> : DataChangedEventArgs
@@ -716,14 +812,6 @@ namespace Core
         Volatile = 3
     }
 
-    public enum DataStructureType
-    {
-        Item = 0,
-        List = 1,
-        Tree = 2,
-        Object = 3
-    }
-
     public enum ContainerState
     {
         Unknown = -1,
@@ -731,5 +819,15 @@ namespace Core
         InputOnly = 1,
         OutputOnly = 2,
         VolatileOnly = 3
+    }
+
+    public enum DataStructurePattern
+    {
+        Unknown = -1,
+        Item = 0,
+        List = 1,
+        Tree = 2,
+        Object = 3,
+        EventArgData = 4
     }
 }

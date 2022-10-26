@@ -19,10 +19,10 @@ namespace Rhino3DMLibrary
 
         public override void Compute()
         {
-            ((Rhino.Geometry.PlaneSurface)this.ChildElementManager.GetData<GeometryBase>(0)).TryGetPlane(out Rhino.Geometry.Plane plane);
-            double angledegreesZ = this.ChildElementManager.GetData<double>(1, 0);
-            double angledegreesY = this.ChildElementManager.GetData<double>(2, 0);
-            double angledegreesX = this.ChildElementManager.GetData<double>(3, 0);
+            ((Rhino.Geometry.PlaneSurface)this.ChildElementManager.GetData<GeometryBase>(nodeBlock1, default)).TryGetPlane(out Rhino.Geometry.Plane plane);
+            double angledegreesZ = this.ChildElementManager.GetData<double>(nodeBlock2, 0);
+            double angledegreesY = this.ChildElementManager.GetData<double>(nodeBlock3, 0);
+            double angledegreesX = this.ChildElementManager.GetData<double>(nodeBlock4, 0);
 
             angledegreesZ *= Math.PI/180;
             angledegreesY *= Math.PI/180;
@@ -31,16 +31,10 @@ namespace Rhino3DMLibrary
             if (plane.IsValid)
             {
                 plane.Rotate(angledegreesZ, plane.ZAxis);
-                GeometryBase geo = new Rhino.Geometry.PlaneSurface(plane, new Interval(-10.0, 10.0), new Interval(-10.0, 10.0));
-                this.ChildElementManager.SetData<GeometryBase>(geo, 0);
-
                 plane.Rotate(angledegreesY, plane.YAxis);
-                GeometryBase geo2 = new Rhino.Geometry.PlaneSurface(plane, new Interval(-10.0, 10.0), new Interval(-10.0, 10.0));
-                this.ChildElementManager.SetData<GeometryBase>(geo2, 1);
-
                 plane.Rotate(angledegreesX, plane.XAxis);
                 GeometryBase geo3 = new Rhino.Geometry.PlaneSurface(plane, new Interval(-10.0, 10.0), new Interval(-10.0, 10.0));
-                this.ChildElementManager.SetData<GeometryBase>(geo3, 0);
+                this.ChildElementManager.SetData<GeometryBase>(geo3, nodeBlock5);
             }
 
 

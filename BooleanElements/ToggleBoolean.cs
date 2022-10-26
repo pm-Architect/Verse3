@@ -26,7 +26,7 @@ namespace EventsLibrary
         {
             if (_value.HasValue)
             {
-                this.ChildElementManager.SetData<bool>(_value.Value, 0);
+                this.ChildElementManager.SetData<bool>(_value.Value, nodeBlock2);
                 toggleBlock.DisplayedText = _value.ToString();
             }
         }
@@ -62,14 +62,14 @@ namespace EventsLibrary
         {
             _value = true;
             ComputationCore.Compute(this, false);
-            this.ChildElementManager.EventOccured(0, new EventArgData(new DataStructure(_value)));
+            this.ChildElementManager.EventOccured(nodeBlock, new EventArgData(new DataStructure(_value)));
         }
 
         private void ButtonBlock_ToggleUnchecked(object? sender, RoutedEventArgs e)
         {
             _value = false;
             ComputationCore.Compute(this, false);
-            this.ChildElementManager.EventOccured(1, new EventArgData(new DataStructure(_value)));
+            this.ChildElementManager.EventOccured(nodeBlock1, new EventArgData(new DataStructure(_value)));
         }
     }
 }

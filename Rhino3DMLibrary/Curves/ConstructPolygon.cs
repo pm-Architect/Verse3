@@ -21,16 +21,16 @@ namespace Rhino3DMLibrary
         {
             Plane plane = new Plane();
 
-            ((Rhino.Geometry.PlaneSurface)this.ChildElementManager.GetData<GeometryBase>(0)).TryGetPlane(out plane);
-            double radius = Math.Abs(this.ChildElementManager.GetData<double>(1, 50));
-            double sideCount = (int)Math.Abs(this.ChildElementManager.GetData<double>(2, 10));
+            ((Rhino.Geometry.PlaneSurface)this.ChildElementManager.GetData<GeometryBase>(nodeBlockX, default)).TryGetPlane(out plane);
+            double radius = Math.Abs(this.ChildElementManager.GetData<double>(nodeBlockY, 50));
+            double sideCount = (int)Math.Abs(this.ChildElementManager.GetData<double>(nodeBlockZ, 10));
 
             if (plane.IsValid && sideCount >= 3 && radius > 0)
             {
                 Circle circle = new Circle(plane, radius);
                 Polyline polyline = Polyline.CreateInscribedPolygon(circle, Math.Abs((int)sideCount));
                 GeometryBase geo = polyline.ToPolylineCurve();
-                this.ChildElementManager.SetData<GeometryBase>(geo, 0);
+                this.ChildElementManager.SetData<GeometryBase>(geo, nodeBlockResult);
             }
 
         }

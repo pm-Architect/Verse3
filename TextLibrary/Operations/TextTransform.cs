@@ -25,9 +25,9 @@ namespace TextLibrary
 
         public override void Compute()
         {
-            string a = this.ChildElementManager.GetData<string>(0, "");
-            this.ChildElementManager.SetData<string>(a.ToUpper(), 0);
-            this.ChildElementManager.SetData<string>(a.ToLower(), 1);
+            string a = this.ChildElementManager.GetData<string>(nodeBlock, "");
+            this.ChildElementManager.SetData<string>(a.ToUpper(), nodeBlock2);
+            this.ChildElementManager.SetData<string>(a.ToLower(), nodeBlock3);
         }
 
         public override CompInfo GetCompInfo() => new CompInfo(this, "Text Transform", "Operations", "Text");
@@ -38,7 +38,7 @@ namespace TextLibrary
         public override void Initialize()
         {
             nodeBlock = new TextDataNode(this, NodeType.Input);
-            nodeBlock.Width = 50;
+            
             this.ChildElementManager.AddDataInputNode(nodeBlock, "Text");
 
 

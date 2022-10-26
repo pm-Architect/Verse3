@@ -30,7 +30,7 @@ namespace MathLibrary
         {
             if (_sliderValue.HasValue)
             {
-                this.ChildElementManager.SetData<double>(this._sliderValue.Value, 0);
+                this.ChildElementManager.SetData<double>(this._sliderValue.Value, nodeBlock);
                 this.previewTextBlock.DisplayedText = $"Value = {_sliderValue.Value}";
             }
         }
@@ -62,7 +62,7 @@ namespace MathLibrary
         {
             this._sliderValue = sliderBlock.Value;
             ComputationCore.Compute(this, false);
-            this.ChildElementManager.EventOccured(0, new EventArgData(new DataStructure(_sliderValue)));
+            this.ChildElementManager.EventOccured(nodeBlock1, new EventArgData(new DataStructure(_sliderValue)));
         }
 
         public override ContextMenu ContextMenu

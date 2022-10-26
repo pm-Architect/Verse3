@@ -26,10 +26,16 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            string a = this.ChildElementManager.GetData<string>(0, "");
-            string b = this.ChildElementManager.GetData<string>(1, "");
-            bool contain = a.Contains(b);
-            this.ChildElementManager.SetData<bool>(contain, 0);
+            string a = this.ChildElementManager.GetData<string>(nodeBlock, "");
+            string b = this.ChildElementManager.GetData<string>(nodeBlock1, "");
+            if (string.IsNullOrEmpty(a) || string.IsNullOrEmpty(b))
+            {
+                this.ChildElementManager.SetData(false, nodeBlock2);
+            }
+            else
+            {
+                this.ChildElementManager.SetData(a.Contains(b), nodeBlock2);
+            }
        
         }
 

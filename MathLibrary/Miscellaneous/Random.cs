@@ -24,10 +24,10 @@ namespace MathLibrary
 
         public override void Compute()
         {
-            double a = this.ChildElementManager.GetData<double>(0, int.MinValue);
-            double b = this.ChildElementManager.GetData<double>(1, int.MaxValue);
+            double a = this.ChildElementManager.GetData<double>(nodeBlock, int.MinValue);
+            double b = this.ChildElementManager.GetData<double>(nodeBlock1, int.MaxValue);
             Random rd = new Random();
-            this.ChildElementManager.SetData<double>(rd.Next((int)b, (int)a), 0);
+            this.ChildElementManager.SetData<double>(rd.Next((int)b, (int)a), nodeBlock3);
         }
 
 
@@ -39,7 +39,7 @@ namespace MathLibrary
         public override void Initialize()
         {
             nodeBlock = new NumberDataNode(this, NodeType.Input);
-            nodeBlock.Width = 50;
+            
             this.ChildElementManager.AddDataInputNode(nodeBlock, "Maximum");
             
             nodeBlock1 = new NumberDataNode(this, NodeType.Input);
