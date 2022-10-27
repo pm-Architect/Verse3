@@ -28,7 +28,6 @@ namespace MathLibrary
             bool a = this.ChildElementManager.GetData(nodeBlock, false);
             bool b = this.ChildElementManager.GetData(nodeBlock1, false);
             this.ChildElementManager.SetData((a && b), nodeBlock2);
-            //this.previewTextBlock.DisplayedText = ("Result = " + (a && b).ToString());
         }
         
         private BooleanDataNode nodeBlock;

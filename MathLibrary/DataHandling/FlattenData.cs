@@ -38,7 +38,7 @@ namespace MathLibrary
             DataStructure input = this.ChildElementManager.GetData(DataStructureNode);
 
 
-            this.ChildElementManager.SetData(MathUtils.Flattendata(input), Result);
+            this.ChildElementManager.SetData(MathUtils.FlattenDataStructure(input), Result);
 
 
             this.previewTextBlock.DisplayedText = $"Grafted data = {input}";

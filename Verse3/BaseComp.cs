@@ -657,37 +657,27 @@ namespace Verse3
             this._owner.ComputationPipelineInfo.IOManager.RemoveNode(node);
         }
 
-        //public T GetData<T>(int v)
-        //{
-        //    return this._owner.ComputationPipelineInfo.IOManager.GetData<T>(v);
-        //}
-
         public T GetData<T>(DataNode<T> node, T defaultValue = default)
         {
             try
             {
                 DataStructure<T> ds = GetData<T>(node);
-                if (ds != null/* && ds.IsValid*/)
+                if (ds is null) return default;
+                if (ds.Data is T castData)
                 {
-                    object data = GetData<T>(node).Data;
-                    if (data is T castData)
-                    {
-                        return castData;
-                    }
-                    else if (data is object[] array)
-                    {
-                        if (array.Length == 1)
-                        {
-                            if (array[0] is T castArrayData)
-                            {
-                                return castArrayData;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception("Data is not a single item / type mismatch");
-                    }
+                    return castData;
+                }
+                else if (ds.Data is T[] castArray && castArray.Length == 1)
+                {
+                    return castArray[0];
+                }
+                else if (ds.Data == default)
+                {
+                    return defaultValue;
+                }
+                else
+                {
+                    throw new Exception("Data is not a single item / type mismatch");
                 }
             }
             catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex.Message); }
@@ -697,51 +687,42 @@ namespace Verse3
         public DataStructure<T> GetData<T>(DataNode<T> node)
         {
             if (node == null) return null;
-            if (node.DataValueType == typeof(T))
+            //if (node.DataValueType == typeof(T))
+            //{
+            if (node.DataGoo != null)
             {
-                if (node.DataGoo != null)
+                if (node.DataGoo.DataType.IsAssignableTo(typeof(T)))
                 {
-                    if (node.DataGoo.DataType.IsAssignableTo(typeof(T)))
-                    {
-                        return node.DataGoo.Duplicate<T>();
-                    }
-                    else
-                    {
-                        throw new Exception("Data type mismatch");
-                    }
+                    //return node.DataGoo.Duplicate<T>();
+                    return node.DataGoo;
+                }
+                else if (node.DataGoo.DataType.IsAssignableTo(typeof(object)))
+                {
+                    return (node.DataGoo as DataStructure).DuplicateAsType<T>();
+                }
+                else
+                {
+                    throw new Exception("Data type mismatch");
                 }
             }
+            //}
             return null;
-        }
-
-        //public bool SetData<T>(T v1, int v2)
-        //{
-        //    return this._owner.ComputationPipelineInfo.IOManager.SetData<T>(v1, v2);
-        //}
-
-        public bool SetData<T>(T data, DataNode<T> node)
-        {
-            if (data is null) return false;
-            if (node is null) return false;
-            if (node.DataValueType == data.GetType())
-            {
-                node.DataGoo.Data = data;
-                return true;
-            }
-            else return false;
         }
         
         public bool SetData<T>(object data, DataNode<T> node)
         {
             if (data is null) return false;
             if (node is null) return false;
-            if (data is DataStructure)
-                return SetData(((DataStructure)data).Duplicate<T>(), node);
+            if (data is DataStructure ds)
+            {
+                if (data is DataStructure<T> dsT) return SetData(dsT, node);
+                else return SetData(ds.DuplicateAsType<T>(), node);
+            }
             else if (data is T || data.GetType().IsAssignableTo(typeof(T)))
             {
                 try
                 {
-                    node.DataGoo.Data = (T)data;
+                    node.DataGoo = new DataStructure<T>((T)data);
                     return true;
                 }
                 catch (Exception ex)
@@ -752,7 +733,7 @@ namespace Verse3
             return false;
         }
 
-        public bool SetData<T>(DataStructure<T> data, DataNode<T> node)
+        private bool SetData<T>(DataStructure<T> data, DataNode<T> node)
         {
             try
             {
@@ -767,7 +748,7 @@ namespace Verse3
                 //}
                 else
                 {
-                    node.DataGoo = data.Duplicate<T>();
+                    node.DataGoo = data.DuplicateAsType<T>();
                 }
                 return true;
             }
@@ -776,14 +757,6 @@ namespace Verse3
                 throw ex;
             }
         }
-
-        //public T GetData<T>(int v, T defaultValue)
-        //{
-        //    T a = defaultValue;
-        //    a = this._owner.ComputationPipelineInfo.IOManager.GetData<T>(v, defaultValue);
-        //    if (a is null) a = defaultValue;
-        //    return a;
-        //}
 
         public ElementsLinkedList<IRenderable> FilterChildElementsByType(ElementType elementType)
         {
@@ -1526,12 +1499,12 @@ namespace Verse3
                         {
                             if (value.Data.GetType().IsAssignableTo(typeof(D)))
                             {
-                                _dataGoo = value.Duplicate<D>();
+                                _dataGoo = value.DuplicateAsType<D>();
                             }
                             else if (value.DataType.IsAssignableTo(typeof(DataStructure<D>)))
                             {
                                 //TODO: Improve DataStructure depth with a while loop to iterate into branches
-                                _dataGoo = ((DataStructure<D>)value.Data).Duplicate<D>();
+                                _dataGoo = ((DataStructure<D>)value.Data).DuplicateAsType<D>();
                             }
                         }
                         _dataGoo = new DataStructure<D>();
@@ -1566,7 +1539,7 @@ namespace Verse3
                     {
                         if (value.DataType.IsAssignableTo(typeof(D)))
                         {
-                            _dataGoo = value.Duplicate<D>();
+                            _dataGoo = value.DuplicateAsType<D>();
                         }
                     }
                     else
@@ -1595,7 +1568,7 @@ namespace Verse3
             this.renderPipelineInfo = new RenderPipelineInfo(this);
             _computationPipelineInfo = new ComputationPipelineInfo(this);
             this.RenderPipelineInfo.Parent = parent as IRenderable;
-            this.DataGoo.DataChanged += OnDataChanged;
+            //this.DataGoo.DataChanged += OnDataChanged;
             this._nodeType = type;
             //this.DataGoo.DataChanged += DataChanged;
             //double x = DataViewModel.ContentCanvasMarginOffset + this.RenderPipelineInfo.Parent.X;
@@ -1670,12 +1643,12 @@ namespace Verse3
                                     this.DataGoo.Clear();
                                     if (noriginCAST.DataGoo != null)
                                     {
-                                        this.DataGoo = noriginCAST.DataGoo.Duplicate<D>();
+                                        this.DataGoo = noriginCAST.DataGoo.DuplicateAsType<D>();
                                     }
                                 }
                                 else if (!this.DataGoo.Equals(noriginCAST.DataGoo))
                                 {
-                                    this.DataGoo = noriginCAST.DataGoo.Duplicate<D>();
+                                    this.DataGoo = noriginCAST.DataGoo.DuplicateAsType<D>();
                                 }
                             }
                             catch (Exception ex)
@@ -1709,9 +1682,8 @@ namespace Verse3
                 {
                     if (conn.Origin == this && conn.Destination is IDataNode)
                     {
-                        if (conn.Destination is IDataNode<D>)
+                        if (conn.Destination is IDataNode<D> ndest)
                         {
-                            IDataNode<D> ndest = conn.Destination as IDataNode<D>;
                             if (!ndest.DataGoo.IsValid)
                             {
                                 ndest.DataGoo.Clear();
@@ -1732,7 +1704,7 @@ namespace Verse3
                                 {
                                     ndestCAST.DataGoo.Clear();
                                     //ndestCAST.DataGoo = this.DataGoo.Duplicate<ndestCAST.DataValueType>;
-                                    MethodInfo mi = typeof(DataStructure<>).MakeGenericType(this.DataValueType).GetMethod("Duplicate").MakeGenericMethod(ndestCAST.DataValueType);
+                                    MethodInfo mi = typeof(DataStructure).GetMethod("DuplicateAsType").MakeGenericMethod(ndestCAST.DataValueType);
                                     object result = mi.Invoke(this.DataGoo, null);
                                     if (result != null && result is DataStructure resultDs)
                                     {

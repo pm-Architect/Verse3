@@ -49,18 +49,16 @@ namespace Core
         }
         public EventArgData(object eventargs) : base(eventargs)
         {
-            this.Add(new DataStructure(eventargs));
-            if (this.volatileData is DSMetadata metadata)
+            if (this._metadata != null)
             {
-                metadata.DataStructurePattern = DataStructurePattern.EventArgData;
+                _metadata.DataStructurePattern = DataStructurePattern.EventArgData;
             }
         }
-        public EventArgData(DataStructure argdata) : base()
+        public EventArgData(DataStructure argdata) : base(argdata)
         {
-            this.Add(argdata);
-            if (this.volatileData is DSMetadata metadata)
+            if (this._metadata != null)
             {
-                metadata.DataStructurePattern = DataStructurePattern.EventArgData;
+                _metadata.DataStructurePattern = DataStructurePattern.EventArgData;
             }
         }
 
@@ -68,23 +66,17 @@ namespace Core
         {
             get
             {
-                if (base.Count == 1 && base.Data is DataStructure data)
+                if (base.Count == 1 && base[0] is DataStructure data)
                     return data;
                 else return null;
-                //{
-                //    if (this.volatileData != null)
-                //    {
-                //        this.Add(this.volatileData);
-                //    }
-                //    this.volatileData = new DSMetadata(this);
-                //    return this.ToArray();
-                //}
             }
         }
 
         public override string ToString()
         {
-            return base[0].ToString();
+            if (base.Count == 1 && base[0] is DataStructure data)
+                return data.ToString();
+            else return null;
         }
     }
 

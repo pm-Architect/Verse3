@@ -46,7 +46,7 @@ namespace Verse3.VanillaElements
                         {
                             if (value.Data.GetType().IsAssignableTo(typeof(double)))
                             {
-                                _dataGoo = value.Duplicate<double>();
+                                _dataGoo = value.DuplicateAsType<double>();
                             }
                         }
                         _dataGoo = new DataStructure<double>();

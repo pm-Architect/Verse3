@@ -11,13 +11,13 @@ namespace Core
     public interface IDataGoo : INotifyPropertyChanged, ISerializable
     {
         public Guid ID { get; }
-        public IDataGoo Parent { get; }
-        public DataStructure Children { get; }
+        //public IDataGoo Parent { get; }
+        //public DataStructure Children { get; }
         [DataMember]
         object Data { get; set; }
         bool IsValid { get; }
-        string IsValidReason { get; }
-        public DataAddress Address { get; }
+        //string IsValidReason { get; }
+        //public DataAddress Address { get; }
         //[DataMember]
         public Type DataType { get; }
 
@@ -37,7 +37,6 @@ namespace Core
     {
         new D Data { get; set; }
         string TypeName { get; }
-        IDataGoo<D> Clone();
     }
 
     public interface IDataGooContainer : IComputable
@@ -103,98 +102,82 @@ namespace Core
         }
 
         //Fire an event when Data is set
-        public delegate void DataChangedEventHandler(DataStructure<D> sender, DataChangedEventArgs<D> e);
-        public DataChangedEventHandler DataChanged;
+        //public new delegate void DataChangedEventHandler(DataStructure<D> sender, DataChangedEventArgs<D> e);
+        //public new DataChangedEventHandler DataChanged;
         public new object Data
         {
             get
             {
-                if (volatileData == default)
+                if (base.Count == 1)
                 {
-                    if (Children == default || Children.Count == 0)
-                        return default;
-                    else
-                        return Children.ToArray();
+                    if (base._metadata != null)
+                    {
+                        if (base[0] is D data)
+                        {
+                            return data;
+                        }
+                        if (base[0] is DataStructure<D> ds)
+                        {
+                            return ds.Data;
+                        }
+                        else throw new Exception("Cast Error: DataStructure<D> item could not be cast to D");
+                    }
+                    else throw new Exception("Inconsistent Data Format. Volatile Data is not DSMetadata, but Data Structure has children.");
+                }
+                else if (base.Count > 0)
+                {
+                    if (base._metadata != null)
+                    {
+                        if (this.ToArray() is D[] array)
+                        {
+                            return array;
+                        }
+                        else throw new Exception("Cast Error: DataStructure<D> data could not be cast to D[]");
+                    }
+                    else throw new Exception("Inconsistent Data Format. Volatile Data is not DSMetadata, but Data Structure has children.");
                 }
                 else
                 {
-                    if (Children == default || Children.Count == 0) return volatileData;
-                    else
-                    {
-                        if (volatileData is DSMetadata)
-                        {
-                            return Children.ToArray();
-                        }
-                        else
-                        {
-                            //Children.Clear();
-                            return volatileData;
-                        }
-                    }
+                    return base._data;
                 }
             }
             set
             {
                 if (value == null) throw new ArgumentNullException("value");
-                if (value is D castData)
+                try
                 {
-                    D old = default;
-                    if (base.volatileData != null && base.volatileData is D castOldData) old = castOldData;
-                    base.volatileData = castData;
-                    if (DataChanged != null && DataChanged.GetInvocationList().Length > 0)
-                        DataChanged(this, new DataChangedEventArgs<D>(old, castData));
+                    this.Clear();
+                    this.Add(value);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
                 }
             }
-            //get
-            //{
-            //    if (volatileData == default)
-            //    {
-            //        if (Children == default || Children.Count == 0)
-            //            return default;
-            //        else
-            //            return Children.ToArray();
-            //    }
-            //    else
-            //    {
-            //        if (Children == default || Children.Count == 0) return volatileData;
-            //        else
-            //        {
-            //            if (volatileData is DSMetadata)
-            //            {
-            //                return Children.ToArray();
-            //            }
-            //            else
-            //            {
-            //                //Children.Clear();
-            //                return volatileData;
-            //            }
-            //        }
-            //    }
-            //}
-            //set
-            //{
-            //    if (value == null) throw new ArgumentNullException("value");
-            //    if (value is DataStructure)
-            //    {
-            //        DataStructure ds = ((DataStructure)value);
-            //        this.Children.Add(ds);
-            //    }
-            //    else
-            //    {
-            //        volatileData = value;
-            //    }
-            //}
         }
         public new Type DataType => typeof(D);
+
+        public DataStructurePattern DataStructurePattern
+        {
+            get
+            {
+                if (_metadata != null)
+                {
+                    return _metadata.DataStructurePattern;
+                }
+                else if (_data != null)
+                {
+                    return DataStructurePattern.Item;
+                }
+                else return DataStructurePattern.Unknown;
+            }
+        }
 
         public DataStructure() : base()
         {
         }
-        public DataStructure(D data) : base()
+        public DataStructure(D data) : base(data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
-            Data = data;
         }
         public DataStructure(D[] data) : base()
         {
@@ -207,28 +190,28 @@ namespace Core
         }
         public DataStructure(IDataGoo<D> data) : base(new List<IDataGoo<D>> { data })
         {
-            ID = Guid.NewGuid();
         }
         public DataStructure(IEnumerable<IDataGoo<D>> data) : base(data)
         {
-            ID = Guid.NewGuid();
         }
 
-        public new void Add(D data)
-        {
-            if (data is null) throw new ArgumentNullException(nameof(data));
-            base.Add(new DataStructure<D>(data));
-        }
         public new void Add(object data)
         {
             if (data is null) throw new ArgumentNullException(nameof(data));
             if (data is D castData)
             {
                 base.Add(new DataStructure<D>(castData));
+                //if (DataChanged != null && DataChanged.GetInvocationList().Length > 0)
+                //    DataChanged(this, new DataChangedEventArgs<D>(castData));
             }
             else if (data is DataStructure ds)
             {
-                base.Add(ds);
+                if (this.DataType.IsAssignableFrom(ds.DataType))
+                {
+                    base.Add(ds);
+                    //if (DataChanged != null && DataChanged.GetInvocationList().Length > 0)
+                    //    DataChanged(this, new DataChangedEventArgs<D>((D)ds.Data));
+                }
             }
             else if (data.GetType().IsArray)
             {
@@ -238,6 +221,8 @@ namespace Core
                     foreach (D d in (D[])data)
                     {
                         base.Add(new DataStructure<D>(d));
+                        //if (DataChanged != null && DataChanged.GetInvocationList().Length > 0)
+                        //    DataChanged(this, new DataChangedEventArgs<D>(d));
                     }
                 }
                 else
@@ -251,51 +236,135 @@ namespace Core
                 //TODO: TryCast
                 throw new ArgumentException("Data is not of type " + typeof(D).ToString());
             }
+            //if (value is IDataGoo tryCastDg)
+            //{
+            //    if ((typeof(D)).IsAssignableFrom(tryCastDg.DataType.GetType()))
+            //    {
+            //        if (tryCastDg.Data is D castData)
+            //        {
+            //            this.Clear();
+            //            this.Add(castData);
+            //        }
+            //        else if (tryCastDg.Data is D[] castArrData)
+            //        {
+            //            this.Clear();
+            //            this.Add(castArrData);
+            //        }
+            //        else
+            //        {
+            //            try
+            //            {
+            //                if (tryCastDg.Data.GetType().IsArray)
+            //                {
+            //                    D[] arrOut = (D[])tryCastDg.Data;
+            //                    if (arrOut != null)
+            //                    {
+            //                        this.Clear();
+            //                        this.Add(arrOut);
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    D itemOut = (D)tryCastDg.Data;
+            //                    if (itemOut != null)
+            //                    {
+            //                        this.Clear();
+            //                        this.Add(itemOut);
+            //                    }
+            //                }
+            //            }
+            //            catch (Exception ex)
+            //            {
+            //                throw ex;
+            //            }
+            //        }
+            //    }
+            //    else throw new InvalidCastException("Provided Data is not / cannot be cast to an item or array of type " + typeof(D).ToString());
+            //}
+            //else if ((typeof(D)).IsAssignableFrom(value.GetType()) || (typeof(D[])).IsAssignableFrom(value.GetType()))
+            //{
+            //    try
+            //    {
+            //        if (value.GetType().IsArray)
+            //        {
+            //            D[] arrOut = (D[])value;
+            //            if (arrOut != null)
+            //            {
+            //                this.Clear();
+            //                this.Add(arrOut);
+            //            }
+            //        }
+            //        else
+            //        {
+            //            D itemOut = (D)value;
+            //            if (itemOut != null)
+            //            {
+            //                this.Clear();
+            //                this.Add(itemOut);
+            //            }
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        throw ex;
+            //    }
+            //}
         }
-        public DataStructure<T> Duplicate<T>()
+        
+        public static implicit operator D(DataStructure<D> v)
         {
-            try
-            {
-                DataStructure<T> dsOut;
-                if (volatileData is T castData)
-                {
-                    return new DataStructure<T>(castData);
-                }
-                else if (volatileData is DataStructure ds)
-                {
-                    dsOut = ds.Duplicate<T>();
-                }
-                else
-                {
-                    dsOut = new DataStructure<T>();
-                }
-                dsOut.ID = ID;
-                if (this.Count > 0)
-                {
-                    foreach (IDataGoo goo in this)
-                    {
-                        if (goo is DataStructure<T>)
-                        {
-                            dsOut.Add(((DataStructure<T>)goo).Duplicate());
-                        }
-                        else if (goo.Data is T)
-                        {
-                            dsOut.Add(new DataStructure<T>((T)goo.Data));
-                        }
-                        else
-                        {
-                            DataStructure<T> gooT = new DataStructure<T>((T)goo.Data);
-                            dsOut.Add(goo);
-                        }
-                    }
-                }
-                return dsOut;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            if (v.DataStructurePattern == DataStructurePattern.Item && v.Data is D data) return data;
+            else throw new Exception("DataStructure<D> is not a single item.");
         }
+        public static implicit operator DataStructure<D>(D v)
+        {
+            return new DataStructure<D>(v);
+        }
+        //public new DataStructure<T> Duplicate<T>()
+        //{
+        //    try
+        //    {
+        //        DataStructure<T> dsOut;
+        //        if (this.Data is null) throw new NullReferenceException("Data is null");
+        //        if (volatileData is T castData)
+        //        {
+        //            return new DataStructure<T>(castData);
+        //        }
+        //        else if (volatileData is DataStructure ds)
+        //        {
+        //            dsOut = ds.Duplicate<T>();
+        //        }
+        //        else
+        //        {
+        //            dsOut = new DataStructure<T>();
+        //        }
+        //        dsOut.ID = ID;
+        //        if (this.Count > 0)
+        //        {
+        //            foreach (IDataGoo goo in this)
+        //            {
+        //                if (goo is DataStructure<T>)
+        //                {
+        //                    dsOut.Add(((DataStructure<T>)goo).Duplicate());
+        //                }
+        //                else if (goo.Data is T)
+        //                {
+        //                    dsOut.Add(new DataStructure<T>((T)goo.Data));
+        //                }
+        //                else
+        //                {
+        //                    DataStructure<T> gooT = new DataStructure<T>((T)goo.Data);
+        //                    dsOut.Add(goo);
+        //                }
+        //            }
+        //        }
+        //        return dsOut;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
     }
 
     [Serializable]
@@ -309,7 +378,10 @@ namespace Core
                 object[] objectsOut = new object[this.Count];
                 for (int i = 0; i < this.Count; i++)
                 {
-                    objectsOut[i] = this[i].Data;
+                    if (this[i] is DataStructure d)
+                    {
+                        objectsOut[i] = d.Data;
+                    }
                 }
                 return objectsOut;
             }
@@ -369,60 +441,67 @@ namespace Core
             //}
         }
 
-        protected object volatileData = default;
+        internal DSMetadata _metadata = default;
+        protected object _data = default;
         [DataMember]
         public object Data
         {
             get
             {
-                if (volatileData == default)
+                if (_data != default)
                 {
-                    if (Children == default || Children.Count == 0)
-                        return default;
-                    else if (Children.Count > 1)
+                    return _data;
+                }
+                else if (this.Count > 0)
+                {
+                    if (_metadata != null)
                     {
-                        volatileData = new DSMetadata(this);
                         return this.ToArray();
                     }
-                    else
-                        return this.ToArray();
-                }
-                else
-                {
-                    if (Children != default)
+                    else if (this.Count == 1)
                     {
-                        if (Children.Count > 0)
-                        {
-                            Children.Add(volatileData);
-                            volatileData = new DSMetadata(this);
-                            return this.ToArray();
-                        }
-                        else return volatileData;
+                        return this[0];
                     }
-                    else return volatileData;
+                    else throw new Exception("Inconsistent Data Format. Metadata is null, but Data Structure has children.");
                 }
+                else return _data;
             }
             set
             {
                 if (value == null) throw new ArgumentNullException("value");
-                if (value is DataStructure)
+                if (_metadata != null)
                 {
-                    DataStructure ds = ((DataStructure)value);
-                    this.Add(ds);
+                    this.Clear();
+                    this.Add(value);
                 }
                 else
                 {
-                    volatileData = value;
+                    object old = _data;
+                    _data = value;
+                    //if (DataChanged != null && DataChanged.GetInvocationList().Length > 0)
+                    //    DataChanged(this, new DataChangedEventArgs(old, _data));
                 }
             }
         }
         public Guid ID { get; set; }
         public bool IsValid { get => (this.Data != default); }
-        public string IsValidReason { get; }
-        public IDataGoo Parent { get; }
-        public DataStructure Children { get; }
-        public bool IsEmpty { get; }
-        public DataAddress Address { get; }
+        public bool IsEmpty { get => (this.Count == 0 || this.Data == default); }
+        public DataStructurePattern DataStructurePattern
+        {
+            get
+            {
+                if (_metadata != null)
+                {
+                    return _metadata.DataStructurePattern;
+                }
+                else if (_data != null)
+                {
+                    return DataStructurePattern.Item;
+                }
+                else return DataStructurePattern.Unknown;
+            }
+        }
+        //public DataAddress Address { get => new DataAddress(this); }
         private Type overrideDataType = default;
         public Type DataType
         {
@@ -430,16 +509,35 @@ namespace Core
             {
                 if (overrideDataType != default)
                     return overrideDataType;
-                if (volatileData != default)
-                    return volatileData.GetType();
+                if (_metadata != null)
+                {
+                    return _metadata.DataType;
+                }
+                else if (this._data != default) return this._data.GetType();
                 else return typeof(object);
             }
             set
             {
-                if (overrideDataType == default)
-                    overrideDataType = value;
+                if (_metadata != null)
+                {
+                    if (_metadata.DataType == value)
+                        overrideDataType = value;
+                    else throw new Exception($"Cannot override DataType. DataStructure already has Data of type {_metadata.DataType.Name}.");
+                }
+                else
+                {
+                    if (this._data != default)
+                    {
+                        if (_data.GetType() == value) overrideDataType = value;
+                        else throw new Exception($"Cannot override DataType. DataStructure already has Data of type {_data.GetType().Name}.");
+                    }
+                    else overrideDataType = value;
+                }
             }
         }
+        
+        //public delegate void DataChangedEventHandler(DataStructure sender, DataChangedEventArgs e);
+        //public DataChangedEventHandler DataChanged;
 
         public DataStructure() : base()
         {
@@ -449,32 +547,40 @@ namespace Core
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
-            if (data.GetType().IsArray)
+            ID = Guid.NewGuid();
+            if (data is IDataGoo)
             {
-                if (data is object[] dataArray)
+                if (data is DataStructure ds)
                 {
-                    foreach (object o in dataArray)
-                    {
-                        if (o == null)
-                            throw new ArgumentNullException(nameof(o));
-                        this.Add(new DataStructure(o));
-                    }
+                    this.Add(ds);
                 }
             }
-            volatileData = data;
-            ID = Guid.NewGuid();
+            else if (data is object[] array)
+            {
+                foreach (object o in array)
+                {
+                    if (o == null)
+                        throw new ArgumentNullException(nameof(data));
+                    this.Add(new DataStructure(o));
+                }
+            }
+            else
+            {
+                Data = data;
+                _metadata = new DSMetadata(this);
+            }
         }
         public DataStructure(object[] data) : base()
         {
             if (data == null || data.Length == 0)
                 throw new ArgumentNullException(nameof(data));
+            ID = Guid.NewGuid();
             foreach (object o in data)
             {
                 if (o == null)
                     throw new ArgumentNullException(nameof(data));
                 this.Add(new DataStructure(o));
             }
-            ID = Guid.NewGuid();
         }
         public DataStructure(IDataGoo data) : base(new List<IDataGoo> { data })
         {
@@ -492,71 +598,159 @@ namespace Core
 
         public new void Add(object data)
         {
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
-            if (data is IDataGoo)
-                base.Add((IDataGoo)data);
-            else
-                base.Add(new DataStructure(data));
-            if (this.Count > 0)
+            try
             {
-                volatileData = new DSMetadata(this);
+                if (data == null)
+                    throw new ArgumentNullException(nameof(data));
+                if (data is IDataGoo dg)
+                {
+                    if (this.DataType.IsAssignableFrom(dg.DataType))
+                    {
+                        base.Add(dg);
+                        //if (DataChanged != null && DataChanged.GetInvocationList().Length > 0)
+                        //    DataChanged(this, new DataChangedEventArgs(dg));
+                    }
+                    else if (this.DataType.IsAssignableFrom(typeof(DataStructure<>).MakeGenericType(dg.DataType)))
+                    {
+                        base.Add(dg);
+                    }
+                    else throw new InvalidCastException($"DataStructure only accepts values of type {this.DataType.Name}");
+                }
+                else
+                {
+                    if (this.DataType.IsAssignableFrom(data.GetType()))
+                    {
+                        base.Add(new DataStructure(data));
+                        //if (DataChanged != null && DataChanged.GetInvocationList().Length > 0)
+                        //    DataChanged(this, new DataChangedEventArgs(data));
+                    }
+                    else throw new InvalidCastException($"DataStructure only accepts values of type {this.DataType.Name}");
+                }
+                if (this.Count > 0)
+                {
+                    if (_metadata != null)
+                    {
+                        _metadata.EditedAt = DateTime.Now.ToFileTimeUtc().ToString();
+                    }
+                    else
+                    {
+                        _metadata = new DSMetadata(this);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public new void Insert(int i, object data)
+        {
+            try
+            {
+                if (data == null)
+                    throw new ArgumentNullException(nameof(data));
+                if (data is IDataGoo dg)
+                {
+                    if (this.DataType.IsAssignableFrom(dg.DataType))
+                    {
+                        base.Insert(i, dg);
+                        //if (DataChanged != null && DataChanged.GetInvocationList().Length > 0)
+                        //    DataChanged(this, new DataChangedEventArgs(dg));
+                    }
+                    else throw new InvalidCastException($"DataStructure only accepts values of type {this.DataType.Name}");
+                }
+                else
+                {
+                    if (this.DataType.IsAssignableFrom(data.GetType()))
+                    {
+                        base.Insert(i, new DataStructure(data));
+                        //if (DataChanged != null && DataChanged.GetInvocationList().Length > 0)
+                        //    DataChanged(this, new DataChangedEventArgs(data));
+                    }
+                    else throw new InvalidCastException($"DataStructure only accepts values of type {this.DataType.Name}");
+                }
+                if (this.Count > 0)
+                {
+                    if (_metadata != null)
+                    {
+                        _metadata.EditedAt = DateTime.Now.ToFileTimeUtc().ToString();
+                    }
+                    else
+                    {
+                        _metadata = new DSMetadata(this);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
         public DataStructure Duplicate()
         {
-            DataStructure dsOut = new DataStructure();
-            if (volatileData != null) dsOut = new DataStructure(volatileData);
+            DataStructure dsOut = new DataStructure(this.Data);
             dsOut.ID = ID;
             dsOut.overrideDataType = overrideDataType;
-            if (this.Count > 0)
+            if (dsOut._metadata != null)
             {
-                foreach (IDataGoo goo in this)
-                {
-                    if (goo is DataStructure)
-                    {
-                        dsOut.Add(((DataStructure)goo).Duplicate());
-                    }
-                }
+                _metadata.EditedAt = DateTime.Now.ToFileTimeUtc().ToString();
             }
-            //TODO: update DSMetadata's EditedAt timestamp
             return dsOut;
         }
-        public DataStructure<T> Duplicate<T>()
+        public DataStructure<T> DuplicateAsType<T>()
         {
-            DataStructure<T> dsOut = new DataStructure<T>();
-            if (volatileData != null && volatileData is T) dsOut = new DataStructure<T>((T)volatileData);
-            dsOut.ID = ID;
-            if (this.Count > 0)
+            try
             {
-                foreach (IDataGoo goo in this)
+                DataStructure<T> dsOut = default;
+                if (this.Data is null) return dsOut;
+                if (this.Data is T castvData)
                 {
-                    if (goo is DataStructure<T>)
+                    dsOut = new DataStructure<T>(castvData);
+                    dsOut.ID = ID;
+                    dsOut.overrideDataType = typeof(T);
+                    if (dsOut._metadata != null)
                     {
-                        dsOut.Add(((DataStructure<T>)goo).Duplicate());
-                    }
-                    else if ((typeof(DataStructure)).IsAssignableFrom(this.DataType))
-                    {
-                        //TODO: Improve DataStructure depth with a while loop to iterate into branches
-                        DataStructure currDS = (DataStructure)this.Data;
-                        while ((typeof(DataStructure)).IsAssignableFrom(currDS.DataType))
-                        {
-                            currDS = (DataStructure)currDS.Data;
-                        }
-                        if (currDS.Data is T)
-                        {
-                            dsOut = currDS.Duplicate<T>();
-                        }
-                    }
-                    else
-                    {
-                        DataStructure<T> gooT = new DataStructure<T>((T)goo.Data);
-                        dsOut.Add(goo);
+                        _metadata.EditedAt = DateTime.Now.ToFileTimeUtc().ToString();
                     }
                 }
+                else if (this.Data.GetType().IsArray && this.Data is T[] castArrData)
+                {
+                    dsOut = new DataStructure<T>(castArrData);
+                    dsOut.ID = ID;
+                    dsOut.overrideDataType = typeof(T[]);
+                    if (dsOut._metadata != null)
+                    {
+                        _metadata.EditedAt = DateTime.Now.ToFileTimeUtc().ToString();
+                    }
+                }
+                else if (this.Data is DataStructure dsItem)
+                {
+                    dsOut = new DataStructure<T>();
+                    dsOut.ID = ID;
+                    dsOut.overrideDataType = typeof(DataStructure<T>);
+                    dsOut.Add(dsItem.DuplicateAsType<T>());
+                }
+                else if (this.Data is DataStructure[] dsArr)
+                {
+                    dsOut = new DataStructure<T>();
+                    dsOut.ID = ID;
+                    dsOut.overrideDataType = typeof(DataStructure<T>[]);
+                    if (dsArr.Length > 0)
+                    {
+                        foreach (DataStructure ds in dsArr)
+                        {
+                            dsOut.Add(ds.DuplicateAsType<T>());
+                        }
+                    }
+                }
+                return dsOut;
             }
-            return dsOut;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
 
@@ -727,54 +921,96 @@ namespace Core
 
     internal class DSMetadata
     {
+        public Type DataType { get; private set; } = typeof(object);
+
         public DSMetadata()
         {
-            CreatedAt = DateTime.Now;
-            EditedAt = DateTime.Now;
+            CreatedAt = DateTime.Now.ToFileTimeUtc().ToString();
+            EditedAt = DateTime.Now.ToFileTimeUtc().ToString();
         }
         public DSMetadata(DataStructure dataReference)
         {
-            CreatedAt = DateTime.Now;
-            EditedAt = DateTime.Now;
+            CreatedAt = DateTime.Now.ToFileTimeUtc().ToString();
+            EditedAt = DateTime.Now.ToFileTimeUtc().ToString();
             if (dataReference != null)
             {
-                if (dataReference is EventArgData eData)
-                {
-                    //DSType = DataStructureType.EventArgData;
-                    
-                    //Iterate into DataStructure
-                    DataStructure currDS = eData as DataStructure;
-                    
-                    if (currDS.Data is DSMetadata)
-                    {
-                        while (currDS.Data is DSMetadata)
-                        {
-                            if (currDS.Data is DataStructure innerDS)
-                                currDS = innerDS;
-                        }
-                    }
-                    
-                    //if (eData.Data is DataStructure ds)
-                    //{
-
-                    //}
-                    //else if (eData.Data is DSMetadata)
-                    //{
-
-                    //}
-                }
+                this.DataType = TryGetConsistentType(dataReference);
             }
         }
-        public DateTime CreatedAt { get; internal set; }
-        public DateTime EditedAt { get; internal set; }
-        public DataStructurePattern DataStructurePattern { get; internal set; }
+        
+        private Type TryGetConsistentType(DataStructure dataReference)
+        {
+            DataStructurePattern valOut = DataStructurePattern.Unknown;
+            Type consistentType = typeof(object);
+            if (dataReference == default) { this.DataStructurePattern = valOut; return default; }
+            if (dataReference.Data == default) { this.DataStructurePattern = valOut; return default; }
+            if (dataReference.Data.GetType().IsArray)
+            {
+                valOut = DataStructurePattern.List;
+                foreach (DataStructure ds in dataReference)
+                {
+                    if (ds._metadata != null)
+                    {
+                        valOut = DataStructurePattern.Tree;
+                        if (consistentType.IsAssignableFrom(ds._metadata.DataType))
+                        {
+                            if (consistentType == typeof(object) && ds._metadata.DataType != typeof(object))
+                            {
+                                if (!typeof(DataStructure).IsAssignableFrom(ds._metadata.DataType))
+                                {
+                                    consistentType = ds._metadata.DataType;
+                                }
+                                else
+                                {
+                                    consistentType = TryGetConsistentType(ds);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            valOut = DataStructurePattern.Object;
+                            consistentType = typeof(object);
+                        }
+                    }
+                    else throw new Exception("Inconsistent Data Structure : Missing Metadata.");
+                }
+            }
+            else if (dataReference.Data is DataStructure innerDS)
+            {
+                consistentType = TryGetConsistentType(innerDS);
+            }
+            else
+            {
+                valOut = DataStructurePattern.Item;
+                consistentType = dataReference.Data.GetType();
+            }
+            this.DataStructurePattern = valOut;
+            return consistentType;
+        }
+
+        public string CreatedAt { get; internal set; }
+        public string EditedAt { get; internal set; }
+        public DataStructurePattern DataStructurePattern { get; internal set; } = DataStructurePattern.Unknown;
     }
 
     public class DataChangedEventArgs<D> : DataChangedEventArgs
     {
-        public new D OldData { get; private set; }
-        public new D NewData { get; private set; }
         public DataChangedEventArgs(D oldData, D newData) : base(oldData, newData)
+        {
+        }
+        public DataChangedEventArgs(D newData) : base(newData)
+        {
+        }
+        public DataChangedEventArgs(object oldData, D newData) : base(oldData, newData)
+        {
+        }
+        public DataChangedEventArgs(D[] oldData, D[] newData) : base(oldData, newData)
+        {
+        }
+        public DataChangedEventArgs(D[] newData) : base(newData)
+        {
+        }
+        public DataChangedEventArgs(object oldData, D[] newData) : base(oldData, newData)
         {
         }
     }
@@ -787,21 +1023,46 @@ namespace Core
             OldData = oldData;
             NewData = newData;
         }
+        public DataChangedEventArgs(object[] oldData, object[] newData)
+        {
+            OldData = oldData;
+            NewData = newData;
+        }
+        public DataChangedEventArgs(object oldData, object[] newData)
+        {
+            OldData = oldData;
+            NewData = newData;
+        }
+        public DataChangedEventArgs(object[] oldData, object newData)
+        {
+            OldData = oldData;
+            NewData = newData;
+        }
+        public DataChangedEventArgs(object newData)
+        {
+            OldData = null;
+            NewData = newData;
+        }
+        public DataChangedEventArgs(object[] newData)
+        {
+            OldData = null;
+            NewData = newData;
+        }
     }
 
-    public class DataAddress
-    {
-        public IDataGoo AddressOf { get; private set; }
-        public DataAddress(IDataGoo goo)
-        {
-            this.AddressOf = goo;
-        }
-        public override string ToString()
-        {
-            //TODO: IMPLEMENT DATA ADDRESS
-            return base.ToString();
-        }
-    }
+    //public class DataAddress
+    //{
+    //    public IDataGoo AddressOf { get; private set; }
+    //    public DataAddress(IDataGoo goo)
+    //    {
+    //        this.AddressOf = goo;
+    //    }
+    //    public override string ToString()
+    //    {
+    //        //TODO: IMPLEMENT DATA ADDRESS
+    //        return base.ToString();
+    //    }
+    //}
 
     public enum DataState
     {
