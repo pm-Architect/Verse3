@@ -39,13 +39,16 @@ namespace MathLibrary
         {
             DataStructure result = this.ChildElementManager.GetData(DataStructureNode);
             double sum = 0;
-
+            if (result == null || result.Count == 0) return;
             for (int i = 0; i < result.Count; i++)
             {
-                sum += (double)result[i].Data;
+                if (result[i].Data is double d)
+                {
+                    sum += d;
+                }
             }
             this.ChildElementManager.SetData(sum, Result);
-            this.ChildElementManager.SetData(sum/result.Count, Averaged);
+            this.ChildElementManager.SetData((sum / result.Count), Averaged);
 
             this.previewTextBlock.DisplayedText = $"Sum of data = {sum}";
         }
