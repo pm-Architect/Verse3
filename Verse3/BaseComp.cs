@@ -314,6 +314,7 @@ namespace Verse3
             previewTextBlock = new TextElement();
             previewTextBlock.TextAlignment = TextAlignment.Left;
             previewTextBlock.DisplayedText = string.Empty;
+            previewTextBlock.Width = 200;
             this.ChildElementManager.AddElement(previewTextBlock);
             if (this.ComputationPipelineInfo.IOManager.PrimaryDataOutput >= 0)
             {

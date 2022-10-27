@@ -715,14 +715,35 @@ namespace Core
                         _metadata.EditedAt = DateTime.Now.ToFileTimeUtc().ToString();
                     }
                 }
-                else if (this.Data.GetType().IsArray && this.Data is T[] castArrData)
+                else if (this.Data.GetType().IsArray)
                 {
-                    dsOut = new DataStructure<T>(castArrData);
-                    dsOut.ID = ID;
-                    dsOut.overrideDataType = typeof(T[]);
-                    if (dsOut._metadata != null)
+                    if (this.Data is T[] castArrData)
                     {
-                        _metadata.EditedAt = DateTime.Now.ToFileTimeUtc().ToString();
+                        dsOut = new DataStructure<T>(castArrData);
+                        dsOut.ID = ID;
+                        dsOut.overrideDataType = typeof(T[]);
+                        if (dsOut._metadata != null)
+                        {
+                            _metadata.EditedAt = DateTime.Now.ToFileTimeUtc().ToString();
+                        }
+                    }
+                    else if (this.Data is object[] arr)
+                    {
+                        dsOut = new DataStructure<T>();
+                        dsOut.ID = ID;
+                        dsOut.overrideDataType = typeof(T);
+                        foreach (object o in arr)
+                        {
+                            if (o == null) continue;
+                            if (o is T castObjData)
+                            {
+                                dsOut.Add(castObjData);
+                            }
+                        }
+                        if (dsOut._metadata != null)
+                        {
+                            _metadata.EditedAt = DateTime.Now.ToFileTimeUtc().ToString();
+                        }
                     }
                 }
                 else if (this.Data is DataStructure dsItem)
