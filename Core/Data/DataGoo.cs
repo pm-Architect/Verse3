@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 
 namespace Core
 {
@@ -75,6 +76,26 @@ namespace Core
     [Serializable]
     public class DataStructure<D> : DataStructure, ISerializable
     {
+        public new object[] ToArray()
+        {
+            if (this.Count > 0)
+            {
+                object[] objectsOut = new object[this.Count];
+                for (int i = 0; i < this.Count; i++)
+                {
+                    if (this[i] is DataStructure<D> d)
+                    {
+                        if (d.Data is D castData) objectsOut[i] = castData;
+                        else if (d.Data is D[] castDataArray) objectsOut[i] = castDataArray;
+                    }
+                }
+                return objectsOut;
+            }
+            else
+            {
+                return null;
+            }
+        }
         protected DataStructure(SerializationInfo info, StreamingContext context) : base()
         {
             if (info.ObjectType == typeof(DataStructure<D>))
@@ -593,7 +614,49 @@ namespace Core
 
         public override string ToString()
         {
-            return this.Data?.ToString();
+            if (this.DataStructurePattern == DataStructurePattern.Item)
+            {
+                return this.Data.ToString();
+            }
+            else if (this.DataStructurePattern == DataStructurePattern.List)
+            {
+                return $"List [{this.Count}]";
+            }
+            else if (this.DataStructurePattern == DataStructurePattern.Tree)
+            {
+                return $"Tree [{this.Count}]";
+            }
+            else if (this.DataStructurePattern == DataStructurePattern.Object)
+            {
+                return $"Object {{{this.Count}}}";
+            }
+            else if (this.DataStructurePattern == DataStructurePattern.EventArgData)
+            {
+                if (this.Count > 0) return this[0].ToString();
+                else return this.Data?.ToString();
+            }
+            else if (this.DataStructurePattern == DataStructurePattern.Unknown)
+            {
+                if (this.Data is object[] array)
+                {
+                    if (array.Length > 0)
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        sb.Append("Array [");
+                        foreach (object o in array)
+                        {
+                            sb.Append(o.ToString());
+                            sb.Append(", ");
+                        }
+                        sb.Remove(sb.Length - 2, 2);
+                        sb.Append("]");
+                        return sb.ToString();
+                    }
+                    else return this.Data?.ToString();
+                }
+                else return this.Data?.ToString();
+            }
+            else return this.Data?.ToString();
         }
 
         public new void Add(object data)
