@@ -37,10 +37,12 @@ namespace MathLibrary
         public override void Compute()
         {
             DataStructure result = this.ChildElementManager.GetData(DataStructureNode);
-            int count = result.Count;
+            int count = -1;
+            if (result != null) count = result.Count;
 
-            this.ChildElementManager.SetData(count, Output);
-            this.previewTextBlock.DisplayedText = $"Item Count:{count}";
+            if (count > -1)
+                this.ChildElementManager.SetData((double)count, Output);
+            //this.previewTextBlock.DisplayedText = $"Item Count = {count}";
         }
     }
 }

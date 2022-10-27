@@ -723,12 +723,23 @@ namespace Verse3
             {
                 try
                 {
-                    node.DataGoo = new DataStructure<T>((T)data);
-                    return true;
+                    return SetData(new DataStructure<T>((T)data), node);
                 }
                 catch (Exception ex)
                 {
                     throw ex;
+                }
+            }
+            else
+            {
+                try
+                {
+                    T tryCastData = (T)data;
+                    return SetData(new DataStructure<T>(tryCastData), node);
+                }
+                catch (Exception ex1)
+                {
+                    throw ex1;
                 }
             }
             return false;
