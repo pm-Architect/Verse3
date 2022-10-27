@@ -42,12 +42,23 @@ namespace MathLibrary
         public override void Compute()
         {
             DataStructure result = this.ChildElementManager.GetData(DataStructureNode);
-            object value = this.ChildElementManager.GetData(Value, 3);
-            bool contains = result.Contains(new DataStructure(value));
+            
+            var value = this.ChildElementManager.GetData(Value);
+            if (result == null || result.Count == 0 || value == null) return;
 
+            bool contains = false;
+            foreach (var item in result)
+            {
+                if (item.Data.Equals(value.Data))
+                {
+                    contains = true;
+                    break;
+                }
+            }
 
             this.ChildElementManager.SetData(contains, Output);
             this.previewTextBlock.DisplayedText = $"Contains Value:{contains}";
+ 
         }
     }
 }

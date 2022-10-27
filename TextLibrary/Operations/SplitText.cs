@@ -26,10 +26,10 @@ namespace TextLibrary
 
         public override void Compute()
         {
-            string a = this.ChildElementManager.GetData(nodeBlock, "Hello, You");
-            string splitter = this.ChildElementManager.GetData(nodeBlock2, ",");
+            string a = this.ChildElementManager.GetData(nodeBlock, "Hello User");
+            string splitter = this.ChildElementManager.GetData(nodeBlock2, " ");
             if (string.IsNullOrEmpty(a) || string.IsNullOrEmpty(splitter)) return;
-
+            
             string[] splitArray = a.Split(splitter);
             DataStructure result = new DataStructure<string>(); 
             foreach (string item in splitArray)

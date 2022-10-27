@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core;
+using MS.WindowsAPICodePack.Internal;
 using Verse3;
 using Verse3.VanillaElements;
 
@@ -194,6 +195,79 @@ namespace MathLibrary
             //        result.Add(flattened);
             //    }
             //}
+
+            return result;
+
+        }
+
+        public static DataStructure SortData(DataStructure input, bool desc)
+        {
+            DataStructure result = new DataStructure();
+            IEnumerable<object> sortedData;
+
+            if (desc)
+            {
+                sortedData = from inputItem in input orderby inputItem.Data descending select inputItem;
+            }
+            else
+            {
+                sortedData = from inputItem in input orderby inputItem.Data select inputItem;
+            }
+
+
+            if (sortedData != null)
+            {
+                foreach (var item in sortedData)
+                {
+                    result.Add(item);
+                }
+            }
+
+            return result;
+        }
+
+
+        public static double? Median(DataStructure source)
+        {
+
+            int count = source.Count();
+            
+            SortData(source, false);
+
+            int midpoint = count / 2;
+
+            if (source[0].Data is double)
+            {
+                if (count % 2 == 0)
+                    return (Convert.ToDouble(source.ElementAt(midpoint - 1).Data) + Convert.ToDouble(source.ElementAt(midpoint).Data)) / 2.0;
+                else
+                    return Convert.ToDouble(source.ElementAt(midpoint).Data);
+            }
+
+            else return null;
+
+        }
+
+        public static double? SampleStandardDeviation(DataStructure source)
+        {
+
+            if (source is null || source[0].Data is not double) return null;
+
+            int size = source.Count;
+            double result = 0;
+            double sum = 0;
+            for (int i = 0; i < source.Count; i++)
+            {
+                    sum += (double)source[i].Data;                
+            }
+            double mean = sum / size;
+
+            double squaresum = 0;
+            for (int i = 0; i < source.Count; i++)
+            {
+                squaresum += Math.Pow(((double)source[i].Data - mean),2);
+            }
+            result = Math.Sqrt(squaresum / (size - 1));
 
             return result;
 

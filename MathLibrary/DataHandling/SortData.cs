@@ -1,10 +1,7 @@
 ﻿using Core;
 using Verse3;
 using Verse3.VanillaElements;
-using System.Linq;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using Microsoft.VisualBasic;
+
 
 namespace MathLibrary
 {
@@ -43,28 +40,8 @@ namespace MathLibrary
         {
             DataStructure input = this.ChildElementManager.GetData(DataStructureNode);
             bool desc = this.ChildElementManager.GetData(Descending, false);
-            DataStructure result = new DataStructure();
-            IEnumerable<object> sortedData;
 
-            if (desc)
-            {
-                sortedData = from inputItem in input orderby inputItem.Data descending select inputItem;
-            }
-            else
-            {
-                sortedData = from inputItem in input orderby inputItem.Data select inputItem;
-            }
-            
-            
-            if (sortedData != null)
-            {
-                foreach (var item in sortedData)
-                {
-                    result.Add(item);
-                }
-            }
-            
-         
+            DataStructure result = MathUtils.SortData(input, desc);
             this.ChildElementManager.SetData(result, Result);
 
 
