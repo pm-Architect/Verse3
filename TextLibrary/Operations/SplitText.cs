@@ -28,15 +28,15 @@ namespace TextLibrary
         {
             string a = this.ChildElementManager.GetData(nodeBlock, "Hello, You");
             string splitter = this.ChildElementManager.GetData(nodeBlock2, ",");
-            
+            if (string.IsNullOrEmpty(a) || string.IsNullOrEmpty(splitter)) return;
 
             string[] splitArray = a.Split(splitter);
-            DataStructure result = new DataStructure(); 
+            DataStructure result = new DataStructure<string>(); 
             foreach (string item in splitArray)
             {
                 result.Add(item);
             }
-            this.ChildElementManager.SetData(result, nodeBlock2);    
+            this.ChildElementManager.SetData(result, nodeBlock3);    
         }
 
         public override CompInfo GetCompInfo() => new CompInfo(this, "Split Text", "Operations", "Text");

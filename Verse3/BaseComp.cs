@@ -663,7 +663,7 @@ namespace Verse3
             try
             {
                 DataStructure<T> ds = GetData<T>(node);
-                if (ds is null) return default;
+                if (ds is null) return defaultValue;
                 if (ds.Data is T castData)
                 {
                     return castData;
@@ -716,8 +716,10 @@ namespace Verse3
             if (node is null) return false;
             if (data is DataStructure ds)
             {
-                if (data is DataStructure<T> dsT) return SetData(dsT, node);
-                else return SetData(ds.DuplicateAsType<T>(), node);
+                if (data is DataStructure<T> dsT)
+                    return SetData(dsT, node);
+                else
+                    return SetData(ds.DuplicateAsType<T>(), node);
             }
             else if (data is T || data.GetType().IsAssignableTo(typeof(T)))
             {
@@ -760,9 +762,9 @@ namespace Verse3
                 //}
                 else
                 {
-                    node.DataGoo = data.DuplicateAsType<T>();
+                    node.DataGoo = data;
+                    return true;
                 }
-                return true;
             }
             catch (Exception ex)
             {
