@@ -37,7 +37,7 @@ namespace CoreInterop
             }
             catch (Exception ex)
             {
-                throw ex;
+                CoreConsole.Log(ex);
             }
         }
         public void Send(DataStructure data, string clientName)
@@ -48,7 +48,7 @@ namespace CoreInterop
             }
             catch (Exception ex)
             {
-                throw ex;
+                CoreConsole.Log(ex);
             }
         }
 
@@ -65,7 +65,7 @@ namespace CoreInterop
         {
             CoreConsole.Log($"Client {connection.Id} is now disconnected!");
             ClientDisconnected.Invoke(this, new EventArgs());
-            //Console.WriteLine("Client {0} disconnected", connection.Id);
+            //CoreConsole.Log("Client {0} disconnected", connection.Id);
         }
 
         public event EventHandler<DataStructure> ClientMessage;
@@ -73,7 +73,7 @@ namespace CoreInterop
         {
             CoreConsole.Log($"Client {connection.Id} sent a message: {message.ToString()}");
             ClientMessage.Invoke(connection, message);
-            //Console.WriteLine("Client {0} says: {1}", connection.Id, message);
+            //CoreConsole.Log("Client {0} says: {1}", connection.Id, message);
         }
 
         public event EventHandler<Exception> Error;

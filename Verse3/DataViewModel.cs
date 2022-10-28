@@ -92,27 +92,35 @@ namespace Verse3
         }
         public string ToXMLString()
         {
-            //if (this.XMLAttributes == null) throw new Exception("XMLAttributes is null.");
-            if (this.XMLSerializer == null) throw new Exception("XMLSerializer is null.");
-
-            StringBuilder sb = new StringBuilder();
-
-            foreach (BaseComp comp in DataViewModel.Comps)
+            try
             {
-                XmlDocument xmlDoc = new XmlDocument();   //Represents an XML document.
+                //if (this.XMLAttributes == null) throw new Exception("XMLAttributes is null.");
+                if (this.XMLSerializer == null) throw new Exception("XMLSerializer is null.");
 
-                // Creates a stream whose backing store is memory. 
-                using (MemoryStream xmlStream = new MemoryStream())
+                StringBuilder sb = new StringBuilder();
+
+                foreach (BaseComp comp in DataViewModel.Comps)
                 {
-                    this.XMLSerializer.Serialize(xmlStream, comp);
-                    xmlStream.Position = 0;
-                    //Loads the XML document from the specified string.
-                    xmlDoc.Load(xmlStream);
-                    sb.AppendLine(xmlDoc.InnerXml);
-                }
-            }
+                    XmlDocument xmlDoc = new XmlDocument();   //Represents an XML document.
 
-            return sb.ToString();
+                    // Creates a stream whose backing store is memory. 
+                    using (MemoryStream xmlStream = new MemoryStream())
+                    {
+                        this.XMLSerializer.Serialize(xmlStream, comp);
+                        xmlStream.Position = 0;
+                        //Loads the XML document from the specified string.
+                        xmlDoc.Load(xmlStream);
+                        sb.AppendLine(xmlDoc.InnerXml);
+                    }
+                }
+
+                return sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                CoreConsole.Log(ex);
+                return null;
+            }
         }
         public VFSerializable(DataViewModel dataViewModel)
         {
@@ -145,8 +153,8 @@ namespace Verse3
             }
             catch (Exception ex)
             {
-                //throw ex;
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                //CoreConsole.Log(ex);
+                CoreConsole.Log(ex);
             }
             //finally
             //{
@@ -212,8 +220,8 @@ namespace Verse3
             }
             catch (Exception ex)
             {
-                //throw ex;
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                //CoreConsole.Log(ex);
+                CoreConsole.Log(ex);
                 return null;
             }
         }
@@ -254,8 +262,8 @@ namespace Verse3
             }
             catch (Exception ex)
             {
-                //throw ex;
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                //CoreConsole.Log(ex);
+                CoreConsole.Log(ex);
             }
         }
 
@@ -281,6 +289,7 @@ namespace Verse3
                         if (oldAuthor == ("AuthorID::" + authorId))
                         {
                             System.Diagnostics.Debug.WriteLine("File created by " + oldAuthor);
+                            CoreConsole.Log("File created by " + oldAuthor);
                             if (authorId != "DEVELOPER") return null;
                         }
                         return (VFSerializable)file.GetObject();
@@ -293,8 +302,8 @@ namespace Verse3
             }
             catch (Exception ex)
             {
-                //throw ex;
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                //CoreConsole.Log(ex);
+                CoreConsole.Log(ex);
                 return null;
             }
         }
@@ -345,9 +354,9 @@ namespace Verse3
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                CoreConsole.Log(ex);
                 return null;
-                //throw ex;
+                //CoreConsole.Log(ex);
             }
             //switch (jo["ObjType"].Value<int>())
             //{
@@ -460,7 +469,7 @@ namespace Verse3
         //    }
         //    catch (Exception ex)
         //    {
-        //        throw ex;
+        //        CoreConsole.Log(ex);
         //    }
         //}
         
@@ -527,7 +536,8 @@ namespace Verse3
                 }
                 else
                 {
-                    throw new InvalidCastException();
+                    Exception ex = new InvalidCastException();
+                    CoreConsole.Log(ex);
                 }
             }
         }
@@ -645,7 +655,8 @@ namespace Verse3
                 }
                 else
                 {
-                    throw new InvalidCastException();
+                    Exception ex = new InvalidCastException();
+                    CoreConsole.Log(ex);
                 }
             }
         }
@@ -810,7 +821,7 @@ namespace Verse3
             }
             catch (Exception ex)
             {
-                throw ex;
+                CoreConsole.Log(ex);
             }
         }
 
@@ -960,7 +971,8 @@ namespace Verse3
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception(ex.Message);
+                    CoreConsole.Log(ex);
+                    return false;
                 }
             }
         }

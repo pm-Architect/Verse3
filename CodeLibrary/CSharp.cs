@@ -49,7 +49,6 @@ namespace CodeLibrary
                         catch (Exception ex)
                         {
                             CoreConsole.Log(ex.Message);
-                            //throw;
                         }
                         //TODO: Check for other types of constructors
                         //TODO: Get LibraryInfo
@@ -71,7 +70,6 @@ namespace CodeLibrary
             catch (Exception ex)
             {
                 CoreConsole.Log(ex.Message);
-                //throw;
             }
             
             _log = AssemblyCompiler.CompileLog;
@@ -173,7 +171,6 @@ namespace CodeLibrary
                         catch (Exception ex)
                         {
                             CoreConsole.Log(ex.Message);
-                            //throw;
                         }
                     }
                 }
@@ -187,7 +184,7 @@ namespace CodeLibrary
                     if (_log.Count <= 5)foreach (string entry in _log) this.previewTextBlock.DisplayedText += (entry + "\n");
                     else foreach (string entry in (_log.GetRange((_log.Count - 5), 5))) this.previewTextBlock.DisplayedText += (entry + "\n");
                 }
-                //throw ex;
+                CoreConsole.Log(ex);
             }
         }
 
@@ -224,7 +221,6 @@ namespace CodeLibrary
                         catch (Exception ex)
                         {
                             CoreConsole.Log(ex.Message);
-                            //throw;
                         }
                     }
                 }
@@ -238,7 +234,7 @@ namespace CodeLibrary
                     if (_log.Count <= 5) foreach (string entry in _log) this.previewTextBlock.DisplayedText += (entry + "\n");
                     else foreach (string entry in (_log.GetRange((_log.Count - 5), 5))) this.previewTextBlock.DisplayedText += (entry + "\n");
                 }
-                //throw ex;
+                CoreConsole.Log(ex);
             }
         }
 

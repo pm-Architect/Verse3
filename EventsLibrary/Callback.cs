@@ -27,7 +27,8 @@ namespace EventsLibrary
             }
             else
             {
-                throw new Exception("Callback must be initialized with a valid BaseComp");
+                Exception ex = new Exception("Callback must be initialized with a valid BaseComp");
+                CoreConsole.Log(ex);
             }
         }
         
@@ -69,7 +70,7 @@ namespace EventsLibrary
             catch (Exception ex)
             {
 
-                throw ex;
+                CoreConsole.Log(ex);
             }
         }
         public override CompInfo GetCompInfo() => new CompInfo(this, "Callback", "`", "`",

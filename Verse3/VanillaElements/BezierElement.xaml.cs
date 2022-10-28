@@ -125,7 +125,7 @@ namespace Verse3.VanillaElements
                 }
                 catch (Exception ex)
                 {
-                    
+                    CoreConsole.Log(ex);
                 }
             }
 

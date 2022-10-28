@@ -742,7 +742,7 @@ namespace Core
             }
             catch (Exception ex)
             {
-                throw ex;
+                CoreConsole.Log(ex);
             }
         }
 

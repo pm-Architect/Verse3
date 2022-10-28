@@ -18,12 +18,11 @@ namespace CanvasElements
         {
             InitializeComponent();
         }
-
-        public IRenderable Element => throw new System.NotImplementedException();
+        
+        public IRenderable Element => null;
 
         public void Render()
         {
-            throw new System.NotImplementedException();
         }
     }
 
@@ -55,7 +54,8 @@ namespace CanvasElements
                 }
                 else
                 {
-                    throw new InvalidCastException();
+                    Exception ex = new Exception("Invalid View Type");
+                    CoreConsole.Log(ex);
                 }
             }
         }

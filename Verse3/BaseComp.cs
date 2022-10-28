@@ -77,8 +77,7 @@ namespace Verse3
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
-                    //throw ex;
+                    CoreConsole.Log(ex);
                 }
             }
         }
@@ -104,7 +103,8 @@ namespace Verse3
                 }
                 else
                 {
-                    throw new InvalidCastException();
+                    Exception ex = new Exception("Invalid View Type");
+                    CoreConsole.Log(ex);
                 }
             }
         }
@@ -496,7 +496,7 @@ namespace Verse3
             }
             catch (Exception ex)
             {
-                throw ex;
+                CoreConsole.Log(ex);
             }
         }
 
@@ -690,10 +690,14 @@ namespace Verse3
                 }
                 else
                 {
-                    throw new Exception("Data is not a single item / type mismatch");
+                    Exception ex = new Exception("Data is not a single item / type mismatch");
+                    CoreConsole.Log(ex);
                 }
             }
-            catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex.Message); }
+            catch (Exception ex)
+            {
+                CoreConsole.Log(ex);
+            }
             return defaultValue;
         }
 
@@ -715,7 +719,8 @@ namespace Verse3
                 }
                 else
                 {
-                    throw new Exception("Data type mismatch");
+                    Exception ex = new Exception("Data type mismatch");
+                    CoreConsole.Log(ex);
                 }
             }
             //}
@@ -741,7 +746,7 @@ namespace Verse3
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    CoreConsole.Log(ex);
                 }
             }
             else
@@ -753,7 +758,7 @@ namespace Verse3
                 }
                 catch (Exception ex1)
                 {
-                    throw ex1;
+                    CoreConsole.Log(ex1);
                 }
             }
             return false;
@@ -780,7 +785,8 @@ namespace Verse3
             }
             catch (Exception ex)
             {
-                throw ex;
+                CoreConsole.Log(ex);
+                return false;
             }
         }
 
@@ -934,34 +940,6 @@ namespace Verse3
     public interface IBaseCompView<R> : IRenderView where R : BaseComp
     {
         public new R Element { get; }
-        //{
-        //    get
-        //    {
-        //        if (Element == null)
-        //        {
-        //            if (this.GetType().IsAssignableTo(typeof(UserControl)))
-        //            {
-        //                object dc = ((UserControl)this).DataContext;
-        //                if (dc.GetType().IsAssignableTo(typeof(R)))
-        //                {
-        //                    Element = (R)dc;
-        //                }
-        //            }
-        //        }
-        //        return Element;
-        //    }
-        //    private set
-        //    {
-        //        if (value is R)
-        //        {
-        //            Element = (R)value;
-        //        }
-        //        else
-        //        {
-        //            throw new InvalidCastException();
-        //        }
-        //    }
-        //}
         public Guid? ElementGuid
         {
             get { return Element?.ID; }
@@ -1225,7 +1203,8 @@ namespace Verse3
                 }
                 else
                 {
-                    throw new InvalidCastException();
+                    Exception ex = new Exception("Invalid RenderView type");
+                    CoreConsole.Log(ex);
                 }
             }
         }
@@ -1545,7 +1524,7 @@ namespace Verse3
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    CoreConsole.Log(ex);
                 }
             }
         }
@@ -1584,7 +1563,7 @@ namespace Verse3
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    CoreConsole.Log(ex);
                 }
             }
         }
@@ -1688,13 +1667,13 @@ namespace Verse3
                             }
                             catch (Exception ex)
                             {
-
-                                throw ex;
+                                CoreConsole.Log(ex);
                             }
                         }
                         else
                         {
-                            throw new Exception("Data type mismatch error");
+                            Exception ex = new Exception("Data type mismatch error");
+                            CoreConsole.Log(ex);
                         }
                         //this.NodeContentColor = System.Windows.Media.Brushes.White;
                         //break;
@@ -1760,13 +1739,13 @@ namespace Verse3
                             }
                             catch (Exception ex)
                             {
-
-                                throw ex;
+                                CoreConsole.Log(ex);
                             }
                         }
                         else
                         {
-                            throw new Exception("Data type mismatch error");
+                            Exception ex = new Exception("Data type mismatch error");
+                            CoreConsole.Log(ex);
                         }
                         //IDataNode<D> nd = conn.Destination as IDataNode<D>;
                         //if (!nd.DataGoo.IsValid)
@@ -1812,7 +1791,7 @@ namespace Verse3
             }
             catch (Exception ex)
             {
-                throw ex;
+                CoreConsole.Log(ex);
             }
         }
 
@@ -1929,17 +1908,6 @@ namespace Verse3
         public ElementsLinkedList<INode> Nodes => new ElementsLinkedList<INode>() { this };
         [JsonIgnore]
         public ComputableElementState ComputableElementState { get; set; }
-        //DataStructure IDataGooContainer.DataGoo
-        //{
-        //    get => this.DataGoo;
-        //    set
-        //    {
-        //        if (value is DataStructure<D>)
-        //            this.DataGoo = value as DataStructure<D>;
-        //        else
-        //            throw new InvalidCastException();
-        //    }
-        //}
 
         #endregion
 
@@ -1979,7 +1947,8 @@ namespace Verse3
                 }
                 else
                 {
-                    throw new InvalidCastException();
+                    Exception ex = new Exception("Invalid View Type");
+                    CoreConsole.Log(ex);
                 }
             }
         }
@@ -2083,12 +2052,6 @@ namespace Verse3
         [IgnoreDataMember]
         public IRenderable Parent { get => this.RenderPipelineInfo.Parent; set => this.RenderPipelineInfo.SetParent(value); }
         public abstract string Name { get; set; }
-
-        //public ElementsLinkedList<IConnection> Connections => throw new NotImplementedException();
-
-        //public CanvasPoint Hotspot => throw new NotImplementedException();
-
-        //public double HotspotThresholdRadius => throw new NotImplementedException();
         [JsonIgnore]
         public bool RenderExpired { get; set; }
 
@@ -2373,7 +2336,7 @@ namespace Verse3
             }
             catch (Exception ex)
             {
-                throw ex;
+                CoreConsole.Log(ex);
             }
         }
 

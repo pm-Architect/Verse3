@@ -162,8 +162,8 @@ namespace Verse3
             catch (Exception ex)
             {
                 //throw;
-                //throw ex;
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                //CoreConsole.Log(ex);
+                CoreConsole.Log(ex);
             }
         }
 
@@ -505,7 +505,7 @@ namespace Verse3
                     catch (Exception ex)
                     {
 
-                        throw ex;
+                        CoreConsole.Log(ex);
                     }
                 }
                 if (EditorForm.connectionsPending.Count > 0)
@@ -524,7 +524,7 @@ namespace Verse3
                     catch (Exception ex)
                     {
 
-                        throw ex;
+                        CoreConsole.Log(ex);
                     }
                 }
                 if (EditorForm.compsPendingAddToArsenal.Count > 0)
@@ -541,7 +541,7 @@ namespace Verse3
                     catch (Exception ex)
                     {
 
-                        throw ex;
+                        CoreConsole.Log(ex);
                     }
                 }
             }
@@ -644,7 +644,7 @@ namespace Verse3
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    CoreConsole.Log(ex);
                 }
             }
         }

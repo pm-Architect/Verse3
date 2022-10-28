@@ -46,7 +46,7 @@ namespace Core
             catch (Exception e)
             {
                 //TODO: Log to console
-                Console.WriteLine(e.Message);
+                CoreConsole.Log(e);
             }
             return count;
         }
@@ -496,7 +496,8 @@ namespace Core
                     }
                     else
                     {
-                        throw new Exception("Data type mismatch");
+                        Exception ex = new Exception("Data type mismatch");
+                        CoreConsole.Log(ex);
                     }
                 }
             }
@@ -532,12 +533,14 @@ namespace Core
                         }
                         else
                         {
-                            throw new Exception("Data type mismatch");
+                            Exception ex = new Exception("Data type mismatch");
+                            CoreConsole.Log(ex);
                         }
                     }
                     else
                     {
-                        throw new Exception("Data type mismatch");
+                        Exception ex = new Exception("Data type mismatch");
+                        CoreConsole.Log(ex);
                     }
                 }
             }
@@ -579,7 +582,8 @@ namespace Core
                     }
                     else
                     {
-                        throw new Exception("Data type mismatch");
+                        Exception ex = new Exception("Data type mismatch");
+                        CoreConsole.Log(ex);
                     }
                     return false;
                 }
@@ -589,10 +593,11 @@ namespace Core
                     return false;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                CoreConsole.Log(ex);
+                output = default;
+                return false;
             }
         }
 

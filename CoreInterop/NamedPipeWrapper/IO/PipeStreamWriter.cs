@@ -1,3 +1,4 @@
+using Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -47,6 +48,7 @@ namespace NamedPipeWrapper.IO
             }
             catch (Exception ex)
             {
+                CoreConsole.Log(ex);
                 throw new SerializationException("An object in the graph of type parameter T is not marked as serializable.", ex);
                 //if any exception in the serialize, it will stop named pipe wrapper, so there will ignore any exception.
                 //return null;

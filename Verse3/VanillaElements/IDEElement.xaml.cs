@@ -210,12 +210,12 @@ namespace VanillaElements
         {
             if (t.IsFaulted)
             {
-                Console.WriteLine(t.Exception.ToString());
+                CoreConsole.Log(t.Exception.ToString());
                 return null;
             }
             else
             {
-                Console.WriteLine(t.Result.ToString());
+                CoreConsole.Log(t.Result.ToString());
                 this.Element._script = t.Result.ToString();
                 return t.Result.ToString();
             }
@@ -228,7 +228,7 @@ namespace VanillaElements
 
         private void WebMessageReceived(object sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
         {
-            Console.WriteLine(e.TryGetWebMessageAsString());
+            CoreConsole.Log(e.TryGetWebMessageAsString());
             this.Element._script = e.TryGetWebMessageAsString();
             this.Element.UpdateScript(e.TryGetWebMessageAsString());
         }

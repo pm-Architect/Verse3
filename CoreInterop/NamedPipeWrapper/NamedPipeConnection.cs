@@ -8,6 +8,7 @@ using System.Threading;
 using NamedPipeWrapper.IO;
 using NamedPipeWrapper.Threading;
 using System.Collections.Concurrent;
+using Core;
 
 namespace NamedPipeWrapper
 {
@@ -160,7 +161,7 @@ namespace NamedPipeWrapper
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception(ex.Message);
+                    CoreConsole.Log(ex);
                     //we must igonre exception, otherwise, the namepipe wrapper will stop work.
                 }
             }

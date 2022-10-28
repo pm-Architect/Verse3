@@ -11,11 +11,31 @@ namespace Core
     {
         private static readonly CoreConsole Instance = new CoreConsole();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly StringBuilder StringLogger = new StringBuilder();
 
         //TODO: Push data to Supabase
-        public static void Log(string message)
+        //public static void Log(string message, LogLevel level = default)
+        //{
+        //    if (level == default) level = LogLevel.Info;
+        //    Logger.Log(level, message);
+        //}
+        public static void Log(string message, bool isException = false, string prefix = "", string suffix = "")
         {
-            Logger.Info(message);
+            if (isException)
+            {
+                StringLogger.AppendLine($"ERROR: {prefix} |[ {message} ]| {suffix}");
+                Logger.Log(LogLevel.Error, (prefix + " |[ " + message + " ]| " + suffix).Trim());
+            }
+            else
+            {
+                StringLogger.AppendLine($"INFO: {prefix} |[ {message} ]| {suffix}");
+                Logger.Log(LogLevel.Info, (prefix + " |[ " + message + " ]| " + suffix).Trim());
+            }
+        }
+        public static void Log(Exception ex, string prefix = "", string suffix = "")
+        {
+            StringLogger.AppendLine($"ERROR: {prefix} |[ {ex.Message} ]| {suffix}");
+            Logger.Log(LogLevel.Error, (prefix + " |[ " + ex.Message + " ]| " + suffix).Trim());
         }
 
         //TODO: Debug / Events / Serial / Console Logger
@@ -40,12 +60,21 @@ namespace Core
             var config = new LoggingConfiguration();
             
             // Targets where to log to: File and Console
-            var logemail = new NLog.Targets.MailTarget("logemail");
-            var logfile = new NLog.Targets.FileTarget("logfile") { FileName = "file.txt" };
-            var logconsole = new NLog.Targets.ConsoleTarget("logconsole");
+            //var logemail = new NLog.Targets.MailTarget("logemail");
+            var logfile = new NLog.Targets.FileTarget("logfile")
+            {
+                FileName = "verse3_logfile.txt",
+                Layout = "${longdate} ${level} ${message} ${exception:format=tostring}"
+            };
+            var logconsole = new NLog.Targets.ConsoleTarget("logconsole") { DetectConsoleAvailable = true };
+            //var logstring = new NLog.Targets.MethodCallTarget("logmethod");
+            //logstring.MethodName = "LogFromNLog";
+            //logstring.Parameters.Add(new NLog.Targets.MethodCallParameter("message", "${message}"));
+            //logstring.Parameters.Add(new NLog.Targets.MethodCallParameter("level", "${level}"));
 
-            // Rules for mapping loggers to targets            
+            // Rules for mapping loggers to targets
             config.AddRule(LogLevel.Info, LogLevel.Fatal, logconsole);
+            //config.AddRule(LogLevel.Info, LogLevel.Fatal, logstring);
             config.AddRule(LogLevel.Debug, LogLevel.Fatal, logfile);
 
             // Apply config           
@@ -69,36 +98,36 @@ namespace Core
         }
     }
 
-    public class ElementConsole
-    {
-        public IElement Element;
-        public List<string> LogBook { get; private set; } = new List<string>();
-        public int Log(string message, LogMessageSeverity severity = LogMessageSeverity.Info)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(severity.ToString().ToUpper());
-            sb.Append("[");
-            sb.Append(DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss"));
-            sb.Append("]=\"");
-            sb.Append(message);
-            sb.Append("\"@");
-            sb.Append(Element.ElementType);
-            sb.Append("{ID:");
-            sb.Append(Element.ID.ToString());
-            sb.Append("};");
-            LogBook.Add(sb.ToString());
-            return LogBook.Count;
-        }
-        public ElementConsole(IElement element)
-        {
-            Element = element;
-        }
-    }
+    //public class ElementConsole
+    //{
+    //    public IElement Element;
+    //    public List<string> LogBook { get; private set; } = new List<string>();
+    //    public int Log(string message, LogMessageSeverity severity = LogMessageSeverity.Info)
+    //    {
+    //        StringBuilder sb = new StringBuilder();
+    //        sb.Append(severity.ToString().ToUpper());
+    //        sb.Append("[");
+    //        sb.Append(DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss"));
+    //        sb.Append("]=\"");
+    //        sb.Append(message);
+    //        sb.Append("\"@");
+    //        sb.Append(Element.ElementType);
+    //        sb.Append("{ID:");
+    //        sb.Append(Element.ID.ToString());
+    //        sb.Append("};");
+    //        LogBook.Add(sb.ToString());
+    //        return LogBook.Count;
+    //    }
+    //    public ElementConsole(IElement element)
+    //    {
+    //        Element = element;
+    //    }
+    //}
 
-    public enum LogMessageSeverity
-    {
-        Info,
-        Warning,
-        Error
-    }
+    //public enum LogMessageSeverity
+    //{
+    //    Info,
+    //    Warning,
+    //    Error
+    //}
 }

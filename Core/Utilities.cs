@@ -38,7 +38,7 @@ namespace Core
         {
             if (!HttpListener.IsSupported)
             {
-                Console.WriteLine("Not Supported");
+                CoreConsole.Log("Not Supported");
                 return;
             }
             _listener = new HttpListener();
@@ -65,7 +65,7 @@ namespace Core
                 string u = context.Request.ToString();
                 var request = context.Request;
 
-                Console.WriteLine($"{request.RawUrl}");
+                CoreConsole.Log($"{request.RawUrl}");
                 if (request.QueryString.Count > 0)
                 {
                     string t = request.QueryString.Get(0);

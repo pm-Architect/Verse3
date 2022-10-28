@@ -1,4 +1,5 @@
-﻿using NamedPipeWrapper.IO;
+﻿using Core;
+using NamedPipeWrapper.IO;
 using NamedPipeWrapper.Threading;
 using System;
 using System.Collections.Generic;
@@ -199,6 +200,7 @@ namespace NamedPipeWrapper
             // Catch the IOException that is raised if the pipe is broken or disconnected.
             catch (Exception e)
             {
+                CoreConsole.Log(e, "Named pipe is broken or disconnected: {0}");
                 Console.Error.WriteLine("Named pipe is broken or disconnected: {0}", e);
 
                 Cleanup(handshakePipe);

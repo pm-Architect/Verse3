@@ -24,7 +24,7 @@ namespace CoreInterop
         public event EventHandler Disconnected;
         private void OnDisconnected(NamedPipeConnection<DataStructure, DataStructure> connection)
         {
-            //CoreConsole.Log($"Server disconnected!");
+            CoreConsole.Log($"Server disconnected!");
             Disconnected.Invoke(this, new EventArgs());
             //throw new NotImplementedException();
         }
@@ -32,15 +32,15 @@ namespace CoreInterop
         public event EventHandler<DataStructure> ServerMessage;
         private void OnServerMessage(NamedPipeConnection<DataStructure, DataStructure> connection, DataStructure message)
         {
-            //CoreConsole.Log($"Server sent a message: {message.ToString()}");
+            CoreConsole.Log($"Server sent a message: {message.ToString()}");
             ServerMessage.Invoke(connection, message);
-            //Console.WriteLine("Server says: {0}", message);
+            //CoreConsole.Log("Server says: {0}", message);
         }
 
         public event EventHandler<Exception> Error;
         private void OnError(Exception exception)
         {
-            //CoreConsole.Log($"Error: {exception}");
+            CoreConsole.Log($"Error: {exception}");
             Error.Invoke(this, exception);
             //Console.Error.WriteLine("ERROR: {0}", exception);
         }

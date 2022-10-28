@@ -133,7 +133,7 @@ namespace MathLibrary
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                CoreConsole.Log(ex);
             }
         }
 

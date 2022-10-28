@@ -45,10 +45,12 @@ namespace Verse3
                 assembly = Assembly.Load(bytes);
             }
             System.Diagnostics.Trace.WriteLine(assembly.FullName);
+            CoreConsole.Log(assembly.FullName, false, "AssemblyLoader: Loading Assembly");
             Module[] modules = assembly.GetModules();
             foreach (Module module in modules)
             {
                 System.Diagnostics.Trace.WriteLine(module.Name);
+                CoreConsole.Log(module.Name);
                 AssemblyName[] names = module.Assembly.GetReferencedAssemblies();
                 if (names.Length > 0)
                 {
@@ -80,10 +82,12 @@ namespace Verse3
                                             Assembly.Load(asm.GetName());
                                         }
                                         System.Diagnostics.Trace.WriteLine("Adding Reference: " + asm.FullName + " from " + file);
+                                        CoreConsole.Log("Adding Reference: " + asm.FullName + " from " + file);
                                     }
                                     catch (Exception ex0)
                                     {
-                                        System.Diagnostics.Trace.WriteLine("Error Adding Reference: " + ex0.Message);
+                                        //System.Diagnostics.Trace.WriteLine("Error Adding Reference: " + ex0.Message);
+                                        CoreConsole.Log(ex0, "Error Adding Reference: ");
                                         //System.Diagnostics.Trace.WriteLine("Adding Reflection Only Reference from " + file);
                                         //Assembly asm1 = Assembly.ReflectionOnlyLoadFrom(file);
                                     }
@@ -92,16 +96,19 @@ namespace Verse3
                         }
                         catch (Exception ex)
                         {
-                            System.Diagnostics.Trace.WriteLine("Error Adding Reference: " + ex.Message);
+                            //System.Diagnostics.Trace.WriteLine("Error Adding Reference: " + ex.Message);
+                            CoreConsole.Log(ex);
                         }
                         loaded = AppDomain.CurrentDomain.GetAssemblies().ToList();
                         if (loaded.Any(a => a.FullName == name.FullName))
                         {
                             System.Diagnostics.Trace.WriteLine("Added Reference: " + name.FullName);
+                            CoreConsole.Log("Added Reference: " + name.FullName);
                         }
                         else
                         {
                             System.Diagnostics.Trace.WriteLine("Error Adding Reference: " + name.FullName);
+                            CoreConsole.Log("Error Adding Reference: " + name.FullName);
                         }
                     }
                 }
@@ -117,10 +124,12 @@ namespace Verse3
                 foreach (var type in types)
                 {
                     System.Diagnostics.Trace.WriteLine(type.FullName);
+                    CoreConsole.Log(type.FullName);
 
                     if ((typeof(IElement).IsAssignableFrom(type)) || (type.GetInterface("IElement") != null))
                     {
                         System.Diagnostics.Trace.WriteLine($"Loading {type.FullName}");
+                        CoreConsole.Log($"Loading {type.FullName}");
                         var command = AssemblyCompiler.CreateRunClass(type);
                         if (command != null) foundCommands.Add(command);
                     }
@@ -129,7 +138,8 @@ namespace Verse3
 
             catch (ReflectionTypeLoadException ex1)
             {
-                System.Diagnostics.Trace.WriteLine("Reflection Type Load Error: " + ex1.Message);
+                //System.Diagnostics.Trace.WriteLine("Reflection Type Load Error: " + ex1.Message);
+                CoreConsole.Log(ex1, "Reflection Type Load Error: ");
             }
             return foundCommands;
         }
@@ -138,14 +148,17 @@ namespace Verse3
         {
             List<IElement> foundCommands = new List<IElement>();
             System.Diagnostics.Trace.WriteLine(assembly.FullName);
+            CoreConsole.Log(assembly.FullName);
 
             foreach (var type in assembly.GetTypes())
             {
                 System.Diagnostics.Trace.WriteLine(type.FullName);
+                CoreConsole.Log(type.FullName);
 
                 if (typeof(IElement).IsAssignableFrom(type))
                 {
                     System.Diagnostics.Trace.WriteLine($"Loading {type.FullName}");
+                    CoreConsole.Log($"Loading {type.FullName}");
                     var command = AssemblyCompiler.CreateRunClass(type);
                     if (command != null) foundCommands.Add(command);
                 }

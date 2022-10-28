@@ -71,6 +71,7 @@ namespace TextLibrary
                             }
                             catch (Exception ex)
                             {
+                                CoreConsole.Log(ex);
                                 this.previewTextBlock.DisplayedText = ex.Message;
                             }
                             break;

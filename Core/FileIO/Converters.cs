@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using Core;
 
 namespace SaveXML
 {
@@ -27,27 +28,35 @@ namespace SaveXML
         /// <returns>Returns XML as string.</returns>
         public static string CreateXML(Object YourClassObject)
         {
-            if (YourClassObject != null && YourClassObject is XmlAttributesContainer)
+            try
             {
-                XmlAttributesContainer container = YourClassObject as XmlAttributesContainer;
-
-                if (container.XMLAttributes == null) throw new Exception("XMLAttributes cannot be null.");
-
-                XmlDocument xmlDoc = new XmlDocument();   //Represents an XML document.
-                
-                // Initializes a new instance of the XmlDocument class.
-                XmlSerializer xmlSerializer = new XmlSerializer(YourClassObject.GetType(), container.XMLAttributes);
-                // Creates a stream whose backing store is memory. 
-                using (MemoryStream xmlStream = new MemoryStream())
+                if (YourClassObject != null && YourClassObject is XmlAttributesContainer)
                 {
-                    xmlSerializer.Serialize(xmlStream, YourClassObject);
-                    xmlStream.Position = 0;
-                    //Loads the XML document from the specified string.
-                    xmlDoc.Load(xmlStream);
-                    return xmlDoc.InnerXml;
+                    XmlAttributesContainer container = YourClassObject as XmlAttributesContainer;
+
+                    if (container.XMLAttributes == null) throw new Exception("XMLAttributes cannot be null.");
+
+                    XmlDocument xmlDoc = new XmlDocument();   //Represents an XML document.
+
+                    // Initializes a new instance of the XmlDocument class.
+                    XmlSerializer xmlSerializer = new XmlSerializer(YourClassObject.GetType(), container.XMLAttributes);
+                    // Creates a stream whose backing store is memory. 
+                    using (MemoryStream xmlStream = new MemoryStream())
+                    {
+                        xmlSerializer.Serialize(xmlStream, YourClassObject);
+                        xmlStream.Position = 0;
+                        //Loads the XML document from the specified string.
+                        xmlDoc.Load(xmlStream);
+                        return xmlDoc.InnerXml;
+                    }
                 }
+                else throw new Exception("Object cannot be null.");
             }
-            else throw new Exception("Object cannot be null.");
+            catch (Exception ex)
+            {
+                CoreConsole.Log(ex);
+                return null;
+            }
         }
         /// <summary>
         /// <see cref="CreateObject"/> method converts specified XML string into an <see cref="Object"/> that can be explicitly converted to corresponding class object.

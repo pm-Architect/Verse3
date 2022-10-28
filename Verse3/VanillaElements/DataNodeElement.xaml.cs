@@ -76,7 +76,7 @@ namespace Verse3.VanillaElements
         //    }
         //    catch/* (Exception ex)*/
         //    {
-        //        //throw ex;
+        //        //CoreConsole.Log(ex);
         //    }
         //}
 
@@ -121,9 +121,9 @@ namespace Verse3.VanillaElements
                         {
                             this._element.NodeContentColor = Brushes.White;
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            throw;
+                            CoreConsole.Log(ex);
                         }
                         foreach (BezierElement bezier in node.Connections)
                         {
@@ -148,9 +148,9 @@ namespace Verse3.VanillaElements
                             this._element.NodeContentColor = Brushes.Transparent;
                             //RenderingCore.Render(this._element.Parent);
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            throw;
+                            CoreConsole.Log(ex);
                         }
                     }
                 }
@@ -161,9 +161,9 @@ namespace Verse3.VanillaElements
                         this._element.NodeContentColor = Brushes.Transparent;
                         //RenderingCore.Render(this._element.Parent);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        throw;
+                        CoreConsole.Log(ex);
                     }
                 }
             }

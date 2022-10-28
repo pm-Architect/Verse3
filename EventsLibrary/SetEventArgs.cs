@@ -61,7 +61,7 @@ namespace EventsLibrary
             }
             catch (Exception ex)
             {
-                throw ex;
+                CoreConsole.Log(ex);
             }
             ComputationCore.Compute(this, false);
         }

@@ -29,7 +29,7 @@ namespace Verse3
                         continue;
                     }
                     var name = assembly.GetName().Name + ".dll";
-                    Console.WriteLine(name);
+                    CoreConsole.Log(name);
                     string loc = assembly.Location;
                     try
                     {
@@ -40,8 +40,7 @@ namespace Verse3
                     }
                     catch (Exception ex)
                     {
-                        CoreConsole.Log(ex.Message + " at " + loc);
-                        //throw new Exception(ex.Message);
+                        CoreConsole.Log(ex);
                     }
                 }
             }
@@ -121,8 +120,7 @@ namespace Verse3
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Trace.WriteLine(ex.Message);
-                //throw ex;
+                CoreConsole.Log(ex);
                 return null;
             }
         }

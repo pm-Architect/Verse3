@@ -14,22 +14,6 @@ namespace ColorLibrary
     public class ColorSelector : BaseComp
     {
         internal Color? _value = Color.FromArgb(255, 255, 255, 255);
-        //private double _inputValue = 0.0;
-
-        public string? ElementText
-        {
-            get
-            {
-                string? name = this.GetType().FullName;
-                string? viewname = this.ViewType.FullName;
-                string? dataIN = _value.ToString();
-                //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
-                //dataIN = ((NumberDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0])?.DataGoo.Data.ToString();
-                //string? zindex = DataViewModel.WPFControl.Content.
-                
-                return $"Value: {dataIN}";
-            }
-        }
         
         #region Constructors
 
@@ -99,8 +83,7 @@ namespace ColorLibrary
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                //throw;
+                CoreConsole.Log(ex);
             }
         }
 

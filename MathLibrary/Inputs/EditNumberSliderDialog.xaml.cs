@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,7 +26,11 @@ namespace MathLibrary.Inputs
             InitializeComponent();
             _owner = owner;
             if (_owner != null && _owner._sliderValue.HasValue) Value = _owner._sliderValue.Value;
-            else throw new ArgumentNullException("owner");
+            else
+            {
+                Exception ex = new ArgumentNullException("owner");
+                CoreConsole.Log(ex);
+            }
         }
 
         public double Value
@@ -51,7 +56,11 @@ namespace MathLibrary.Inputs
         {
             if (_owner != null && _owner.sliderBlock != null)
                 _owner.sliderBlock.Value = Value;
-            else throw new ArgumentNullException("owner");
+            else
+            {
+                Exception ex = new ArgumentNullException("owner");
+                CoreConsole.Log(ex);
+            }
             this.Close();
         }
 

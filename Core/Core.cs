@@ -16,6 +16,10 @@ namespace Core
         {
             CoreConsole.Initialize();
         }
+        public static void Log(string message)
+        {
+            CoreConsole.Log(message);
+        }
         public static async Task<string> Login()
         {
             string uri = await Client.Instance.Auth.SignIn(Supabase.Gotrue.Client.Provider.LinkedIn);
@@ -197,8 +201,8 @@ namespace Core
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
-                    //throw ex;
+                    CoreConsole.Log(ex);
+                    //CoreConsole.Log(ex);
                 }
             }
             else
@@ -209,8 +213,8 @@ namespace Core
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
-                    //throw ex;
+                    CoreConsole.Log(ex);
+                    //CoreConsole.Log(ex);
                 }
             }
         }
@@ -260,10 +264,5 @@ namespace Core
                 renderable.RenderExpired = false;
             }
         }
-    }
-
-    internal static class AssemblyManager
-    {
-
     }
 }
