@@ -137,13 +137,14 @@ namespace Core
 
     public interface IComputable : IElement
     {
-        [JsonIgnore]
+        //[JsonIgnore]
         public ComputationPipelineInfo ComputationPipelineInfo { get; }
 
         //public ElementsLinkedList<INode> Nodes { get; }
 
         void CollectData();
 
+        [JsonIgnore]
         public ComputableElementState ComputableElementState { get; set; }
         //public ElementConsole Console { get; }
         //public bool Enabled { get; set; }
@@ -157,19 +158,25 @@ namespace Core
 
     public class ComputationPipelineInfo
     {
+        [JsonIgnore]
         private IComputable _computable;
+        [JsonIgnore]
         private IOManager _ioManager;
         [JsonIgnore]
         public IOManager IOManager => _ioManager;
+        [JsonIgnore]
         private ElementsLinkedList<IComputable> _dataDS = new ElementsLinkedList<IComputable>();
         public ElementsLinkedList<IComputable> DataDS => _dataDS;
 
+        [JsonIgnore]
         private ElementsLinkedList<IComputable> _dataUS = new ElementsLinkedList<IComputable>();
         public ElementsLinkedList<IComputable> DataUS => _dataUS;
 
+        [JsonIgnore]
         private ElementsLinkedList<IComputable> _eventDS = new ElementsLinkedList<IComputable>();
         public ElementsLinkedList<IComputable> EventDS => _eventDS;
 
+        [JsonIgnore]
         private ElementsLinkedList<IComputable> _eventUS = new ElementsLinkedList<IComputable>();
         public ElementsLinkedList<IComputable> EventUS => _eventUS;
         public ComputationPipelineInfo(IComputable computable)

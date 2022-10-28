@@ -48,31 +48,37 @@ namespace Core
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
+        [JsonIgnore]
         protected ElementsLinkedList<IElement> elements = new ElementsLinkedList<IElement>();
 
         ///
         /// The current scale at which the content is being viewed.
         /// 
+        [JsonIgnore]
         protected double contentScale = 1;
 
         ///
         /// The X coordinate of the offset of the viewport onto the content (in content coordinates).
         /// 
+        [JsonIgnore]
         protected double contentOffsetX = 0;
 
         ///
         /// The Y coordinate of the offset of the viewport onto the content (in content coordinates).
         /// 
+        [JsonIgnore]
         protected double contentOffsetY = 0;
 
         ///
         /// The width of the content (in content coordinates).
         /// 
+        [JsonIgnore]
         protected double contentWidth = 0;
 
         ///
         /// The heigth of the content (in content coordinates).
         /// 
+        [JsonIgnore]
         protected double contentHeight = 0;
 
         ///
@@ -80,6 +86,7 @@ namespace Core
         /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
         /// data model so that the value can be shared with the overview window.
         /// 
+        [JsonIgnore]
         protected double contentViewportWidth = 0;
 
         ///
@@ -87,6 +94,7 @@ namespace Core
         /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
         /// data model so that the value can be shared with the overview window.
         /// 
+        [JsonIgnore]
         protected double contentViewportHeight = 0;
 
         #endregion Data Members
@@ -114,6 +122,7 @@ namespace Core
             }
         }
 
+        [JsonIgnore]
         public static double ContentCanvasMarginOffset = 0.0;
 
         protected DataModel() : base()
@@ -131,13 +140,13 @@ namespace Core
             //
             //DataModel.instance = this;
             this.elements = (ElementsLinkedList<IElement>)info.GetValue("elements", typeof(ElementsLinkedList<IElement>));
-            this.contentScale = (double)info.GetValue("contentScale", typeof(double));
-            this.contentOffsetX = (double)info.GetValue("contentOffsetX", typeof(double));
-            this.contentOffsetY = (double)info.GetValue("contentOffsetY", typeof(double));
-            this.contentWidth = (double)info.GetValue("contentWidth", typeof(double));
-            this.contentHeight = (double)info.GetValue("contentHeight", typeof(double));
-            this.contentViewportWidth = (double)info.GetValue("contentViewportWidth", typeof(double));
-            this.contentViewportHeight = (double)info.GetValue("contentViewportHeight", typeof(double));
+            //this.contentScale = (double)info.GetValue("contentScale", typeof(double));
+            //this.contentOffsetX = (double)info.GetValue("contentOffsetX", typeof(double));
+            //this.contentOffsetY = (double)info.GetValue("contentOffsetY", typeof(double));
+            //this.contentWidth = (double)info.GetValue("contentWidth", typeof(double));
+            //this.contentHeight = (double)info.GetValue("contentHeight", typeof(double));
+            //this.contentViewportWidth = (double)info.GetValue("contentViewportWidth", typeof(double));
+            //this.contentViewportHeight = (double)info.GetValue("contentViewportHeight", typeof(double));
         }
 
         #endregion
@@ -148,7 +157,6 @@ namespace Core
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
         [XmlIgnore]
-        [JsonIgnore]
         public ElementsLinkedList<IElement> Elements
         {
             get
@@ -169,13 +177,13 @@ namespace Core
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("elements", this.elements);
-            info.AddValue("contentScale", this.contentScale);
-            info.AddValue("contentOffsetX", this.contentOffsetX);
-            info.AddValue("contentOffsetY", this.contentOffsetY);
-            info.AddValue("contentWidth", this.contentWidth);
-            info.AddValue("contentHeight", this.contentHeight);
-            info.AddValue("contentViewportWidth", this.contentViewportWidth);
-            info.AddValue("contentViewportHeight", this.contentViewportHeight);
+            //info.AddValue("contentScale", this.contentScale);
+            //info.AddValue("contentOffsetX", this.contentOffsetX);
+            //info.AddValue("contentOffsetY", this.contentOffsetY);
+            //info.AddValue("contentWidth", this.contentWidth);
+            //info.AddValue("contentHeight", this.contentHeight);
+            //info.AddValue("contentViewportWidth", this.contentViewportWidth);
+            //info.AddValue("contentViewportHeight", this.contentViewportHeight);
         }
 
         ///
@@ -376,6 +384,7 @@ namespace Core
         [XmlIgnore]
         public Guid ID { get; }
 
+        [JsonIgnore]
         public ElementState ElementState { get; set; }
 
         public ElementType ElementType { get; set; }

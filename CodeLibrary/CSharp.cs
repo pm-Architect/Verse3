@@ -117,26 +117,26 @@ namespace CodeLibrary
 
             ideElement = new IDEElement();
             ideElement.ScriptChanged += IdeElement_ScriptChanged;
-            ideElement.Width = 600;
-            ideElement.Height = 350;
+            //ideElement.Width = 600;
+            //ideElement.Height = 350;
             this.ChildElementManager.AddElement(ideElement);
 
             buttonBlock = new ButtonElement();
             buttonBlock.DisplayedText = "Compile";
             buttonBlock.OnButtonClicked += ButtonBlock_OnButtonClicked;
-            buttonBlock.Width = 200;
+            //buttonBlock.Width = 200;
             this.ChildElementManager.AddElement(buttonBlock);
 
             buttonBlock1 = new ButtonElement();
             buttonBlock1.DisplayedText = "Load Instance";
             buttonBlock1.OnButtonClicked += ButtonBlock1_OnButtonClicked;
-            buttonBlock1.Width = 200;
+            //buttonBlock1.Width = 200;
             this.ChildElementManager.AddElement(buttonBlock1);
 
             buttonBlock2 = new ButtonElement();
             buttonBlock2.DisplayedText = "Add to Arsenal";
             buttonBlock2.OnButtonClicked += ButtonBlock2_OnButtonClicked;
-            buttonBlock2.Width = 200;
+            //buttonBlock2.Width = 200;
             this.ChildElementManager.AddElement(buttonBlock2);
         }
 

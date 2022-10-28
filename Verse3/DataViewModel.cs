@@ -41,6 +41,7 @@ namespace Verse3
         [XmlElement]
         public DataViewModel DataViewModel { get; set; }
         [XmlIgnore]
+        [JsonIgnore]
         public XmlSerializer XMLSerializer
         {
             get
@@ -69,6 +70,7 @@ namespace Verse3
             }
         }
         [XmlIgnore]
+        [JsonIgnore]
         public override XmlAttributeOverrides XMLAttributes
         {
             get
@@ -376,15 +378,19 @@ namespace Verse3
     public class DataViewModel : DataModel
     {
         [XmlIgnore]
+        [JsonIgnore]
         public static InfiniteCanvasWPFControl WPFControl { get; private set; }
         [XmlIgnore]
+        [JsonIgnore]
         public static INode ActiveNode { get; internal set; }
         [XmlIgnore]
+        [JsonIgnore]
         public static IConnection ActiveConnection { get; internal set; }
 
         private static Dispatcher dispatcher = null;
         internal static CompInfo SearchBarCompInfo;
 
+        [JsonIgnore]
         [XmlIgnore]
         public static Dispatcher Dispatcher { get => dispatcher; }
 
@@ -680,10 +686,12 @@ namespace Verse3
             set => boundingBox.Size.Height = value;
         }
 
+        [JsonIgnore]
         public ElementState State { get; set; }
 
         //public IRenderView ElementView { get; internal set; }
 
+        [JsonIgnore]
         public ElementState ElementState { get; set; }
         
         private ElementType _elementType = ElementType.UIElement;
@@ -788,17 +796,17 @@ namespace Verse3
             try
             {
                 //info.AddValue("ID", this.ID);
-                info.AddValue("X", this.X);
-                info.AddValue("Y", this.Y);
-                info.AddValue("Width", this.Width);
-                info.AddValue("Height", this.Height);
-                info.AddValue("ElementType", this.ElementType);
-                info.AddValue("State", this.State);
-                info.AddValue("IsSelected", this.IsSelected);
-                info.AddValue("BoundingBox", this.BoundingBox);
-                info.AddValue("ElementState", this.ElementState);
-                info.AddValue("Parent", this.Parent);
-                info.AddValue("Children", this.Children);
+                //info.AddValue("X", this.X);
+                //info.AddValue("Y", this.Y);
+                //info.AddValue("Width", this.Width);
+                //info.AddValue("Height", this.Height);
+                //info.AddValue("ElementType", this.ElementType);
+                //info.AddValue("State", this.State);
+                //info.AddValue("IsSelected", this.IsSelected);
+                //info.AddValue("BoundingBox", this.BoundingBox);
+                //info.AddValue("ElementState", this.ElementState);
+                //info.AddValue("Parent", this.Parent);
+                //info.AddValue("Children", this.Children);
             }
             catch (Exception ex)
             {

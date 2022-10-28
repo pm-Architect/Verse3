@@ -16,8 +16,8 @@ namespace MathLibrary
                 string? name = this.GetType().FullName;
                 string? viewname = this.ViewType.FullName;
                 string? dataIN = "";
-                if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
-                    dataIN = ((BooleanDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data.ToString();
+                //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
+                //    dataIN = ((BooleanDataNode)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data.ToString();
                 //string? zindex = DataViewModel.WPFControl.Content.
                 
                 return $"Output Value: {dataIN}";

@@ -115,14 +115,18 @@ namespace Verse3
         
         public Guid ID { get => _id; set => _id = value; }
 
+        [JsonIgnore]
         public bool IsSelected { get; set; }
 
         public BoundingBox BoundingBox { get => boundingBox; set => SetProperty(ref boundingBox, value); }
 
+        [JsonIgnore]
         public double X { get => boundingBox.Location.X; }
 
+        [JsonIgnore]
         public double Y { get => boundingBox.Location.Y; }
 
+        [JsonIgnore]
         public double Width
         {
             get => boundingBox.Size.Width;
@@ -133,6 +137,7 @@ namespace Verse3
             }
         }
 
+        [JsonIgnore]
         public double Height
         {
             get => boundingBox.Size.Height;
@@ -143,21 +148,26 @@ namespace Verse3
             }
         }
 
+        [JsonIgnore]
         public ElementState State { get; set; }
 
         //public IRenderView ElementView { get; internal set; }
 
+        [JsonIgnore]
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get => ElementType.BaseComp; set => ElementType = ElementType.BaseComp; }
         [XmlIgnore]
+        [JsonIgnore]
         bool IRenderable.Visible { get; set; }
 
         private Brush background;
         [XmlIgnore]
+        [JsonIgnore]
         public Brush Background { get => background; set => SetProperty(ref background, value); }
 
         private Brush accent;
         [XmlIgnore]
+        [JsonIgnore]
         public Brush Accent { get => accent; set => SetProperty(ref accent, value); }
 
         //internal CompOrientation _orientation = CompOrientation.Vertical;
@@ -204,7 +214,9 @@ namespace Verse3
             }
         }
 
+        [JsonIgnore]
         public bool RenderExpired { get; set; }
+        [JsonIgnore]
         public virtual ContextMenu ContextMenu
         {
             get
@@ -470,17 +482,17 @@ namespace Verse3
             {
                 //info.AddValue("ID", this.ID);
                 CompInfo ci = GetCompInfo();
-                info.AddValue("Name", ci.Name);
-                info.AddValue("MetadataCompInfo", MetadataCompInfo);
+                //info.AddValue("Name", ci.Name);
+                //info.AddValue("MetadataCompInfo", MetadataCompInfo);
                 //info.AddValue("X", this.X);
                 //info.AddValue("Y", this.Y);
                 //info.AddValue("Width", this.Width);
                 //info.AddValue("Height", this.Height);
-                info.AddValue("ElementType", this.ElementType);
-                info.AddValue("State", this.State);
-                info.AddValue("IsSelected", this.IsSelected);
-                info.AddValue("BoundingBox", this.BoundingBox);
-                info.AddValue("ElementState", this.ElementState);
+                //info.AddValue("ElementType", this.ElementType);
+                //info.AddValue("State", this.State);
+                //info.AddValue("IsSelected", this.IsSelected);
+                //info.AddValue("BoundingBox", this.BoundingBox);
+                //info.AddValue("ElementState", this.ElementState);
             }
             catch (Exception ex)
             {
@@ -1226,6 +1238,7 @@ namespace Verse3
 
         public Guid ID { get => _id; private set => _id = value; }
 
+        [JsonIgnore]
         public bool IsSelected { get; set; }
 
         public BoundingBox BoundingBox { get => boundingBox; private set => SetProperty(ref boundingBox, value); }
@@ -1254,12 +1267,15 @@ namespace Verse3
             set => boundingBox.Size.Height = value;
         }
 
+        [JsonIgnore]
         public ElementState State { get; set; }
 
         //public IRenderView ElementView { get; internal set; }
 
+        [JsonIgnore]
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get => ElementType.Node; set => ElementType = ElementType.Node; }
+        [JsonIgnore]
         bool IRenderable.Visible { get; set; }
 
 
@@ -1409,6 +1425,7 @@ namespace Verse3
         private NodeType _nodeType = NodeType.Unset;
         public NodeType NodeType { get => _nodeType; }
 
+        [JsonIgnore]
         internal CanvasPoint _hotspot = new CanvasPoint(0, 0);
         [JsonIgnore]
         [IgnoreDataMember]
@@ -1497,7 +1514,9 @@ namespace Verse3
         [IgnoreDataMember]
         public Type DataValueType => typeof(D);
 
+        [JsonIgnore]
         private DataStructure<D> _dataGoo = new DataStructure<D>();
+        [JsonIgnore]
         public DataStructure<D> DataGoo
         {
             get => _dataGoo;
@@ -1539,7 +1558,9 @@ namespace Verse3
         [JsonIgnore]
         [IgnoreDataMember]
         public ElementsLinkedList<INode> Nodes => new ElementsLinkedList<INode>() { this };
+        [JsonIgnore]
         public ComputableElementState ComputableElementState { get; set; }
+        [JsonIgnore]
         DataStructure IDataGooContainer.DataGoo
         {
             get => _dataGoo;
@@ -1889,6 +1910,7 @@ namespace Verse3
             }
         }
 
+        [JsonIgnore]
         public double HotspotThresholdRadius { get; }
 
         //public Type DataValueType => typeof(D);
@@ -1896,6 +1918,7 @@ namespace Verse3
         //private DataStructure<D> _dataGoo = new DataStructure<D>();
         //public DataStructure<D> DataGoo { get => _dataGoo; set => _dataGoo = value; }
 
+        [JsonIgnore]
         private ComputationPipelineInfo _computationPipelineInfo;
         [JsonIgnore]
         [IgnoreDataMember]
@@ -1904,6 +1927,7 @@ namespace Verse3
         [JsonIgnore]
         [IgnoreDataMember]
         public ElementsLinkedList<INode> Nodes => new ElementsLinkedList<INode>() { this };
+        [JsonIgnore]
         public ComputableElementState ComputableElementState { get; set; }
         //DataStructure IDataGooContainer.DataGoo
         //{
@@ -1968,6 +1992,7 @@ namespace Verse3
 
         public Guid ID { get => _id; private set => _id = value; }
 
+        [JsonIgnore]
         public bool IsSelected { get; set; }
 
         public BoundingBox BoundingBox { get => boundingBox; private set => SetProperty(ref boundingBox, value); }
@@ -1996,12 +2021,15 @@ namespace Verse3
             set => boundingBox.Size.Height = value;
         }
 
+        [JsonIgnore]
         public ElementState State { get; set; }
 
         //public IRenderView ElementView { get; internal set; }
 
+        [JsonIgnore]
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get => ElementType.Node; set => ElementType = ElementType.Node; }
+        [JsonIgnore]
         bool IRenderable.Visible { get; set; }
 
 
@@ -2061,6 +2089,7 @@ namespace Verse3
         //public CanvasPoint Hotspot => throw new NotImplementedException();
 
         //public double HotspotThresholdRadius => throw new NotImplementedException();
+        [JsonIgnore]
         public bool RenderExpired { get; set; }
 
         //public IRenderable Parent => this.RenderPipelineInfo.Parent;
@@ -2330,17 +2359,17 @@ namespace Verse3
             try
             {
                 //info.AddValue("ID", this.ID);
-                info.AddValue("X", this.X);
-                info.AddValue("Y", this.Y);
-                info.AddValue("Width", this.Width);
-                info.AddValue("Height", this.Height);
-                info.AddValue("ElementType", this.ElementType);
-                info.AddValue("State", this.State);
-                info.AddValue("IsSelected", this.IsSelected);
-                info.AddValue("BoundingBox", this.BoundingBox);
-                info.AddValue("ElementState", this.ElementState);
-                info.AddValue("Parent", this.Parent);
-                info.AddValue("Children", this.Children);
+                //info.AddValue("X", this.X);
+                //info.AddValue("Y", this.Y);
+                //info.AddValue("Width", this.Width);
+                //info.AddValue("Height", this.Height);
+                //info.AddValue("ElementType", this.ElementType);
+                //info.AddValue("State", this.State);
+                //info.AddValue("IsSelected", this.IsSelected);
+                //info.AddValue("BoundingBox", this.BoundingBox);
+                //info.AddValue("ElementState", this.ElementState);
+                //info.AddValue("Parent", this.Parent);
+                //info.AddValue("Children", this.Children);
             }
             catch (Exception ex)
             {

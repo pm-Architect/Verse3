@@ -142,6 +142,7 @@ namespace Core
         //public IRenderable ZPrev => _zPrev;
         //private IRenderable _zNext;
         //public IRenderable ZNext => _zNext;
+        [JsonIgnore]
         private IRenderable _parent;
         [JsonIgnore]
         public IRenderable Parent
@@ -149,6 +150,7 @@ namespace Core
             get { return _parent; }
             set { _parent = value; }
         }
+        [JsonIgnore]
         private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
         [JsonIgnore]
         public ElementsLinkedList<IRenderable> Children => _children;
@@ -213,7 +215,7 @@ namespace Core
         object ViewKey { get; set; }
         [JsonIgnore]
         IRenderView RenderView { get; set; }
-
+        [JsonIgnore]
         public bool Visible { get; set; }
 
         #endregion
@@ -228,6 +230,7 @@ namespace Core
         /// <summary>
         /// The X coordinate of the location of the element Bounding Box (in content coordinates).
         /// </summary>
+        [JsonIgnore]
         double X { get; }
         /// <summary>
         /// Set the X coordinate of the location of the element Bounding Box (in content coordinates).
@@ -241,6 +244,7 @@ namespace Core
         /// <summary>
         /// The Y coordinate of the location of the element Bounding Box (in content coordinates).
         /// </summary>
+        [JsonIgnore]
         double Y { get; }
         /// <summary>
         /// Set the Y coordinate of the location of the element Bounding Box (in content coordinates).
@@ -254,6 +258,7 @@ namespace Core
         /// <summary>
         /// The width of the element Bounding Box (in content coordinates).
         /// </summary>
+        [JsonIgnore]
         double Width { get; set; }
         /// <summary>
         /// Set the width of the element Bounding Box (in content coordinates).
@@ -263,8 +268,11 @@ namespace Core
         /// <summary>
         /// The height of the element Bounding Box (in content coordinates).
         /// </summary>
+        [JsonIgnore]
         double Height { get; set; }
+        [JsonIgnore]
         bool IsSelected { get; set; }
+        [JsonIgnore]
         bool RenderExpired { get; set; }
 
         /// <summary>

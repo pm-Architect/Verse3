@@ -1,0 +1,1907 @@
+{
+  "$id": "1",
+  "DataViewModel": {
+    "$id": "2",
+    "elements": [
+      {
+        "$id": "3",
+        "ID": "4bfb2edc-cdf1-47e9-847d-6aa4ca3d3807",
+        "BoundingBox": {
+          "Location": { "$id": "4", "X": 0.0, "Y": 0.0 },
+          "Size": { "$id": "5", "Width": 10.0, "Height": 10.0 }
+        },
+        "State": 0,
+        "ElementType": 5
+      },
+      {
+        "$id": "6",
+        "ID": "3d638c0e-3f13-40cd-87c7-7f9343ae5865",
+        "BoundingBox": {
+          "Location": { "$id": "7", "X": 14990.0, "Y": 14990.0 },
+          "Size": { "$id": "8", "Width": 10.0, "Height": 10.0 }
+        },
+        "State": 0,
+        "ElementType": 5
+      },
+      {
+        "$id": "9",
+        "Name": "Toggle Boolean",
+        "MetadataCompInfo": "{\"Name\":\"Toggle Boolean\",\"Group\":\"Basic UI\",\"Tab\":\"Boolean\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"EventsLibrary.ToggleBoolean\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF1B3656\"}",
+        "ID": "2b116c85-eb94-48ba-a987-3d1ad128839b",
+        "BoundingBox": {
+          "$id": "10",
+          "Location": {
+            "$id": "11",
+            "X": 2039.333333333334,
+            "Y": 4617.333333333334
+          },
+          "Size": { "$id": "12", "Width": 210.26333333333335, "Height": 274.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "13",
+        "Name": "AND Gate",
+        "MetadataCompInfo": "{\"Name\":\"AND Gate\",\"Group\":\"Gates\",\"Tab\":\"Boolean\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.AndGate\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF591F70\"}",
+        "ID": "ce40e8f9-955c-4f0a-becb-4439ba515ca8",
+        "BoundingBox": {
+          "$id": "14",
+          "Location": {
+            "$id": "15",
+            "X": 2278.333333333334,
+            "Y": 4623.333333333334
+          },
+          "Size": { "$id": "16", "Width": 174.10000000000002, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "17",
+        "Name": "NOT Gate",
+        "MetadataCompInfo": "{\"Name\":\"NOT Gate\",\"Group\":\"Gates\",\"Tab\":\"Boolean\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.NotGate\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF6D2236\"}",
+        "ID": "725c1e4a-5d90-47d9-84ca-6993405b4b82",
+        "BoundingBox": {
+          "$id": "18",
+          "Location": {
+            "$id": "19",
+            "X": 2487.333333333334,
+            "Y": 4621.333333333334
+          },
+          "Size": {
+            "$id": "20",
+            "Width": 174.10000000000002,
+            "Height": 146.14000000000001
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "21",
+        "Name": "OR Gate",
+        "MetadataCompInfo": "{\"Name\":\"OR Gate\",\"Group\":\"Gates\",\"Tab\":\"Boolean\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.OrGate\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF332C69\"}",
+        "ID": "e1d3c196-7689-44aa-bc41-87281c6c15c7",
+        "BoundingBox": {
+          "$id": "22",
+          "Location": {
+            "$id": "23",
+            "X": 2687.333333333334,
+            "Y": 4622.333333333334
+          },
+          "Size": { "$id": "24", "Width": 174.10000000000002, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "25",
+        "Name": "XOR Gate",
+        "MetadataCompInfo": "{\"Name\":\"XOR Gate\",\"Group\":\"Gates\",\"Tab\":\"Boolean\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.XorGate\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF11191E\"}",
+        "ID": "a12f1fd2-fdc6-49a1-ac8c-e50ffa2b95d8",
+        "BoundingBox": {
+          "$id": "26",
+          "Location": {
+            "$id": "27",
+            "X": 2885.333333333334,
+            "Y": 4627.333333333334
+          },
+          "Size": { "$id": "28", "Width": 174.10000000000002, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "29",
+        "Name": "Equal To",
+        "MetadataCompInfo": "{\"Name\":\"Equal To\",\"Group\":\"Comparison\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.EqualTo\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF6E4804\"}",
+        "ID": "addff8b7-7eb1-4a23-904c-c0f6f701d9e7",
+        "BoundingBox": {
+          "$id": "30",
+          "Location": {
+            "$id": "31",
+            "X": 2044.333333333334,
+            "Y": 4949.333333333334
+          },
+          "Size": { "$id": "32", "Width": 186.51333333333335, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "33",
+        "Name": "Greater Than",
+        "MetadataCompInfo": "{\"Name\":\"Greater Than\",\"Group\":\"Comparison\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.GreaterThan\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF161D06\"}",
+        "ID": "ea0fcd2e-2937-4a25-8321-a965ba576d2c",
+        "BoundingBox": {
+          "$id": "34",
+          "Location": {
+            "$id": "35",
+            "X": 2276.333333333334,
+            "Y": 4958.333333333334
+          },
+          "Size": { "$id": "36", "Width": 263.04333333333335, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "37",
+        "Name": "Less Than",
+        "MetadataCompInfo": "{\"Name\":\"Less Than\",\"Group\":\"Comparison\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.LessThan\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF454C4C\"}",
+        "ID": "6aedcee1-aa6c-447b-9e27-e296eb63bffd",
+        "BoundingBox": {
+          "$id": "38",
+          "Location": {
+            "$id": "39",
+            "X": 2562.333333333334,
+            "Y": 4952.333333333334
+          },
+          "Size": { "$id": "40", "Width": 245.85000000000002, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "41",
+        "Name": "Binomial Equation",
+        "MetadataCompInfo": "{\"Name\":\"Binomial Equation\",\"Group\":\"Advanced Operations\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.BinomialEquation\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF5A4D73\"}",
+        "ID": "7be95ef0-bdad-4027-a834-96a86d3484ac",
+        "BoundingBox": {
+          "$id": "42",
+          "Location": {
+            "$id": "43",
+            "X": 2835.333333333334,
+            "Y": 4949.333333333334
+          },
+          "Size": {
+            "$id": "44",
+            "Width": 188.01666666666668,
+            "Height": 190.3766666666667
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "45",
+        "Name": "Factorial",
+        "MetadataCompInfo": "{\"Name\":\"Factorial\",\"Group\":\"Advanced Operations\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Factorial\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF033C03\"}",
+        "ID": "908df060-e373-4394-91b7-02788f422520",
+        "BoundingBox": {
+          "$id": "46",
+          "Location": {
+            "$id": "47",
+            "X": 3054.333333333334,
+            "Y": 4949.333333333334
+          },
+          "Size": { "$id": "48", "Width": 174.10000000000002, "Height": 138.69 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "49",
+        "Name": "Logarithm",
+        "MetadataCompInfo": "{\"Name\":\"Logarithm\",\"Group\":\"Advanced Operations\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Logarithm\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF066F59\"}",
+        "ID": "e76cde95-0059-4f68-a30c-172382a67a52",
+        "BoundingBox": {
+          "$id": "50",
+          "Location": {
+            "$id": "51",
+            "X": 3276.333333333334,
+            "Y": 4951.333333333334
+          },
+          "Size": { "$id": "52", "Width": 209.96666666666667, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "53",
+        "Name": "Permutation and Combination",
+        "MetadataCompInfo": "{\"Name\":\"Permutation and Combination\",\"Group\":\"Advanced Operations\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.PermutationCombination\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF690C1B\"}",
+        "ID": "5ec890be-3347-4680-b5de-feebebfe4f38",
+        "BoundingBox": {
+          "$id": "54",
+          "Location": {
+            "$id": "55",
+            "X": 3506.333333333334,
+            "Y": 4954.333333333334
+          },
+          "Size": {
+            "$id": "56",
+            "Width": 209.63666666666668,
+            "Height": 254.20333333333335
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "57",
+        "Name": "Square Root",
+        "MetadataCompInfo": "{\"Name\":\"Square Root\",\"Group\":\"Advanced Operations\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.SquareRoot\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF04107C\"}",
+        "ID": "d1ec0ebb-5fbc-4be1-a359-017adae21801",
+        "BoundingBox": {
+          "$id": "58",
+          "Location": {
+            "$id": "59",
+            "X": 3734.3333333333335,
+            "Y": 4950.333333333334
+          },
+          "Size": {
+            "$id": "60",
+            "Width": 174.10000000000002,
+            "Height": 159.42666666666668
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "61",
+        "Name": "Addition",
+        "MetadataCompInfo": "{\"Name\":\"Addition\",\"Group\":\"Operations\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Addition\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF172446\"}",
+        "ID": "6a3833f6-ddbf-46e5-a930-454d56aaf053",
+        "BoundingBox": {
+          "$id": "62",
+          "Location": {
+            "$id": "63",
+            "X": 2045.333333333334,
+            "Y": 5225.333333333334
+          },
+          "Size": { "$id": "64", "Width": 174.10000000000002, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "65",
+        "Name": "Division",
+        "MetadataCompInfo": "{\"Name\":\"Division\",\"Group\":\"Operations\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Division\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF247527\"}",
+        "ID": "9d9474bf-71fe-49b6-88fc-6c82049585db",
+        "BoundingBox": {
+          "$id": "66",
+          "Location": {
+            "$id": "67",
+            "X": 2248.333333333334,
+            "Y": 5224.333333333334
+          },
+          "Size": { "$id": "68", "Width": 198.90000000000003, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "69",
+        "Name": "Multiplication",
+        "MetadataCompInfo": "{\"Name\":\"Multiplication\",\"Group\":\"Operations\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Multiplication\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF04025A\"}",
+        "ID": "b4067832-fb00-4b0e-bc68-d1125516e838",
+        "BoundingBox": {
+          "$id": "70",
+          "Location": {
+            "$id": "71",
+            "X": 2476.333333333334,
+            "Y": 5224.333333333334
+          },
+          "Size": { "$id": "72", "Width": 174.10000000000002, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "73",
+        "Name": "Subtraction",
+        "MetadataCompInfo": "{\"Name\":\"Subtraction\",\"Group\":\"Operations\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Subtraction\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF6D2F1A\"}",
+        "ID": "6a3daf6a-0826-4a9b-b43f-93616ff61b1c",
+        "BoundingBox": {
+          "$id": "74",
+          "Location": {
+            "$id": "75",
+            "X": 2679.333333333334,
+            "Y": 5226.333333333334
+          },
+          "Size": { "$id": "76", "Width": 174.10000000000002, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "77",
+        "Name": "Number Slider",
+        "MetadataCompInfo": "{\"Name\":\"Number Slider\",\"Group\":\"Inputs\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.NumberContainer\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF376A44\"}",
+        "ID": "ed37831e-de65-421e-a1a0-65a0b2b48a3c",
+        "BoundingBox": {
+          "$id": "78",
+          "Location": {
+            "$id": "79",
+            "X": 2899.333333333334,
+            "Y": 5229.333333333334
+          },
+          "Size": { "$id": "80", "Width": 200.0, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "81",
+        "Name": "Range Selector",
+        "MetadataCompInfo": "{\"Name\":\"Range Selector\",\"Group\":\"Inputs\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.RangeSelector\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF74456E\"}",
+        "ID": "49871a9f-c0e1-4374-821a-9611d94adb65",
+        "BoundingBox": {
+          "$id": "82",
+          "Location": {
+            "$id": "83",
+            "X": 3135.333333333334,
+            "Y": 5218.333333333334
+          },
+          "Size": { "$id": "84", "Width": 200.0, "Height": 274.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "85",
+        "Name": "Absolute",
+        "MetadataCompInfo": "{\"Name\":\"Absolute\",\"Group\":\"Intermediate Operations\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Absolute\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF4E5012\"}",
+        "ID": "191b0fef-9da0-4ac1-83a8-0aa264fc597c",
+        "BoundingBox": {
+          "$id": "86",
+          "Location": {
+            "$id": "87",
+            "X": 3384.333333333334,
+            "Y": 5219.333333333334
+          },
+          "Size": {
+            "$id": "88",
+            "Width": 174.10000000000002,
+            "Height": 141.35666666666668
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "89",
+        "Name": "Average",
+        "MetadataCompInfo": "{\"Name\":\"Average\",\"Group\":\"Intermediate Operations\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Average\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF692126\"}",
+        "ID": "894784fe-d049-486d-80f9-05e2ece51fb0",
+        "BoundingBox": {
+          "$id": "90",
+          "Location": {
+            "$id": "91",
+            "X": 3579.333333333334,
+            "Y": 5225.333333333334
+          },
+          "Size": { "$id": "92", "Width": 174.10000000000002, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "93",
+        "Name": "Exponent",
+        "MetadataCompInfo": "{\"Name\":\"Exponent\",\"Group\":\"Intermediate Operations\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Exponent\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF3E4D78\"}",
+        "ID": "4cb696c3-e3b3-48b3-b7d4-1c583497d1d5",
+        "BoundingBox": {
+          "$id": "94",
+          "Location": {
+            "$id": "95",
+            "X": 2017.333333333334,
+            "Y": 5512.333333333334
+          },
+          "Size": { "$id": "96", "Width": 209.96666666666667, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "97",
+        "Name": "Maximum",
+        "MetadataCompInfo": "{\"Name\":\"Maximum\",\"Group\":\"Intermediate Operations\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Maximum\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF72367C\"}",
+        "ID": "b74dec4b-3b13-4897-9934-0cbdef918e4c",
+        "BoundingBox": {
+          "$id": "98",
+          "Location": {
+            "$id": "99",
+            "X": 2270.333333333334,
+            "Y": 5513.333333333334
+          },
+          "Size": { "$id": "100", "Width": 174.10000000000002, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "101",
+        "Name": "Minimum",
+        "MetadataCompInfo": "{\"Name\":\"Minimum\",\"Group\":\"Intermediate Operations\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Minimum\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF016E1E\"}",
+        "ID": "ab91c4a4-e4b9-418f-b06e-30415938f112",
+        "BoundingBox": {
+          "$id": "102",
+          "Location": {
+            "$id": "103",
+            "X": 2511.333333333334,
+            "Y": 5513.333333333334
+          },
+          "Size": { "$id": "104", "Width": 174.10000000000002, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "105",
+        "Name": "Round",
+        "MetadataCompInfo": "{\"Name\":\"Round\",\"Group\":\"Intermediate Operations\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Round\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF263F65\"}",
+        "ID": "1e921463-3b89-4401-8bc2-92f4c187b475",
+        "BoundingBox": {
+          "$id": "106",
+          "Location": {
+            "$id": "107",
+            "X": 2716.333333333334,
+            "Y": 5513.333333333334
+          },
+          "Size": {
+            "$id": "108",
+            "Width": 174.10000000000002,
+            "Height": 128.90333333333334
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "109",
+        "Name": "Number Characteristics",
+        "MetadataCompInfo": "{\"Name\":\"Number Characteristics\",\"Group\":\"Miscellaneous\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.NumberCharacteristics\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF3F4071\"}",
+        "ID": "cd761f18-6376-4a3f-8a02-691ca50db721",
+        "BoundingBox": {
+          "$id": "110",
+          "Location": {
+            "$id": "111",
+            "X": 2939.333333333334,
+            "Y": 5513.333333333334
+          },
+          "Size": { "$id": "112", "Width": 216.70666666666668, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "113",
+        "Name": "Random",
+        "MetadataCompInfo": "{\"Name\":\"Random\",\"Group\":\"Miscellaneous\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.RandomNumber\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF111440\"}",
+        "ID": "68f2c5db-6914-4c09-bae1-48d3404eb8c1",
+        "BoundingBox": {
+          "$id": "114",
+          "Location": {
+            "$id": "115",
+            "X": 3190.333333333334,
+            "Y": 5511.333333333334
+          },
+          "Size": { "$id": "116", "Width": 332.29, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "117",
+        "Name": "Arc Cosine",
+        "MetadataCompInfo": "{\"Name\":\"Arc Cosine\",\"Group\":\"Trigonometry\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.ArcCosine\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF3C0D0F\"}",
+        "ID": "3cfd2e3a-a766-4379-b4e6-31dde87f2ecd",
+        "BoundingBox": {
+          "$id": "118",
+          "Location": {
+            "$id": "119",
+            "X": 3554.333333333334,
+            "Y": 5512.333333333334
+          },
+          "Size": {
+            "$id": "120",
+            "Width": 219.25333333333336,
+            "Height": 150.67000000000002
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "121",
+        "Name": "Arc Sine",
+        "MetadataCompInfo": "{\"Name\":\"Arc Sine\",\"Group\":\"Trigonometry\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.ArcSine\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF61242A\"}",
+        "ID": "53e05b0e-f7d2-4562-b746-dcf066ade4ee",
+        "BoundingBox": {
+          "$id": "122",
+          "Location": {
+            "$id": "123",
+            "X": 1998.333333333334,
+            "Y": 5753.333333333334
+          },
+          "Size": {
+            "$id": "124",
+            "Width": 219.25333333333336,
+            "Height": 137.49
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "125",
+        "Name": "Arc Tangent",
+        "MetadataCompInfo": "{\"Name\":\"Arc Tangent\",\"Group\":\"Trigonometry\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.ArcTangent\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF080E30\"}",
+        "ID": "f259bbdf-5d2d-4d41-bd34-43e3c4a477a0",
+        "BoundingBox": {
+          "$id": "126",
+          "Location": {
+            "$id": "127",
+            "X": 2273.333333333334,
+            "Y": 5755.333333333334
+          },
+          "Size": {
+            "$id": "128",
+            "Width": 219.25333333333336,
+            "Height": 157.18
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "129",
+        "Name": "Cosine",
+        "MetadataCompInfo": "{\"Name\":\"Cosine\",\"Group\":\"Trigonometry\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Cosine\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF5A4273\"}",
+        "ID": "9b1e9749-c9d7-404d-94e2-fc9d2a93fb05",
+        "BoundingBox": {
+          "$id": "130",
+          "Location": {
+            "$id": "131",
+            "X": 2544.333333333334,
+            "Y": 5751.333333333334
+          },
+          "Size": {
+            "$id": "132",
+            "Width": 207.60666666666668,
+            "Height": 129.92666666666668
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "133",
+        "Name": "Sine",
+        "MetadataCompInfo": "{\"Name\":\"Sine\",\"Group\":\"Trigonometry\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Sine\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF396B08\"}",
+        "ID": "ca38d3d8-6922-4d56-9ebf-ff146c7c8a9e",
+        "BoundingBox": {
+          "$id": "134",
+          "Location": {
+            "$id": "135",
+            "X": 2790.333333333334,
+            "Y": 5751.333333333334
+          },
+          "Size": { "$id": "136", "Width": 207.60666666666668, "Height": 124.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "137",
+        "Name": "Tangent",
+        "MetadataCompInfo": "{\"Name\":\"Tangent\",\"Group\":\"Trigonometry\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Tangent\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF394F6A\"}",
+        "ID": "b2c9460a-7187-4623-8863-f6afa7f89dcd",
+        "BoundingBox": {
+          "$id": "138",
+          "Location": {
+            "$id": "139",
+            "X": 3023.333333333334,
+            "Y": 5753.333333333334
+          },
+          "Size": {
+            "$id": "140",
+            "Width": 207.60666666666668,
+            "Height": 136.43666666666667
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "141",
+        "Name": "Convert to Degrees",
+        "MetadataCompInfo": "{\"Name\":\"Convert to Degrees\",\"Group\":\"Conversions\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.ConvertToDegrees\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF30732E\"}",
+        "ID": "a0b7099a-c594-4e97-a805-681c2725651b",
+        "BoundingBox": {
+          "$id": "142",
+          "Location": {
+            "$id": "143",
+            "X": 3250.333333333334,
+            "Y": 5755.333333333334
+          },
+          "Size": {
+            "$id": "144",
+            "Width": 219.22333333333336,
+            "Height": 197.16
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "145",
+        "Name": "Convert to Radians",
+        "MetadataCompInfo": "{\"Name\":\"Convert to Radians\",\"Group\":\"Conversions\",\"Tab\":\"Math\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.ConvertToRadians\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF593C1A\"}",
+        "ID": "32f6b411-d046-473c-81ad-41a31a2fe1e4",
+        "BoundingBox": {
+          "$id": "146",
+          "Location": {
+            "$id": "147",
+            "X": 3505.333333333334,
+            "Y": 5752.333333333334
+          },
+          "Size": {
+            "$id": "148",
+            "Width": 219.22333333333336,
+            "Height": 194.83
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "149",
+        "Name": "CSharp",
+        "MetadataCompInfo": "{\"Name\":\"CSharp\",\"Group\":\"CSharp\",\"Tab\":\"Code\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"CodeLibrary.CSharp\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF40407A\"}",
+        "ID": "e15520ce-6d84-44d3-a143-9f139f9caca9",
+        "BoundingBox": {
+          "$id": "150",
+          "Location": {
+            "$id": "151",
+            "X": 4061.363636363635,
+            "Y": 4570.303030303032
+          },
+          "Size": { "$id": "152", "Width": 620.0, "Height": 782.8000000000001 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "153",
+        "ElementText": "Value: #FFFFFFFF",
+        "Name": "Color Picker",
+        "MetadataCompInfo": "{\"Name\":\"Color Picker\",\"Group\":\"Basic UI\",\"Tab\":\"Color\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"ColorLibrary.ColorSelector\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF725C24\"}",
+        "ID": "540b002b-dd15-44e4-afcb-d67c66bee67a",
+        "BoundingBox": {
+          "$id": "154",
+          "Location": {
+            "$id": "155",
+            "X": 4726.999999999999,
+            "Y": 4585.666666666668
+          },
+          "Size": { "$id": "156", "Width": 200.0, "Height": 344.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "157",
+        "Name": "Construct Color",
+        "MetadataCompInfo": "{\"Name\":\"Construct Color\",\"Group\":\"Primitive\",\"Tab\":\"Color\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"ColorLibrary.ConstructColor\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF6D7B77\"}",
+        "ID": "928d55de-ae07-4ccd-b248-8c435332d559",
+        "BoundingBox": {
+          "$id": "158",
+          "Location": {
+            "$id": "159",
+            "X": 4962.999999999999,
+            "Y": 4580.666666666668
+          },
+          "Size": { "$id": "160", "Width": 171.20333333333335, "Height": 274.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "161",
+        "Name": "Deconstruct color",
+        "MetadataCompInfo": "{\"Name\":\"Deconstruct color\",\"Group\":\"Primitive\",\"Tab\":\"Color\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"ColorLibrary.DeconstructColor\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF234A76\"}",
+        "ID": "408a96ff-faf4-48e4-9267-89a0998829e8",
+        "BoundingBox": {
+          "$id": "162",
+          "Location": {
+            "$id": "163",
+            "X": 5153.999999999999,
+            "Y": 4574.666666666668
+          },
+          "Size": { "$id": "164", "Width": 171.20333333333335, "Height": 274.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "165",
+        "Name": "DateTime Picker",
+        "MetadataCompInfo": "{\"Name\":\"DateTime Picker\",\"Group\":\"Basic UI\",\"Tab\":\"DateTime\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"EventsLibrary.DateTimePicker\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF251219\"}",
+        "ID": "83dffb32-ffe9-43d3-a0c0-4b88d9a4fbc0",
+        "BoundingBox": {
+          "$id": "166",
+          "Location": {
+            "$id": "167",
+            "X": 5335.999999999999,
+            "Y": 4575.666666666668
+          },
+          "Size": { "$id": "168", "Width": 206.21, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "169",
+        "Name": "DateTime Now",
+        "MetadataCompInfo": "{\"Name\":\"DateTime Now\",\"Group\":\"Basic UI\",\"Tab\":\"DateTime\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.DateTimeNow\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF703726\"}",
+        "ID": "8c2ed258-fabc-4911-9292-8cdb9329d91e",
+        "BoundingBox": {
+          "$id": "170",
+          "Location": {
+            "$id": "171",
+            "X": 5548.999999999999,
+            "Y": 4578.666666666668
+          },
+          "Size": {
+            "$id": "172",
+            "Width": 198.27333333333334,
+            "Height": 173.03666666666666
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "173",
+        "Name": "Compare DateTime",
+        "MetadataCompInfo": "{\"Name\":\"Compare DateTime\",\"Group\":\"Boolean\",\"Tab\":\"DateTime\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.CompareDateTime\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF1B011C\"}",
+        "ID": "eeaed81d-42e0-4952-b270-ff3ea6a6eb68",
+        "BoundingBox": {
+          "$id": "174",
+          "Location": {
+            "$id": "175",
+            "X": 5760.999999999999,
+            "Y": 4578.666666666668
+          },
+          "Size": { "$id": "176", "Width": 317.0, "Height": 324.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "177",
+        "Name": "DateTime transform",
+        "MetadataCompInfo": "{\"Name\":\"DateTime transform\",\"Group\":\"Operations\",\"Tab\":\"DateTime\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.DateTimeTransform\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF32456D\"}",
+        "ID": "555856bf-873a-4156-8d6f-942af6281c56",
+        "BoundingBox": {
+          "$id": "178",
+          "Location": {
+            "$id": "179",
+            "X": 4728.999999999999,
+            "Y": 4963.666666666668
+          },
+          "Size": { "$id": "180", "Width": 262.9533333333334, "Height": 424.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "181",
+        "Name": "Construct DateTime",
+        "MetadataCompInfo": "{\"Name\":\"Construct DateTime\",\"Group\":\"Primitives\",\"Tab\":\"DateTime\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.ConstructDateTime\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF547050\"}",
+        "ID": "63ba6f26-5dbe-424e-b154-12d0ffe3c998",
+        "BoundingBox": {
+          "$id": "182",
+          "Location": {
+            "$id": "183",
+            "X": 5032.999999999999,
+            "Y": 4957.666666666668
+          },
+          "Size": { "$id": "184", "Width": 224.15000000000003, "Height": 374.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "185",
+        "Name": "Date Characteristics",
+        "MetadataCompInfo": "{\"Name\":\"Date Characteristics\",\"Group\":\"Primitives\",\"Tab\":\"DateTime\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.DateCharacteristics\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF731417\"}",
+        "ID": "4c7d1151-0012-433e-9785-4502d4d59f51",
+        "BoundingBox": {
+          "$id": "186",
+          "Location": {
+            "$id": "187",
+            "X": 5333.999999999999,
+            "Y": 4954.666666666668
+          },
+          "Size": { "$id": "188", "Width": 276.3366666666667, "Height": 274.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "189",
+        "Name": "Deconstruct DateTime",
+        "MetadataCompInfo": "{\"Name\":\"Deconstruct DateTime\",\"Group\":\"Primitives\",\"Tab\":\"DateTime\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.DeconstructDateTime\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF1C4F6E\"}",
+        "ID": "1c1740cb-3f53-4951-8d1b-af07632fd457",
+        "BoundingBox": {
+          "$id": "190",
+          "Location": {
+            "$id": "191",
+            "X": 5634.999999999999,
+            "Y": 4930.666666666668
+          },
+          "Size": { "$id": "192", "Width": 224.15, "Height": 374.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "193",
+        "Name": "Convert TimeZone",
+        "MetadataCompInfo": "{\"Name\":\"Convert TimeZone\",\"Group\":\"Timezones\",\"Tab\":\"DateTime\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.ConvertTimeZone\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF2A123A\"}",
+        "ID": "5590d99a-bdfc-4e4a-9253-7390d0c57598",
+        "BoundingBox": {
+          "$id": "194",
+          "Location": {
+            "$id": "195",
+            "X": 4039.999999999999,
+            "Y": 5405.666666666668
+          },
+          "Size": { "$id": "196", "Width": 320.6733333333334, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "197",
+        "Name": "Current TimeZone",
+        "MetadataCompInfo": "{\"Name\":\"Current TimeZone\",\"Group\":\"Timezones\",\"Tab\":\"DateTime\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.CurrentTimeZone\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF331116\"}",
+        "ID": "581a72fb-d427-4a6d-b042-04ac7fa1f468",
+        "BoundingBox": {
+          "$id": "198",
+          "Location": {
+            "$id": "199",
+            "X": 4400.999999999999,
+            "Y": 5405.666666666668
+          },
+          "Size": {
+            "$id": "200",
+            "Width": 140.73000000000002,
+            "Height": 190.13333333333335
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "201",
+        "Name": "Get TimeZone",
+        "MetadataCompInfo": "{\"Name\":\"Get TimeZone\",\"Group\":\"Timezones\",\"Tab\":\"DateTime\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.GetTimeZone\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF5D5435\"}",
+        "ID": "7d08e0de-6c05-4389-89d9-95c4d9449c71",
+        "BoundingBox": {
+          "$id": "202",
+          "Location": {
+            "$id": "203",
+            "X": 4601.999999999999,
+            "Y": 5407.666666666668
+          },
+          "Size": { "$id": "204", "Width": 328.51, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "205",
+        "Name": "TimeZone Properties",
+        "MetadataCompInfo": "{\"Name\":\"TimeZone Properties\",\"Group\":\"Timezones\",\"Tab\":\"DateTime\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.TimeZoneProperties\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF414C68\"}",
+        "ID": "535ce852-5e16-4717-b772-70335df0ea0e",
+        "BoundingBox": {
+          "$id": "206",
+          "Location": {
+            "$id": "207",
+            "X": 4968.999999999999,
+            "Y": 5410.666666666668
+          },
+          "Size": { "$id": "208", "Width": 269.49333333333334, "Height": 274.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "209",
+        "Name": "Data Changed Event",
+        "MetadataCompInfo": "{\"Name\":\"Data Changed Event\",\"Group\":\"Data\",\"Tab\":\"Events\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"InteropLibrary.DataChangeEvent\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF752217\"}",
+        "ID": "39042e90-ac77-447c-801a-7377f8f42178",
+        "BoundingBox": {
+          "$id": "210",
+          "Location": {
+            "$id": "211",
+            "X": 5276.999999999999,
+            "Y": 5404.666666666668
+          },
+          "Size": { "$id": "212", "Width": 276.64, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "213",
+        "ElementText": "Output Value: ",
+        "Name": "Button Trigger",
+        "MetadataCompInfo": "{\"Name\":\"Button Trigger\",\"Group\":\"Basic UI\",\"Tab\":\"Events\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"EventsLibrary.ButtonTrigger\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF6D7432\"}",
+        "ID": "db82beab-3461-4e36-9d91-2deda95bf746",
+        "BoundingBox": {
+          "$id": "214",
+          "Location": {
+            "$id": "215",
+            "X": 5581.999999999999,
+            "Y": 5404.666666666668
+          },
+          "Size": { "$id": "216", "Width": 200.0, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "217",
+        "Name": "Event Indicator",
+        "MetadataCompInfo": "{\"Name\":\"Event Indicator\",\"Group\":\"Event Utilities\",\"Tab\":\"Events\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"EventsLibrary.EventIndicator\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF753F6B\"}",
+        "ID": "df7e8c58-3b44-4232-abee-ed3ce0fbc083",
+        "BoundingBox": {
+          "$id": "218",
+          "Location": {
+            "$id": "219",
+            "X": 4020.999999999999,
+            "Y": 5693.666666666668
+          },
+          "Size": { "$id": "220", "Width": 223.18666666666667, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "221",
+        "Name": "Set Event Args",
+        "MetadataCompInfo": "{\"Name\":\"Set Event Args\",\"Group\":\"Event Utilities\",\"Tab\":\"Events\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"EventsLibrary.SetEventArgs\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF17062E\"}",
+        "ID": "5d567082-c635-4d1c-bea0-a071a3d57b89",
+        "BoundingBox": {
+          "$id": "222",
+          "Location": {
+            "$id": "223",
+            "X": 4296.999999999999,
+            "Y": 5694.666666666668
+          },
+          "Size": { "$id": "224", "Width": 220.38666666666666, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "225",
+        "Name": "Flipflop",
+        "MetadataCompInfo": "{\"Name\":\"Flipflop\",\"Group\":\"Filters\",\"Tab\":\"Events\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"EventsLibrary.Flipflop\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF4B5307\"}",
+        "ID": "6a716898-cd76-4bdf-934a-2e7d40bca7e2",
+        "BoundingBox": {
+          "$id": "226",
+          "Location": {
+            "$id": "227",
+            "X": 4558.999999999999,
+            "Y": 5692.666666666668
+          },
+          "Size": { "$id": "228", "Width": 160.90333333333334, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "229",
+        "Name": "If Then",
+        "MetadataCompInfo": "{\"Name\":\"If Then\",\"Group\":\"Filters\",\"Tab\":\"Events\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"EventsLibrary.IfThenEventFilter\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF100B05\"}",
+        "ID": "c11fa064-bb93-48cd-bf52-f1544d7cfc11",
+        "BoundingBox": {
+          "$id": "230",
+          "Location": {
+            "$id": "231",
+            "X": 4736.999999999999,
+            "Y": 5693.666666666668
+          },
+          "Size": { "$id": "232", "Width": 212.25000000000003, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "233",
+        "Name": "For Loop",
+        "MetadataCompInfo": "{\"Name\":\"For Loop\",\"Group\":\"Recursion\",\"Tab\":\"Events\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"EventsLibrary.Loop\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FFFF6700\"}",
+        "ID": "e69193ef-eb56-43b7-b081-4622185caa20",
+        "BoundingBox": {
+          "$id": "234",
+          "Location": {
+            "$id": "235",
+            "X": 4966.999999999999,
+            "Y": 5695.666666666668
+          },
+          "Size": { "$id": "236", "Width": 216.21000000000004, "Height": 274.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "237",
+        "Name": "Callback",
+        "MetadataCompInfo": "{\"Name\":\"Callback\",\"Group\":\"`\",\"Tab\":\"`\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"EventsLibrary.Callback\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FFFF6700\"}",
+        "ID": "1dc901d7-45e5-4f30-9b70-148271c580ca",
+        "BoundingBox": {
+          "$id": "238",
+          "Location": {
+            "$id": "239",
+            "X": 5205.999999999999,
+            "Y": 5697.666666666668
+          },
+          "Size": { "$id": "240", "Width": 244.75, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "241",
+        "Name": "Timer",
+        "MetadataCompInfo": "{\"Name\":\"Timer\",\"Group\":\"Timing\",\"Tab\":\"Events\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"EventsLibrary.Timer\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF1A0D60\"}",
+        "ID": "2a7e401b-e87c-46e1-8c79-dc92782d202f",
+        "BoundingBox": {
+          "$id": "242",
+          "Location": {
+            "$id": "243",
+            "X": 5468.999999999999,
+            "Y": 5701.666666666668
+          },
+          "Size": { "$id": "244", "Width": 200.0, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "245",
+        "Name": "Wait",
+        "MetadataCompInfo": "{\"Name\":\"Wait\",\"Group\":\"Timing\",\"Tab\":\"Events\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"EventsLibrary.Wait\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF7B2018\"}",
+        "ID": "48a6abc3-297b-46c6-b95b-8a3c81aa20e8",
+        "BoundingBox": {
+          "$id": "246",
+          "Location": {
+            "$id": "247",
+            "X": 5672.999999999999,
+            "Y": 5695.666666666668
+          },
+          "Size": { "$id": "248", "Width": 180.67666666666668, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "249",
+        "Name": "Interop Message Receiver",
+        "MetadataCompInfo": "{\"Name\":\"Interop Message Receiver\",\"Group\":\"Events\",\"Tab\":\"Interop\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"InteropLibrary.InteropMessageRCV\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF505C50\"}",
+        "ID": "de162997-7aa4-4dbc-a833-16dd3b6ff8a6",
+        "BoundingBox": {
+          "$id": "250",
+          "Location": {
+            "$id": "251",
+            "X": 4010.999999999999,
+            "Y": 5990.666666666668
+          },
+          "Size": { "$id": "252", "Width": 276.76666666666665, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "253",
+        "Name": "Interop Message Send",
+        "MetadataCompInfo": "{\"Name\":\"Interop Message Send\",\"Group\":\"Events\",\"Tab\":\"Interop\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"InteropLibrary.InteropMessageSND\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF6B4369\"}",
+        "ID": "72ebf49e-6d1b-45c9-a30a-adeb919fd6bf",
+        "BoundingBox": {
+          "$id": "254",
+          "Location": {
+            "$id": "255",
+            "X": 4318.999999999999,
+            "Y": 5991.666666666668
+          },
+          "Size": { "$id": "256", "Width": 247.03000000000003, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "257",
+        "Name": "Contains Item",
+        "MetadataCompInfo": "{\"Name\":\"Contains Item\",\"Group\":\"Data Details\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.ContainsItem\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF071762\"}",
+        "ID": "e2ae9373-cba8-4fb5-b81b-95fda51f78c9",
+        "BoundingBox": {
+          "$id": "258",
+          "Location": {
+            "$id": "259",
+            "X": 4608.999999999999,
+            "Y": 5993.666666666668
+          },
+          "Size": { "$id": "260", "Width": 288.4, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "261",
+        "Name": "Data at Index",
+        "MetadataCompInfo": "{\"Name\":\"Data at Index\",\"Group\":\"Data Details\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.DataAtIndex\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF2A0D6C\"}",
+        "ID": "c6c7c27f-baa2-42dd-9da5-d567738501e0",
+        "BoundingBox": {
+          "$id": "262",
+          "Location": {
+            "$id": "263",
+            "X": 4908.999999999999,
+            "Y": 5993.666666666668
+          },
+          "Size": { "$id": "264", "Width": 280.6566666666667, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "265",
+        "Name": "Item Count",
+        "MetadataCompInfo": "{\"Name\":\"Item Count\",\"Group\":\"Data Details\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.ItemCount\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF542365\"}",
+        "ID": "d6b44fcf-0f8f-4667-b746-c1b3b9625257",
+        "BoundingBox": {
+          "$id": "266",
+          "Location": {
+            "$id": "267",
+            "X": 5217.999999999999,
+            "Y": 5994.666666666668
+          },
+          "Size": {
+            "$id": "268",
+            "Width": 269.5133333333333,
+            "Height": 153.66666666666669
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "269",
+        "Name": "Sum & Average",
+        "MetadataCompInfo": "{\"Name\":\"Sum & Average\",\"Group\":\"Data Details\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.SumData\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF515B3D\"}",
+        "ID": "8507f6ee-3b60-4448-951a-fd2f57c4a5b6",
+        "BoundingBox": {
+          "$id": "270",
+          "Location": {
+            "$id": "271",
+            "X": 5503.999999999999,
+            "Y": 5991.666666666668
+          },
+          "Size": {
+            "$id": "272",
+            "Width": 275.80000000000007,
+            "Height": 177.23
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "273",
+        "Name": "Data Subset",
+        "MetadataCompInfo": "{\"Name\":\"Data Subset\",\"Group\":\"Modification\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.DataSubset\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF293B4D\"}",
+        "ID": "71cfe983-b841-4585-b3da-36c17014e4d6",
+        "BoundingBox": {
+          "$id": "274",
+          "Location": {
+            "$id": "275",
+            "X": 6263.999999999998,
+            "Y": 4609.333333333333
+          },
+          "Size": { "$id": "276", "Width": 273.88, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "277",
+        "Name": "Flatten Data",
+        "MetadataCompInfo": "{\"Name\":\"Flatten Data\",\"Group\":\"Modification\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.FlattenData\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF404C4C\"}",
+        "ID": "5dae157b-5d9b-46be-8419-1cb2c1ca92d4",
+        "BoundingBox": {
+          "$id": "278",
+          "Location": {
+            "$id": "279",
+            "X": 6567.999999999998,
+            "Y": 4606.333333333333
+          },
+          "Size": {
+            "$id": "280",
+            "Width": 287.6433333333333,
+            "Height": 158.45333333333335
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "281",
+        "Name": "Graft Data",
+        "MetadataCompInfo": "{\"Name\":\"Graft Data\",\"Group\":\"Modification\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.GraftData\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF616D63\"}",
+        "ID": "74f89238-7a46-41fa-9e75-b6abe01730e3",
+        "BoundingBox": {
+          "$id": "282",
+          "Location": {
+            "$id": "283",
+            "X": 6888.999999999998,
+            "Y": 4606.333333333333
+          },
+          "Size": {
+            "$id": "284",
+            "Width": 277.9066666666667,
+            "Height": 148.71666666666667
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "285",
+        "Name": "Insert Data Item",
+        "MetadataCompInfo": "{\"Name\":\"Insert Data Item\",\"Group\":\"Modification\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.InsertDataItem\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF251D72\"}",
+        "ID": "5353c013-b297-40bc-a4dd-91e5ab2af90e",
+        "BoundingBox": {
+          "$id": "286",
+          "Location": {
+            "$id": "287",
+            "X": 7196.999999999998,
+            "Y": 4605.333333333333
+          },
+          "Size": { "$id": "288", "Width": 289.97333333333336, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "289",
+        "Name": "Reverse Data",
+        "MetadataCompInfo": "{\"Name\":\"Reverse Data\",\"Group\":\"Modification\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.ReverseData\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF714805\"}",
+        "ID": "543bcc0d-53f5-4a48-972f-586efc7bb660",
+        "BoundingBox": {
+          "$id": "290",
+          "Location": {
+            "$id": "291",
+            "X": 7517.999999999998,
+            "Y": 4605.333333333333
+          },
+          "Size": {
+            "$id": "292",
+            "Width": 285.96333333333337,
+            "Height": 163.05
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "293",
+        "Name": "Sort Data",
+        "MetadataCompInfo": "{\"Name\":\"Sort Data\",\"Group\":\"Modification\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.SortData\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF683317\"}",
+        "ID": "7271a98d-5201-4600-a441-e7b538717536",
+        "BoundingBox": {
+          "$id": "294",
+          "Location": {
+            "$id": "295",
+            "X": 7820.999999999997,
+            "Y": 4609.333333333333
+          },
+          "Size": { "$id": "296", "Width": 273.21333333333337, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "297",
+        "Name": "Fibonacci Sequence",
+        "MetadataCompInfo": "{\"Name\":\"Fibonacci Sequence\",\"Group\":\"Series\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.FibonacciSequence\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF76330F\"}",
+        "ID": "490960fb-b2f9-43ea-8310-a9ff8344ccd0",
+        "BoundingBox": {
+          "$id": "298",
+          "Location": {
+            "$id": "299",
+            "X": 6237.999999999998,
+            "Y": 4853.333333333333
+          },
+          "Size": {
+            "$id": "300",
+            "Width": 270.92666666666673,
+            "Height": 198.82000000000002
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "301",
+        "Name": "Geometric Progression",
+        "MetadataCompInfo": "{\"Name\":\"Geometric Progression\",\"Group\":\"Series\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.GeometricProgression\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF745906\"}",
+        "ID": "7ebc940a-aefb-48b9-91c9-40141864c7f5",
+        "BoundingBox": {
+          "$id": "302",
+          "Location": {
+            "$id": "303",
+            "X": 6535.999999999998,
+            "Y": 4857.333333333333
+          },
+          "Size": { "$id": "304", "Width": 200.11666666666667, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "305",
+        "Name": "Harmonic Progression",
+        "MetadataCompInfo": "{\"Name\":\"Harmonic Progression\",\"Group\":\"Series\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.HarmonicProgression\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF5E2E29\"}",
+        "ID": "039fdfa8-bf14-449f-91b2-3253493357ba",
+        "BoundingBox": {
+          "$id": "306",
+          "Location": {
+            "$id": "307",
+            "X": 6783.999999999998,
+            "Y": 4858.333333333333
+          },
+          "Size": { "$id": "308", "Width": 181.74666666666667, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "309",
+        "Name": "Arithmetic Progression",
+        "MetadataCompInfo": "{\"Name\":\"Arithmetic Progression\",\"Group\":\"Series\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Series\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF70220B\"}",
+        "ID": "a369d2f9-445b-448b-a6d9-0a9634f858b2",
+        "BoundingBox": {
+          "$id": "310",
+          "Location": {
+            "$id": "311",
+            "X": 7000.999999999998,
+            "Y": 4856.333333333333
+          },
+          "Size": { "$id": "312", "Width": 180.9666666666667, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "313",
+        "Name": "Get Median",
+        "MetadataCompInfo": "{\"Name\":\"Get Median\",\"Group\":\"Computation\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.GetMedian\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF443042\"}",
+        "ID": "b69448be-185f-4a1a-a124-bb77a735d5a1",
+        "BoundingBox": {
+          "$id": "314",
+          "Location": {
+            "$id": "315",
+            "X": 7236.999999999998,
+            "Y": 4858.333333333333
+          },
+          "Size": {
+            "$id": "316",
+            "Width": 250.17000000000004,
+            "Height": 156.18666666666667
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "317",
+        "Name": "Get Range",
+        "MetadataCompInfo": "{\"Name\":\"Get Range\",\"Group\":\"Computation\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.GetRange\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF031D3C\"}",
+        "ID": "9d2c8128-9419-473a-8afa-a899b39a32a2",
+        "BoundingBox": {
+          "$id": "318",
+          "Location": {
+            "$id": "319",
+            "X": 7510.999999999998,
+            "Y": 4855.333333333333
+          },
+          "Size": {
+            "$id": "320",
+            "Width": 243.66333333333336,
+            "Height": 149.68
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "321",
+        "Name": "Sample Standard Deviation",
+        "MetadataCompInfo": "{\"Name\":\"Sample Standard Deviation\",\"Group\":\"Computation\",\"Tab\":\"Data\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.SampleStandardDeviation\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF3D282E\"}",
+        "ID": "9d8cf98d-6223-4981-94f5-5767eb5fa2ea",
+        "BoundingBox": {
+          "$id": "322",
+          "Location": {
+            "$id": "323",
+            "X": 7777.000000000001,
+            "Y": 4859.333333333333
+          },
+          "Size": {
+            "$id": "324",
+            "Width": 353.48,
+            "Height": 237.63333333333335
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "325",
+        "Name": "Construct Bounding Box",
+        "MetadataCompInfo": "{\"Name\":\"Construct Bounding Box\",\"Group\":\"Basic\",\"Tab\":\"Breps\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.ConstructBoundingBox\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF330C6B\"}",
+        "ID": "a17571a9-dc32-4b13-81f6-9213c90ec82e",
+        "BoundingBox": {
+          "$id": "326",
+          "Location": {
+            "$id": "327",
+            "X": 6250.999999999998,
+            "Y": 5100.333333333333
+          },
+          "Size": {
+            "$id": "328",
+            "Width": 245.25000000000003,
+            "Height": 222.69333333333336
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "329",
+        "Name": "Construct Cone",
+        "MetadataCompInfo": "{\"Name\":\"Construct Cone\",\"Group\":\"Basic\",\"Tab\":\"Breps\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.ConstructCone\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF453E22\"}",
+        "ID": "ede458c3-3df1-4538-b026-0beeb58807de",
+        "BoundingBox": {
+          "$id": "330",
+          "Location": {
+            "$id": "331",
+            "X": 6525.999999999998,
+            "Y": 5098.333333333333
+          },
+          "Size": { "$id": "332", "Width": 197.55333333333334, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "333",
+        "Name": "Construct Cylinder",
+        "MetadataCompInfo": "{\"Name\":\"Construct Cylinder\",\"Group\":\"Basic\",\"Tab\":\"Breps\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.ConstructCylinder\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF543D58\"}",
+        "ID": "86c305e0-d7bb-479a-85ea-dc78e3374e63",
+        "BoundingBox": {
+          "$id": "334",
+          "Location": {
+            "$id": "335",
+            "X": 6740.999999999998,
+            "Y": 5102.333333333333
+          },
+          "Size": {
+            "$id": "336",
+            "Width": 213.38333333333335,
+            "Height": 192.02666666666667
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "337",
+        "Name": "Construct Sphere",
+        "MetadataCompInfo": "{\"Name\":\"Construct Sphere\",\"Group\":\"Basic\",\"Tab\":\"Breps\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.ConstructSphere\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF123A5A\"}",
+        "ID": "72611503-b5a2-4af4-97bb-cc435056ea7e",
+        "BoundingBox": {
+          "$id": "338",
+          "Location": {
+            "$id": "339",
+            "X": 6967.999999999998,
+            "Y": 5101.333333333333
+          },
+          "Size": {
+            "$id": "340",
+            "Width": 206.48333333333335,
+            "Height": 185.61333333333334
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "341",
+        "Name": "Construct Torus",
+        "MetadataCompInfo": "{\"Name\":\"Construct Torus\",\"Group\":\"Basic\",\"Tab\":\"Breps\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.ConstructTorus\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF4B1116\"}",
+        "ID": "cd406008-268c-428d-bd62-4c8b7ad802ce",
+        "BoundingBox": {
+          "$id": "342",
+          "Location": {
+            "$id": "343",
+            "X": 7189.999999999998,
+            "Y": 5097.333333333333
+          },
+          "Size": { "$id": "344", "Width": 232.70666666666668, "Height": 238.8 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "345",
+        "Name": "Construct Circle",
+        "MetadataCompInfo": "{\"Name\":\"Construct Circle\",\"Group\":\"Line\",\"Tab\":\"Curve\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.ConstructCircle\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF5C344A\"}",
+        "ID": "0ac6e887-adeb-4cb8-bb9f-a92dbb994be8",
+        "BoundingBox": {
+          "$id": "346",
+          "Location": {
+            "$id": "347",
+            "X": 7438.999999999998,
+            "Y": 5102.333333333333
+          },
+          "Size": {
+            "$id": "348",
+            "Width": 198.77666666666667,
+            "Height": 177.90666666666667
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "349",
+        "Name": "Construct Ellipse",
+        "MetadataCompInfo": "{\"Name\":\"Construct Ellipse\",\"Group\":\"Line\",\"Tab\":\"Curve\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.ConstructEllipse\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF200958\"}",
+        "ID": "4bf7d2ed-636a-4a38-8f47-ceea6acd4b5c",
+        "BoundingBox": {
+          "$id": "350",
+          "Location": {
+            "$id": "351",
+            "X": 7664.000000000001,
+            "Y": 5097.333333333333
+          },
+          "Size": { "$id": "352", "Width": 204.44000000000003, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "353",
+        "Name": "Construct Line",
+        "MetadataCompInfo": "{\"Name\":\"Construct Line\",\"Group\":\"Line\",\"Tab\":\"Curve\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.ConstructLine\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF381F12\"}",
+        "ID": "7e2e3807-071f-4b32-8b57-990ea698193c",
+        "BoundingBox": {
+          "$id": "354",
+          "Location": {
+            "$id": "355",
+            "X": 7893.999999999997,
+            "Y": 5097.333333333333
+          },
+          "Size": { "$id": "356", "Width": 180.42333333333335, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "357",
+        "Name": "Construct Polygon",
+        "MetadataCompInfo": "{\"Name\":\"Construct Polygon\",\"Group\":\"Line\",\"Tab\":\"Curve\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.ConstructPolygon\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF475B29\"}",
+        "ID": "aec7e655-7c17-450a-b8ec-c5e7ae20348e",
+        "BoundingBox": {
+          "$id": "358",
+          "Location": {
+            "$id": "359",
+            "X": 6230.999999999998,
+            "Y": 5355.333333333333
+          },
+          "Size": { "$id": "360", "Width": 235.32333333333335, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "361",
+        "Name": "Construct Rectangle",
+        "MetadataCompInfo": "{\"Name\":\"Construct Rectangle\",\"Group\":\"Line\",\"Tab\":\"Curve\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.ConstructRectangle\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF47787B\"}",
+        "ID": "1554d697-4c1a-464d-88f2-d229bbef7dd4",
+        "BoundingBox": {
+          "$id": "362",
+          "Location": {
+            "$id": "363",
+            "X": 6486.999999999998,
+            "Y": 5354.333333333333
+          },
+          "Size": { "$id": "364", "Width": 221.88666666666668, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "365",
+        "Name": "Deconstruct Line",
+        "MetadataCompInfo": "{\"Name\":\"Deconstruct Line\",\"Group\":\"Line\",\"Tab\":\"Curve\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.DeconstructLine\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF734D36\"}",
+        "ID": "cc9c72a4-62b5-4786-862d-158b446d91b0",
+        "BoundingBox": {
+          "$id": "366",
+          "Location": {
+            "$id": "367",
+            "X": 6732.999999999998,
+            "Y": 5354.333333333333
+          },
+          "Size": {
+            "$id": "368",
+            "Width": 180.42333333333335,
+            "Height": 183.09666666666666
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "369",
+        "Name": "Create Extrusion",
+        "MetadataCompInfo": "{\"Name\":\"Create Extrusion\",\"Group\":\"Operations\",\"Tab\":\"Curve\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.CreateExtrusion\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF4D3035\"}",
+        "ID": "21575a87-7834-4c7f-83a9-19707a663b75",
+        "BoundingBox": {
+          "$id": "370",
+          "Location": {
+            "$id": "371",
+            "X": 6936.999999999998,
+            "Y": 5354.333333333333
+          },
+          "Size": { "$id": "372", "Width": 275.00333333333333, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "373",
+        "Name": "Divide Curve",
+        "MetadataCompInfo": "{\"Name\":\"Divide Curve\",\"Group\":\"Operations\",\"Tab\":\"Curve\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.DivideCurve\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF0F5B71\"}",
+        "ID": "178bd1c5-7d43-483a-ae61-34ace1ecc1f7",
+        "BoundingBox": {
+          "$id": "374",
+          "Location": {
+            "$id": "375",
+            "X": 7252.999999999998,
+            "Y": 5357.333333333333
+          },
+          "Size": { "$id": "376", "Width": 287.29333333333335, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "377",
+        "Name": "Construct Plane",
+        "MetadataCompInfo": "{\"Name\":\"Construct Plane\",\"Group\":\"Basic\",\"Tab\":\"Surface\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.ConstructPlane\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF684161\"}",
+        "ID": "c90d6f34-ee81-4e73-9506-b5a425f58841",
+        "BoundingBox": {
+          "$id": "378",
+          "Location": {
+            "$id": "379",
+            "X": 7549.999999999997,
+            "Y": 5355.333333333333
+          },
+          "Size": { "$id": "380", "Width": 200.02666666666667, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "381",
+        "Name": "Get Plane",
+        "MetadataCompInfo": "{\"Name\":\"Get Plane\",\"Group\":\"Basic\",\"Tab\":\"Surface\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.GetPlane\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF55405A\"}",
+        "ID": "e784032f-f7e9-42fe-82c5-e311d050349c",
+        "BoundingBox": {
+          "$id": "382",
+          "Location": {
+            "$id": "383",
+            "X": 7781.000000000001,
+            "Y": 5356.333333333333
+          },
+          "Size": { "$id": "384", "Width": 243.65333333333334, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "385",
+        "Name": "Rotate Plane",
+        "MetadataCompInfo": "{\"Name\":\"Rotate Plane\",\"Group\":\"Operations\",\"Tab\":\"Surface\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.RotatePlane\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF071E33\"}",
+        "ID": "b916be1b-9a59-46aa-b4bf-116309cd6c45",
+        "BoundingBox": {
+          "$id": "386",
+          "Location": {
+            "$id": "387",
+            "X": 6223.999999999998,
+            "Y": 5604.333333333333
+          },
+          "Size": { "$id": "388", "Width": 263.11333333333334, "Height": 274.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "389",
+        "Name": "Construct Point",
+        "MetadataCompInfo": "{\"Name\":\"Construct Point\",\"Group\":\"Point\",\"Tab\":\"Vector\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.ConstructPoint\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF65202E\"}",
+        "ID": "a71e710c-acf8-47c7-8a45-1a0952de855b",
+        "BoundingBox": {
+          "$id": "390",
+          "Location": {
+            "$id": "391",
+            "X": 6504.999999999998,
+            "Y": 5610.333333333333
+          },
+          "Size": { "$id": "392", "Width": 227.10000000000002, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "393",
+        "Name": "Deconstruct Point",
+        "MetadataCompInfo": "{\"Name\":\"Deconstruct Point\",\"Group\":\"Point\",\"Tab\":\"Vector\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.DeconstructPoint\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF093561\"}",
+        "ID": "081aac55-065b-4a04-887e-2b6642627a3d",
+        "BoundingBox": {
+          "$id": "394",
+          "Location": {
+            "$id": "395",
+            "X": 6762.999999999998,
+            "Y": 5604.333333333333
+          },
+          "Size": { "$id": "396", "Width": 168.54666666666668, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "397",
+        "Name": "Distance",
+        "MetadataCompInfo": "{\"Name\":\"Distance\",\"Group\":\"Point\",\"Tab\":\"Vector\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"Rhino3DMLibrary.Distance\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF356E7B\"}",
+        "ID": "a969ab8e-78d1-46ec-bb4c-b4df2097173b",
+        "BoundingBox": {
+          "$id": "398",
+          "Location": {
+            "$id": "399",
+            "X": 6948.999999999998,
+            "Y": 5603.333333333333
+          },
+          "Size": { "$id": "400", "Width": 217.69333333333336, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "401",
+        "Name": "Text Panel",
+        "MetadataCompInfo": "{\"Name\":\"Text Panel\",\"Group\":\"Display\",\"Tab\":\"Text\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"TextLibrary.TextPanel\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF6C2476\"}",
+        "ID": "dd59fedb-ec34-4fb2-8331-542358b36b8d",
+        "BoundingBox": {
+          "$id": "402",
+          "Location": {
+            "$id": "403",
+            "X": 7178.999999999998,
+            "Y": 5604.333333333333
+          },
+          "Size": {
+            "$id": "404",
+            "Width": 109.09333333333333,
+            "Height": 147.04333333333335
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "405",
+        "Name": "Text Input",
+        "MetadataCompInfo": "{\"Name\":\"Text Input\",\"Group\":\"Inputs\",\"Tab\":\"Text\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"TextLibrary.TextContainer\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF3F1661\"}",
+        "ID": "adeb2c43-e594-4fcb-8b3b-e0f0cd87705d",
+        "BoundingBox": {
+          "$id": "406",
+          "Location": {
+            "$id": "407",
+            "X": 7310.999999999998,
+            "Y": 5605.333333333333
+          },
+          "Size": { "$id": "408", "Width": 200.0, "Height": 244.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "409",
+        "Name": "Replace",
+        "MetadataCompInfo": "{\"Name\":\"Replace\",\"Group\":\"Operations\",\"Tab\":\"Text\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"TextLibrary.Replace\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF2D4E51\"}",
+        "ID": "cdf780da-7f29-46f9-b874-6e0d630a657f",
+        "BoundingBox": {
+          "$id": "410",
+          "Location": {
+            "$id": "411",
+            "X": 7539.999999999998,
+            "Y": 5606.333333333333
+          },
+          "Size": { "$id": "412", "Width": 207.35000000000002, "Height": 224.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "413",
+        "Name": "Split Text",
+        "MetadataCompInfo": "{\"Name\":\"Split Text\",\"Group\":\"Operations\",\"Tab\":\"Text\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"TextLibrary.SplitText\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF120950\"}",
+        "ID": "6d917957-f321-438b-b2cc-b8d39e3b58d1",
+        "BoundingBox": {
+          "$id": "414",
+          "Location": {
+            "$id": "415",
+            "X": 7787.000000000001,
+            "Y": 5605.333333333333
+          },
+          "Size": { "$id": "416", "Width": 221.41333333333336, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "417",
+        "Name": "Text Length",
+        "MetadataCompInfo": "{\"Name\":\"Text Length\",\"Group\":\"Operations\",\"Tab\":\"Text\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"TextLibrary.TextLength\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF6A5C1C\"}",
+        "ID": "c62e1156-c8cb-42b0-9221-40630eb83fe0",
+        "BoundingBox": {
+          "$id": "418",
+          "Location": {
+            "$id": "419",
+            "X": 6220.999999999998,
+            "Y": 5888.333333333332
+          },
+          "Size": {
+            "$id": "420",
+            "Width": 192.0066666666667,
+            "Height": 155.29333333333335
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "421",
+        "Name": "Text Transform",
+        "MetadataCompInfo": "{\"Name\":\"Text Transform\",\"Group\":\"Operations\",\"Tab\":\"Text\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"TextLibrary.TextTransform\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF101C37\"}",
+        "ID": "3c6f6f4a-ce4b-424c-a11b-ffba334077cb",
+        "BoundingBox": {
+          "$id": "422",
+          "Location": {
+            "$id": "423",
+            "X": 6445.999999999998,
+            "Y": 5884.333333333332
+          },
+          "Size": { "$id": "424", "Width": 188.16666666666669, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "425",
+        "Name": "Text Trim",
+        "MetadataCompInfo": "{\"Name\":\"Text Trim\",\"Group\":\"Operations\",\"Tab\":\"Text\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"TextLibrary.TextTrim\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF776D05\"}",
+        "ID": "b0d3b0d6-a96d-436a-a208-188132e79989",
+        "BoundingBox": {
+          "$id": "426",
+          "Location": {
+            "$id": "427",
+            "X": 6669.999999999998,
+            "Y": 5886.333333333332
+          },
+          "Size": {
+            "$id": "428",
+            "Width": 225.96,
+            "Height": 141.31333333333333
+          }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "429",
+        "Name": "Concatenate",
+        "MetadataCompInfo": "{\"Name\":\"Concatenate\",\"Group\":\"Operations\",\"Tab\":\"Text\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Concatenate\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF011A20\"}",
+        "ID": "4da03c3f-920b-4225-bbc8-0ea701ccb8bc",
+        "BoundingBox": {
+          "$id": "430",
+          "Location": {
+            "$id": "431",
+            "X": 6932.999999999998,
+            "Y": 5884.333333333332
+          },
+          "Size": { "$id": "432", "Width": 174.10000000000002, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "433",
+        "Name": "Text Contains",
+        "MetadataCompInfo": "{\"Name\":\"Text Contains\",\"Group\":\"Operations\",\"Tab\":\"Text\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Contains\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF052E58\"}",
+        "ID": "4e474100-2225-4e32-a6e3-95a967ecfa78",
+        "BoundingBox": {
+          "$id": "434",
+          "Location": {
+            "$id": "435",
+            "X": 7134.999999999998,
+            "Y": 5887.333333333332
+          },
+          "Size": { "$id": "436", "Width": 212.57333333333335, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "437",
+        "ElementText": "Output Value: ",
+        "Name": "Regex",
+        "MetadataCompInfo": "{\"Name\":\"Regex\",\"Group\":\"Advanced Operations\",\"Tab\":\"Text\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"MathLibrary.Regexp\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF6C5027\"}",
+        "ID": "885c578f-65a6-452a-a5af-04bf3ab62481",
+        "BoundingBox": {
+          "$id": "438",
+          "Location": {
+            "$id": "439",
+            "X": 7371.999999999998,
+            "Y": 5886.333333333332
+          },
+          "Size": { "$id": "440", "Width": 240.13333333333335, "Height": 174.4 }
+        },
+        "ElementType": 6
+      },
+      {
+        "$id": "441",
+        "Name": "RuntimeCompilerTest",
+        "MetadataCompInfo": "{\"Name\":\"RuntimeCompilerTest\",\"Group\":\"RuntimeCompilerTest\",\"Tab\":\"RuntimeCompilerTest\",\"Description\":\"DEVELOPMENT BUILD : Define values for all relevant properties before publishing\",\"Author\":\"DEVELOPMENT_BUILD\",\"Version\":\"0.0.0.1\",\"License\":\"DEVELOPMENT BUILD : No warranties. Use at your own risk. Not cloud-safe\",\"Website\":\"https://iiterate.de\",\"Repository\":\"https://iiterate.de\",\"TypeName\":\"RuntimeLibrary.RuntimeCompilerTest\",\"BuiltAgainst\":\"v4.0.30319\",\"IsValid\":true,\"IsDevelopmentBuild\":true,\"Accent\":\"#FF6F6D0F\"}",
+        "ID": "c3bbfe10-24cb-4a32-9f37-7ede2b38bf18",
+        "BoundingBox": {
+          "$id": "442",
+          "Location": {
+            "$id": "443",
+            "X": 3818.2500000000005,
+            "Y": 4608.295454545455
+          },
+          "Size": {
+            "$id": "444",
+            "Width": 174.10000000000002,
+            "Height": 207.41
+          }
+        },
+        "ElementType": 6
+      }
+    ]
+  }
+}

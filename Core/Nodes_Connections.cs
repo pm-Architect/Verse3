@@ -12,7 +12,9 @@ namespace Core
         public IElement Parent { get; set; }
         [JsonIgnore]
         public ElementsLinkedList<IConnection> Connections { get; }
+        [JsonIgnore]
         public NodeType NodeType { get; }
+        [JsonIgnore]
         public CanvasPoint Hotspot { get; }
         public string Name { get; set; }
         public new ElementType ElementType { get/* => ElementType.Node*/; }
@@ -29,6 +31,7 @@ namespace Core
         //public new event EventHandler<DataChangedEventArgs<D>> DataChanged;
         public delegate void NodeDataChangedEventHandler(IDataNode<D> container, DataChangedEventArgs<D> e);
         public event NodeDataChangedEventHandler NodeDataChanged;
+        [JsonIgnore]
         new DataStructure<D> DataGoo { get; set; }
     }
 
@@ -84,6 +87,7 @@ namespace Core
     {
         public INode Origin { get; }
         public INode Destination { get; }
+        [JsonIgnore]
         public ConnectionType ConnectionType { get; }
         public new ElementType ElementType { get/* => ElementType.Connection*/; }
     }

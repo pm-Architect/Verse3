@@ -20,6 +20,7 @@
         Height="{Binding BoundingBox.Size.Height}"
         MinWidth="100"
         MinHeight="20"
+        MaxHeight="120"
         >
         <hc:TextBox
             Name="TextBoxBlock"
