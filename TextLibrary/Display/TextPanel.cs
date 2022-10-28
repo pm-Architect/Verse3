@@ -61,6 +61,7 @@ namespace TextLibrary
                                     {
                                         this.previewTextBlock.DisplayedText += (goo.Data.ToString() + ", ");
                                     }
+                                    this.previewTextBlock.DisplayedText = this.previewTextBlock.DisplayedText.TrimEnd(',', ' ');
                                     this.previewTextBlock.DisplayedText += "]";
                                 }
                                 else
@@ -75,7 +76,7 @@ namespace TextLibrary
                             break;
                         }
                 }
-                //this.ChildElementManager.AdjustBounds(true);
+                this.ChildElementManager.AdjustBounds(true);
             }
         }
 
