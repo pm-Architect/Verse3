@@ -241,6 +241,7 @@ namespace VanillaElements
                 this.OverlayImage.Visibility = Visibility.Hidden;
                 this.EmulatedIDEBrowser.IsEnabled = true;
                 this.EmulatedIDEBrowser.Visibility = Visibility.Visible;
+                DataViewModel.WPFControl.ClearSelection();
             }
         }
 

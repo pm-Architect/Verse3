@@ -12,35 +12,47 @@ namespace Core
         private static readonly CoreConsole Instance = new CoreConsole();
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly StringBuilder StringLogger = new StringBuilder();
+        private static readonly List<string> LogList = new List<string>();
 
-        //TODO: Push data to Supabase
-        //public static void Log(string message, LogLevel level = default)
-        //{
-        //    if (level == default) level = LogLevel.Info;
-        //    Logger.Log(level, message);
-        //}
+        public static void GetEntries(int v, out string[] entries)
+        {
+            List<string> eList = new List<string>();
+            for (int i = 0; i < v; i++)
+            {
+                if (LogList.Count - i - 1 >= 0)
+                {
+                    eList.Add(LogList[LogList.Count - i - 1]);
+                }
+            }
+            entries = eList.ToArray();
+        }
         public static void Log(string message, bool isException = false, string prefix = "", string suffix = "")
         {
             if (isException)
             {
                 StringLogger.AppendLine($"ERROR: {prefix} |[ {message} ]| {suffix}");
+                LogList.Add($"ERROR: {prefix} |[ {message} ]| {suffix}");
                 Logger.Log(LogLevel.Error, (prefix + " |[ " + message + " ]| " + suffix).Trim());
+                if (CoreConsole.OnLog != null && CoreConsole.OnLog.GetInvocationList().Length > 0)
+                    CoreConsole.OnLog.Invoke(null, new EventArgData(new DataStructure<string>(($"ERROR: {prefix} |[ {message} ]| {suffix}"))));
             }
             else
             {
                 StringLogger.AppendLine($"INFO: {prefix} |[ {message} ]| {suffix}");
+                LogList.Add($"INFO: {prefix} |[ {message} ]| {suffix}");
                 Logger.Log(LogLevel.Info, (prefix + " |[ " + message + " ]| " + suffix).Trim());
+                if (CoreConsole.OnLog != null && CoreConsole.OnLog.GetInvocationList().Length > 0)
+                    CoreConsole.OnLog.Invoke(null, new EventArgData(new DataStructure<string>(($"INFO: {prefix} |[ {message} ]| {suffix}"))));
             }
         }
         public static void Log(Exception ex, string prefix = "", string suffix = "")
         {
             StringLogger.AppendLine($"ERROR: {prefix} |[ {ex.Message} ]| {suffix}");
+            LogList.Add($"ERROR: {prefix} |[ {ex.Message} ]| {suffix}");
             Logger.Log(LogLevel.Error, (prefix + " |[ " + ex.Message + " ]| " + suffix).Trim());
+            if (CoreConsole.OnLog != null && CoreConsole.OnLog.GetInvocationList().Length > 0)
+                CoreConsole.OnLog.Invoke(null, new EventArgData(new DataStructure<string>(($"ERROR: {prefix} |[ {ex.Message} ]| {suffix}"))));
         }
-
-        //TODO: Debug / Events / Serial / Console Logger
-        //NLog?
-        // https://github.com/NLog/NLog
 
         private CoreConsole()
         {
@@ -96,6 +108,10 @@ namespace Core
             // For ease of readability we'll use this:
             //var instance = Client.Instance;
         }
+
+
+        public delegate void ConsoleLogEventHandler(object sender, EventArgData e);
+        public static event ConsoleLogEventHandler OnLog;
     }
 
     //public class ElementConsole

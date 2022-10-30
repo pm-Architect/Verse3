@@ -93,6 +93,7 @@ namespace CodeLibrary
                     }
                 }
             }
+            this.ChildElementManager.AdjustBounds(false);
             //this.ChildElementManager.AdjustBounds(true);
             RenderingCore.Render(this);
         }
