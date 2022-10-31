@@ -37,6 +37,7 @@ namespace CoreInterop
             }
             catch (Exception ex)
             {
+                //throw ex;
                 CoreConsole.Log(ex);
             }
         }
@@ -48,6 +49,7 @@ namespace CoreInterop
             }
             catch (Exception ex)
             {
+                //throw ex;
                 CoreConsole.Log(ex);
             }
         }
@@ -55,8 +57,9 @@ namespace CoreInterop
         public event EventHandler ClientConnected;
         private void OnClientConnected(NamedPipeConnection<DataStructure, DataStructure> connection)
         {
-            CoreConsole.Log($"Client {connection.Id} is now connected!");
-            ClientConnected.Invoke(connection, new EventArgs());
+            //CoreConsole.Log($"Client {connection.Id} is now connected!");
+            if (ClientConnected != null && ClientConnected.GetInvocationList().Length > 0)
+                ClientConnected.Invoke(connection, new EventArgs());
             connection.PushMessage(new DataStructure<string>("Connected to Verse3"));
         }
 
@@ -64,7 +67,8 @@ namespace CoreInterop
         private void OnClientDisconnected(NamedPipeConnection<DataStructure, DataStructure> connection)
         {
             CoreConsole.Log($"Client {connection.Id} is now disconnected!");
-            ClientDisconnected.Invoke(this, new EventArgs());
+            if (ClientDisconnected != null && ClientDisconnected.GetInvocationList().Length > 0)
+                ClientDisconnected.Invoke(this, new EventArgs());
             //CoreConsole.Log("Client {0} disconnected", connection.Id);
         }
 
@@ -72,7 +76,8 @@ namespace CoreInterop
         private void OnClientMessage(NamedPipeConnection<DataStructure, DataStructure> connection, DataStructure message)
         {
             CoreConsole.Log($"Client {connection.Id} sent a message: {message.ToString()}");
-            ClientMessage.Invoke(connection, message);
+            if (ClientMessage != null && ClientMessage.GetInvocationList().Length > 0)
+                ClientMessage.Invoke(connection, message);
             //CoreConsole.Log("Client {0} says: {1}", connection.Id, message);
         }
 
@@ -80,7 +85,8 @@ namespace CoreInterop
         private void OnError(Exception exception)
         {
             CoreConsole.Log($"Error: {exception}");
-            Error.Invoke(this, exception);
+            if (Error != null && Error.GetInvocationList().Length > 0)
+                Error.Invoke(this, exception);
             //Console.Error.WriteLine("ERROR: {0}", exception);
         }
     }

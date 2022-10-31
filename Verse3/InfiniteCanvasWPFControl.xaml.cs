@@ -507,6 +507,61 @@ namespace Verse3
                             this.ClearSelection();
                             foreach (IRenderable renderable1 in toBeDeleted)
                             {
+                                if (renderable1 is BaseComp bc)
+                                {
+                                    if (bc.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 0)
+                                    {
+                                        foreach (IDataNode dataInputNode in bc.ComputationPipelineInfo.IOManager.DataInputNodes)
+                                        {
+                                            if (dataInputNode.Connections.Count > 0)
+                                            {
+                                                foreach (IConnection dataConnection in dataInputNode.Connections)
+                                                {
+                                                    if (dataConnection is BezierElement be) be.Remove();
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (bc.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
+                                    {
+                                        foreach (IDataNode dataOutputNode in bc.ComputationPipelineInfo.IOManager.DataOutputNodes)
+                                        {
+                                            if (dataOutputNode.Connections.Count > 0)
+                                            {
+                                                foreach (IConnection dataConnection in dataOutputNode.Connections)
+                                                {
+                                                    if (dataConnection is BezierElement be) be.Remove();
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (bc.ComputationPipelineInfo.IOManager.EventInputNodes.Count > 0)
+                                    {
+                                        foreach (IEventNode eventInputNode in bc.ComputationPipelineInfo.IOManager.EventInputNodes)
+                                        {
+                                            if (eventInputNode.Connections.Count > 0)
+                                            {
+                                                foreach (IConnection eventConnection in eventInputNode.Connections)
+                                                {
+                                                    if (eventConnection is BezierElement be) be.Remove();
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (bc.ComputationPipelineInfo.IOManager.EventOutputNodes.Count > 0)
+                                    {
+                                        foreach (IEventNode eventOutputNode in bc.ComputationPipelineInfo.IOManager.EventOutputNodes)
+                                        {
+                                            if (eventOutputNode.Connections.Count > 0)
+                                            {
+                                                foreach (IConnection eventConnection in eventOutputNode.Connections)
+                                                {
+                                                    if (eventConnection is BezierElement be) be.Remove();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                                 renderable1.Dispose();
                             }
                             e.Handled = true;

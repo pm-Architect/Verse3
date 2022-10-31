@@ -8,8 +8,6 @@ namespace InteropLibrary
 {
     public class InteropMessageRCV : BaseComp
     {
-        internal string _lastMessage = "";
-
         #region Constructors
 
         public InteropMessageRCV() : base()
@@ -44,10 +42,9 @@ namespace InteropLibrary
 
         private void _LocalInteropServer_ClientMessage(object? sender, DataStructure e)
         {
-            this.ComputationPipelineInfo.IOManager.EventOccured(0, new EventArgData(e));
-            _lastMessage = e.ToString();
-            this.ComputationPipelineInfo.IOManager.SetData(e, 0);
-            ComputationPipeline.ComputeComputable(this);
+            this.ChildElementManager.EventOccured(nodeBlock, new EventArgData(e));
+            this.ChildElementManager.SetData(e, nodeBlock2);
+            ComputationCore.Compute(this, false);
         }
     }
 }

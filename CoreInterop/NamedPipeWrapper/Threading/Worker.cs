@@ -49,7 +49,6 @@ namespace NamedPipeWrapper.Threading
             }
             catch (Exception e)
             {
-                CoreConsole.Log(e);
                 Callback(() => Fail(e));
             }
         }

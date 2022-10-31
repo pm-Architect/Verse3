@@ -28,9 +28,9 @@ namespace Rhino3DMLibrary
                     this.ChildElementManager.SetData<double>(p.X, nodeBlockX);
                     this.ChildElementManager.SetData<double>(p.Y, nodeBlockY);
                     this.ChildElementManager.SetData<double>(p.Z, nodeBlockZ);
+                    this.previewTextBlock.DisplayedText = ($"({p.X}, {p.Y}, {p.Z})");
                 }
                 else return;
-                this.previewTextBlock.DisplayedText = geo.ToString();
             }
         }
 

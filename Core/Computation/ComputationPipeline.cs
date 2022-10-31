@@ -115,10 +115,10 @@ namespace Core
                 if (computeSuccess) return count;
                 else return -1;
             }
-            catch /*(Exception e)*/
+            catch (Exception ex)
             {
+                CoreConsole.Log(ex);
                 computable.ComputableElementState = ComputableElementState.Failed;
-                //TODO: Log to console
             }
             finally
             {

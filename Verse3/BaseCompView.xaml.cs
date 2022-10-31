@@ -184,75 +184,84 @@ namespace Verse3
         /// </summary>
         void OnMouseMove(object sender, MouseEventArgs e)
         {
-            //MouseEventArgs
-            if (DataViewModel.WPFControl.MouseHandlingMode == MouseHandlingMode.CopyDraggingElements && DataViewModel.WPFControl.ContentElements.SelectedItems.Count > 0)
+            try
             {
-                List<BaseComp> copiedComps = new List<BaseComp>();
-                foreach (BaseComp comp in DataViewModel.WPFControl.ContentElements.SelectedItems)
+                //MouseEventArgs
+                if (DataViewModel.WPFControl.MouseHandlingMode == MouseHandlingMode.CopyDraggingElements && DataViewModel.WPFControl.ContentElements.SelectedItems.Count > 0)
                 {
-                    BaseComp comp1 = Activator.CreateInstance(comp.GetType()) as BaseComp;
-                    ParameterInfo[] pi = comp1.GetCompInfo().ConstructorInfo.GetParameters();
-                    object[] args = new object[pi.Length];
-                    for (int i = 0; i < pi.Length; i++)
+                    List<BaseComp> copiedComps = new List<BaseComp>();
+                    foreach (BaseComp comp in DataViewModel.WPFControl.ContentElements.SelectedItems)
                     {
-                        if (!(pi[i].DefaultValue is DBNull)) args[i] = pi[i].DefaultValue;
-                        else
+                        BaseComp comp1 = Activator.CreateInstance(comp.GetType()) as BaseComp;
+                        ParameterInfo[] pi = comp1.GetCompInfo().ConstructorInfo.GetParameters();
+                        object[] args = new object[pi.Length];
+                        for (int i = 0; i < pi.Length; i++)
                         {
-                            if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "x")
-                                args[i] = DataViewModel.WPFControl.GetMouseRelPosition().X;
-                            //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().X;
-                            else if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "y")
-                                args[i] = DataViewModel.WPFControl.GetMouseRelPosition().Y;
-                            //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().Y;
+                            if (!(pi[i].DefaultValue is DBNull)) args[i] = pi[i].DefaultValue;
+                            else
+                            {
+                                if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "x")
+                                    args[i] = DataViewModel.WPFControl.GetMouseRelPosition().X;
+                                //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().X;
+                                else if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "y")
+                                    args[i] = DataViewModel.WPFControl.GetMouseRelPosition().Y;
+                                //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().Y;
+                            }
+                        }
+                        BaseComp comp1instance = comp1.GetCompInfo().ConstructorInfo.Invoke(args) as BaseComp;
+                        DataTemplateManager.RegisterDataTemplate(comp1instance);
+                        DataViewModel.Instance.Elements.Add(comp1instance);
+
+                        copiedComps.Add(comp1instance);
+                    }
+                    DataViewModel.WPFControl.ClearSelection();
+                    foreach (BaseComp comp in copiedComps) DataViewModel.WPFControl.AddToSelection(comp);
+
+                    DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.DraggingElements;
+                }
+                if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingElements)
+                {
+                    //
+                    // We are not in rectangle dragging mode, so don't do anything.
+                    //
+                    return;
+                }
+
+                Point curContentPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
+                Vector rectangleDragVector = curContentPoint - DataViewModel.WPFControl.origContentMouseDownPoint;
+
+                //
+                // When in 'dragging rectangles' mode update the position of the rectangle as the user drags it.
+                //
+
+                DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
+
+                //TODO: If other BaseComps are also selected, Render all selected BaseComps together with rectangleDragVector translation
+                if (DataViewModel.WPFControl.LBcontent.SelectedItems.Count > 1)
+                {
+                    foreach (IRenderable renderable in DataViewModel.WPFControl.LBcontent.SelectedItems)
+                    {
+                        if (renderable != null)
+                        {
+                            RenderPipeline.RenderRenderable(renderable, rectangleDragVector.X, rectangleDragVector.Y);
                         }
                     }
-                    BaseComp comp1instance = comp1.GetCompInfo().ConstructorInfo.Invoke(args) as BaseComp;
-                    DataTemplateManager.RegisterDataTemplate(comp1instance);
-                    DataViewModel.Instance.Elements.Add(comp1instance);
-
-                    copiedComps.Add(comp1instance);
                 }
-                DataViewModel.WPFControl.ClearSelection();
-                foreach (BaseComp comp in copiedComps) DataViewModel.WPFControl.AddToSelection(comp);
-
-                DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.DraggingElements;
-            }
-            if (DataViewModel.WPFControl.MouseHandlingMode != MouseHandlingMode.DraggingElements)
-            {
-                //
-                // We are not in rectangle dragging mode, so don't do anything.
-                //
-                return;
-            }
-
-            Point curContentPoint = e.GetPosition(DataViewModel.WPFControl.ContentElements);
-            Vector rectangleDragVector = curContentPoint - DataViewModel.WPFControl.origContentMouseDownPoint;
-
-            //
-            // When in 'dragging rectangles' mode update the position of the rectangle as the user drags it.
-            //
-
-            DataViewModel.WPFControl.origContentMouseDownPoint = curContentPoint;
-
-            //TODO: If other BaseComps are also selected, Render all selected BaseComps together with rectangleDragVector translation
-            if (DataViewModel.WPFControl.LBcontent.SelectedItems.Count > 1)
-            {
-                foreach (IRenderable renderable in DataViewModel.WPFControl.LBcontent.SelectedItems)
+                else
                 {
-                    if (renderable != null)
-                    {
-                        RenderPipeline.RenderRenderable(renderable, rectangleDragVector.X, rectangleDragVector.Y);
-                    }
+                    RenderPipeline.RenderRenderable(this.Element, rectangleDragVector.X, rectangleDragVector.Y);
                 }
+
+                DataViewModel.WPFControl.ExpandContent();
+
+                e.Handled = true;
             }
-            else
+            catch (Exception ex)
             {
-                RenderPipeline.RenderRenderable(this.Element, rectangleDragVector.X, rectangleDragVector.Y);
+                CoreConsole.Log(ex);
+                //throw ex;
             }
-
-            DataViewModel.WPFControl.ExpandContent();
-
-            e.Handled = true;
+            
         }
 
         void OnMouseWheel(object sender, MouseWheelEventArgs e)

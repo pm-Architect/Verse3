@@ -33,6 +33,7 @@ namespace Verse3InteropRhinoPlugin
 
         ///<returns>The command name as it appears on the Rhino command line.</returns>
         public override string EnglishName => "Verse3InteropCommand";
+        public override string LocalName => "Verse3Interop";
 
         string lastMessage = "";
         protected override Result RunCommand(RhinoDoc doc, RunMode mode)
@@ -40,7 +41,6 @@ namespace Verse3InteropRhinoPlugin
             if (client != null)
             {
                 //TODO: Reconnect if disconnected
-                RhinoApp.WriteLine("Last Message: " + lastMessage);
                 //client = new InteropClient("Verse3", "token");
                 //client.ServerMessage += Client_ServerMessage;
             }
@@ -51,12 +51,14 @@ namespace Verse3InteropRhinoPlugin
                 client.ServerMessage += Client_ServerMessage;
                 client.Disconnected += Client_Disconnected;
                 client.Error += Client_Error;
-                RhinoApp.WriteLine("Last Message: " + lastMessage);
             }
+            if (lastMessage != "" || lastMessage != null) RhinoApp.WriteLine("Last Message: " + lastMessage);
             using (GetObject gs = new GetObject())
             {
-                gs.SetCommandPrompt("Enter a message to send to Verse3");
-                gs.AcceptNothing(true);
+                gs.SetCommandPrompt("Send to Verse3");
+                gs.AcceptNothing(false);
+                gs.AcceptNumber(true, true);
+                gs.AcceptString(true);
                 GetResult result = gs.Get();
                 switch (result)
                 {
@@ -186,6 +188,7 @@ namespace Verse3InteropRhinoPlugin
                 lastMessage = e.ToString();
                 RhinoApp.WriteLine("InteropMessage: " + lastMessage);
                 Type dt = e.DataType;
+                object data = e.Data;
                 if (dt is null)
                 {
                     RhinoApp.WriteLine("Data Type Not Serialized/Found");
@@ -201,6 +204,17 @@ namespace Verse3InteropRhinoPlugin
                     {
                         RhinoApp.WriteLine("Data Type Error: " + ex.Message);
                         return;
+                    }
+                }
+                if (dt.IsArray && e.Data is object[] array)
+                {
+                    if (e.DataStructurePattern == DataStructurePattern.Item)
+                    {
+                        if (array.Length == 1 && array[0] != null)
+                        {
+                            dt = array[0].GetType();
+                            data = array[0];
+                        }
                     }
                 }
                 InteropDelegate dgt = null;
@@ -232,32 +246,32 @@ namespace Verse3InteropRhinoPlugin
                         }
                     case Type t when t == typeof(double):
                         {
-                            RhinoApp.WriteLine("Double: " + e.ToString());
+                            RhinoApp.WriteLine("Double: " + data.ToString());
                             dgt = new InteropDelegate(MakeCubeOfSize);
                             break;
                         }
                     case Type t when typeof(GeometryBase).IsAssignableFrom(t):
                         {
-                            if (e.Data is GeometryBase gb)
+                            if (data is GeometryBase gb)
                             {
-                                RhinoApp.WriteLine("GeometryBase: " + gb.ObjectType.ToString() + "; Value: " + e.ToString());
+                                RhinoApp.WriteLine("GeometryBase: " + gb.ObjectType.ToString() + "; Value: " + data.ToString());
                                 dgt = new InteropDelegate(MakeGeometry);
                             }
                             break;
                         }
                     case Type t when typeof(CommonObject).IsAssignableFrom(t):
                         {
-                            RhinoApp.WriteLine("CommonObject: " + e.DataType.ToString() + "; Value: " + e.ToString());
+                            RhinoApp.WriteLine("CommonObject: " + dt.ToString() + "; Value: " + data.ToString());
                             break;
                         }
                     case Type t when typeof(DataStructure).IsAssignableFrom(t):
                         {
-                            RhinoApp.WriteLine("DataStructure: " + e.DataType.ToString() + "; Value: " + e.ToString());
+                            RhinoApp.WriteLine("DataStructure: " + dt.ToString() + "; Value: " + data.ToString());
                             break;
                         }
                     case Type t when typeof(R3.GeometryBase).IsAssignableFrom(t):
                         {
-                            RhinoApp.WriteLine("Rhino3dm Geometry: " + e.DataType.ToString() + "; Value: " + e.ToString());
+                            RhinoApp.WriteLine("Rhino3dm Geometry: " + dt.ToString() + "; Value: " + data.ToString());
                             if (oldGuids.Count > 0)
                             {
                                 foreach (Guid guid in oldGuids)
@@ -270,7 +284,7 @@ namespace Verse3InteropRhinoPlugin
                                 }
                                 oldGuids.Clear();
                             }
-                            if (e.Data is R3.GeometryBase geor3)
+                            if (data is R3.GeometryBase geor3)
                             {
                                 try
                                 {
@@ -289,30 +303,47 @@ namespace Verse3InteropRhinoPlugin
                         }
                     case Type t when typeof(RC.GeometryBase).IsAssignableFrom(t):
                         {
-                            RhinoApp.WriteLine("RhinoCommon Geometry: " + e.DataType.ToString() + "; Value: " + e.ToString());
+                            RhinoApp.WriteLine("RhinoCommon Geometry: " + dt.ToString() + "; Value: " + data.ToString());
                             dgt = new InteropDelegate(MakeGeometry);
                             break;
                         }
+                    //case Type t when typeof(object[]).IsAssignableFrom(t):
+                    //    {
+                    //        RhinoApp.WriteLine("Objects: " + e.DataStructurePattern.ToString() + "; Value: " + data.ToString());
+                    //        if (e.DataStructurePattern == DataStructurePattern.Item)
+                    //        {
+                    //            RhinoApp.WriteLine(((object[])e.Data)[0].GetType().ToString());
+                    //        }
+                    //        dgt = new InteropDelegate(MakeGeometry);
+                    //        break;
+                    //    }
                     default:
                         {
-                            RhinoApp.WriteLine("Unhandled Type: " + e.DataType.ToString() + "; Value: " + e.ToString());
+                            RhinoApp.WriteLine("Unhandled Type: " + dt.ToString() + "; Value: " + data.ToString());
                             break;
                         }
                 }
                 if (dgt != null)
                 {
-                    object[] args = { e.Data };
-                    //if (referencedGeo.Count > 0)
-                    //{
-                    //    lock (referencedGeo)
-                    //    {
-                    //        args = new object[] { e, referencedGeo };
-                    //        RhinoApp.InvokeOnUiThread(dgt, args);
-                    //    }
-                    //    return;
-                    //}
-                    RhinoApp.InvokeOnUiThread(dgt, args);
-                    return;
+                    try
+                    {
+                        object[] args = { data };
+                        //if (referencedGeo.Count > 0)
+                        //{
+                        //    lock (referencedGeo)
+                        //    {
+                        //        args = new object[] { e, referencedGeo };
+                        //        RhinoApp.InvokeOnUiThread(dgt, args);
+                        //    }
+                        //    return;
+                        //}
+                        RhinoApp.InvokeOnUiThread(dgt, args);
+                        return;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
                 }
             }
         }

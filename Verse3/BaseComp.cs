@@ -1714,27 +1714,30 @@ namespace Verse3
                             IDataNode ndestCAST = conn.Destination as IDataNode;
                             try
                             {
-                                if (!ndestCAST.DataGoo.IsValid)
+                                if (ndestCAST != null)
                                 {
-                                    ndestCAST.DataGoo.Clear();
-                                    //ndestCAST.DataGoo = this.DataGoo.Duplicate<ndestCAST.DataValueType>;
-                                    MethodInfo mi = typeof(DataStructure).GetMethod("DuplicateAsType").MakeGenericMethod(ndestCAST.DataValueType);
-                                    object result = mi.Invoke(this.DataGoo, null);
-                                    if (result != null && result is DataStructure resultDs)
+                                    if (ndestCAST.DataGoo != null && !ndestCAST.DataGoo.IsValid)
                                     {
-                                        ndestCAST.DataGoo = resultDs.Duplicate();
+                                        ndestCAST.DataGoo.Clear();
+                                        //ndestCAST.DataGoo = this.DataGoo.Duplicate<ndestCAST.DataValueType>;
+                                        MethodInfo mi = typeof(DataStructure).GetMethod("DuplicateAsType").MakeGenericMethod(ndestCAST.DataValueType);
+                                        object result = mi.Invoke(this.DataGoo, null);
+                                        if (result != null && result is DataStructure resultDs)
+                                        {
+                                            ndestCAST.DataGoo = resultDs.Duplicate();
+                                            ndestCAST.DataGoo.ToString();
+                                        }
+                                    }
+                                    else if (!ndestCAST.DataGoo.Equals(this.DataGoo))
+                                    {
+                                        ndestCAST.DataGoo = this.DataGoo.Duplicate();
                                         ndestCAST.DataGoo.ToString();
                                     }
-                                }
-                                else if (!ndestCAST.DataGoo.Equals(this.DataGoo))
-                                {
-                                    ndestCAST.DataGoo = this.DataGoo.Duplicate();
-                                    ndestCAST.DataGoo.ToString();
-                                }
-                                else
-                                {
-                                    ndestCAST.DataGoo = this.DataGoo.Duplicate();
-                                    ndestCAST.DataGoo.ToString();
+                                    else
+                                    {
+                                        ndestCAST.DataGoo = this.DataGoo.Duplicate();
+                                        ndestCAST.DataGoo.ToString();
+                                    }
                                 }
                             }
                             catch (Exception ex)

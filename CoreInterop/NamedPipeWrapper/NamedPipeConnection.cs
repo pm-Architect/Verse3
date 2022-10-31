@@ -161,6 +161,7 @@ namespace NamedPipeWrapper
                 }
                 catch (Exception ex)
                 {
+                    //throw ex;
                     CoreConsole.Log(ex);
                     //we must igonre exception, otherwise, the namepipe wrapper will stop work.
                 }
@@ -175,20 +176,22 @@ namespace NamedPipeWrapper
         private void WritePipe()
         {
             
-                while (IsConnected && _streamWrapper.CanWrite)
+            while (IsConnected && _streamWrapper.CanWrite)
+            {
+                try
                 {
-                    try
+                    //using blockcollection, we needn't use singal to wait for result.
+                    //_writeSignal.WaitOne();
+                    //while (_writeQueue.Count > 0)
                     {
-                        //using blockcollection, we needn't use singal to wait for result.
-                        //_writeSignal.WaitOne();
-                        //while (_writeQueue.Count > 0)
-                        {
-                            _streamWrapper.WriteObject(_writeQueue.Take());
-                            _streamWrapper.WaitForPipeDrain();
-                        }
+                        _streamWrapper.WriteObject(_writeQueue.Take());
+                        _streamWrapper.WaitForPipeDrain();
                     }
-                    catch
-                    {
+                }
+                catch (Exception ex)
+                {
+                    //throw ex;
+                    CoreConsole.Log(ex);
                     //we must igonre exception, otherwise, the namepipe wrapper will stop work.
                 }
             }

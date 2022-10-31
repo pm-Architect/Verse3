@@ -375,6 +375,8 @@ namespace Core
                         //throw new Exception("DataStructure ID does not match");
                     object checkData = info.GetValue("Data", DataType);
                     this.Data = checkData;
+                    if (checkData is null)
+                        throw new Exception("DataStructure Data is Null");
                     if (checkData.GetType() != DataType)
                         throw new Exception("DataStructure DataType does not match Data");
                     if (checkData != Data)
@@ -414,13 +416,13 @@ namespace Core
                     }
                     else if (this.Count > 0)
                     {
-                        if (_metadata != null)
+                        if (this.Count == 1)
+                        {
+                            return this[0].Data;
+                        }
+                        else if (_metadata != null)
                         {
                             return this.ToArray();
-                        }
-                        else if (this.Count == 1)
-                        {
-                            return this[0];
                         }
                         else throw new Exception("Inconsistent Data Format. Metadata is null, but Data Structure has children.");
                     }
@@ -612,6 +614,10 @@ namespace Core
             {
                 if (this.Data is object[] array)
                 {
+                    if (array.Length == 1)
+                    {
+                        return array[0].ToString();
+                    }
                     if (array.Length > 0)
                     {
                         StringBuilder sb = new StringBuilder();
@@ -1006,33 +1012,45 @@ namespace Core
                 if (dataReference.Data == default) { this.DataStructurePattern = valOut; return default; }
                 if (dataReference.Data.GetType().IsArray)
                 {
-                    valOut = DataStructurePattern.List;
-                    foreach (DataStructure ds in dataReference)
+                    if (dataReference.Data is object[] array)
                     {
-                        if (ds._metadata != null)
+                        if (array.Length == 1)
                         {
-                            valOut = DataStructurePattern.Tree;
-                            if (consistentType.IsAssignableFrom(ds._metadata.DataType))
+                            valOut = DataStructurePattern.Item;
+                            consistentType = array[0].GetType();
+                        }
+                        else if (array.Length > 1)
+                        {
+
+                            valOut = DataStructurePattern.List;
+                            foreach (DataStructure ds in dataReference)
                             {
-                                if (consistentType == typeof(object) && ds._metadata.DataType != typeof(object))
+                                if (ds._metadata != null)
                                 {
-                                    if (!typeof(DataStructure).IsAssignableFrom(ds._metadata.DataType))
+                                    valOut = DataStructurePattern.Tree;
+                                    if (consistentType.IsAssignableFrom(ds._metadata.DataType))
                                     {
-                                        consistentType = ds._metadata.DataType;
+                                        if (consistentType == typeof(object) && ds._metadata.DataType != typeof(object))
+                                        {
+                                            if (!typeof(DataStructure).IsAssignableFrom(ds._metadata.DataType))
+                                            {
+                                                consistentType = ds._metadata.DataType;
+                                            }
+                                            else
+                                            {
+                                                consistentType = TryGetConsistentType(ds);
+                                            }
+                                        }
                                     }
                                     else
                                     {
-                                        consistentType = TryGetConsistentType(ds);
+                                        valOut = DataStructurePattern.Object;
+                                        consistentType = typeof(object);
                                     }
                                 }
-                            }
-                            else
-                            {
-                                valOut = DataStructurePattern.Object;
-                                consistentType = typeof(object);
+                                else throw new Exception("Inconsistent Data Structure : Missing Metadata.");
                             }
                         }
-                        else throw new Exception("Inconsistent Data Structure : Missing Metadata.");
                     }
                 }
                 else if (dataReference.Data is DataStructure innerDS)
