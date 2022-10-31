@@ -457,12 +457,19 @@ namespace Verse3.VanillaElements
 
         public void Remove()
         {
-            this.origin.Connections.Remove(this);
-            this.destination.Connections.Remove(this);
-            //this.origin = null;
-            //this.destination = null;
-            DataViewModel.Instance.Elements.Remove(this);
-            this.Dispose();
+            try
+            {
+                this.origin.Connections.Remove(this);
+                this.destination.Connections.Remove(this);
+                //this.origin = null;
+                //this.destination = null;
+                DataViewModel.Instance.Elements.Remove(this);
+                this.Dispose();
+            }
+            catch (Exception ex)
+            {
+                CoreConsole.Log(ex);
+            }
         }
 
         #region Constructors

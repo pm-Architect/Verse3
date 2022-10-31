@@ -509,6 +509,7 @@ namespace Verse3
                             {
                                 if (renderable1 is BaseComp bc)
                                 {
+                                    List<IConnection> toBeDeletedConnections = new List<IConnection>();
                                     if (bc.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 0)
                                     {
                                         foreach (IDataNode dataInputNode in bc.ComputationPipelineInfo.IOManager.DataInputNodes)
@@ -517,7 +518,7 @@ namespace Verse3
                                             {
                                                 foreach (IConnection dataConnection in dataInputNode.Connections)
                                                 {
-                                                    if (dataConnection is BezierElement be) be.Remove();
+                                                    if (dataConnection is BezierElement be) toBeDeletedConnections.Add(be);
                                                 }
                                             }
                                         }
@@ -530,7 +531,7 @@ namespace Verse3
                                             {
                                                 foreach (IConnection dataConnection in dataOutputNode.Connections)
                                                 {
-                                                    if (dataConnection is BezierElement be) be.Remove();
+                                                    if (dataConnection is BezierElement be) toBeDeletedConnections.Add(be);
                                                 }
                                             }
                                         }
@@ -543,7 +544,7 @@ namespace Verse3
                                             {
                                                 foreach (IConnection eventConnection in eventInputNode.Connections)
                                                 {
-                                                    if (eventConnection is BezierElement be) be.Remove();
+                                                    if (eventConnection is BezierElement be) toBeDeletedConnections.Add(be);
                                                 }
                                             }
                                         }
@@ -556,8 +557,18 @@ namespace Verse3
                                             {
                                                 foreach (IConnection eventConnection in eventOutputNode.Connections)
                                                 {
-                                                    if (eventConnection is BezierElement be) be.Remove();
+                                                    if (eventConnection is BezierElement be) toBeDeletedConnections.Add(be);
                                                 }
+                                            }
+                                        }
+                                    }
+                                    if (toBeDeletedConnections.Count > 0)
+                                    {
+                                        foreach (IConnection connection in toBeDeletedConnections)
+                                        {
+                                            if (connection is BezierElement bezierElement)
+                                            {
+                                                bezierElement.Remove();
                                             }
                                         }
                                     }
