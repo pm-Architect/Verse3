@@ -27,60 +27,58 @@ namespace MathLibrary
         public override void Compute()
         {
 
-            DateTime dateTime = (DateTime)this.ChildElementManager.GetData(nodeBlock0, DateTime.Now);
-            DateTime dateTime2 = (DateTime)this.ChildElementManager.GetData(nodeBlock1, DateTime.Now);
-            TimeSpan timespan0 = (TimeSpan)this.ChildElementManager.GetData(nodeBlock2).Data;
+            DateTime dateTime = (DateTime)this.ChildElementManager.GetData(a, DateTime.Now);
+            DateTime dateTime2 = (DateTime)this.ChildElementManager.GetData(b, DateTime.Now);
 
-            TimeSpan timespan = dateTime.Subtract(dateTime2);
-            DateTime dateTime3 = dateTime.Subtract(timespan0);
+            TimeSpan timespan = dateTime2.Subtract(dateTime);
 
-            this.ChildElementManager.SetData(timespan.Days, nodeBlock3);
-            this.ChildElementManager.SetData(timespan.Hours, nodeBlock4);
-            this.ChildElementManager.SetData(timespan.Minutes, nodeBlock5);
-            this.ChildElementManager.SetData(timespan, nodeBlock6);
-            this.ChildElementManager.SetData(dateTime3, nodeBlock7);
+            this.ChildElementManager.SetData(timespan, timeSpan);
+            this.ChildElementManager.SetData((double)timespan.Days, days);
+            this.ChildElementManager.SetData((double)timespan.Hours, hours);
+            this.ChildElementManager.SetData((double)timespan.Minutes, mins);
+            this.ChildElementManager.SetData((double)timespan.Seconds, secs);
+            this.ChildElementManager.SetData((double)timespan.Milliseconds, msecs);
 
         }
 
-        private DateTimeDataNode nodeBlock0;
-        private DateTimeDataNode nodeBlock1;
-        private TimeSpanDataNode nodeBlock2;
+        private DateTimeDataNode a;
+        private DateTimeDataNode b;
 
-        private NumberDataNode nodeBlock3;
-        private NumberDataNode nodeBlock4;
-        private NumberDataNode nodeBlock5;
-        private TimeSpanDataNode nodeBlock6;
-        private DateTimeDataNode nodeBlock7;
+        private TimeSpanDataNode timeSpan;
+        private NumberDataNode days;
+        private NumberDataNode hours;
+        private NumberDataNode mins;
+        private NumberDataNode secs;
+        private NumberDataNode msecs;
 
 
 
 
         public override void Initialize()
         {
-            nodeBlock0 = new DateTimeDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlock0, "DateTime A");
+            a = new DateTimeDataNode(this, NodeType.Input);
+            this.ChildElementManager.AddDataInputNode(a, "DateTime A");
 
-            nodeBlock1 = new DateTimeDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlock1, "DateTime B");
+            b = new DateTimeDataNode(this, NodeType.Input);
+            this.ChildElementManager.AddDataInputNode(b, "DateTime B");
 
-            nodeBlock2 = new TimeSpanDataNode(this, NodeType.Input);
-            this.ChildElementManager.AddDataInputNode(nodeBlock2, "Timespan");
+            timeSpan = new TimeSpanDataNode(this, NodeType.Output);
+            this.ChildElementManager.AddDataOutputNode(timeSpan, "TimeSpan", true);
 
-            nodeBlock3 = new NumberDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlock3, "Days", true);
+            days = new NumberDataNode(this, NodeType.Output);
+            this.ChildElementManager.AddDataOutputNode(days, "Days");
 
-            nodeBlock4 = new NumberDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlock4, "Hours");
+            hours = new NumberDataNode(this, NodeType.Output);
+            this.ChildElementManager.AddDataOutputNode(hours, "Hours");
 
-            nodeBlock5 = new NumberDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlock5, "Minutes");
+            mins = new NumberDataNode(this, NodeType.Output);
+            this.ChildElementManager.AddDataOutputNode(mins, "Minutes");
 
-            nodeBlock6 = new TimeSpanDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlock6, "TimeSpan");
+            secs = new NumberDataNode(this, NodeType.Output);
+            this.ChildElementManager.AddDataOutputNode(secs, "Seconds");
 
-            nodeBlock7 = new DateTimeDataNode(this, NodeType.Output);
-            this.ChildElementManager.AddDataOutputNode(nodeBlock7, "New Date");
-
+            msecs = new NumberDataNode(this, NodeType.Output);
+            this.ChildElementManager.AddDataOutputNode(msecs, "Milliseconds");
         }
     }
 }

@@ -54,6 +54,36 @@ namespace Core
                 CoreConsole.OnLog.Invoke(null, new EventArgData(new DataStructure<string>(($"ERROR: {prefix} |[ {ex.Message} ]| {suffix}"))));
         }
 
+        public static void Log(string message, IComputable computable, bool isException = false, string prefix = "", string suffix = "")
+        {
+            if (isException)
+            {
+                StringLogger.AppendLine($"ERROR @ {computable.ID.ToString()}: {prefix} |[ {message} ]| {suffix}");
+                LogList.Add($"ERROR @ {computable.ID.ToString()}: {prefix} |[ {message} ]| {suffix}");
+                Logger.Log(LogLevel.Error, (computable.ID.ToString() + " : " + prefix + " |[ " + message + " ]| " + suffix).Trim());
+                if (CoreConsole.OnLog != null && CoreConsole.OnLog.GetInvocationList().Length > 0)
+                    CoreConsole.OnLog.Invoke(null, new EventArgData(new DataStructure<string>(($"ERROR: {prefix} |[ {message} ]| {suffix}"))));
+            }
+            else
+            {
+                StringLogger.AppendLine($"INFO @ {computable.ID.ToString()}: {prefix} |[ {message} ]| {suffix}");
+                LogList.Add($"INFO @ {computable.ID.ToString()}: {prefix} |[ {message} ]| {suffix}");
+                Logger.Log(LogLevel.Info, (computable.ID.ToString() + " : " + prefix + " |[ " + message + " ]| " + suffix).Trim());
+                if (CoreConsole.OnLog != null && CoreConsole.OnLog.GetInvocationList().Length > 0)
+                    CoreConsole.OnLog.Invoke(null, new EventArgData(new DataStructure<string>(($"INFO: {prefix} |[ {message} ]| {suffix}"))));
+                computable.OnLog_Internal(new EventArgData(new DataStructure<string>(($"INFO: {prefix} |[ {message} ]| {suffix}"))));
+            }
+        }
+        public static void Log(Exception ex, IComputable computable, string prefix = "", string suffix = "")
+        {
+            StringLogger.AppendLine($"ERROR @ {computable.ID.ToString()}: {prefix} |[ {ex.Message} ]| {suffix}");
+            LogList.Add($"ERROR @ {computable.ID.ToString()}: {prefix} |[ {ex.Message} ]| {suffix}");
+            Logger.Log(LogLevel.Error, (computable.ID.ToString() + " : " + prefix + " |[ " + ex.Message + " ]| " + suffix).Trim());
+            if (CoreConsole.OnLog != null && CoreConsole.OnLog.GetInvocationList().Length > 0)
+                CoreConsole.OnLog.Invoke(null, new EventArgData(new DataStructure<string>(($"ERROR: {prefix} |[ {ex.Message} ]| {suffix}"))));
+            computable.OnLog_Internal(new EventArgData(new DataStructure<string>(($"ERROR: {prefix} |[ {ex.Message} ]| {suffix}"))));
+        }
+
         private CoreConsole()
         {
             if (Client.Instance != null)
@@ -65,6 +95,11 @@ namespace Core
         private static async void sLoad(string url, string key)
         {
             await Client.InitializeAsync(url, key);
+        }
+        
+        private static void LogFromNLog(string message, LogLevel level)
+        {
+
         }
 
         public static void Initialize()
@@ -79,14 +114,14 @@ namespace Core
                 Layout = "${longdate} ${level} ${message} ${exception:format=tostring}"
             };
             var logconsole = new NLog.Targets.ConsoleTarget("logconsole") { DetectConsoleAvailable = true };
-            //var logstring = new NLog.Targets.MethodCallTarget("logmethod");
-            //logstring.MethodName = "LogFromNLog";
-            //logstring.Parameters.Add(new NLog.Targets.MethodCallParameter("message", "${message}"));
-            //logstring.Parameters.Add(new NLog.Targets.MethodCallParameter("level", "${level}"));
+            var logmethod = new NLog.Targets.MethodCallTarget("logmethod");
+            logmethod.MethodName = "LogFromNLog";
+            logmethod.Parameters.Add(new NLog.Targets.MethodCallParameter("message", "${message}"));
+            logmethod.Parameters.Add(new NLog.Targets.MethodCallParameter("level", "${level}"));
 
             // Rules for mapping loggers to targets
             config.AddRule(LogLevel.Info, LogLevel.Fatal, logconsole);
-            //config.AddRule(LogLevel.Info, LogLevel.Fatal, logstring);
+            config.AddRule(LogLevel.Info, LogLevel.Fatal, logmethod);
             config.AddRule(LogLevel.Debug, LogLevel.Fatal, logfile);
 
             // Apply config           

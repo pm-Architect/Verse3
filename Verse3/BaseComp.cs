@@ -18,6 +18,7 @@ using System.Xml.Serialization;
 using Verse3.VanillaElements;
 using Newtonsoft.Json;
 using static Core.Geometry2D;
+using System.Text;
 
 namespace Verse3
 {
@@ -357,11 +358,12 @@ namespace Verse3
 
         public abstract void Compute();
 
-        public virtual void CollectData()
+        public virtual bool CollectData()
         {
+            bool result = false;
             if (this.ComputationPipelineInfo.IOManager.DataInputNodes != null && this.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 1)
             {
-                this.ComputationPipelineInfo.CollectData();
+                result = this.ComputationPipelineInfo.CollectData();
                 if (this.ComputationPipelineInfo.IOManager.PrimaryDataOutput > -1)
                 {
                     if (previewTextBlock == null)
@@ -379,6 +381,7 @@ namespace Verse3
                     this.previewTextBlock.DisplayedText = primaryDataName + " = " + node.DataGoo.ToString();
                 }
             }
+            return result;
         }
         public virtual void DeliverData()
         {
@@ -401,6 +404,12 @@ namespace Verse3
         //#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         #endregion
+
+        private StringBuilder sbLog = new StringBuilder();
+        public void OnLog_Internal(EventArgData e)
+        {
+            sbLog.AppendLine(e.ToString());
+        }
 
         public abstract CompInfo GetCompInfo();
 
@@ -582,6 +591,10 @@ namespace Verse3
                                 _output.Add(element);
                             }
                         }
+                        else if (element is AddRemoveNodeButtonElement arnbe)
+                        {
+                            _input.Add(arnbe);
+                        }
                         break;
                     }
                 default:
@@ -631,6 +644,9 @@ namespace Verse3
                     }
             }
         }
+        
+        #region Add/Remove Individual Nodes
+
         public int AddDataOutputNode<T>(IDataNode<T> node, string name = "", bool isPrimaryOutput = false)
         {
             node.Name = name;
@@ -647,6 +663,26 @@ namespace Verse3
         {
             node.Name = name;
             if (node is IRenderable) AddElement(node as IRenderable);
+            return this._owner.ComputationPipelineInfo.IOManager.AddDataInputNode<T>(node);
+        }
+
+        public int AddExpandableDataInputNode<T>(IDataNode<T> node, string name = "", bool rearrangable = false)
+        {
+            node.Name = name;
+            if (node is IRenderable) AddElement(node as IRenderable);
+            AddRemoveNodeButtonElement addRemoveNode = new AddRemoveNodeButtonElement(node, rearrangable, true);
+            addRemoveNode.OnAddClicked += (s, e) =>
+            {
+                if (rearrangable)
+                {
+                    //TODO: Add rearrangable node
+                }
+                else
+                {
+                    //TODO: Add non-rearrangable node
+                }
+            };
+            AddElement(addRemoveNode);
             return this._owner.ComputationPipelineInfo.IOManager.AddDataInputNode<T>(node);
         }
 
@@ -669,6 +705,8 @@ namespace Verse3
             if (node is IRenderable) RemoveElement(node as IRenderable);
             this._owner.ComputationPipelineInfo.IOManager.RemoveNode(node);
         }
+
+        #endregion
 
         public T GetData<T>(DataNode<T> node, T defaultValue = default)
         {
@@ -1624,8 +1662,9 @@ namespace Verse3
         {
             this.ComputableElementState = ComputableElementState.Computed;
         }
-        public void CollectData()
+        public bool CollectData()
         {
+            bool result = false;
             if (this.Connections != null && this.Connections.Count > 0)
             {
                 foreach (IConnection conn in this.Connections)
@@ -1633,17 +1672,18 @@ namespace Verse3
                     //INCOMING CONNECTIONS
                     if (conn.Destination == this && conn.Origin is IDataNode)
                     {
-                        if (conn.Origin is IDataNode<D>)
+                        if (conn.Origin is IDataNode<D> norigin)
                         {
-                            IDataNode<D> norigin = conn.Origin as IDataNode<D>;
                             if (!this.DataGoo.IsValid)
                             {
                                 this.DataGoo.Clear();
                                 this.DataGoo = norigin.DataGoo;
+                                result = true;
                             }
                             else if (!this.DataGoo.Equals(norigin.DataGoo))
                             {
                                 this.DataGoo = norigin.DataGoo;
+                                result = true;
                             }
                         }
                         else if ((conn.Origin as IDataNode).DataValueType.IsAssignableFrom(this.DataValueType)
@@ -1658,11 +1698,13 @@ namespace Verse3
                                     if (noriginCAST.DataGoo != null)
                                     {
                                         this.DataGoo = noriginCAST.DataGoo.DuplicateAsType<D>();
+                                        result = true;
                                     }
                                 }
                                 else if (!this.DataGoo.Equals(noriginCAST.DataGoo))
                                 {
                                     this.DataGoo = noriginCAST.DataGoo.DuplicateAsType<D>();
+                                    result = true;
                                 }
                             }
                             catch (Exception ex)
@@ -1672,6 +1714,7 @@ namespace Verse3
                         }
                         else
                         {
+                            result = false;
                             Exception ex = new Exception("Data type mismatch error");
                             CoreConsole.Log(ex);
                         }
@@ -1687,6 +1730,7 @@ namespace Verse3
                     //}
                 }
             }
+            return result;
         }
         public void DeliverData()
         {
@@ -1727,6 +1771,11 @@ namespace Verse3
                                             ndestCAST.DataGoo = resultDs.Duplicate();
                                             ndestCAST.DataGoo.ToString();
                                         }
+                                    }
+                                    else if ((conn.Destination as IDataNode).DataValueType.IsAssignableTo(typeof(double)))
+                                    {
+                                        ndestCAST.DataGoo = this.DataGoo.DuplicateAsType<double>();
+                                        ndestCAST.DataGoo.ToString();
                                     }
                                     else if (!ndestCAST.DataGoo.Equals(this.DataGoo))
                                     {
@@ -1772,6 +1821,11 @@ namespace Verse3
             }
         }
 
+        private StringBuilder sbLog = new StringBuilder();
+        public void OnLog_Internal(EventArgData e)
+        {
+            sbLog.AppendLine(e.ToString());
+        }
         public abstract void ToggleActive();
 
 
@@ -2255,8 +2309,9 @@ namespace Verse3
         {
             this.ComputableElementState = ComputableElementState.Computed;
         }
-        public void CollectData()
+        public bool CollectData()
         {
+            bool result = false;
             if (this.Connections != null && this.Connections.Count > 0)
             {
                 foreach (IConnection conn in this.Connections)
@@ -2265,6 +2320,11 @@ namespace Verse3
                     if (conn.Destination == this && conn.Origin is IEventNode)
                     {
                         IEventNode no = conn.Origin as IEventNode;
+                        if (!no.ComputationPipelineInfo.EventUS.Contains(this)) result = true;
+                        else
+                        {
+                            //TODO: Handle Error & loop checking!!!!
+                        }
                         //if (!this.DataGoo.IsValid)
                         //{
                         //    this.DataGoo.Clear();
@@ -2286,6 +2346,7 @@ namespace Verse3
                     //}
                 }
             }
+            return result;
         }
         public void DeliverData()
         {
@@ -2320,6 +2381,11 @@ namespace Verse3
         }
 
 
+        private StringBuilder sbLog = new StringBuilder();
+        public void OnLog_Internal(EventArgData e)
+        {
+            sbLog.AppendLine(e.ToString());
+        }
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             try

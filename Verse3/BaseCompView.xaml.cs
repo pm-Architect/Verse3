@@ -144,6 +144,10 @@ namespace Verse3
 
                 e.Handled = true;
             }
+            else if (e.ChangedButton == MouseButton.Right)
+            {
+                //TODO: Mouse down Right & Middle
+            }
         }
 
         /// <summary>

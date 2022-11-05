@@ -78,38 +78,50 @@ namespace Core
                     //}
                     //else
                     //{
-                    computable.CollectData();
+                    //ComputeForDataStructureFlag
                     //TODO: Create a task to compute and store the task in the computable as part of it's state
                     //https://medium.com/@alex.puiu/parallel-foreach-async-in-c-36756f8ebe62
-                    computable.Compute();
-                    computable.DeliverData();
-
-                    count++;
-                    if (recursive)
+                    if (computable.CollectData())
                     {
-                        //if (!upstream)
-                        //{
-                        if (computable.ComputationPipelineInfo.DataDS != null && computable.ComputationPipelineInfo.DataDS.Count > 0)
-                        {
-                            foreach (IComputable compDS in computable.ComputationPipelineInfo.DataDS)
-                            {
-                                //TODO: Log to console
-                                computeSuccess = computeSuccess && (ComputeComputable(compDS) > 0);
-                            }
-                        }
-                        //}
-                        //else
-                        //{
-                        //if (computable.ComputationPipelineInfo.DataUS != null && computable.ComputationPipelineInfo.DataUS.Count > 0)
-                        //{
-                        //    foreach (IComputable compUS in computable.ComputationPipelineInfo.DataUS)
-                        //    {
-                        //        //TODO: Log to console
-                        //        computeSuccess = computeSuccess && (ComputeComputable(compUS) > 0);
-                        //    }
-                        //}
-                        //}
+                        computeSuccess = false;
+                        computable.ComputationPipelineInfo.ComputableElementState = ComputableElementState.Failed;
+                        computable.OnLog_Internal(new EventArgData(new DataStructure<string>("CollectData failed - Check Inputs.")));
                     }
+                    else
+                    {
+                        computable.ComputationPipelineInfo.ComputableElementState = ComputableElementState.Computing;
+                        computable.Compute();
+                        computable.ComputationPipelineInfo.ComputableElementState = ComputableElementState.Computed;
+                        computable.DeliverData();
+
+                        count++;
+                        if (recursive)
+                        {
+                            //if (!upstream)
+                            //{
+                            if (computable.ComputationPipelineInfo.DataDS != null && computable.ComputationPipelineInfo.DataDS.Count > 0)
+                            {
+                                foreach (IComputable compDS in computable.ComputationPipelineInfo.DataDS)
+                                {
+                                    //TODO: Log to console
+                                    computeSuccess = computeSuccess && (ComputeComputable(compDS) > 0);
+                                }
+                            }
+                            //}
+                            //else
+                            //{
+                            //if (computable.ComputationPipelineInfo.DataUS != null && computable.ComputationPipelineInfo.DataUS.Count > 0)
+                            //{
+                            //    foreach (IComputable compUS in computable.ComputationPipelineInfo.DataUS)
+                            //    {
+                            //        //TODO: Log to console
+                            //        computeSuccess = computeSuccess && (ComputeComputable(compUS) > 0);
+                            //    }
+                            //}
+                            //}
+                        }
+                    }
+                    
                     //}
                 }
                 if (computeSuccess) return count;
@@ -117,7 +129,7 @@ namespace Core
             }
             catch (Exception ex)
             {
-                CoreConsole.Log(ex);
+                CoreConsole.Log(ex, computable);
                 computable.ComputableElementState = ComputableElementState.Failed;
             }
             finally
@@ -137,12 +149,13 @@ namespace Core
 
     public interface IComputable : IElement
     {
+        public void OnLog_Internal(EventArgData e);
         //[JsonIgnore]
         public ComputationPipelineInfo ComputationPipelineInfo { get; }
 
         //public ElementsLinkedList<INode> Nodes { get; }
 
-        void CollectData();
+        bool CollectData();
 
         [JsonIgnore]
         public ComputableElementState ComputableElementState { get; set; }
@@ -179,6 +192,11 @@ namespace Core
         [JsonIgnore]
         private ElementsLinkedList<IComputable> _eventUS = new ElementsLinkedList<IComputable>();
         public ElementsLinkedList<IComputable> EventUS => _eventUS;
+
+        [JsonIgnore]
+        private ComputableElementState computableElementState = ComputableElementState.Default;
+        public ComputableElementState ComputableElementState { get => computableElementState; internal set => computableElementState = value; }
+
         public ComputationPipelineInfo(IComputable computable)
         {
             this._computable = computable;
@@ -220,9 +238,9 @@ namespace Core
                 eventDS.ComputationPipelineInfo.AddEventUpStream(_computable);
             }
         }
-        public void CollectData()
+        public bool CollectData()
         {
-            IOManager.CollectData();
+            return IOManager.CollectData();
             //if (this._dataUS.Count > 0)
             //{
             //    foreach (IComputable dataUS in this._dataUS)
@@ -649,8 +667,9 @@ namespace Core
             else return false;
         }
 
-        public void CollectData()
+        public bool CollectData()
         {
+            bool result = false;
             foreach (IDataNode dataInputNode in this._dataInputNodes)
             {
                 //TODO: ONLY WHEN/IF CONNECTIONS CHANGED
@@ -669,6 +688,7 @@ namespace Core
                 }
                 dataInputNode.CollectData();
             }
+            return result;
         }
         public void DeliverData()
         {
