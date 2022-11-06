@@ -28,6 +28,9 @@
             Margin="10"
             FontFamily="Maven Pro"
             TextChanged="TextBoxBlock_TextChanged"
+            TextWrapping="Wrap"
+            AcceptsReturn="True"
+            VerticalScrollBarVisibility="Visible"
             />
     </Grid>
 </UserControl>
