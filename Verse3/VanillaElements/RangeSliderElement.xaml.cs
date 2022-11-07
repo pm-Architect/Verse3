@@ -106,7 +106,7 @@ namespace Verse3.VanillaElements
         }
     }
 
-    [Serializable]
+    //[Serializable]
     public class RangeSliderElement : BaseElement
     {
         public event EventHandler<RoutedEventArgs> ValuesChanged;

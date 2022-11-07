@@ -123,12 +123,13 @@
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
             this.clearToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.clearToolStripMenuItem.Text = "Clear";
+            this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
             // loadLibraryToolStripMenuItem
             // 
             this.loadLibraryToolStripMenuItem.Name = "loadLibraryToolStripMenuItem";
             this.loadLibraryToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
-            this.loadLibraryToolStripMenuItem.Text = "Load Library...";
+            this.loadLibraryToolStripMenuItem.Text = "Hot-Load Library...";
             this.loadLibraryToolStripMenuItem.Click += new System.EventHandler(this.loadLibraryToolStripMenuItem_Click);
             // 
             // exportCanvasToImageToolStripMenuItem
@@ -136,12 +137,13 @@
             this.exportCanvasToImageToolStripMenuItem.Name = "exportCanvasToImageToolStripMenuItem";
             this.exportCanvasToImageToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.exportCanvasToImageToolStripMenuItem.Text = "&Export Canvas to Image";
+            this.exportCanvasToImageToolStripMenuItem.Click += new System.EventHandler(this.exportCanvasToImageToolStripMenuItem_Click);
             // 
             // exportCanvasToolStripMenuItem
             // 
             this.exportCanvasToolStripMenuItem.Name = "exportCanvasToolStripMenuItem";
-            this.exportCanvasToolStripMenuItem.Size = new System.Drawing.Size(94, 20);
-            this.exportCanvasToolStripMenuItem.Text = "Export Canvas";
+            this.exportCanvasToolStripMenuItem.Size = new System.Drawing.Size(107, 20);
+            this.exportCanvasToolStripMenuItem.Text = "Send &Feedback...";
             this.exportCanvasToolStripMenuItem.Click += new System.EventHandler(this.exportCanvasToolStripMenuItem_Click);
             // 
             // tableLayoutPanel2

@@ -169,6 +169,7 @@ namespace Core
         void DeliverData();
     }
 
+    [Serializable]
     public class ComputationPipelineInfo
     {
         [JsonIgnore]
@@ -177,19 +178,19 @@ namespace Core
         private IOManager _ioManager;
         [JsonIgnore]
         public IOManager IOManager => _ioManager;
-        [JsonIgnore]
+        //[JsonIgnore]
         private ElementsLinkedList<IComputable> _dataDS = new ElementsLinkedList<IComputable>();
         public ElementsLinkedList<IComputable> DataDS => _dataDS;
 
-        [JsonIgnore]
+        //[JsonIgnore]
         private ElementsLinkedList<IComputable> _dataUS = new ElementsLinkedList<IComputable>();
         public ElementsLinkedList<IComputable> DataUS => _dataUS;
 
-        [JsonIgnore]
+        //[JsonIgnore]
         private ElementsLinkedList<IComputable> _eventDS = new ElementsLinkedList<IComputable>();
         public ElementsLinkedList<IComputable> EventDS => _eventDS;
 
-        [JsonIgnore]
+        //[JsonIgnore]
         private ElementsLinkedList<IComputable> _eventUS = new ElementsLinkedList<IComputable>();
         public ElementsLinkedList<IComputable> EventUS => _eventUS;
 

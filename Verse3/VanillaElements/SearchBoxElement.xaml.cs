@@ -113,7 +113,7 @@ namespace Verse3.VanillaElements
         }
     }
 
-    [Serializable]
+    //[Serializable]
     public class SearchBoxElement : BaseElement
     {
         #region Properties

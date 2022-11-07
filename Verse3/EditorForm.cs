@@ -606,7 +606,7 @@ namespace Verse3
                     string xml = VFfile.ToXMLString();
                     File.WriteAllText(saveFileDialog.FileName, xml);
                 }
-                else if (saveFileDialog.FileName.EndsWith(".vfj"))
+                else if (saveFileDialog.FileName.EndsWith(".vfj") || saveFileDialog.FileName.EndsWith(".vfj.json"))
                 {
                     //Serialize to xml
                     string xml = VFfile.ToJSONString();
@@ -647,6 +647,23 @@ namespace Verse3
                     CoreConsole.Log(ex);
                 }
             }
+        }
+
+        private void exportCanvasToImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(elementHost1.Size.Width, elementHost1.Size.Height);
+            elementHost1.DrawToBitmap(bmp, elementHost1.Bounds);
+            //save bmp to AppData/CanvasExports
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Verse3\\CanvasExports\\");
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            {
+                bmp.Save(Path.Combine(path, DateTime.Now.ToString("yyyyMMddHHmmss") + "_ProjectVerseCanvasExport.png"));
+            }
+        }
+
+        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

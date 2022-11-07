@@ -9,17 +9,17 @@ using System.Text;
 
 namespace Core
 {
-    public interface IDataGoo : INotifyPropertyChanged, ISerializable
+    public interface IDataGoo : INotifyPropertyChanged/*, ISerializable*/
     {
         public Guid ID { get; }
         //public IDataGoo Parent { get; }
         //public DataStructure Children { get; }
-        [DataMember]
+        //[DataMember]
         object Data { get; set; }
         bool IsValid { get; }
         //string IsValidReason { get; }
         //public DataAddress Address { get; }
-        //[DataMember]
+        ////[DataMember]
         public Type DataType { get; }
 
         #region INotifyPropertyChanged Members
@@ -73,8 +73,8 @@ namespace Core
         new DataStructure<D> DataGoo { get; set; }
     }
 
-    [Serializable]
-    public class DataStructure<D> : DataStructure, ISerializable
+    //[Serializable]
+    public class DataStructure<D> : DataStructure/*, ISerializable*/
     {
         public new object[] ToArray()
         {
@@ -96,31 +96,31 @@ namespace Core
                 return null;
             }
         }
-        protected DataStructure(SerializationInfo info, StreamingContext context) : base()
-        {
-            if (info.ObjectType == typeof(DataStructure<D>))
-            {
-                //if (DataType == (Type)info.GetValue("DataType", typeof(Type)))
-                //{
-                Data = (D)info.GetValue("Data", typeof(D));
-                //DataType = typeof(D);
-                //}
-            }
-            //info.GetValue("DataType", typeof(Type));
-            //info.GetValue("Data", this.DataType);
-        }
-        public new void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            try
-            {
-                info.AddValue("Data", Data);
-                //info.AddValue("DataType", DataType);
-            }
-            catch (Exception ex)
-            {
-                CoreConsole.Log(ex);
-            }
-        }
+        //protected DataStructure(SerializationInfo info, StreamingContext context) : base()
+        //{
+        //    if (info.ObjectType == typeof(DataStructure<D>))
+        //    {
+        //        //if (DataType == (Type)info.GetValue("DataType", typeof(Type)))
+        //        //{
+        //        Data = (D)info.GetValue("Data", typeof(D));
+        //        //DataType = typeof(D);
+        //        //}
+        //    }
+        //    //info.GetValue("DataType", typeof(Type));
+        //    //info.GetValue("Data", this.DataType);
+        //}
+        //public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    try
+        //    {
+        //        info.AddValue("Data", Data);
+        //        //info.AddValue("DataType", DataType);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        CoreConsole.Log(ex);
+        //    }
+        //}
 
         //Fire an event when Data is set
         //public new delegate void DataChangedEventHandler(DataStructure<D> sender, DataChangedEventArgs<D> e);
@@ -326,9 +326,9 @@ namespace Core
         }
     }
 
-    [Serializable]
-    [DataContract]
-    public class DataStructure : DataLinkedList<IDataGoo>, IDataGoo, ISerializable
+    //[Serializable]
+    ////[DataContract]
+    public class DataStructure : DataLinkedList<IDataGoo>, IDataGoo/*, ISerializable*/
     {
         public object[] ToArray()
         {
@@ -349,61 +349,103 @@ namespace Core
                 return null;
             }
         }
-        //[DataMember]
+        ////[DataMember]
         public byte[] Bytes
         {
             get => ToBytes(this);
         }
-        public DataStructure(SerializationInfo info, StreamingContext context)
-        {
-            if (info.ObjectType == typeof(DataStructure))
-            {
-                try
-                {
-                    //byte[] bytes = { };
-                    //bytes = (byte[])info.GetValue("Bytes", bytes.GetType());
-                    //DataStructure temp = DataSerialization.DeserializeFromBytes(bytes);
-                    //this.volatileData = temp.volatileData;
-                    //this.Children = temp.Children;
-                    //this.Parent = temp.Parent;
-                    //this.Address = temp.Address;
-                    //this.DataType = temp.DataType;
-                    //this.ID = temp.ID;
-                    //this.Data = temp.Data;
-                    //Guid checkGuid = (Guid)info.GetValue("ID", typeof(Guid));
-                    //if (checkGuid != ID)
-                        //throw new Exception("DataStructure ID does not match");
-                    object checkData = info.GetValue("Data", DataType);
-                    this.Data = checkData;
-                    if (checkData is null)
-                        throw new Exception("DataStructure Data is Null");
-                    if (checkData.GetType() != DataType)
-                        throw new Exception("DataStructure DataType does not match Data");
-                    if (checkData != Data)
-                        throw new Exception("DataStructure Data does not match");
-                    //TODO: Duplicate DataStructure
-                }
-                catch (Exception ex)
-                {
-                    CoreConsole.Log(ex);
-                }
-            }
-        }
+
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Data", Data);
-            //info.AddValue("ID", ID);
-            //info.AddValue("Bytes", Bytes);
-            //info.AddValue("DataType", DataType);
-            //if (this.Data != null)
-            //{
-
-            //}
+//            if (info.ObjectType == typeof(DataStructure))
+//            {
+//                try
+//                {
+//                    //byte[] bytes = { };
+//                    //bytes = (byte[])info.GetValue("Bytes", bytes.GetType());
+//                    //DataStructure temp = DataSerialization.DeserializeFromBytes(bytes);
+//                    //this.volatileData = temp.volatileData;
+//                    //this.Children = temp.Children;
+//                    //this.Parent = temp.Parent;
+//                    //this.Address = temp.Address;
+//                    //this.DataType = temp.DataType;
+//                    //this.ID = temp.ID;
+//                    //this.Data = temp.Data;
+//                    //Guid checkGuid = (Guid)info.GetValue("ID", typeof(Guid));
+//                    //if (checkGuid != ID)
+//                        //throw new Exception("DataStructure ID does not match");
+//                    object checkData = info.GetValue("Data", DataType);
+//                    this.Data = checkData;
+//                    if (checkData is null)
+//                        throw new Exception("DataStructure Data is Null");
+//                    if (checkData.GetType() != DataType)
+//                        throw new Exception("DataStructure DataType does not match Data");
+//                    if (checkData != Data)
+//                        throw new Exception("DataStructure Data does not match");
+//                    //TODO: Duplicate DataStructure
+//                }
+//                catch (Exception ex)
+//                {
+//                    CoreConsole.Log(ex);
+//                }
+//            }
+            base.GetObjectData(info, context);
+            if (_data != default) info.AddValue("InternalData", _data);
         }
+
+        public DataStructure(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+
+        }
+
+        //public DataStructure(SerializationInfo info, StreamingContext context)
+        //{
+        //    if (info.ObjectType == typeof(DataStructure))
+        //    {
+        //        try
+        //        {
+        //            //byte[] bytes = { };
+        //            //bytes = (byte[])info.GetValue("Bytes", bytes.GetType());
+        //            //DataStructure temp = DataSerialization.DeserializeFromBytes(bytes);
+        //            //this.volatileData = temp.volatileData;
+        //            //this.Children = temp.Children;
+        //            //this.Parent = temp.Parent;
+        //            //this.Address = temp.Address;
+        //            //this.DataType = temp.DataType;
+        //            //this.ID = temp.ID;
+        //            //this.Data = temp.Data;
+        //            //Guid checkGuid = (Guid)info.GetValue("ID", typeof(Guid));
+        //            //if (checkGuid != ID)
+        //                //throw new Exception("DataStructure ID does not match");
+        //            object checkData = info.GetValue("Data", DataType);
+        //            this.Data = checkData;
+        //            if (checkData.GetType() != DataType)
+        //                throw new Exception("DataStructure DataType does not match Data");
+        //            if (checkData != Data)
+        //                throw new Exception("DataStructure Data does not match");
+        //            //TODO: Duplicate DataStructure
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            CoreConsole.Log(ex);
+        //        }
+        //    }
+        //}
+        //public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    info.AddValue("Data", Data);
+        //    //info.AddValue("ID", ID);
+        //    //info.AddValue("Bytes", Bytes);
+        //    //info.AddValue("DataType", DataType);
+        //    //if (this.Data != null)
+        //    //{
+
+        //    //}
+        //}
 
         internal DSMetadata _metadata = default;
         protected object _data = default;
-        [DataMember]
+        //[DataMember]
         public object Data
         {
             get
@@ -958,7 +1000,7 @@ namespace Core
         }
 
         /// <summary>
-        /// RockfishDeserializationBinder class
+        /// InteropSerializationBinder class
         /// </summary>
         /// <remarks>
         /// Both RhinoCommon and Rhino3dmIO have a Rhino.Geometry.GeometryBase

@@ -12,7 +12,7 @@ namespace Core
 
     /// <summary>Represents a doubly linked list.</summary>
     /// <typeparam name="T">Specifies the element type of the linked list.</typeparam>
-    [Serializable]
+    //[Serializable]
     [ComVisible(false)]
     [DebuggerDisplay("Count = {Count}")]
     public class ElementsLinkedList<T> : ObservableCollection<T>, ICollection<T>, IEnumerable<T>, IEnumerable, ICollection, IReadOnlyCollection<T>, ISerializable, IDeserializationCallback where T : IElement
@@ -21,7 +21,7 @@ namespace Core
 
         /// <summary>Enumerates the elements of a <see cref="T:Core.CustomLinkedList<T>" />.</summary>
         /// <typeparam name="T" />
-        [Serializable]
+        //[Serializable]
         public struct Enumerator : IEnumerator<T>, IDisposable, IEnumerator, ISerializable, IDeserializationCallback
         {
             private ElementsLinkedList<T> enumlist;

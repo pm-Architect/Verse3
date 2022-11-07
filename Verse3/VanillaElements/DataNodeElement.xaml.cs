@@ -244,7 +244,7 @@ namespace Verse3.VanillaElements
         }
     }
 
-    [Serializable]
+    //[Serializable]
     public class DataNodeElement<T> : DataNode<T>
     {
         public override Type ViewType => typeof(DataNodeElementView);

@@ -257,7 +257,7 @@ namespace VanillaElements
         }
     }
 
-    [Serializable]
+    //[Serializable]
     public class IDEElement : BaseElement
     {
         public override Type ViewType => typeof(IDEElementView);

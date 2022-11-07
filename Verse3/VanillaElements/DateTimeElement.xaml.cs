@@ -106,7 +106,7 @@ namespace Verse3.VanillaElements
 
     }
 
-    [Serializable]
+    //[Serializable]
     public class DateTimeElement : BaseElement
     {
         public event EventHandler<RoutedEventArgs> DateTimeChanged;

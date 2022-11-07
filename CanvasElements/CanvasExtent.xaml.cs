@@ -26,6 +26,7 @@ namespace CanvasElements
         }
     }
 
+    
     public class CanvasExtentElement : IRenderable
     {
         #region Data Members
@@ -164,10 +165,7 @@ namespace CanvasElements
         }
 
         #endregion
-        
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-        }
+
         public void Dispose()
         {
             if (this.RenderPipelineInfo.Children != null && this.RenderPipelineInfo.Children.Count > 0)
@@ -180,5 +178,8 @@ namespace CanvasElements
             GC.SuppressFinalize(this);
         }
         ~CanvasExtentElement() => Dispose();
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+        }
     }
 }

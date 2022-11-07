@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.Serialization;
@@ -75,6 +76,7 @@ namespace Core
                     }
                 }
             }
+            [JsonIgnore]
             public double Left
             {
                 get
@@ -82,6 +84,7 @@ namespace Core
                     return this.Location.X;
                 }
             }
+            [JsonIgnore]
             public double Right
             {
                 get
@@ -89,6 +92,7 @@ namespace Core
                     return (this.Location.X + this.Size.Width);
                 }
             }
+            [JsonIgnore]
             public double Top
             {
                 get
@@ -96,6 +100,7 @@ namespace Core
                     return this.Location.Y;
                 }
             }
+            [JsonIgnore]
             public double Bottom
             {
                 get
@@ -104,6 +109,7 @@ namespace Core
                 }
             }
 
+            [JsonIgnore]
             public CanvasPoint Center
             {
                 get

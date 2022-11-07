@@ -8,7 +8,7 @@ using System.Windows;
 using Verse3;
 using Verse3.VanillaElements;
 
-namespace CodeLibrary
+namespace TextLibrary
 {
     public class CoreConsoleDisplay : BaseComp
     {

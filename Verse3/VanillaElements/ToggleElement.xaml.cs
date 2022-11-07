@@ -110,7 +110,7 @@ namespace Verse3.VanillaElements
         #endregion
     }
 
-    [Serializable]
+    //[Serializable]
     public class ToggleElement : BaseElement
     {
 

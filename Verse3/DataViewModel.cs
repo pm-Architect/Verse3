@@ -34,13 +34,13 @@ using Newtonsoft.Json.Linq;
 
 namespace Verse3
 {
-    [Serializable]
-    public class VFSerializable : XmlAttributesContainer, ISerializable
+    //[Serializable]
+    public class VFSerializable : XmlAttributesContainer/*, ISerializable*/
     {
         
         [XmlElement]
         public DataViewModel DataViewModel { get; set; }
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public XmlSerializer XMLSerializer
         {
@@ -69,7 +69,7 @@ namespace Verse3
                 return xmlSerializer;
             }
         }
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public override XmlAttributeOverrides XMLAttributes
         {
@@ -130,15 +130,15 @@ namespace Verse3
         {
         }
 
-        public VFSerializable(SerializationInfo info, StreamingContext context)
-        {
-            DataViewModel = (DataViewModel)info.GetValue("DataViewModel", typeof(DataViewModel));
-        }
+        //public VFSerializable(SerializationInfo info, StreamingContext context)
+        //{
+        //    DataViewModel = (DataViewModel)info.GetValue("DataViewModel", typeof(DataViewModel));
+        //}
 
-        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("DataViewModel", DataViewModel);
-        }
+        //public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    info.AddValue("DataViewModel", DataViewModel);
+        //}
 
         internal void Serialize(string path)
         {
@@ -313,6 +313,7 @@ namespace Verse3
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize;
             settings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
+            settings.Formatting = Newtonsoft.Json.Formatting.Indented;
             return JsonConvert.SerializeObject(this, settings);
         }
 
@@ -380,19 +381,19 @@ namespace Verse3
     /// A simple example of a data-model.  
     /// The purpose of this data-model is to share display data between the main window and overview window.
     /// </summary>
-    [DataContract]
+    //////[DataContract]
     [Serializable]
-    [XmlRoot("DataViewModel")]
-    [XmlType("DataViewModel")]
+    ////[XmlRoot("DataViewModel")]
+    ////[XmlType("DataViewModel")]
     public class DataViewModel : DataModel
     {
-        [XmlIgnore]
+        ////[XmlIgnore]
         [JsonIgnore]
         public static InfiniteCanvasWPFControl WPFControl { get; private set; }
-        [XmlIgnore]
+        ////[XmlIgnore]
         [JsonIgnore]
         public static INode ActiveNode { get; internal set; }
-        [XmlIgnore]
+        ////[XmlIgnore]
         [JsonIgnore]
         public static IConnection ActiveConnection { get; internal set; }
 
@@ -400,10 +401,10 @@ namespace Verse3
         internal static CompInfo SearchBarCompInfo;
 
         [JsonIgnore]
-        [XmlIgnore]
+        ////[XmlIgnore]
         public static Dispatcher Dispatcher { get => dispatcher; }
 
-        [XmlElement]
+        //[XmlElement]
         public ElementsLinkedList<BaseComp> Comps
         {
             get
@@ -435,7 +436,7 @@ namespace Verse3
         }
 
         //protected static DataViewModel instance = new DataViewModel();
-        [XmlIgnore]
+        ////[XmlIgnore]
         public new static DataModel Instance
         {
             get
@@ -619,7 +620,7 @@ namespace Verse3
     }
 
 
-    [Serializable]
+    //[Serializable]
     public abstract class BaseElement : IRenderable
     {
         #region Data Members
@@ -806,15 +807,15 @@ namespace Verse3
         {
             try
             {
-                //info.AddValue("ID", this.ID);
+                info.AddValue("ID", this.ID);
                 //info.AddValue("X", this.X);
                 //info.AddValue("Y", this.Y);
                 //info.AddValue("Width", this.Width);
                 //info.AddValue("Height", this.Height);
-                //info.AddValue("ElementType", this.ElementType);
+                info.AddValue("ElementType", this.ElementType);
                 //info.AddValue("State", this.State);
                 //info.AddValue("IsSelected", this.IsSelected);
-                //info.AddValue("BoundingBox", this.BoundingBox);
+                info.AddValue("BoundingBox", this.BoundingBox);
                 //info.AddValue("ElementState", this.ElementState);
                 //info.AddValue("Parent", this.Parent);
                 //info.AddValue("Children", this.Children);

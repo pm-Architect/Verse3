@@ -22,9 +22,9 @@ using System.Text;
 
 namespace Verse3
 {
-    [Serializable]
-    [XmlRoot("BaseComp")]
-    [XmlType("BaseComp")]
+    //[Serializable]
+    //[XmlRoot("BaseComp")]
+    //[XmlType("BaseComp")]
     public abstract class BaseComp : IRenderable, IComputable
     {
         #region Data Members
@@ -82,13 +82,13 @@ namespace Verse3
                 }
             }
         }
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public ChildElementManager ChildElementManager => _cEManager;
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public RenderPipelineInfo RenderPipelineInfo => renderPipelineInfo;
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public IRenderView RenderView
         {
@@ -109,9 +109,9 @@ namespace Verse3
                 }
             }
         }
-        [XmlIgnore]
+        //[XmlIgnore]
         public Type ViewType => typeof(BaseCompView);
-        [XmlIgnore]
+        //[XmlIgnore]
         public object ViewKey { get; set; }
         
         public Guid ID { get => _id; set => _id = value; }
@@ -157,17 +157,17 @@ namespace Verse3
         [JsonIgnore]
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get => ElementType.BaseComp; set => ElementType = ElementType.BaseComp; }
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         bool IRenderable.Visible { get; set; }
 
         private Brush background;
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public Brush Background { get => background; set => SetProperty(ref background, value); }
 
         private Brush accent;
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public Brush Accent { get => accent; set => SetProperty(ref accent, value); }
 
@@ -185,23 +185,23 @@ namespace Verse3
         //}
 
 
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public IRenderable Parent => RenderPipelineInfo.Parent;
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public ElementsLinkedList<IRenderable> Children => RenderPipelineInfo.Children;
 
         private ComputationPipelineInfo computationPipelineInfo;
-        [XmlIgnore]
-        [JsonIgnore]
+        //[XmlIgnore]
+        //[JsonIgnore]
         public ComputationPipelineInfo ComputationPipelineInfo => computationPipelineInfo;
 
         //private ElementsLinkedList<INode> _nodes = new ElementsLinkedList<INode>();
         //public ElementsLinkedList<INode> Nodes => _nodes;
 
         public ComputableElementState ComputableElementState { get; set; } = ComputableElementState.Unset;
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         IRenderView IRenderable.RenderView
         {
@@ -268,28 +268,28 @@ namespace Verse3
             this.Background = new SolidColorBrush(Colors.Gray);
         }
 
-        public BaseComp(SerializationInfo info, StreamingContext context)
-        {
-            _cEManager = new ChildElementManager(this);
+        //public BaseComp(SerializationInfo info, StreamingContext context)
+        //{
+        //    _cEManager = new ChildElementManager(this);
 
-            renderPipelineInfo = new RenderPipelineInfo(this);
-            computationPipelineInfo = new ComputationPipelineInfo(this);
+        //    renderPipelineInfo = new RenderPipelineInfo(this);
+        //    computationPipelineInfo = new ComputationPipelineInfo(this);
 
-            //this.boundingBox = new BoundingBox();
+        //    //this.boundingBox = new BoundingBox();
 
-            CompInfo ci = this.GetCompInfo();
+        //    CompInfo ci = this.GetCompInfo();
 
-            this.Accent = new SolidColorBrush(ci.Accent);
-            this.Background = new SolidColorBrush(Colors.Gray);
+        //    this.Accent = new SolidColorBrush(ci.Accent);
+        //    this.Background = new SolidColorBrush(Colors.Gray);
             
-            Name = info.GetString("Name");
-            MetadataCompInfo = info.GetString("MetadataCompInfo");
-            this.ElementType = (ElementType)info.GetValue("ElementType", typeof(ElementType));
-            this.State = (ElementState)info.GetValue("State", typeof(ElementState));
-            this.boundingBox = (BoundingBox)info.GetValue("BoundingBox", typeof(BoundingBox));
-            this.IsSelected = info.GetBoolean("IsSelected");
-            this.ElementState = (ElementState)info.GetValue("ElementState", typeof(ElementState));
-        }
+        //    Name = info.GetString("Name");
+        //    MetadataCompInfo = info.GetString("MetadataCompInfo");
+        //    this.ElementType = (ElementType)info.GetValue("ElementType", typeof(ElementType));
+        //    this.State = (ElementState)info.GetValue("State", typeof(ElementState));
+        //    this.boundingBox = (BoundingBox)info.GetValue("BoundingBox", typeof(BoundingBox));
+        //    this.IsSelected = info.GetBoolean("IsSelected");
+        //    this.ElementState = (ElementState)info.GetValue("ElementState", typeof(ElementState));
+        //}
 
         public abstract void Initialize();
 
@@ -489,18 +489,19 @@ namespace Verse3
         {
             try
             {
-                //info.AddValue("ID", this.ID);
+                info.AddValue("ID", this.ID);
                 CompInfo ci = GetCompInfo();
-                //info.AddValue("Name", ci.Name);
-                //info.AddValue("MetadataCompInfo", MetadataCompInfo);
+                info.AddValue("Name", ci.Name);
+                info.AddValue("MetadataCompInfo", MetadataCompInfo);
+                info.AddValue("ComputationPipelineInfo", ComputationPipelineInfo);
                 //info.AddValue("X", this.X);
                 //info.AddValue("Y", this.Y);
                 //info.AddValue("Width", this.Width);
                 //info.AddValue("Height", this.Height);
-                //info.AddValue("ElementType", this.ElementType);
+                info.AddValue("ElementType", this.ElementType);
                 //info.AddValue("State", this.State);
                 //info.AddValue("IsSelected", this.IsSelected);
-                //info.AddValue("BoundingBox", this.BoundingBox);
+                info.AddValue("BoundingBox", this.BoundingBox);
                 //info.AddValue("ElementState", this.ElementState);
             }
             catch (Exception ex)
@@ -1056,7 +1057,7 @@ namespace Verse3
         #endregion
     }
 
-    [Serializable]
+    //[Serializable]
     public readonly struct CompInfo
     {
         public CompInfo(BaseComp comp, string name, string group, string tab, Color accent = default, Type[] ArgumentTypes = default)
@@ -1833,18 +1834,18 @@ namespace Verse3
         {
             try
             {
-                //info.AddValue("ID", this.ID);
-                info.AddValue("X", this.X);
-                info.AddValue("Y", this.Y);
-                info.AddValue("Width", this.Width);
-                info.AddValue("Height", this.Height);
+                info.AddValue("ID", this.ID);
+                //info.AddValue("X", this.X);
+                //info.AddValue("Y", this.Y);
+                //info.AddValue("Width", this.Width);
+                //info.AddValue("Height", this.Height);
                 info.AddValue("ElementType", this.ElementType);
-                info.AddValue("State", this.State);
-                info.AddValue("IsSelected", this.IsSelected);
+                //info.AddValue("State", this.State);
+                //info.AddValue("IsSelected", this.IsSelected);
                 info.AddValue("BoundingBox", this.BoundingBox);
-                info.AddValue("ElementState", this.ElementState);
-                info.AddValue("Parent", this.Parent);
-                info.AddValue("Children", this.Children);
+                //info.AddValue("ElementState", this.ElementState);
+                //info.AddValue("Parent", this.Parent);
+                //info.AddValue("Children", this.Children);
             }
             catch (Exception ex)
             {
@@ -2380,7 +2381,7 @@ namespace Verse3
             }
         }
 
-
+        
         private StringBuilder sbLog = new StringBuilder();
         public void OnLog_Internal(EventArgData e)
         {
@@ -2390,15 +2391,15 @@ namespace Verse3
         {
             try
             {
-                //info.AddValue("ID", this.ID);
+                info.AddValue("ID", this.ID);
                 //info.AddValue("X", this.X);
                 //info.AddValue("Y", this.Y);
                 //info.AddValue("Width", this.Width);
                 //info.AddValue("Height", this.Height);
-                //info.AddValue("ElementType", this.ElementType);
+                info.AddValue("ElementType", this.ElementType);
                 //info.AddValue("State", this.State);
                 //info.AddValue("IsSelected", this.IsSelected);
-                //info.AddValue("BoundingBox", this.BoundingBox);
+                info.AddValue("BoundingBox", this.BoundingBox);
                 //info.AddValue("ElementState", this.ElementState);
                 //info.AddValue("Parent", this.Parent);
                 //info.AddValue("Children", this.Children);

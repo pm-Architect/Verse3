@@ -12,10 +12,10 @@ namespace Core
     /// A simple example of a data-model.  
     /// The purpose of this data-model is to share display data between the main window and overview window.
     /// </summary>
-    [DataContract]
+    ////[DataContract]
     [Serializable]
-    [XmlRoot("DataModel")]
-    [XmlType("DataModel")]
+    //[XmlRoot("DataModel")]
+    //[XmlType("DataModel")]
     public class DataModel : INotifyPropertyChanged, ISerializable
     {
         #region INotifyPropertyChanged Members
@@ -48,7 +48,7 @@ namespace Core
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
-        [JsonIgnore]
+        //[JsonIgnore]
         protected ElementsLinkedList<IElement> elements = new ElementsLinkedList<IElement>();
 
         ///
@@ -104,8 +104,8 @@ namespace Core
         /// <summary>
         /// Retreive the singleton instance.
         /// </summary>
-        [JsonIgnore]
-        [XmlIgnore]
+        //[JsonIgnore]
+        //[XmlIgnore]
         public static DataModel Instance
         {
             get
@@ -132,7 +132,7 @@ namespace Core
             //
             //DataModel.instance = this;
         }
-        
+
         protected DataModel(SerializationInfo info, StreamingContext context) : base()
         {
             //
@@ -156,7 +156,7 @@ namespace Core
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
-        [XmlIgnore]
+        //[XmlIgnore]
         public ElementsLinkedList<IElement> Elements
         {
             get
@@ -189,7 +189,7 @@ namespace Core
         ///
         /// The current scale at which the content is being viewed.
         /// 
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public double ContentScale
         {
@@ -205,7 +205,7 @@ namespace Core
             }
         }
 
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public CanvasPoint ContentOffset
         {
@@ -223,7 +223,7 @@ namespace Core
         ///
         /// The X coordinate of the offset of the viewport onto the content (in content coordinates).
         /// 
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public double ContentOffsetX
         {
@@ -242,7 +242,7 @@ namespace Core
         ///
         /// The Y coordinate of the offset of the viewport onto the content (in content coordinates).
         /// 
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public double ContentOffsetY
         {
@@ -258,7 +258,7 @@ namespace Core
             }
         }
 
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public CanvasSize ContentSize
         {
@@ -276,7 +276,7 @@ namespace Core
         ///
         /// The width of the content (in content coordinates).
         /// 
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public double ContentWidth
         {
@@ -295,7 +295,7 @@ namespace Core
         ///
         /// The heigth of the content (in content coordinates).
         /// 
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public double ContentHeight
         {
@@ -312,7 +312,7 @@ namespace Core
         }
 
 
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public CanvasSize ContentViewportSize
         {
@@ -332,7 +332,7 @@ namespace Core
         /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
         /// data model so that the value can be shared with the overview window.
         /// 
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public double ContentViewportWidth
         {
@@ -353,7 +353,7 @@ namespace Core
         /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
         /// data model so that the value can be shared with the overview window.
         /// 
-        [XmlIgnore]
+        //[XmlIgnore]
         [JsonIgnore]
         public double ContentViewportHeight
         {
@@ -381,7 +381,7 @@ namespace Core
         /// <summary>
         /// GUID of the element.
         /// </summary>
-        [XmlIgnore]
+        //[XmlIgnore]
         public Guid ID { get; }
 
         [JsonIgnore]

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Verse3.VanillaElements
 {
-    [Serializable]
+    //[Serializable]
     public class GenericDataNode : DataNodeElement<object>
     {
         public GenericDataNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
@@ -14,7 +14,7 @@ namespace Verse3.VanillaElements
     }
 
 
-    [Serializable]
+    //[Serializable]
     public class NumberDataNode : DataNodeElement<double>
     {
         //TODO: Properties like Accept Integers Only, Accept Decimals Only, etc.
@@ -60,21 +60,21 @@ namespace Verse3.VanillaElements
         }
     }
 
-    [Serializable]
+    //[Serializable]
     public class BooleanDataNode : DataNodeElement<bool>
     {
         public BooleanDataNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
         {
         }
     }
-    [Serializable]
+    //[Serializable]
     public class TextDataNode : DataNodeElement<string>
     {
         public TextDataNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
         {
         }
     }
-    [Serializable]
+    //[Serializable]
     public class DateTimeDataNode : DataNodeElement<DateTime>
     {
         public DateTimeDataNode(BaseComp parent, NodeType nodeType) : base(parent, nodeType)
@@ -82,7 +82,7 @@ namespace Verse3.VanillaElements
         }
     }
 
-    [Serializable]
+    //[Serializable]
     public class TimeZoneDataNode : DataNodeElement<TimeZoneInfo>
     {
         public TimeZoneDataNode(BaseComp parent, NodeType nodeType) : base(parent, nodeType)
@@ -90,7 +90,7 @@ namespace Verse3.VanillaElements
         }
     }
 
-    [Serializable]
+    //[Serializable]
     public class TimeSpanDataNode : DataNodeElement<TimeSpan>
     {
         public TimeSpanDataNode(BaseComp parent, NodeType nodeType) : base(parent, nodeType)
@@ -98,7 +98,7 @@ namespace Verse3.VanillaElements
         }
     }
 
-    [Serializable]
+    //[Serializable]
     public class GenericEventNode : EventNodeElement
     {
         public GenericEventNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
@@ -106,7 +106,7 @@ namespace Verse3.VanillaElements
         }
     }
 
-    //[Serializable]
+    ////[Serializable]
     //public class ButtonClickedEventNode : EventNodeElement
     //{
     //    public ButtonClickedEventNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
@@ -120,7 +120,7 @@ namespace Verse3.VanillaElements
     //        return outValue;
     //    }
     //}
-    [Serializable]
+    //[Serializable]
     public class InteropMessageEventNode : EventNodeElement
     {
         public InteropMessageEventNode(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
