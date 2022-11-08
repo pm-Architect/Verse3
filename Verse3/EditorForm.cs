@@ -511,7 +511,7 @@ namespace Verse3
                     }
                 }
             }
-            else if (sender is ShellComp shell)
+            else if (sender is BaseComp shell)
             {
                 if (DataViewModel.WPFControl != null)
                 {
@@ -531,12 +531,14 @@ namespace Verse3
                                 if (!(pi[i].DefaultValue is DBNull)) args[i] = pi[i].DefaultValue;
                                 else
                                 {
-                                    if (pi[i].ParameterType == typeof(SerializationInfo) && pi[i].Name.ToLower() == "info")
-                                        args[i] = shell._info;
-                                        //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().X;
-                                    else if (pi[i].ParameterType == typeof(StreamingContext) && pi[i].Name.ToLower() == "context")
-                                        args[i] = shell._context;
-                                        //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().Y;
+                                    if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "x")
+                                        args[i] = shell.X;
+                                    //args[i] = shell._info;
+                                    //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().X;
+                                    else if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "y")
+                                        args[i] = shell.Y;
+                                    //args[i] = shell._context;
+                                    //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().Y;
                                 }
                             }
                             IElement elInst = ci.ConstructorInfo.Invoke(args) as IElement;

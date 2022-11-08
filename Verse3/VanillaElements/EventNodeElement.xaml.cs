@@ -1,4 +1,5 @@
 using Core;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -236,6 +237,7 @@ namespace Verse3.VanillaElements
 
     public class EventNodeElement : EventNode
     {
+        [JsonIgnore]
         public override Type ViewType => typeof(EventNodeElementView);
 
         #region Constructor
@@ -343,6 +345,7 @@ namespace Verse3.VanillaElements
         public override string Name { get => _name; set => _name = value; }
 
         private HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center;
+        [JsonIgnore]
         public HorizontalAlignment HorizontalAlignment
         {
             get
@@ -371,6 +374,7 @@ namespace Verse3.VanillaElements
         }
 
         private System.Windows.Media.Brush nodeColor = System.Windows.Media.Brushes.Transparent;
+        [JsonIgnore]
         public System.Windows.Media.Brush NodeColor
         {
             get
@@ -381,6 +385,7 @@ namespace Verse3.VanillaElements
         }
 
         private System.Windows.Media.Brush nodeContentColor = System.Windows.Media.Brushes.Transparent;
+        [JsonIgnore]
         public System.Windows.Media.Brush NodeContentColor
         {
             get
@@ -390,6 +395,7 @@ namespace Verse3.VanillaElements
             set => SetProperty(ref nodeContentColor, value);
         }
 
+        [JsonIgnore]
         public bool IsActive { get; protected set; }
     }
 

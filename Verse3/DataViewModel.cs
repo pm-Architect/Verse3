@@ -316,6 +316,7 @@ namespace Verse3
         internal string ToJSONString()
         {
             JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.Converters.Add(new BaseCompConverter());
             settings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize;
             settings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
             settings.Formatting = Newtonsoft.Json.Formatting.Indented;
@@ -324,12 +325,17 @@ namespace Verse3
 
         internal static VFSerializable DeserializeJSON(string filePath)
         {
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.Converters.Add(new BaseCompConverter());
+            settings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize;
+            settings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
+            settings.Formatting = Newtonsoft.Json.Formatting.Indented;
             string text = File.ReadAllText(filePath);
-            return JsonConvert.DeserializeObject<VFSerializable>(text);
+            return JsonConvert.DeserializeObject<VFSerializable>(text, settings);
         }
     }
 
-    public class JsonLibraryClassConverter : DefaultContractResolver
+    public class JsonBaseCompClassConverter : DefaultContractResolver
     {
         protected override JsonConverter ResolveContractConverter(Type objectType)
         {
@@ -341,7 +347,7 @@ namespace Verse3
 
     public class BaseCompConverter : JsonConverter
     {
-        static JsonSerializerSettings SpecifiedSubclassConversion = new JsonSerializerSettings() { ContractResolver = new JsonLibraryClassConverter() };
+        static JsonSerializerSettings SpecifiedSubclassConversion = new JsonSerializerSettings() { ContractResolver = new JsonBaseCompClassConverter() };
 
         public override bool CanConvert(Type objectType)
         {
@@ -382,6 +388,48 @@ namespace Verse3
         }
     }
 
+    public class JsonNodeClassConverter : DefaultContractResolver
+    {
+        protected override JsonConverter ResolveContractConverter(Type objectType)
+        {
+            if (typeof(INode).IsAssignableFrom(objectType) && !objectType.IsAbstract) return null;
+            return base.ResolveContractConverter(objectType);
+        }
+    }
+
+    public class NodeConverter : JsonConverter
+    {
+        static JsonSerializerSettings SpecifiedSubclassConversion = new JsonSerializerSettings() { ContractResolver = new JsonNodeClassConverter() };
+
+        public override bool CanConvert(Type objectType)
+        {
+            return typeof(INode).IsAssignableFrom(objectType);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            JObject jo = JObject.Load(reader);
+
+            try
+            {
+                INode bc = JsonConvert.DeserializeObject<INode>(jo.ToString(), SpecifiedSubclassConversion);
+
+                return bc;
+            }
+            catch (Exception ex)
+            {
+                CoreConsole.Log(ex);
+                return null;
+                //CoreConsole.Log(ex);
+            }
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     /// <summary>
     /// A simple example of a data-model.  
     /// The purpose of this data-model is to share display data between the main window and overview window.
@@ -411,19 +459,19 @@ namespace Verse3
 
         //[XmlElement]
         [JsonProperty("Comps")]
-        internal ElementsLinkedList<ShellComp> Comps
+        internal ElementsLinkedList<BaseComp> Comps
         {
             get
             {
                 ElementsLinkedList<IElement> _elementsBuffer = base.elements;
-                ElementsLinkedList<ShellComp> comps = new ElementsLinkedList<ShellComp>();
+                ElementsLinkedList<BaseComp> comps = new ElementsLinkedList<BaseComp>();
                 if (_elementsBuffer.Count > 0)
                 {
                     foreach (IElement element in _elementsBuffer)
                     {
                         if (element is BaseComp comp)
                         {
-                            comps.Add(new ShellComp(comp));
+                            comps.Add(/*new ShellComp(*/comp);
                         }
                     }
                 }
@@ -433,29 +481,37 @@ namespace Verse3
             {
                 if (value != null && value.Count > 0)
                 {
-                    foreach (ShellComp comp in value)
+                    foreach (BaseComp comp in value)
                     {
-                        Main_Verse3.ActiveMain.ActiveEditor.AddToCanvas_OnCall(comp, new EventArgs());
-                        //base.Elements.Add((BaseComp)comp);
+                        try
+                        {
+                            //Main_Verse3.ActiveMain.ActiveEditor.AddToCanvas_OnCall(comp, new EventArgs());
+                            base.Elements.Add(comp);
+                        }
+                        catch (Exception ex)
+                        {
+                            CoreConsole.Log(ex);
+                            //throw ex;
+                        }
                     }
                 }
             }
         }
         //[JsonProperty("Nodes")]
         [JsonIgnore]
-        internal ElementsLinkedList<ShellNode> Nodes
+        internal ElementsLinkedList<INode> Nodes
         {
             get
             {
                 ElementsLinkedList<IElement> _elementsBuffer = base.elements;
-                ElementsLinkedList<ShellNode> comps = new ElementsLinkedList<ShellNode>();
+                ElementsLinkedList<INode> comps = new ElementsLinkedList<INode>();
                 if (_elementsBuffer.Count > 0)
                 {
                     foreach (IElement element in _elementsBuffer)
                     {
                         if (element is INode node)
                         {
-                            comps.Add(new ShellNode(node));
+                            comps.Add(node);
                         }
                     }
                 }
@@ -465,9 +521,9 @@ namespace Verse3
             {
                 if (value != null && value.Count > 0)
                 {
-                    foreach (ShellNode comp in value)
+                    foreach (INode comp in value)
                     {
-                        base.Elements.Add(comp);
+                        //base.Elements.Add(comp);
                     }
                 }
             }
@@ -551,9 +607,10 @@ namespace Verse3
         {
             dispatcher = Dispatcher.CurrentDispatcher;
 
+            if (info is null) throw new NullReferenceException("Invalid SerializationInfo");
             //this.elements = (ElementsLinkedList<IElement>)info.GetValue("elements", typeof(ElementsLinkedList<IElement>));
             //TODO: Add Comps, Elements and Connections from serialization info
-            this.Comps = (ElementsLinkedList<ShellComp>)info.GetValue("Comps", typeof(ElementsLinkedList<ShellComp>));
+            this.Comps = (ElementsLinkedList<BaseComp>)info.GetValue("Comps", typeof(ElementsLinkedList<BaseComp>));
             //this.Elements = (ElementsLinkedList<BaseElement>)info.GetValue("Elements", typeof(ElementsLinkedList<BaseElement>));
             this.Connections = (ElementsLinkedList<BezierElement>)info.GetValue("Connections", typeof(ElementsLinkedList<BezierElement>));
 

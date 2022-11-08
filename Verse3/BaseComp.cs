@@ -523,49 +523,49 @@ namespace Verse3
         ~BaseComp() => Dispose();
     }
 
-    internal class ShellComp : BaseComp
-    {
-        public SerializationInfo _info;
-        public StreamingContext _context;
-        public string _metadataCompInfo;
-        public ShellComp() : base()
-        {
-        }
+    //internal class ShellComp : BaseComp
+    //{
+    //    public SerializationInfo _info;
+    //    public StreamingContext _context;
+    //    public string _metadataCompInfo;
+    //    public ShellComp() : base()
+    //    {
+    //    }
 
-        public ShellComp(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-            _info = info;
-            _context = context;
-            this._metadataCompInfo = info.GetString("MetadataCompInfo");
-        }
+    //    public ShellComp(SerializationInfo info, StreamingContext context) : base(info, context)
+    //    {
+    //        _info = info;
+    //        _context = context;
+    //        this._metadataCompInfo = info.GetString("MetadataCompInfo");
+    //    }
         
-        public new void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-        }
+    //    public new void GetObjectData(SerializationInfo info, StreamingContext context)
+    //    {
+    //        base.GetObjectData(info, context);
+    //    }
         
-        public ShellComp(BaseComp comp)
-        {
-            this.BoundingBox = comp.BoundingBox;
-            this.computationPipelineInfo = comp.ComputationPipelineInfo;
-            this._cEManager = comp.ChildElementManager;
-            this.ID = comp.ID;
-            this._metadataCompInfo = comp.MetadataCompInfo;
-            this.MetadataCompInfo = comp.MetadataCompInfo;
-            this.Name = comp.Name;
-        }
+    //    public ShellComp(BaseComp comp)
+    //    {
+    //        this.BoundingBox = comp.BoundingBox;
+    //        this.computationPipelineInfo = comp.ComputationPipelineInfo;
+    //        this._cEManager = comp.ChildElementManager;
+    //        this.ID = comp.ID;
+    //        this._metadataCompInfo = comp.MetadataCompInfo;
+    //        this.MetadataCompInfo = comp.MetadataCompInfo;
+    //        this.Name = comp.Name;
+    //    }
 
-        public override void Compute()
-        {
-        }
+    //    public override void Compute()
+    //    {
+    //    }
 
-        public override CompInfo GetCompInfo() => CompInfo.FromString(this, this._metadataCompInfo);
+    //    public override CompInfo GetCompInfo() => CompInfo.FromString(this, this._metadataCompInfo);
         
-        public override void Initialize()
-        {
-        }
+    //    public override void Initialize()
+    //    {
+    //    }
 
-    }
+    //}
 
     [Serializable]
     public class ChildElementManager : ISerializable
@@ -580,8 +580,8 @@ namespace Verse3
         public ChildElementManager(SerializationInfo info, StreamingContext context)
         {
             //this._owner = (BaseComp)info.GetValue("Owner", typeof(BaseComp));
-            this.InputNodes = (ElementsLinkedList<ShellNode>)info.GetValue("InputNodes", typeof(ElementsLinkedList<ShellNode>));
-            this.OutputNodes = (ElementsLinkedList<ShellNode>)info.GetValue("OutputNodes", typeof(ElementsLinkedList<ShellNode>));
+            this.InputNodes = (ElementsLinkedList<INode>)info.GetValue("InputNodes", typeof(ElementsLinkedList<INode>));
+            this.OutputNodes = (ElementsLinkedList<INode>)info.GetValue("OutputNodes", typeof(ElementsLinkedList<INode>));
         }
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -947,17 +947,17 @@ namespace Verse3
                 return _input;
             }
         }
-        internal ElementsLinkedList<ShellNode> InputNodes
+        internal ElementsLinkedList<INode> InputNodes
         {
             get
             {
-                ElementsLinkedList<ShellNode> nodes = new ElementsLinkedList<ShellNode>();
+                ElementsLinkedList<INode> nodes = new ElementsLinkedList<INode>();
                 if (_input != null && _input.Count > 0)
                 foreach (IRenderable renderable in _input)
                 {
                     if (renderable is INode node)
                     {
-                        nodes.Add(new ShellNode(node));
+                        nodes.Add(node);
                     }
                 }
                 return nodes;
@@ -1000,17 +1000,17 @@ namespace Verse3
                 return _output;
             }
         }
-        internal ElementsLinkedList<ShellNode> OutputNodes
+        internal ElementsLinkedList<INode> OutputNodes
         {
             get
             {
-                ElementsLinkedList<ShellNode> nodes = new ElementsLinkedList<ShellNode>();
+                ElementsLinkedList<INode> nodes = new ElementsLinkedList<INode>();
                 if (_output != null && _output.Count > 0)
                     foreach (IRenderable renderable in _output)
                     {
                         if (renderable is INode node)
                         {
-                            nodes.Add(new ShellNode(node));
+                            nodes.Add(node);
                         }
                     }
                 return nodes;
@@ -1242,8 +1242,8 @@ namespace Verse3
         }
         public CompInfo(BaseComp comp, string name, string group, string tab, string description, string author, string version, string license, string website, string repository, BitmapSource icon, Color accent)
         {
-            if (comp is ShellComp) ConstructorInfo = comp.GetType().GetConstructor(new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
-            else ConstructorInfo = comp.GetType().GetConstructor(new Type[] { typeof(int), typeof(int) });
+            //if (comp is ShellComp) ConstructorInfo = comp.GetType().GetConstructor(new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
+            /*else*/ ConstructorInfo = comp.GetType().GetConstructor(new Type[] { typeof(int), typeof(int) });
             Name = name;
             Group = group;
             Tab = tab;
@@ -1361,125 +1361,125 @@ namespace Verse3
         }
     }
     
-    internal class ShellNode : INode
-    {
-        public SerializationInfo _info;
-        public StreamingContext _context;
-        public ShellNode()
-        {
-        }
+    //internal class ShellNode : INode
+    //{
+    //    public SerializationInfo _info;
+    //    public StreamingContext _context;
+    //    public ShellNode()
+    //    {
+    //    }
         
-        public ShellNode(INode node)
-        {
-            this.Connections = node.Connections;
-            this.ID = node.ID;
-            this.Name = node.Name;
-            this.Parent = node.Parent;
-        }
+    //    public ShellNode(INode node)
+    //    {
+    //        this.Connections = node.Connections;
+    //        this.ID = node.ID;
+    //        this.Name = node.Name;
+    //        this.Parent = node.Parent;
+    //    }
 
-        public ShellNode(SerializationInfo info, StreamingContext context)
-        {
-            _info = info;
-            _context = context;
-            Name = info.GetString("Name");
-            ID = Guid.Parse(info.GetString("Id"));
-            BezierElements = (ElementsLinkedList<BezierElement>)info.GetValue("BezierElements", typeof(ElementsLinkedList<BezierElement>));
-            Parent = (IElement)info.GetValue("Parent", typeof(ShellComp));
-        }
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("Name", Name);
-            info.AddValue("Id", ID.ToString());
-            info.AddValue("BezierElements", BezierElements);
-            info.AddValue("Parent", Parent);
-        }
+    //    public ShellNode(SerializationInfo info, StreamingContext context)
+    //    {
+    //        _info = info;
+    //        _context = context;
+    //        Name = info.GetString("Name");
+    //        ID = Guid.Parse(info.GetString("Id"));
+    //        BezierElements = (ElementsLinkedList<BezierElement>)info.GetValue("BezierElements", typeof(ElementsLinkedList<BezierElement>));
+    //        Parent = (IElement)info.GetValue("Parent", typeof(BaseComp));
+    //    }
+    //    public void GetObjectData(SerializationInfo info, StreamingContext context)
+    //    {
+    //        info.AddValue("Name", Name);
+    //        info.AddValue("Id", ID.ToString());
+    //        info.AddValue("BezierElements", BezierElements);
+    //        info.AddValue("Parent", Parent);
+    //    }
         
-        [JsonIgnore]
-        public IElement Parent { get; set; }
+    //    [JsonIgnore]
+    //    public IElement Parent { get; set; }
 
-        [JsonIgnore]
-        public ElementsLinkedList<IConnection> Connections { get; private set; }
+    //    [JsonIgnore]
+    //    public ElementsLinkedList<IConnection> Connections { get; private set; }
 
-        public ElementsLinkedList<BezierElement> BezierElements
-        {
-            get
-            {
-                ElementsLinkedList<BezierElement> bezierElements = new ElementsLinkedList<BezierElement>();
-                if (Connections.Count > 0)
-                {
-                    foreach (IConnection connection in Connections)
-                    {
-                        if (connection is BezierElement bezierElement)
-                        {
-                            bezierElements.Add(bezierElement);
-                        }
-                    }
-                }
-                return bezierElements;
-            }
-            set
-            {
-                if (value != null && value.Count > 0)
-                {
-                    foreach (BezierElement bezierElement in value)
-                    {
-                        Connections.Add(bezierElement);
-                    }
-                }
-            }
-        }
+    //    public ElementsLinkedList<BezierElement> BezierElements
+    //    {
+    //        get
+    //        {
+    //            ElementsLinkedList<BezierElement> bezierElements = new ElementsLinkedList<BezierElement>();
+    //            if (Connections.Count > 0)
+    //            {
+    //                foreach (IConnection connection in Connections)
+    //                {
+    //                    if (connection is BezierElement bezierElement)
+    //                    {
+    //                        bezierElements.Add(bezierElement);
+    //                    }
+    //                }
+    //            }
+    //            return bezierElements;
+    //        }
+    //        set
+    //        {
+    //            if (value != null && value.Count > 0)
+    //            {
+    //                foreach (BezierElement bezierElement in value)
+    //                {
+    //                    Connections.Add(bezierElement);
+    //                }
+    //            }
+    //        }
+    //    }
 
-        [JsonIgnore]
-        public NodeType NodeType => NodeType.Unset;
+    //    [JsonIgnore]
+    //    public NodeType NodeType => NodeType.Unset;
 
-        [JsonIgnore]
-        public CanvasPoint Hotspot { get; private set; }
+    //    [JsonIgnore]
+    //    public CanvasPoint Hotspot { get; private set; }
 
-        public string Name { get; set; }
+    //    public string Name { get; set; }
 
-        [JsonIgnore]
-        public ElementType ElementType => ElementType.Node;
+    //    [JsonIgnore]
+    //    public ElementType ElementType => ElementType.Node;
 
-        public Guid ID { get; private set; }
+    //    public Guid ID { get; private set; }
 
-        [JsonIgnore]
-        public ElementState ElementState { get; set; }
-        [JsonIgnore]
-        ElementType IElement.ElementType { get; set; }
+    //    [JsonIgnore]
+    //    public ElementState ElementState { get; set; }
+    //    [JsonIgnore]
+    //    ElementType IElement.ElementType { get; set; }
 
 
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-        }
-        ~ShellNode() => Dispose();
+    //    public void Dispose()
+    //    {
+    //        GC.SuppressFinalize(this);
+    //    }
+    //    ~ShellNode() => Dispose();
 
-        #region INotifyPropertyChanged Members
+    //    #region INotifyPropertyChanged Members
 
-        public event PropertyChangedEventHandler PropertyChanged;
+    //    public event PropertyChangedEventHandler PropertyChanged;
 
-        public void OnPropertyChanged(string name)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
+    //    public void OnPropertyChanged(string name)
+    //    {
+    //        if (PropertyChanged != null)
+    //        {
+    //            PropertyChanged(this, new PropertyChangedEventArgs(name));
+    //        }
+    //    }
 
-        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
-        {
-            if (!Equals(field, newValue))
-            {
-                field = newValue;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-                return true;
-            }
+    //    protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+    //    {
+    //        if (!Equals(field, newValue))
+    //        {
+    //            field = newValue;
+    //            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    //            return true;
+    //        }
 
-            return false;
-        }
+    //        return false;
+    //    }
 
-        #endregion
-    }
+    //    #endregion
+    //}
 
     public abstract class DataNode<D> : IRenderable, IDataNode<D>
     {
@@ -1528,6 +1528,7 @@ namespace Verse3
         public Guid ID { get => _id; private set => _id = value; }
 
         [JsonIgnore]
+        [IgnoreDataMember]
         public bool IsSelected { get; set; }
 
         public BoundingBox BoundingBox { get => boundingBox; private set => SetProperty(ref boundingBox, value); }
@@ -1557,14 +1558,18 @@ namespace Verse3
         }
 
         [JsonIgnore]
+        [IgnoreDataMember]
         public ElementState State { get; set; }
 
         //public IRenderView ElementView { get; internal set; }
 
         [JsonIgnore]
+        [IgnoreDataMember]
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get => ElementType.Node; set => ElementType = ElementType.Node; }
+
         [JsonIgnore]
+        [IgnoreDataMember]
         bool IRenderable.Visible { get; set; }
 
 
@@ -1715,6 +1720,7 @@ namespace Verse3
         public NodeType NodeType { get => _nodeType; }
 
         [JsonIgnore]
+        [IgnoreDataMember]
         internal CanvasPoint _hotspot = new CanvasPoint(0, 0);
         [JsonIgnore]
         [IgnoreDataMember]
@@ -1848,8 +1854,10 @@ namespace Verse3
         [IgnoreDataMember]
         public ElementsLinkedList<INode> Nodes => new ElementsLinkedList<INode>() { this };
         [JsonIgnore]
+        [IgnoreDataMember]
         public ComputableElementState ComputableElementState { get; set; }
         [JsonIgnore]
+        [IgnoreDataMember]
         DataStructure IDataGooContainer.DataGoo
         {
             get => _dataGoo;
@@ -1919,8 +1927,8 @@ namespace Verse3
         {
             this.renderPipelineInfo = new RenderPipelineInfo(this);
             _computationPipelineInfo = new ComputationPipelineInfo(this);
-            this.RenderPipelineInfo.Parent = info.GetValue("Parent", typeof(ShellComp)) as ShellComp;
-            this.DataGoo = info.GetValue("DataGoo", typeof(DataStructure<D>)) as DataStructure<D>;
+            this.RenderPipelineInfo.Parent = info.GetValue("Parent", typeof(BaseComp)) as BaseComp;
+            //this.DataGoo = info.GetValue("DataGoo", typeof(DataStructure<D>)) as DataStructure<D>;
             this._nodeType = (NodeType)info.GetValue("NodeType", typeof(NodeType));
         }
 
@@ -2125,8 +2133,8 @@ namespace Verse3
                 info.AddValue("BoundingBox", this.BoundingBox);
                 //info.AddValue("ElementState", this.ElementState);
                 info.AddValue("Parent", this.Parent);
-                info.AddValue("DataGoo", this.DataGoo);
-                info.AddValue("DataValueType", this.DataValueType);
+                //info.AddValue("DataGoo", this.DataGoo);
+                //info.AddValue("DataValueType", this.DataValueType);
                 info.AddValue("NodeType", this.NodeType);
                 //info.AddValue("Children", this.Children);
             }
@@ -2231,6 +2239,7 @@ namespace Verse3
         }
 
         [JsonIgnore]
+        [IgnoreDataMember]
         public double HotspotThresholdRadius { get; }
 
         //public Type DataValueType => typeof(D);
@@ -2248,6 +2257,7 @@ namespace Verse3
         [IgnoreDataMember]
         public ElementsLinkedList<INode> Nodes => new ElementsLinkedList<INode>() { this };
         [JsonIgnore]
+        [IgnoreDataMember]
         public ComputableElementState ComputableElementState { get; set; }
 
         #endregion
@@ -2312,6 +2322,7 @@ namespace Verse3
         public Guid ID { get => _id; private set => _id = value; }
 
         [JsonIgnore]
+        [IgnoreDataMember]
         public bool IsSelected { get; set; }
 
         public BoundingBox BoundingBox { get => boundingBox; private set => SetProperty(ref boundingBox, value); }
@@ -2341,14 +2352,18 @@ namespace Verse3
         }
 
         [JsonIgnore]
+        [IgnoreDataMember]
         public ElementState State { get; set; }
 
         //public IRenderView ElementView { get; internal set; }
 
         [JsonIgnore]
+        [IgnoreDataMember]
         public ElementState ElementState { get; set; }
         public ElementType ElementType { get => ElementType.Node; set => ElementType = ElementType.Node; }
+
         [JsonIgnore]
+        [IgnoreDataMember]
         bool IRenderable.Visible { get; set; }
 
 
@@ -2403,6 +2418,7 @@ namespace Verse3
         public IRenderable Parent { get => this.RenderPipelineInfo.Parent; set => this.RenderPipelineInfo.SetParent(value); }
         public abstract string Name { get; set; }
         [JsonIgnore]
+        [IgnoreDataMember]
         public bool RenderExpired { get; set; }
 
         //public IRenderable Parent => this.RenderPipelineInfo.Parent;
