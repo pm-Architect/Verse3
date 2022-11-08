@@ -538,21 +538,18 @@ namespace Verse3
             _context = context;
             this._metadataCompInfo = info.GetString("MetadataCompInfo");
         }
-
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        
+        public new void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
         }
         
         public ShellComp(BaseComp comp)
         {
-            this.boundingBox = new BoundingBox();
-            this.Accent = comp.Accent;
             this.BoundingBox = comp.BoundingBox;
             this.computationPipelineInfo = comp.ComputationPipelineInfo;
-            //this.ElementType = comp.ElementType;
+            this._cEManager = comp.ChildElementManager;
             this.ID = comp.ID;
-            this.IsSelected = comp.IsSelected;
             this._metadataCompInfo = comp.MetadataCompInfo;
             this.MetadataCompInfo = comp.MetadataCompInfo;
             this.Name = comp.Name;
@@ -570,13 +567,27 @@ namespace Verse3
 
     }
 
-    public class ChildElementManager
+    [Serializable]
+    public class ChildElementManager : ISerializable
     {
         private BaseComp _owner;
 
         public ChildElementManager(BaseComp owner)
         {
             this._owner = owner;
+        }
+
+        public ChildElementManager(SerializationInfo info, StreamingContext context)
+        {
+            //this._owner = (BaseComp)info.GetValue("Owner", typeof(BaseComp));
+            this.InputNodes = (ElementsLinkedList<ShellNode>)info.GetValue("InputNodes", typeof(ElementsLinkedList<ShellNode>));
+            this.OutputNodes = (ElementsLinkedList<ShellNode>)info.GetValue("OutputNodes", typeof(ElementsLinkedList<ShellNode>));
+        }
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            //info.AddValue("Owner", this._owner);
+            info.AddValue("InputNodes", this.InputNodes);
+            info.AddValue("OutputNodes", this.OutputNodes);
         }
 
         public void AdjustBounds(bool forceExpand = false)
@@ -912,7 +923,9 @@ namespace Verse3
             node.EventOccured(eventArgData);
         }
 
+
         private ElementsLinkedList<IRenderable> _input = new ElementsLinkedList<IRenderable>();
+        [JsonIgnore]
         public ElementsLinkedList<IRenderable> InputSide
         {
             get
@@ -934,8 +947,38 @@ namespace Verse3
                 return _input;
             }
         }
+        internal ElementsLinkedList<ShellNode> InputNodes
+        {
+            get
+            {
+                ElementsLinkedList<ShellNode> nodes = new ElementsLinkedList<ShellNode>();
+                if (_input != null && _input.Count > 0)
+                foreach (IRenderable renderable in _input)
+                {
+                    if (renderable is INode node)
+                    {
+                        nodes.Add(new ShellNode(node));
+                    }
+                }
+                return nodes;
+            }
+            set
+            {
+                //if (value != null && value.Count > 0)
+                //{
+                //    foreach (ShellNode shellNode in value)
+                //    {
+                //        if (shellNode != null)
+                //        {
+                            
+                //        }
+                //    }
+                //}
+            }
+        }
 
         private ElementsLinkedList<IRenderable> _output = new ElementsLinkedList<IRenderable>();
+        [JsonIgnore]
         public ElementsLinkedList<IRenderable> OutputSide
         {
             get
@@ -957,8 +1000,38 @@ namespace Verse3
                 return _output;
             }
         }
+        internal ElementsLinkedList<ShellNode> OutputNodes
+        {
+            get
+            {
+                ElementsLinkedList<ShellNode> nodes = new ElementsLinkedList<ShellNode>();
+                if (_output != null && _output.Count > 0)
+                    foreach (IRenderable renderable in _output)
+                    {
+                        if (renderable is INode node)
+                        {
+                            nodes.Add(new ShellNode(node));
+                        }
+                    }
+                return nodes;
+            }
+            set
+            {
+                //if (value != null && value.Count > 0)
+                //{
+                //    foreach (ShellNode shellNode in value)
+                //    {
+                //        if (shellNode != null)
+                //        {
+
+                //        }
+                //    }
+                //}
+            }
+        }
 
         private ElementsLinkedList<IRenderable> _bottomUI = new ElementsLinkedList<IRenderable>();
+        [JsonIgnore]
         public ElementsLinkedList<IRenderable> BottomUIItems
         {
             get
@@ -977,6 +1050,7 @@ namespace Verse3
         }
 
         private ElementsLinkedList<IRenderable> _center = new ElementsLinkedList<IRenderable>();
+        [JsonIgnore]
         public ElementsLinkedList<IRenderable> CenterBarItems
         {
             get

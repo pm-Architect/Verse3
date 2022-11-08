@@ -441,7 +441,8 @@ namespace Verse3
                 }
             }
         }
-        [JsonProperty("Nodes")]
+        //[JsonProperty("Nodes")]
+        [JsonIgnore]
         internal ElementsLinkedList<ShellNode> Nodes
         {
             get

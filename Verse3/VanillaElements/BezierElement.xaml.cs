@@ -498,8 +498,10 @@ namespace Verse3.VanillaElements
 
         public BezierElement(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            this.origin = (INode)info.GetValue("origin", typeof(INode));
-            this.destination = (INode)info.GetValue("destination", typeof(INode));
+            ShellNode o = (ShellNode)info.GetValue("origin", typeof(ShellNode));
+            ShellNode d = (ShellNode)info.GetValue("destination", typeof(ShellNode));
+            if (DataViewModel.Instance.GetElementWithGuid(o.ID) is INode node) this.origin = node;
+            if (DataViewModel.Instance.GetElementWithGuid(d.ID) is INode node2) this.destination = node2;
             if (this.origin != null && this.Destination != null) RedrawBezier(this.origin, this.destination);
             else throw new NullReferenceException("BezierElement: Origin and/or Destination is null");
         }
