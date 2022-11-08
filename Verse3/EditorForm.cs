@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 using Verse3.VanillaElements;
 
@@ -238,6 +239,7 @@ namespace Verse3
         private Dictionary<string, GroupBox> Groups = new Dictionary<string, GroupBox>();
         private Dictionary<string, Button> Buttons = new Dictionary<string, Button>();
 
+        private List<CompInfo> Arsenal = new List<CompInfo>();
         public void AddToArsenal(CompInfo compInfo)
         {
             if ((compInfo.ConstructorInfo != null) &&
@@ -375,8 +377,34 @@ namespace Verse3
                 tp.ResumeLayout(false);
                 this.tabControl1.ResumeLayout(false);
                 this.PerformLayout();
+
+                Arsenal.Add(compInfo);
             }
         }
+
+        public CompInfo FindInArsenal(CompInfo compInfo, bool showToUser = false)
+        {
+            foreach (CompInfo comp in Arsenal)
+            {
+                if (comp.Name == compInfo.Name &&
+                    comp.Group == compInfo.Group &&
+                    comp.Tab == compInfo.Tab &&
+                    comp.Author == compInfo.Author &&
+                    comp.Version == compInfo.Version &&
+                    comp.ConstructorInfo != null)
+                {
+                    if (showToUser)
+                    {
+                        this.tabControl1.SelectedTab = this.Tabs[comp.Tab];
+                        this.Groups[comp.Group].Focus();
+                        this.Buttons[comp.Name].Focus();
+                    }
+                    return comp;
+                }
+            }
+            return default;
+        }
+
         // 
         // tabControl1
         // 
@@ -483,6 +511,50 @@ namespace Verse3
                     }
                 }
             }
+            else if (sender is ShellComp shell)
+            {
+                if (DataViewModel.WPFControl != null)
+                {
+                    CompInfo ci = shell.GetCompInfo();
+                    ci = FindInArsenal(ci, false);
+                    ConstructorInfo ctorInfo = GetDeserializationConstructor(ci);
+                    if (ctorInfo != null)
+                    {
+                        ////TODO: Invoke constructor based on <PluginName>.cfg json file
+                        ////TODO: Allow user to place the comp with MousePosition
+                        if (ctorInfo.GetParameters().Length > 0)
+                        {
+                            ParameterInfo[] pi = ctorInfo.GetParameters();
+                            object[] args = new object[pi.Length];
+                            for (int i = 0; i < pi.Length; i++)
+                            {
+                                if (!(pi[i].DefaultValue is DBNull)) args[i] = pi[i].DefaultValue;
+                                else
+                                {
+                                    if (pi[i].ParameterType == typeof(SerializationInfo) && pi[i].Name.ToLower() == "info")
+                                        args[i] = shell._info;
+                                        //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().X;
+                                    else if (pi[i].ParameterType == typeof(StreamingContext) && pi[i].Name.ToLower() == "context")
+                                        args[i] = shell._context;
+                                        //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().Y;
+                                }
+                            }
+                            IElement elInst = ci.ConstructorInfo.Invoke(args) as IElement;
+                            DataViewModel.Instance.Elements.Add(elInst);
+                            if (elInst is BaseComp) ComputationCore.Compute(elInst as BaseComp);
+                            //DataViewModel.WPFControl.ExpandContent();
+                        }
+                        else
+                        {
+                            //throw new Exception("Constructor parameters not provided");
+                            //DataViewModel.WPFControl.ExpandContent();
+                        }
+                        //IElement elInst = ci.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
+                        //DataModel.Instance.Elements.Add(elInst);
+                        //DataViewModel.WPFControl.ExpandContent();
+                    }
+                }
+            }
             else
             {
                 if (EditorForm.compsPendingInst.Count > 0)
@@ -545,6 +617,17 @@ namespace Verse3
                     }
                 }
             }
+        }
+
+        private ConstructorInfo GetDeserializationConstructor(CompInfo ci)
+        {
+            Type t = ci.ConstructorInfo.DeclaringType;
+            ConstructorInfo? Dctor = t.GetConstructor(new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
+            if (Dctor != null)
+            {
+                return Dctor;
+            }
+            else return null;
         }
 
         private void LoadLibraries(object sender, EventArgs e)

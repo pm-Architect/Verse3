@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.ComponentModel;
+using System.Runtime.Serialization;
 using static Core.Geometry2D;
 
 namespace Core
@@ -19,6 +21,7 @@ namespace Core
         public string Name { get; set; }
         public new ElementType ElementType { get/* => ElementType.Node*/; }
     }
+
 
     public interface IDataNode : INode, IDataGooContainer
     {

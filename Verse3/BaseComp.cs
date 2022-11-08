@@ -65,7 +65,8 @@ namespace Verse3
         {
             get
             {
-                return GetCompInfo().ToString();
+                if (_metaDataCompInfo is null) return GetCompInfo().ToString();
+                else return _metaDataCompInfo;
             }
             set
             {
@@ -73,6 +74,10 @@ namespace Verse3
                 try
                 {
                     CompInfo ci = CompInfo.FromString(this, value);
+                    if (ci.IsValid)
+                    {
+                        _metaDataCompInfo = ci.ToString();
+                    }
                     //TODO: Try and get a CompInfo from the string and match it to the current CompInfo
 
                 }
@@ -156,7 +161,8 @@ namespace Verse3
 
         [JsonIgnore]
         public ElementState ElementState { get; set; }
-        public ElementType ElementType { get => ElementType.BaseComp; set => ElementType = ElementType.BaseComp; }
+        private ElementType eType = ElementType.BaseComp;
+        public ElementType ElementType { get => eType; set => eType = ElementType.BaseComp; }
         //[XmlIgnore]
         [JsonIgnore]
         bool IRenderable.Visible { get; set; }
@@ -192,7 +198,7 @@ namespace Verse3
         [JsonIgnore]
         public ElementsLinkedList<IRenderable> Children => RenderPipelineInfo.Children;
 
-        private ComputationPipelineInfo computationPipelineInfo;
+        protected ComputationPipelineInfo computationPipelineInfo;
         //[XmlIgnore]
         //[JsonIgnore]
         public ComputationPipelineInfo ComputationPipelineInfo => computationPipelineInfo;
@@ -279,14 +285,15 @@ namespace Verse3
 
             //this.boundingBox = new BoundingBox();
 
+
+            ID = (Guid)info.GetValue("ID", typeof(Guid));
+            Name = info.GetString("Name");
+            _metaDataCompInfo = info.GetString("MetadataCompInfo");
             CompInfo ci = this.GetCompInfo();
 
             this.Accent = new SolidColorBrush(ci.Accent);
             this.Background = new SolidColorBrush(Colors.Gray);
-
-            Name = info.GetString("Name");
-            MetadataCompInfo = info.GetString("MetadataCompInfo");
-            this.ElementType = (ElementType)info.GetValue("ElementType", typeof(ElementType));
+            //this.ElementType = (ElementType)info.GetValue("ElementType", typeof(ElementType));
             //this.State = (ElementState)info.GetValue("State", typeof(ElementState));
             this.boundingBox = (BoundingBox)info.GetValue("BoundingBox", typeof(BoundingBox));
             //this.IsSelected = info.GetBoolean("IsSelected");
@@ -492,9 +499,9 @@ namespace Verse3
             try
             {
                 info.AddValue("ID", this.ID);
+                info.AddValue("MetadataCompInfo", MetadataCompInfo);
                 CompInfo ci = GetCompInfo();
                 info.AddValue("Name", ci.Name);
-                info.AddValue("MetadataCompInfo", MetadataCompInfo);
                 info.AddValue("ComputationPipelineInfo", ComputationPipelineInfo);
                 //info.AddValue("X", this.X);
                 //info.AddValue("Y", this.Y);
@@ -514,6 +521,53 @@ namespace Verse3
         }
 
         ~BaseComp() => Dispose();
+    }
+
+    internal class ShellComp : BaseComp
+    {
+        public SerializationInfo _info;
+        public StreamingContext _context;
+        public string _metadataCompInfo;
+        public ShellComp() : base()
+        {
+        }
+
+        public ShellComp(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            _info = info;
+            _context = context;
+            this._metadataCompInfo = info.GetString("MetadataCompInfo");
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+        }
+        
+        public ShellComp(BaseComp comp)
+        {
+            this.boundingBox = new BoundingBox();
+            this.Accent = comp.Accent;
+            this.BoundingBox = comp.BoundingBox;
+            this.computationPipelineInfo = comp.ComputationPipelineInfo;
+            //this.ElementType = comp.ElementType;
+            this.ID = comp.ID;
+            this.IsSelected = comp.IsSelected;
+            this._metadataCompInfo = comp.MetadataCompInfo;
+            this.MetadataCompInfo = comp.MetadataCompInfo;
+            this.Name = comp.Name;
+        }
+
+        public override void Compute()
+        {
+        }
+
+        public override CompInfo GetCompInfo() => CompInfo.FromString(this, this._metadataCompInfo);
+        
+        public override void Initialize()
+        {
+        }
+
     }
 
     public class ChildElementManager
@@ -1091,7 +1145,7 @@ namespace Verse3
             else Accent = accent;
             TypeName = comp.GetType().FullName;
             BuiltAgainst = Assembly.GetExecutingAssembly().ImageRuntimeVersion;
-            IsValid = true;
+            //IsValid = true;
             IsDevelopmentBuild = true;
         }
         public CompInfo(IRenderable comp, string name, string group, string tab)
@@ -1109,12 +1163,13 @@ namespace Verse3
             Icon = null;
             TypeName = comp.GetType().FullName;
             BuiltAgainst = Assembly.GetExecutingAssembly().ImageRuntimeVersion;
-            IsValid = true;
+            //IsValid = true;
             IsDevelopmentBuild = true;
         }
         public CompInfo(BaseComp comp, string name, string group, string tab, string description, string author, string version, string license, string website, string repository, BitmapSource icon, Color accent)
         {
-            ConstructorInfo = comp.GetType().GetConstructor(new Type[] { typeof(int), typeof(int) });
+            if (comp is ShellComp) ConstructorInfo = comp.GetType().GetConstructor(new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
+            else ConstructorInfo = comp.GetType().GetConstructor(new Type[] { typeof(int), typeof(int) });
             Name = name;
             Group = group;
             Tab = tab;
@@ -1128,7 +1183,7 @@ namespace Verse3
             Accent = accent;
             TypeName = comp.GetType().FullName;
             BuiltAgainst = Assembly.GetExecutingAssembly().ImageRuntimeVersion;
-            IsValid = true;
+            //IsValid = true;
             IsDevelopmentBuild = false;
         }
         [JsonIgnore]
@@ -1144,7 +1199,25 @@ namespace Verse3
         public string Repository { get; init; }
         public string TypeName { get; }
         public string BuiltAgainst { get; }
-        public bool IsValid { get; }
+        public bool IsValid
+        {
+            get
+            {
+                if (ConstructorInfo == null) return false;
+                if (Name == null) return false;
+                if (Group == null) return false;
+                if (Tab == null) return false;
+                //if (Description == null) return false;
+                //if (Author == null) return false;
+                //if (Version == null) return false;
+                //if (License == null) return false;
+                //if (Website == null) return false;
+                //if (Repository == null) return false;
+                //if (TypeName == null) return false;
+                //if (BuiltAgainst == null) return false;
+                return true;
+            }
+        }
         public bool IsDevelopmentBuild { get; }
 
         //TODO: Try allowing SVGs as Icons
@@ -1186,6 +1259,7 @@ namespace Verse3
         internal static CompInfo FromString(BaseComp baseComp, string value)
         {
             //Deserialize JSON string to CompInfo
+            if (value is null) return default;
             CompInfo compInfoDeserialized =  JsonConvert.DeserializeObject<CompInfo>(value);
 
             CompInfo compInfoOut = new CompInfo(baseComp,
@@ -1213,6 +1287,126 @@ namespace Verse3
         }
     }
     
+    internal class ShellNode : INode
+    {
+        public SerializationInfo _info;
+        public StreamingContext _context;
+        public ShellNode()
+        {
+        }
+        
+        public ShellNode(INode node)
+        {
+            this.Connections = node.Connections;
+            this.ID = node.ID;
+            this.Name = node.Name;
+            this.Parent = node.Parent;
+        }
+
+        public ShellNode(SerializationInfo info, StreamingContext context)
+        {
+            _info = info;
+            _context = context;
+            Name = info.GetString("Name");
+            ID = Guid.Parse(info.GetString("Id"));
+            BezierElements = (ElementsLinkedList<BezierElement>)info.GetValue("BezierElements", typeof(ElementsLinkedList<BezierElement>));
+            Parent = (IElement)info.GetValue("Parent", typeof(ShellComp));
+        }
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Name", Name);
+            info.AddValue("Id", ID.ToString());
+            info.AddValue("BezierElements", BezierElements);
+            info.AddValue("Parent", Parent);
+        }
+        
+        [JsonIgnore]
+        public IElement Parent { get; set; }
+
+        [JsonIgnore]
+        public ElementsLinkedList<IConnection> Connections { get; private set; }
+
+        public ElementsLinkedList<BezierElement> BezierElements
+        {
+            get
+            {
+                ElementsLinkedList<BezierElement> bezierElements = new ElementsLinkedList<BezierElement>();
+                if (Connections.Count > 0)
+                {
+                    foreach (IConnection connection in Connections)
+                    {
+                        if (connection is BezierElement bezierElement)
+                        {
+                            bezierElements.Add(bezierElement);
+                        }
+                    }
+                }
+                return bezierElements;
+            }
+            set
+            {
+                if (value != null && value.Count > 0)
+                {
+                    foreach (BezierElement bezierElement in value)
+                    {
+                        Connections.Add(bezierElement);
+                    }
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public NodeType NodeType => NodeType.Unset;
+
+        [JsonIgnore]
+        public CanvasPoint Hotspot { get; private set; }
+
+        public string Name { get; set; }
+
+        [JsonIgnore]
+        public ElementType ElementType => ElementType.Node;
+
+        public Guid ID { get; private set; }
+
+        [JsonIgnore]
+        public ElementState ElementState { get; set; }
+        [JsonIgnore]
+        ElementType IElement.ElementType { get; set; }
+
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
+        ~ShellNode() => Dispose();
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        {
+            if (!Equals(field, newValue))
+            {
+                field = newValue;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                return true;
+            }
+
+            return false;
+        }
+
+        #endregion
+    }
+
     public abstract class DataNode<D> : IRenderable, IDataNode<D>
     {
         #region Data Members
@@ -1651,7 +1845,7 @@ namespace Verse3
         {
             this.renderPipelineInfo = new RenderPipelineInfo(this);
             _computationPipelineInfo = new ComputationPipelineInfo(this);
-            this.RenderPipelineInfo.Parent = info.GetValue("Parent", typeof(IRenderable)) as IRenderable;
+            this.RenderPipelineInfo.Parent = info.GetValue("Parent", typeof(ShellComp)) as ShellComp;
             this.DataGoo = info.GetValue("DataGoo", typeof(DataStructure<D>)) as DataStructure<D>;
             this._nodeType = (NodeType)info.GetValue("NodeType", typeof(NodeType));
         }

@@ -410,19 +410,20 @@ namespace Verse3
         public static Dispatcher Dispatcher { get => dispatcher; }
 
         //[XmlElement]
-        public ElementsLinkedList<BaseComp> Comps
+        [JsonProperty("Comps")]
+        internal ElementsLinkedList<ShellComp> Comps
         {
             get
             {
-                ElementsLinkedList<IElement> _elementsBuffer = base.Elements;
-                ElementsLinkedList<BaseComp> comps = new ElementsLinkedList<BaseComp>();
-                if (base.Elements.Count > 0 && _elementsBuffer.Count > 0)
+                ElementsLinkedList<IElement> _elementsBuffer = base.elements;
+                ElementsLinkedList<ShellComp> comps = new ElementsLinkedList<ShellComp>();
+                if (_elementsBuffer.Count > 0)
                 {
                     foreach (IElement element in _elementsBuffer)
                     {
-                        if (element is BaseComp)
+                        if (element is BaseComp comp)
                         {
-                            comps.Add((BaseComp)element);
+                            comps.Add(new ShellComp(comp));
                         }
                     }
                 }
@@ -432,27 +433,28 @@ namespace Verse3
             {
                 if (value != null && value.Count > 0)
                 {
-                    foreach (BaseComp comp in value)
+                    foreach (ShellComp comp in value)
                     {
-                        base.Elements.Add(comp);
+                        Main_Verse3.ActiveMain.ActiveEditor.AddToCanvas_OnCall(comp, new EventArgs());
+                        //base.Elements.Add((BaseComp)comp);
                     }
                 }
             }
         }
-        [JsonIgnore]
-        public new ElementsLinkedList<BaseElement> Elements
+        [JsonProperty("Nodes")]
+        internal ElementsLinkedList<ShellNode> Nodes
         {
             get
             {
-                ElementsLinkedList<IElement> _elementsBuffer = base.Elements;
-                ElementsLinkedList<BaseElement> comps = new ElementsLinkedList<BaseElement>();
-                if (base.Elements.Count > 0)
+                ElementsLinkedList<IElement> _elementsBuffer = base.elements;
+                ElementsLinkedList<ShellNode> comps = new ElementsLinkedList<ShellNode>();
+                if (_elementsBuffer.Count > 0)
                 {
                     foreach (IElement element in _elementsBuffer)
                     {
-                        if (element is BaseElement)
+                        if (element is INode node)
                         {
-                            comps.Add((BaseElement)element);
+                            comps.Add(new ShellNode(node));
                         }
                     }
                 }
@@ -462,20 +464,21 @@ namespace Verse3
             {
                 if (value != null && value.Count > 0)
                 {
-                    foreach (BaseElement comp in value)
+                    foreach (ShellNode comp in value)
                     {
                         base.Elements.Add(comp);
                     }
                 }
             }
         }
+        [JsonProperty("Connections")]
         public ElementsLinkedList<BezierElement> Connections
         {
             get
             {
-                ElementsLinkedList<IElement> _elementsBuffer = base.Elements;
+                ElementsLinkedList<IElement> _elementsBuffer = base.elements;
                 ElementsLinkedList<BezierElement> comps = new ElementsLinkedList<BezierElement>();
-                if (base.Elements.Count > 0)
+                if (_elementsBuffer.Count > 0)
                 {
                     foreach (IElement element in _elementsBuffer)
                     {
@@ -505,17 +508,17 @@ namespace Verse3
         {
             get
             {
-                if (instance == null)
+                if (DataViewModel.instance == null)
                 {
-                    instance = new DataViewModel();
+                    DataViewModel.instance = new DataViewModel();
                     DataModel.Instance = instance;
                 }
                 return DataModel.instance;
             }
             internal set
             {
-                instance = value;
-                //DataModel.Instance = instance;
+                DataViewModel.instance = value;
+                DataModel.Instance = instance;
             }
         }
 
@@ -549,8 +552,8 @@ namespace Verse3
 
             //this.elements = (ElementsLinkedList<IElement>)info.GetValue("elements", typeof(ElementsLinkedList<IElement>));
             //TODO: Add Comps, Elements and Connections from serialization info
-            this.Comps = (ElementsLinkedList<BaseComp>)info.GetValue("Comps", typeof(ElementsLinkedList<BaseComp>));
-            this.Elements = (ElementsLinkedList<BaseElement>)info.GetValue("Elements", typeof(ElementsLinkedList<BaseElement>));
+            this.Comps = (ElementsLinkedList<ShellComp>)info.GetValue("Comps", typeof(ElementsLinkedList<ShellComp>));
+            //this.Elements = (ElementsLinkedList<BaseElement>)info.GetValue("Elements", typeof(ElementsLinkedList<BaseElement>));
             this.Connections = (ElementsLinkedList<BezierElement>)info.GetValue("Connections", typeof(ElementsLinkedList<BezierElement>));
 
             DataViewModel.Instance = this;
@@ -593,11 +596,11 @@ namespace Verse3
             return bezier;
         }
         
-        public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             //TODO: Add Comps, Elements and Connections to serialization info
             info.AddValue("Comps", this.Comps);
-            info.AddValue("Elements", this.Elements);
+            //info.AddValue("Elements", this.Elements);
             info.AddValue("Connections", this.Connections);
 
             //info.AddValue("elements", this.elements);

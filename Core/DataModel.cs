@@ -105,7 +105,6 @@ namespace Core
         /// <summary>
         /// Retreive the singleton instance.
         /// </summary>
-        //[JsonIgnore]
         //[XmlIgnore]
         public static DataModel Instance
         {

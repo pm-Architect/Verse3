@@ -500,7 +500,8 @@ namespace Verse3.VanillaElements
         {
             this.origin = (INode)info.GetValue("origin", typeof(INode));
             this.destination = (INode)info.GetValue("destination", typeof(INode));
-            RedrawBezier(this.origin, this.destination);
+            if (this.origin != null && this.Destination != null) RedrawBezier(this.origin, this.destination);
+            else throw new NullReferenceException("BezierElement: Origin and/or Destination is null");
         }
 
         public new void GetObjectData(SerializationInfo info, StreamingContext context)
