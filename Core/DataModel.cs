@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using static Core.Geometry2D;
@@ -16,7 +17,7 @@ namespace Core
     [Serializable]
     //[XmlRoot("DataModel")]
     //[XmlType("DataModel")]
-    public class DataModel : INotifyPropertyChanged, ISerializable
+    public class DataModel : INotifyPropertyChanged/*, ISerializable*/
     {
         #region INotifyPropertyChanged Members
 
@@ -48,7 +49,7 @@ namespace Core
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
-        //[JsonIgnore]
+        [JsonIgnore]
         protected ElementsLinkedList<IElement> elements = new ElementsLinkedList<IElement>();
 
         ///
@@ -133,21 +134,22 @@ namespace Core
             //DataModel.instance = this;
         }
 
-        protected DataModel(SerializationInfo info, StreamingContext context) : base()
-        {
-            //
-            // Initialize the data model.
-            //
-            //DataModel.instance = this;
-            this.elements = (ElementsLinkedList<IElement>)info.GetValue("elements", typeof(ElementsLinkedList<IElement>));
-            //this.contentScale = (double)info.GetValue("contentScale", typeof(double));
-            //this.contentOffsetX = (double)info.GetValue("contentOffsetX", typeof(double));
-            //this.contentOffsetY = (double)info.GetValue("contentOffsetY", typeof(double));
-            //this.contentWidth = (double)info.GetValue("contentWidth", typeof(double));
-            //this.contentHeight = (double)info.GetValue("contentHeight", typeof(double));
-            //this.contentViewportWidth = (double)info.GetValue("contentViewportWidth", typeof(double));
-            //this.contentViewportHeight = (double)info.GetValue("contentViewportHeight", typeof(double));
-        }
+        //protected DataModel(SerializationInfo info, StreamingContext context) : base()
+        //{
+        //    //
+        //    // Initialize the data model.
+        //    //
+        //    //DataModel.instance = this;
+        //    this.elements = (ElementsLinkedList<IElement>)info.GetValue("elements", typeof(ElementsLinkedList<IElement>));
+        //    //this.elements = (ElementsLinkedList<IElement>)info.GetValue("elements", typeof(ElementsLinkedList<ShellElement>));
+        //    //this.contentScale = (double)info.GetValue("contentScale", typeof(double));
+        //    //this.contentOffsetX = (double)info.GetValue("contentOffsetX", typeof(double));
+        //    //this.contentOffsetY = (double)info.GetValue("contentOffsetY", typeof(double));
+        //    //this.contentWidth = (double)info.GetValue("contentWidth", typeof(double));
+        //    //this.contentHeight = (double)info.GetValue("contentHeight", typeof(double));
+        //    //this.contentViewportWidth = (double)info.GetValue("contentViewportWidth", typeof(double));
+        //    //this.contentViewportHeight = (double)info.GetValue("contentViewportHeight", typeof(double));
+        //}
 
         #endregion
 
@@ -156,7 +158,7 @@ namespace Core
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
-        //[XmlIgnore]
+        [JsonIgnore]
         public ElementsLinkedList<IElement> Elements
         {
             get
@@ -174,17 +176,17 @@ namespace Core
             return this.Elements.Find(guid).Value;
         }
 
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("elements", this.elements);
-            //info.AddValue("contentScale", this.contentScale);
-            //info.AddValue("contentOffsetX", this.contentOffsetX);
-            //info.AddValue("contentOffsetY", this.contentOffsetY);
-            //info.AddValue("contentWidth", this.contentWidth);
-            //info.AddValue("contentHeight", this.contentHeight);
-            //info.AddValue("contentViewportWidth", this.contentViewportWidth);
-            //info.AddValue("contentViewportHeight", this.contentViewportHeight);
-        }
+        //public void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    info.AddValue("elements", this.elements);
+        //    //info.AddValue("contentScale", this.contentScale);
+        //    //info.AddValue("contentOffsetX", this.contentOffsetX);
+        //    //info.AddValue("contentOffsetY", this.contentOffsetY);
+        //    //info.AddValue("contentWidth", this.contentWidth);
+        //    //info.AddValue("contentHeight", this.contentHeight);
+        //    //info.AddValue("contentViewportWidth", this.contentViewportWidth);
+        //    //info.AddValue("contentViewportHeight", this.contentViewportHeight);
+        //}
 
         ///
         /// The current scale at which the content is being viewed.
@@ -372,6 +374,63 @@ namespace Core
         #endregion
 
         
+    }
+
+    internal class ShellElement : IElement
+    {
+        public Guid ID { get; }
+
+        public ElementState ElementState { get; set; }
+        public ElementType ElementType { get; set; }
+
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
+        ~ShellElement() => Dispose();
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            try
+            {
+                info.AddValue("ID", this.ID);
+                //info.AddValue("X", this.X);
+                //info.AddValue("Y", this.Y);
+                //info.AddValue("Width", this.Width);
+                //info.AddValue("Height", this.Height);
+                info.AddValue("ElementType", this.ElementType);
+                //info.AddValue("State", this.State);
+                //info.AddValue("IsSelected", this.IsSelected);
+                //info.AddValue("BoundingBox", this.BoundingBox);
+                //info.AddValue("ElementState", this.ElementState);
+                //info.AddValue("Parent", this.Parent);
+                //info.AddValue("Children", this.Children);
+            }
+            catch (Exception ex)
+            {
+                CoreConsole.Log(ex);
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        {
+            if (!Equals(field, newValue))
+            {
+                field = newValue;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                return true;
+            }
+
+            return false;
+        }
     }
 
     public interface IElement : INotifyPropertyChanged, IDisposable, ISerializable

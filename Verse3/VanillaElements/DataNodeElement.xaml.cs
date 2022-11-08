@@ -1,4 +1,5 @@
 using Core;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -244,9 +245,10 @@ namespace Verse3.VanillaElements
         }
     }
 
-    //[Serializable]
+    [Serializable]
     public class DataNodeElement<T> : DataNode<T>
     {
+        [JsonIgnore]
         public override Type ViewType => typeof(DataNodeElementView);
 
         #region Constructor and Compute
@@ -345,6 +347,7 @@ namespace Verse3.VanillaElements
         public override string Name { get => _name; set => _name = value; }
 
         private HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center;
+        [JsonIgnore]
         public HorizontalAlignment HorizontalAlignment
         {
             get
@@ -373,6 +376,7 @@ namespace Verse3.VanillaElements
         }
 
         private System.Windows.Media.Brush nodeColor = System.Windows.Media.Brushes.Transparent;
+        [JsonIgnore]
         public System.Windows.Media.Brush NodeColor
         {
             get
@@ -401,6 +405,7 @@ namespace Verse3.VanillaElements
         }
 
         private System.Windows.Media.Brush nodeContentColor = System.Windows.Media.Brushes.Transparent;
+        [JsonIgnore]
         public System.Windows.Media.Brush NodeContentColor
         {
             get

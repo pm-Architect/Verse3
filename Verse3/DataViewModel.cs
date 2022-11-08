@@ -34,8 +34,8 @@ using Newtonsoft.Json.Linq;
 
 namespace Verse3
 {
-    //[Serializable]
-    public class VFSerializable : XmlAttributesContainer/*, ISerializable*/
+    [Serializable]
+    public class VFSerializable : XmlAttributesContainer, ISerializable
     {
         
         [XmlElement]
@@ -130,10 +130,15 @@ namespace Verse3
         {
         }
 
-        //public VFSerializable(SerializationInfo info, StreamingContext context)
-        //{
-        //    DataViewModel = (DataViewModel)info.GetValue("DataViewModel", typeof(DataViewModel));
-        //}
+        public VFSerializable(SerializationInfo info, StreamingContext context)
+        {
+            DataViewModel = (DataViewModel)info.GetValue("DataViewModel", typeof(DataViewModel));
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("DataViewModel", DataViewModel);
+        }
 
         //public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         //{
@@ -409,9 +414,9 @@ namespace Verse3
         {
             get
             {
-                ElementsLinkedList<IElement> _elementsBuffer = this.Elements;
+                ElementsLinkedList<IElement> _elementsBuffer = base.Elements;
                 ElementsLinkedList<BaseComp> comps = new ElementsLinkedList<BaseComp>();
-                if (this.Elements.Count > 0)
+                if (base.Elements.Count > 0 && _elementsBuffer.Count > 0)
                 {
                     foreach (IElement element in _elementsBuffer)
                     {
@@ -429,7 +434,66 @@ namespace Verse3
                 {
                     foreach (BaseComp comp in value)
                     {
-                        this.Elements.Add(comp);
+                        base.Elements.Add(comp);
+                    }
+                }
+            }
+        }
+        [JsonIgnore]
+        public new ElementsLinkedList<BaseElement> Elements
+        {
+            get
+            {
+                ElementsLinkedList<IElement> _elementsBuffer = base.Elements;
+                ElementsLinkedList<BaseElement> comps = new ElementsLinkedList<BaseElement>();
+                if (base.Elements.Count > 0)
+                {
+                    foreach (IElement element in _elementsBuffer)
+                    {
+                        if (element is BaseElement)
+                        {
+                            comps.Add((BaseElement)element);
+                        }
+                    }
+                }
+                return comps;
+            }
+            set
+            {
+                if (value != null && value.Count > 0)
+                {
+                    foreach (BaseElement comp in value)
+                    {
+                        base.Elements.Add(comp);
+                    }
+                }
+            }
+        }
+        public ElementsLinkedList<BezierElement> Connections
+        {
+            get
+            {
+                ElementsLinkedList<IElement> _elementsBuffer = base.Elements;
+                ElementsLinkedList<BezierElement> comps = new ElementsLinkedList<BezierElement>();
+                if (base.Elements.Count > 0)
+                {
+                    foreach (IElement element in _elementsBuffer)
+                    {
+                        if (element is BezierElement)
+                        {
+                            comps.Add((BezierElement)element);
+                        }
+                    }
+                }
+                return comps;
+            }
+            set
+            {
+                if (value != null && value.Count > 0)
+                {
+                    foreach (BezierElement comp in value)
+                    {
+                        base.Elements.Add(comp);
                     }
                 }
             }
@@ -479,6 +543,26 @@ namespace Verse3
             dispatcher = Dispatcher.CurrentDispatcher;
         }
 
+        public DataViewModel(SerializationInfo info, StreamingContext context)/* : base(info, context)*/
+        {
+            dispatcher = Dispatcher.CurrentDispatcher;
+
+            //this.elements = (ElementsLinkedList<IElement>)info.GetValue("elements", typeof(ElementsLinkedList<IElement>));
+            //TODO: Add Comps, Elements and Connections from serialization info
+            this.Comps = (ElementsLinkedList<BaseComp>)info.GetValue("Comps", typeof(ElementsLinkedList<BaseComp>));
+            this.Elements = (ElementsLinkedList<BaseElement>)info.GetValue("Elements", typeof(ElementsLinkedList<BaseElement>));
+            this.Connections = (ElementsLinkedList<BezierElement>)info.GetValue("Connections", typeof(ElementsLinkedList<BezierElement>));
+
+            DataViewModel.Instance = this;
+
+            if (DataViewModel.WPFControl != null)
+            {
+                DataViewModel.WPFControl.ExpandContent();
+            }
+
+            RenderPipeline.Render();
+        }
+
         public static void InitDataViewModel(InfiniteCanvasWPFControl c)
         {
             if (DataViewModel.WPFControl == null)
@@ -507,6 +591,23 @@ namespace Verse3
             //start.Connections.Add(bezier);
             //end.Connections.Add(bezier);
             return bezier;
+        }
+        
+        public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            //TODO: Add Comps, Elements and Connections to serialization info
+            info.AddValue("Comps", this.Comps);
+            info.AddValue("Elements", this.Elements);
+            info.AddValue("Connections", this.Connections);
+
+            //info.AddValue("elements", this.elements);
+            //info.AddValue("contentScale", this.contentScale);
+            //info.AddValue("contentOffsetX", this.contentOffsetX);
+            //info.AddValue("contentOffsetY", this.contentOffsetY);
+            //info.AddValue("contentWidth", this.contentWidth);
+            //info.AddValue("contentHeight", this.contentHeight);
+            //info.AddValue("contentViewportWidth", this.contentViewportWidth);
+            //info.AddValue("contentViewportHeight", this.contentViewportHeight);
         }
     }
 
@@ -719,8 +820,8 @@ namespace Verse3
         [IgnoreDataMember]
         public bool RenderExpired { get; set; }
 
-        [JsonIgnore]
-        [IgnoreDataMember]
+        //[JsonIgnore]
+        //[IgnoreDataMember]
         public IRenderable Parent => this.RenderPipelineInfo.Parent;
 
         [JsonIgnore]
@@ -763,6 +864,15 @@ namespace Verse3
         {
             this.renderPipelineInfo = new RenderPipelineInfo(this);
         }
+
+        public BaseElement(SerializationInfo info, StreamingContext context)
+        {
+            this.renderPipelineInfo = new RenderPipelineInfo(this);
+            this._id = (Guid)info.GetValue("ID", typeof(Guid));
+            this.boundingBox = (BoundingBox)info.GetValue("BoundingBox", typeof(BoundingBox));
+            this.ElementType = (ElementType)info.GetValue("ElementType", typeof(ElementType));
+        }
+
 
         #region INotifyPropertyChanged Members
 

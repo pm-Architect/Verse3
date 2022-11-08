@@ -382,7 +382,7 @@ namespace Verse3.VanillaElements
         }
     }
 
-    //[Serializable]
+    [Serializable]
     public class BezierElement : BaseElement, IConnection
     {
         #region Data Members
@@ -397,6 +397,8 @@ namespace Verse3.VanillaElements
 
         #region Properties
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public BoundingBox InnerBoundingBox { get => this.innerBoundingBox; private set => this.innerBoundingBox = value; }
         [JsonIgnore]
         [IgnoreDataMember]
@@ -407,12 +409,14 @@ namespace Verse3.VanillaElements
         [JsonIgnore]
         [IgnoreDataMember]
         public override Type ViewType => typeof(BezierElementView);
+        [JsonIgnore]
+        [IgnoreDataMember]
         public BezierDirection Direction { get; private set; }
-        [JsonIgnore]
-        [IgnoreDataMember]
+        //[JsonIgnore]
+        //[IgnoreDataMember]
         public INode Origin { get => this.origin; }
-        [JsonIgnore]
-        [IgnoreDataMember]
+        //[JsonIgnore]
+        //[IgnoreDataMember]
         public INode Destination { get => this.destination; }
         public ConnectionType ConnectionType { get; }
         [JsonIgnore]
@@ -490,6 +494,20 @@ namespace Verse3.VanillaElements
                 this.origin = end;
             }
             RedrawBezier(this.origin, this.destination);
+        }
+
+        public BezierElement(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            this.origin = (INode)info.GetValue("origin", typeof(INode));
+            this.destination = (INode)info.GetValue("destination", typeof(INode));
+            RedrawBezier(this.origin, this.destination);
+        }
+
+        public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            info.AddValue("origin", this.origin);
+            info.AddValue("destination", this.destination);
         }
 
         #endregion

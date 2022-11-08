@@ -83,7 +83,7 @@ namespace Verse3
             }
         }
         //[XmlIgnore]
-        [JsonIgnore]
+        //[JsonIgnore]
         public ChildElementManager ChildElementManager => _cEManager;
         //[XmlIgnore]
         [JsonIgnore]
@@ -268,28 +268,30 @@ namespace Verse3
             this.Background = new SolidColorBrush(Colors.Gray);
         }
 
-        //public BaseComp(SerializationInfo info, StreamingContext context)
-        //{
-        //    _cEManager = new ChildElementManager(this);
+        public BaseComp(SerializationInfo info, StreamingContext context)
+        {
+            //_cEManager = new ChildElementManager(this);
+            _cEManager = info.GetValue("ChildElementManager", typeof(ChildElementManager)) as ChildElementManager;
 
-        //    renderPipelineInfo = new RenderPipelineInfo(this);
-        //    computationPipelineInfo = new ComputationPipelineInfo(this);
+            renderPipelineInfo = new RenderPipelineInfo(this);
+            //computationPipelineInfo = new ComputationPipelineInfo(this);
+            computationPipelineInfo = info.GetValue("ComputationPipelineInfo", typeof(ComputationPipelineInfo)) as ComputationPipelineInfo;
 
-        //    //this.boundingBox = new BoundingBox();
+            //this.boundingBox = new BoundingBox();
 
-        //    CompInfo ci = this.GetCompInfo();
+            CompInfo ci = this.GetCompInfo();
 
-        //    this.Accent = new SolidColorBrush(ci.Accent);
-        //    this.Background = new SolidColorBrush(Colors.Gray);
-            
-        //    Name = info.GetString("Name");
-        //    MetadataCompInfo = info.GetString("MetadataCompInfo");
-        //    this.ElementType = (ElementType)info.GetValue("ElementType", typeof(ElementType));
-        //    this.State = (ElementState)info.GetValue("State", typeof(ElementState));
-        //    this.boundingBox = (BoundingBox)info.GetValue("BoundingBox", typeof(BoundingBox));
-        //    this.IsSelected = info.GetBoolean("IsSelected");
-        //    this.ElementState = (ElementState)info.GetValue("ElementState", typeof(ElementState));
-        //}
+            this.Accent = new SolidColorBrush(ci.Accent);
+            this.Background = new SolidColorBrush(Colors.Gray);
+
+            Name = info.GetString("Name");
+            MetadataCompInfo = info.GetString("MetadataCompInfo");
+            this.ElementType = (ElementType)info.GetValue("ElementType", typeof(ElementType));
+            //this.State = (ElementState)info.GetValue("State", typeof(ElementState));
+            this.boundingBox = (BoundingBox)info.GetValue("BoundingBox", typeof(BoundingBox));
+            //this.IsSelected = info.GetBoolean("IsSelected");
+            //this.ElementState = (ElementState)info.GetValue("ElementState", typeof(ElementState));
+        }
 
         public abstract void Initialize();
 
@@ -502,6 +504,7 @@ namespace Verse3
                 //info.AddValue("State", this.State);
                 //info.AddValue("IsSelected", this.IsSelected);
                 info.AddValue("BoundingBox", this.BoundingBox);
+                info.AddValue("ChildElementManager", this.ChildElementManager);
                 //info.AddValue("ElementState", this.ElementState);
             }
             catch (Exception ex)
@@ -1644,6 +1647,15 @@ namespace Verse3
             //}
         }
 
+        public DataNode(SerializationInfo info, StreamingContext context)
+        {
+            this.renderPipelineInfo = new RenderPipelineInfo(this);
+            _computationPipelineInfo = new ComputationPipelineInfo(this);
+            this.RenderPipelineInfo.Parent = info.GetValue("Parent", typeof(IRenderable)) as IRenderable;
+            this.DataGoo = info.GetValue("DataGoo", typeof(DataStructure<D>)) as DataStructure<D>;
+            this._nodeType = (NodeType)info.GetValue("NodeType", typeof(NodeType));
+        }
+
         //event EventHandler<DataChangedEventArgs> IDataNode.DataChanged
         //{
         //    add => DataChanged += value;
@@ -1844,7 +1856,10 @@ namespace Verse3
                 //info.AddValue("IsSelected", this.IsSelected);
                 info.AddValue("BoundingBox", this.BoundingBox);
                 //info.AddValue("ElementState", this.ElementState);
-                //info.AddValue("Parent", this.Parent);
+                info.AddValue("Parent", this.Parent);
+                info.AddValue("DataGoo", this.DataGoo);
+                info.AddValue("DataValueType", this.DataValueType);
+                info.AddValue("NodeType", this.NodeType);
                 //info.AddValue("Children", this.Children);
             }
             catch (Exception ex)
@@ -1976,6 +1991,15 @@ namespace Verse3
             this.RenderPipelineInfo.Parent = parent as IRenderable;
             //this.DataGoo.DataChanged += OnDataChanged;
             this._nodeType = type;
+        }
+
+        public EventNode(SerializationInfo info, StreamingContext context)
+        {
+            this.renderPipelineInfo = new RenderPipelineInfo(this);
+            _computationPipelineInfo = new ComputationPipelineInfo(this);
+            this.RenderPipelineInfo.Parent = info.GetValue("Parent", typeof(IRenderable)) as IRenderable;
+            //this.DataGoo = info.GetValue("DataGoo", typeof(DataStructure<D>)) as DataStructure<D>;
+            this._nodeType = (NodeType)info.GetValue("NodeType", typeof(NodeType));
         }
 
 
@@ -2401,7 +2425,8 @@ namespace Verse3
                 //info.AddValue("IsSelected", this.IsSelected);
                 info.AddValue("BoundingBox", this.BoundingBox);
                 //info.AddValue("ElementState", this.ElementState);
-                //info.AddValue("Parent", this.Parent);
+                info.AddValue("Parent", this.Parent);
+                info.AddValue("NodeType", this.NodeType);
                 //info.AddValue("Children", this.Children);
             }
             catch (Exception ex)
