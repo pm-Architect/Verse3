@@ -834,6 +834,8 @@ namespace Verse3
 
         //public bool IsSelected { get; set; }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public BoundingBox BoundingBox { get => boundingBox; private set => SetProperty(ref boundingBox, value); }
 
         [JsonIgnore]
@@ -930,7 +932,7 @@ namespace Verse3
         {
             this.renderPipelineInfo = new RenderPipelineInfo(this);
             this._id = (Guid)info.GetValue("ID", typeof(Guid));
-            this.boundingBox = (BoundingBox)info.GetValue("BoundingBox", typeof(BoundingBox));
+            //this.boundingBox = (BoundingBox)info.GetValue("BoundingBox", typeof(BoundingBox));
             this.ElementType = (ElementType)info.GetValue("ElementType", typeof(ElementType));
         }
 
@@ -986,7 +988,7 @@ namespace Verse3
                 info.AddValue("ElementType", this.ElementType);
                 //info.AddValue("State", this.State);
                 //info.AddValue("IsSelected", this.IsSelected);
-                info.AddValue("BoundingBox", this.BoundingBox);
+                //info.AddValue("BoundingBox", this.BoundingBox);
                 //info.AddValue("ElementState", this.ElementState);
                 //info.AddValue("Parent", this.Parent);
                 //info.AddValue("Children", this.Children);

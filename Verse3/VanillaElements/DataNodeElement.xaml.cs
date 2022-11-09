@@ -277,6 +277,16 @@ namespace Verse3.VanillaElements
             }
         }
 
+        public DataNodeElement(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            this.PropertyChanged += NodeElement_PropertyChanged;
+        }
+
+        public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+        }
+
         #endregion
 
         private void NodeElement_PropertyChanged(object sender, PropertyChangedEventArgs e)

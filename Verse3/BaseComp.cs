@@ -1531,6 +1531,8 @@ namespace Verse3
         [IgnoreDataMember]
         public bool IsSelected { get; set; }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public BoundingBox BoundingBox { get => boundingBox; private set => SetProperty(ref boundingBox, value); }
 
         [JsonIgnore]
@@ -1716,7 +1718,38 @@ namespace Verse3
         [IgnoreDataMember]
         public ElementsLinkedList<IConnection> Connections => connections;
 
+        public ElementsLinkedList<BezierElement> BezierElements
+        {
+            get
+            {
+                ElementsLinkedList<BezierElement> bezierElements = new ElementsLinkedList<BezierElement>();
+                foreach (IConnection connection in this.Connections)
+                {
+                    if (connection is BezierElement)
+                    {
+                        bezierElements.Add(connection as BezierElement);
+                    }
+                }
+                return bezierElements;
+            }
+            set
+            {
+                if (value != null && value.Count > 0)
+                {
+                    foreach (BezierElement bezierElement in value)
+                    {
+                        //if (!this.Connections.Contains(bezierElement))
+                        //{
+                        //    this.Connections.Add(bezierElement);
+                        //}
+                    }
+                }
+            }
+        }
+
         private NodeType _nodeType = NodeType.Unset;
+        [JsonIgnore]
+        [IgnoreDataMember]
         public NodeType NodeType { get => _nodeType; }
 
         [JsonIgnore]
@@ -1808,10 +1841,10 @@ namespace Verse3
         [JsonIgnore]
         [IgnoreDataMember]
         public Type DataValueType => typeof(D);
-
-        [JsonIgnore]
+        
         private DataStructure<D> _dataGoo = new DataStructure<D>();
         [JsonIgnore]
+        [IgnoreDataMember]
         public DataStructure<D> DataGoo
         {
             get => _dataGoo;
@@ -1925,11 +1958,26 @@ namespace Verse3
 
         public DataNode(SerializationInfo info, StreamingContext context)
         {
-            this.renderPipelineInfo = new RenderPipelineInfo(this);
-            _computationPipelineInfo = new ComputationPipelineInfo(this);
-            this.RenderPipelineInfo.Parent = info.GetValue("Parent", typeof(BaseComp)) as BaseComp;
-            //this.DataGoo = info.GetValue("DataGoo", typeof(DataStructure<D>)) as DataStructure<D>;
-            this._nodeType = (NodeType)info.GetValue("NodeType", typeof(NodeType));
+            //this.renderPipelineInfo = new RenderPipelineInfo(this);
+            //_computationPipelineInfo = new ComputationPipelineInfo(this);
+            BaseComp parentComp = info.GetValue("Parent", typeof(BaseComp)) as BaseComp;
+            //info.AddValue("BezierElements", this.BezierElements);
+            ElementsLinkedList<BezierElement> connections = info.GetValue("BezierElements", typeof(ElementsLinkedList<BezierElement>)) as ElementsLinkedList<BezierElement>;
+            this.DataGoo = info.GetValue("DataGoo", typeof(DataStructure<D>)) as DataStructure<D>;
+            if (this.DataGoo != null || (connections != null && connections.Count > 0))
+            {
+                if (DataViewModel.Instance.GetElementWithGuid(parentComp.ID) is BaseComp comp)
+                {
+                    //TODO: Replicate the connections and set the data
+                    //comp.ChildElementManager.InputNodes.
+                }
+                else
+                {
+                    //TODO: Create a new comp, replicate connections and set the data
+                    CoreConsole.Log("Parent comp not found", true);
+                }
+            }
+            //this._nodeType = (NodeType)info.GetValue("NodeType", typeof(NodeType));
         }
 
         //event EventHandler<DataChangedEventArgs> IDataNode.DataChanged
@@ -2130,12 +2178,13 @@ namespace Verse3
                 info.AddValue("ElementType", this.ElementType);
                 //info.AddValue("State", this.State);
                 //info.AddValue("IsSelected", this.IsSelected);
-                info.AddValue("BoundingBox", this.BoundingBox);
+                //info.AddValue("BoundingBox", this.BoundingBox);
                 //info.AddValue("ElementState", this.ElementState);
                 info.AddValue("Parent", this.Parent);
-                //info.AddValue("DataGoo", this.DataGoo);
+                info.AddValue("DataGoo", this.DataGoo);
+                info.AddValue("BezierElements", this.BezierElements);
                 //info.AddValue("DataValueType", this.DataValueType);
-                info.AddValue("NodeType", this.NodeType);
+                //info.AddValue("NodeType", this.NodeType);
                 //info.AddValue("Children", this.Children);
             }
             catch (Exception ex)
@@ -2198,7 +2247,38 @@ namespace Verse3
         [IgnoreDataMember]
         public ElementsLinkedList<IConnection> Connections => connections;
 
+        public ElementsLinkedList<BezierElement> BezierElements
+        {
+            get
+            {
+                ElementsLinkedList<BezierElement> bezierElements = new ElementsLinkedList<BezierElement>();
+                foreach (IConnection connection in this.Connections)
+                {
+                    if (connection is BezierElement)
+                    {
+                        bezierElements.Add(connection as BezierElement);
+                    }
+                }
+                return bezierElements;
+            }
+            set
+            {
+                if (value != null && value.Count > 0)
+                {
+                    foreach (BezierElement bezierElement in value)
+                    {
+                        //if (!this.Connections.Contains(bezierElement))
+                        //{
+                        //    this.Connections.Add(bezierElement);
+                        //}
+                    }
+                }
+            }
+        }
+
         private NodeType _nodeType = NodeType.Unset;
+        [JsonIgnore]
+        [IgnoreDataMember]
         public NodeType NodeType { get => _nodeType; }
 
         internal CanvasPoint _hotspot = new CanvasPoint(0, 0);
@@ -2273,11 +2353,26 @@ namespace Verse3
 
         public EventNode(SerializationInfo info, StreamingContext context)
         {
-            this.renderPipelineInfo = new RenderPipelineInfo(this);
-            _computationPipelineInfo = new ComputationPipelineInfo(this);
-            this.RenderPipelineInfo.Parent = info.GetValue("Parent", typeof(IRenderable)) as IRenderable;
+            //this.renderPipelineInfo = new RenderPipelineInfo(this);
+            //_computationPipelineInfo = new ComputationPipelineInfo(this);
+            BaseComp parentComp = info.GetValue("Parent", typeof(BaseComp)) as BaseComp;
+            //info.AddValue("BezierElements", this.BezierElements);
+            ElementsLinkedList<BezierElement> connections = info.GetValue("BezierElements", typeof(ElementsLinkedList<BezierElement>)) as ElementsLinkedList<BezierElement>;
             //this.DataGoo = info.GetValue("DataGoo", typeof(DataStructure<D>)) as DataStructure<D>;
-            this._nodeType = (NodeType)info.GetValue("NodeType", typeof(NodeType));
+            if (/*this.DataGoo != null || */(connections != null && connections.Count > 0))
+            {
+                if (DataViewModel.Instance.GetElementWithGuid(parentComp.ID) is BaseComp comp)
+                {
+                    //TODO: Replicate the connections and set the data
+                    //comp.ChildElementManager.InputNodes.
+                }
+                else
+                {
+                    //TODO: Create a new comp, replicate connections and set the data
+                    CoreConsole.Log("Parent comp not found", true);
+                }
+            }
+            //this._nodeType = (NodeType)info.GetValue("NodeType", typeof(NodeType));
         }
 
 
@@ -2325,6 +2420,8 @@ namespace Verse3
         [IgnoreDataMember]
         public bool IsSelected { get; set; }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public BoundingBox BoundingBox { get => boundingBox; private set => SetProperty(ref boundingBox, value); }
 
         [JsonIgnore]
@@ -2707,10 +2804,11 @@ namespace Verse3
                 info.AddValue("ElementType", this.ElementType);
                 //info.AddValue("State", this.State);
                 //info.AddValue("IsSelected", this.IsSelected);
-                info.AddValue("BoundingBox", this.BoundingBox);
+                //info.AddValue("BoundingBox", this.BoundingBox);
                 //info.AddValue("ElementState", this.ElementState);
                 info.AddValue("Parent", this.Parent);
-                info.AddValue("NodeType", this.NodeType);
+                info.AddValue("BezierElements", this.BezierElements);
+                //info.AddValue("NodeType", this.NodeType);
                 //info.AddValue("Children", this.Children);
             }
             catch (Exception ex)

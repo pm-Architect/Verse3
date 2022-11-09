@@ -34,7 +34,6 @@ namespace Core
         //public new event EventHandler<DataChangedEventArgs<D>> DataChanged;
         public delegate void NodeDataChangedEventHandler(IDataNode<D> container, DataChangedEventArgs<D> e);
         public event NodeDataChangedEventHandler NodeDataChanged;
-        [JsonIgnore]
         new DataStructure<D> DataGoo { get; set; }
     }
 

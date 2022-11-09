@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -264,6 +265,15 @@ namespace Verse3.VanillaElements
             {
                 this.HorizontalAlignment = HorizontalAlignment.Center;
             }
+        }
+        public EventNodeElement(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            this.PropertyChanged += NodeElement_PropertyChanged;
+        }
+
+        public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
         }
 
         #endregion
