@@ -1,4 +1,6 @@
 ﻿using Core;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -381,6 +383,7 @@ namespace Verse3
                 Arsenal.Add(compInfo);
             }
         }
+        
 
         public CompInfo FindInArsenal(CompInfo compInfo, bool showToUser = false)
         {
@@ -511,52 +514,52 @@ namespace Verse3
                     }
                 }
             }
-            else if (sender is BaseComp shell)
-            {
-                if (DataViewModel.WPFControl != null)
-                {
-                    CompInfo ci = shell.GetCompInfo();
-                    ci = FindInArsenal(ci, false);
-                    ConstructorInfo ctorInfo = GetDeserializationConstructor(ci);
-                    if (ctorInfo != null)
-                    {
-                        ////TODO: Invoke constructor based on <PluginName>.cfg json file
-                        ////TODO: Allow user to place the comp with MousePosition
-                        if (ctorInfo.GetParameters().Length > 0)
-                        {
-                            ParameterInfo[] pi = ctorInfo.GetParameters();
-                            object[] args = new object[pi.Length];
-                            for (int i = 0; i < pi.Length; i++)
-                            {
-                                if (!(pi[i].DefaultValue is DBNull)) args[i] = pi[i].DefaultValue;
-                                else
-                                {
-                                    if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "x")
-                                        args[i] = shell.X;
-                                    //args[i] = shell._info;
-                                    //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().X;
-                                    else if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "y")
-                                        args[i] = shell.Y;
-                                    //args[i] = shell._context;
-                                    //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().Y;
-                                }
-                            }
-                            IElement elInst = ci.ConstructorInfo.Invoke(args) as IElement;
-                            DataViewModel.Instance.Elements.Add(elInst);
-                            if (elInst is BaseComp) ComputationCore.Compute(elInst as BaseComp);
-                            //DataViewModel.WPFControl.ExpandContent();
-                        }
-                        else
-                        {
-                            //throw new Exception("Constructor parameters not provided");
-                            //DataViewModel.WPFControl.ExpandContent();
-                        }
-                        //IElement elInst = ci.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
-                        //DataModel.Instance.Elements.Add(elInst);
-                        //DataViewModel.WPFControl.ExpandContent();
-                    }
-                }
-            }
+            //else if (sender is BaseComp shell)
+            //{
+            //    if (DataViewModel.WPFControl != null)
+            //    {
+            //        CompInfo ci = shell.GetCompInfo();
+            //        ci = FindInArsenal(ci, false);
+            //        ConstructorInfo ctorInfo = GetDeserializationConstructor(ci);
+            //        if (ctorInfo != null)
+            //        {
+            //            ////TODO: Invoke constructor based on <PluginName>.cfg json file
+            //            ////TODO: Allow user to place the comp with MousePosition
+            //            if (ctorInfo.GetParameters().Length > 0)
+            //            {
+            //                ParameterInfo[] pi = ctorInfo.GetParameters();
+            //                object[] args = new object[pi.Length];
+            //                for (int i = 0; i < pi.Length; i++)
+            //                {
+            //                    if (!(pi[i].DefaultValue is DBNull)) args[i] = pi[i].DefaultValue;
+            //                    else
+            //                    {
+            //                        if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "x")
+            //                            args[i] = shell.X;
+            //                        //args[i] = shell._info;
+            //                        //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().X;
+            //                        else if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "y")
+            //                            args[i] = shell.Y;
+            //                        //args[i] = shell._context;
+            //                        //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().Y;
+            //                    }
+            //                }
+            //                IElement elInst = ci.ConstructorInfo.Invoke(args) as IElement;
+            //                DataViewModel.Instance.Elements.Add(elInst);
+            //                if (elInst is BaseComp) ComputationCore.Compute(elInst as BaseComp);
+            //                //DataViewModel.WPFControl.ExpandContent();
+            //            }
+            //            else
+            //            {
+            //                //throw new Exception("Constructor parameters not provided");
+            //                //DataViewModel.WPFControl.ExpandContent();
+            //            }
+            //            //IElement elInst = ci.ConstructorInfo.Invoke(new object[] { x, y, w, h }) as IElement;
+            //            //DataModel.Instance.Elements.Add(elInst);
+            //            //DataViewModel.WPFControl.ExpandContent();
+            //        }
+            //    }
+            //}
             else
             {
                 if (EditorForm.compsPendingInst.Count > 0)
@@ -619,17 +622,6 @@ namespace Verse3
                     }
                 }
             }
-        }
-
-        private ConstructorInfo GetDeserializationConstructor(CompInfo ci)
-        {
-            Type t = ci.ConstructorInfo.DeclaringType;
-            ConstructorInfo? Dctor = t.GetConstructor(new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
-            if (Dctor != null)
-            {
-                return Dctor;
-            }
-            else return null;
         }
 
         private void LoadLibraries(object sender, EventArgs e)
@@ -715,16 +707,19 @@ namespace Verse3
                     {
                         VFSerializable VFfile = VFSerializable.Deserialize(openFileDialog.FileName);
                         DataViewModel.Instance = VFfile.DataViewModel;
+                        DataViewModel.WPFControl.ExpandContent();
                     }
                     else if (openFileDialog.FileName.EndsWith(".vfx"))
                     {
                         VFSerializable VFfile = VFSerializable.DeserializeXML(openFileDialog.FileName);
                         DataViewModel.Instance = VFfile.DataViewModel;
+                        DataViewModel.WPFControl.ExpandContent();
                     }
                     else if (openFileDialog.FileName.EndsWith(".vfj"))
                     {
                         VFSerializable VFfile = VFSerializable.DeserializeJSON(openFileDialog.FileName);
                         DataViewModel.Instance = VFfile.DataViewModel;
+                        DataViewModel.WPFControl.ExpandContent();
                     }
                 }
                 catch (Exception ex)

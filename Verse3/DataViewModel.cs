@@ -31,6 +31,7 @@ using XamlReader = System.Windows.Markup.XamlReader;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Linq;
+using System.Reflection;
 
 namespace Verse3
 {
@@ -132,7 +133,12 @@ namespace Verse3
 
         public VFSerializable(SerializationInfo info, StreamingContext context)
         {
-            DataViewModel = (DataViewModel)info.GetValue("DataViewModel", typeof(DataViewModel));
+            if (info is null) throw new NullReferenceException("Null SerializationInfo");
+            object dvm = info.GetValue("DataViewModel", typeof(DataViewModel));
+            if (dvm != null && dvm is DataViewModel newDVM)
+            {
+                this.DataViewModel = newDVM;
+            }
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -317,6 +323,7 @@ namespace Verse3
         {
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.Converters.Add(new BaseCompConverter());
+            settings.Converters.Add(new NodeConverter());
             settings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize;
             settings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
             settings.Formatting = Newtonsoft.Json.Formatting.Indented;
@@ -327,15 +334,15 @@ namespace Verse3
         {
             JsonSerializerSettings settings = new JsonSerializerSettings();
             settings.Converters.Add(new BaseCompConverter());
+            settings.Converters.Add(new NodeConverter());
             settings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize;
             settings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.Objects;
-            settings.Formatting = Newtonsoft.Json.Formatting.Indented;
             string text = File.ReadAllText(filePath);
             return JsonConvert.DeserializeObject<VFSerializable>(text, settings);
         }
     }
 
-    public class JsonBaseCompClassConverter : DefaultContractResolver
+    internal class JsonBaseCompClassConverter : DefaultContractResolver
     {
         protected override JsonConverter ResolveContractConverter(Type objectType)
         {
@@ -344,10 +351,10 @@ namespace Verse3
             return base.ResolveContractConverter(objectType);
         }
     }
-
-    public class BaseCompConverter : JsonConverter
+    
+    internal class BaseCompConverter : JsonConverter
     {
-        static JsonSerializerSettings SpecifiedSubclassConversion = new JsonSerializerSettings() { ContractResolver = new JsonBaseCompClassConverter() };
+        static JsonSerializerSettings SpecifiedSubclassConversion = new JsonSerializerSettings() { ContractResolver = new JsonBaseCompClassConverter(), ReferenceLoopHandling = ReferenceLoopHandling.Serialize };
 
         public override bool CanConvert(Type objectType)
         {
@@ -360,8 +367,60 @@ namespace Verse3
             
             try
             {
-                BaseComp bc = JsonConvert.DeserializeObject<BaseComp>(jo.ToString(), SpecifiedSubclassConversion);
-
+                object bc = JsonConvert.DeserializeObject<ShellComp>(jo.ToString(), SpecifiedSubclassConversion);
+                if (jo["MetadataCompInfo"] != null)
+                {
+                    JToken mci = jo["MetadataCompInfo"];
+                    CompInfo mdCompInfo = JsonConvert.DeserializeObject<CompInfo>(mci.ToString());
+                    if (mci != null)
+                    {
+                        //CompInfo ci = Main_Verse3.ActiveMain.ActiveEditor.FindInArsenal(mci);
+                        CompInfo ci = Main_Verse3.ActiveMain.ActiveEditor.FindInArsenal(mdCompInfo);
+                        if (ci.ConstructorInfo != null)
+                        {
+                            if (bc != null && bc is ShellComp shell)
+                            {
+                                if (shell._info != null)
+                                {
+                                    //ConstructorInfo ctorInfo = DataViewModel.GetDeserializationCtor(ci);
+                                    //if (ctorInfo != null)
+                                    //{
+                                    BaseComp actual = (ci.ConstructorInfo.Invoke(new object[] { (int)shell.X, (int)shell.Y })) as BaseComp;
+                                    if (actual != null)
+                                    {
+                                        shell.ApplyObjectData(ref actual);
+                                        bc = actual;
+                                    }
+                                    else
+                                    {
+                                        bc = ci.ConstructorInfo.Invoke(new object[] { (int)shell.X, (int)shell.Y }) as BaseComp;
+                                        CoreConsole.Log("Information lost, creating blank from arsenal");
+                                    }
+                                    //}
+                                    //else
+                                    //{
+                                    //    bc = ci.ConstructorInfo.Invoke(new object[] { }) as BaseComp;
+                                    //    CoreConsole.Log("Information lost, creating blank from arsenal");
+                                    //}
+                                }
+                                else
+                                {
+                                    bc = ci.ConstructorInfo.Invoke(new object[] { (int)shell.X, (int)shell.Y }) as BaseComp;
+                                    CoreConsole.Log("Information lost, creating blank from arsenal");
+                                }
+                            }
+                            else
+                            {
+                                bc = ci.ConstructorInfo.Invoke(new object[] { }) as BaseComp;
+                                CoreConsole.Log("Information lost, creating blank from arsenal");
+                            }
+                        }
+                        else
+                        {
+                            CoreConsole.Log("Comp not found in arsenal", true);
+                        }
+                    }
+                }
                 return bc;
             }
             catch (Exception ex)
@@ -388,7 +447,7 @@ namespace Verse3
         }
     }
 
-    public class JsonNodeClassConverter : DefaultContractResolver
+    internal class JsonNodeClassConverter : DefaultContractResolver
     {
         protected override JsonConverter ResolveContractConverter(Type objectType)
         {
@@ -396,8 +455,8 @@ namespace Verse3
             return base.ResolveContractConverter(objectType);
         }
     }
-
-    public class NodeConverter : JsonConverter
+    
+    internal class NodeConverter : JsonConverter
     {
         static JsonSerializerSettings SpecifiedSubclassConversion = new JsonSerializerSettings() { ContractResolver = new JsonNodeClassConverter() };
 
@@ -412,7 +471,7 @@ namespace Verse3
 
             try
             {
-                INode bc = JsonConvert.DeserializeObject<INode>(jo.ToString(), SpecifiedSubclassConversion);
+                ShellNode bc = JsonConvert.DeserializeObject<ShellNode>(jo.ToString(), SpecifiedSubclassConversion);
 
                 return bc;
             }
@@ -426,7 +485,7 @@ namespace Verse3
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            serializer.Serialize(writer, value);
         }
     }
 
@@ -438,7 +497,7 @@ namespace Verse3
     [Serializable]
     ////[XmlRoot("DataViewModel")]
     ////[XmlType("DataViewModel")]
-    public class DataViewModel : DataModel
+    public class DataViewModel : DataModel, ISerializable
     {
         ////[XmlIgnore]
         [JsonIgnore]
@@ -610,11 +669,79 @@ namespace Verse3
             if (info is null) throw new NullReferenceException("Invalid SerializationInfo");
             //this.elements = (ElementsLinkedList<IElement>)info.GetValue("elements", typeof(ElementsLinkedList<IElement>));
             //TODO: Add Comps, Elements and Connections from serialization info
-            this.Comps = (ElementsLinkedList<BaseComp>)info.GetValue("Comps", typeof(ElementsLinkedList<BaseComp>));
+            //this.Comps = (ElementsLinkedList<BaseComp>)info.GetValue("Comps", typeof(ElementsLinkedList<BaseComp>));
             //this.Elements = (ElementsLinkedList<BaseElement>)info.GetValue("Elements", typeof(ElementsLinkedList<BaseElement>));
-            this.Connections = (ElementsLinkedList<BezierElement>)info.GetValue("Connections", typeof(ElementsLinkedList<BezierElement>));
+            //this.Connections = (ElementsLinkedList<BezierElement>)info.GetValue("Connections", typeof(ElementsLinkedList<BezierElement>));
 
-            DataViewModel.Instance = this;
+
+            ElementsLinkedList<BaseComp> comps = (ElementsLinkedList<BaseComp>)info.GetValue("Comps", typeof(ElementsLinkedList<BaseComp>));
+            ElementsLinkedList<BezierElement> connections = (ElementsLinkedList<BezierElement>)info.GetValue("Connections", typeof(ElementsLinkedList<BezierElement>));
+
+
+            //TODO: CONFIRM BEFORE CLEARING
+            //DataViewModel.Instance.Elements.Clear();
+
+
+            if (comps != null && comps.Count > 0)
+            {
+                foreach (BaseComp shell in comps)
+                {
+                    try
+                    {
+                        if (shell._sInfo != null)
+                        {
+                            if (DataViewModel.WPFControl != null)
+                            {
+                                CompInfo ci = shell.GetCompInfo();
+                                ci = Main_Verse3.ActiveMain.ActiveEditor.FindInArsenal(ci, false);
+                                ConstructorInfo ctorInfo = GetDeserializationCtor(ci);
+                                if (ctorInfo != null)
+                                {
+                                    ////TODO: Invoke constructor based on <PluginName>.cfg json file
+                                    ////TODO: Allow user to place the comp with MousePosition
+                                    if (ctorInfo.GetParameters().Length > 0)
+                                    {
+                                        ParameterInfo[] pi = ctorInfo.GetParameters();
+                                        object[] args = new object[pi.Length];
+                                        for (int i = 0; i < pi.Length; i++)
+                                        {
+                                            if (!(pi[i].DefaultValue is DBNull)) args[i] = pi[i].DefaultValue;
+                                            else
+                                            {
+                                                if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "info")
+                                                    args[i] = shell._sInfo;
+                                                //args[i] = shell.X;
+                                                //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().X;
+                                                else if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "context")
+                                                    args[i] = shell._sContext;
+                                                //args[i] = shell.Y;
+                                                //args[i] = InfiniteCanvasWPFControl.GetMouseRelPosition().Y;
+                                            }
+                                        }
+                                        IElement elInst = ci.ConstructorInfo.Invoke(args) as IElement;
+                                        this.Elements.Add(elInst);
+                                        //if (elInst is BaseComp) ComputationCore.Compute(elInst as BaseComp);
+                                        //DataViewModel.WPFControl.ExpandContent();
+                                    }
+                                    else
+                                    {
+                                        throw new Exception("Constructor parameters not valid");
+                                        //DataViewModel.WPFControl.ExpandContent();
+                                    }
+                                }
+                            }
+                        }
+
+                        DataViewModel.Instance.Elements.Clear();
+                        DataViewModel.Instance = this;
+                    }
+                    catch (Exception ex)
+                    {
+                        CoreConsole.Log(ex);
+                        //throw ex;
+                    }
+                }
+            }
 
             if (DataViewModel.WPFControl != null)
             {
@@ -622,6 +749,17 @@ namespace Verse3
             }
 
             RenderPipeline.Render();
+        }
+
+        internal static ConstructorInfo GetDeserializationCtor(CompInfo ci)
+        {
+            Type t = ci.ConstructorInfo.DeclaringType;
+            ConstructorInfo Dctor = t.BaseType.GetConstructor(new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
+            if (Dctor != null)
+            {
+                return Dctor;
+            }
+            else return null;
         }
 
         public static void InitDataViewModel(InfiniteCanvasWPFControl c)
