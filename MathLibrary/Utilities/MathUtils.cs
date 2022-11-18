@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core;
 using MS.WindowsAPICodePack.Internal;
+using Newtonsoft.Json;
 using Verse3;
 using Verse3.VanillaElements;
 
@@ -271,6 +272,19 @@ namespace MathLibrary
 
             return result;
 
+        }
+
+        public class JsonDict : Dictionary<string, object>, IDisposable
+        {
+            public override string ToString()
+            {
+                return JsonConvert.SerializeObject(this, Formatting.Indented);
+            }
+
+            public void Dispose()
+            {
+                Clear();
+            }
         }
     }
 

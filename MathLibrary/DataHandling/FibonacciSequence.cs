@@ -38,7 +38,7 @@ namespace MathLibrary
             DataStructure<double> result = new DataStructure<double>();
             result = MathUtils.FibonacciSequence(count);
 
-            this.ChildElementManager.SetData(result, Result);
+            this.ChildElementManager.SetData(result.Data, Result);
             if (count > 0)
             this.previewTextBlock.DisplayedText = $"Last number = {result.Last.Value.Data.ToString()}";
         }

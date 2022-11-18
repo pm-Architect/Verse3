@@ -36,7 +36,7 @@ namespace TextLibrary
             {
                 result.Add(item);
             }
-            this.ChildElementManager.SetData(result, nodeBlock3);    
+            this.ChildElementManager.SetData(result.Data, nodeBlock3);    
         }
 
         public override CompInfo GetCompInfo() => new CompInfo(this, "Split Text", "Operations", "Text");
