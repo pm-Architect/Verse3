@@ -11,8 +11,7 @@
     <Deterministic>false</Deterministic>
     <Platforms>AnyCPU;x64</Platforms>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <SignAssembly>False</SignAssembly>
-    <AssemblyOriginatorKeyFile>apphost.exe</AssemblyOriginatorKeyFile>
+    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="MonacoEditor\**" />

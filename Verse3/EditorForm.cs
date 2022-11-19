@@ -648,6 +648,15 @@ namespace Verse3
             { 
                 bmp.Save(Path.Combine(path, DateTime.Now.ToString("yyyyMMddHHmmss") + "_ProjectVerseCanvasExport.png"));
             }
+
+            //Try serializing the script to a json string
+
+            //Show the feedback dialog
+            FeedbackForm ff = new FeedbackForm();
+            if (ff.ShowDialog(Main_Verse3.ActiveMain) == DialogResult.OK)
+            {
+
+            }
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)

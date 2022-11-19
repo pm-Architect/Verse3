@@ -4,6 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Supabase;
+using Postgrest.Models;
+using Postgrest.Attributes;
+using Postgrest;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Core
 {
@@ -13,6 +18,7 @@ namespace Core
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly StringBuilder StringLogger = new StringBuilder();
         private static readonly List<string> LogList = new List<string>();
+        private static Table<FeedbackReport> table;
 
         public static void GetEntries(int v, out string[] entries)
         {
@@ -35,6 +41,7 @@ namespace Core
                 Logger.Log(LogLevel.Error, (prefix + " |[ " + message + " ]| " + suffix).Trim());
                 if (CoreConsole.OnLog != null && CoreConsole.OnLog.GetInvocationList().Length > 0)
                     CoreConsole.OnLog.Invoke(null, new EventArgData(new DataStructure<string>(($"ERROR: {prefix} |[ {message} ]| {suffix}"))));
+                SendToSB((prefix + " |[ " + message + " ]| " + suffix).Trim(), LogLevel.Error);
             }
             else
             {
@@ -43,6 +50,7 @@ namespace Core
                 Logger.Log(LogLevel.Info, (prefix + " |[ " + message + " ]| " + suffix).Trim());
                 if (CoreConsole.OnLog != null && CoreConsole.OnLog.GetInvocationList().Length > 0)
                     CoreConsole.OnLog.Invoke(null, new EventArgData(new DataStructure<string>(($"INFO: {prefix} |[ {message} ]| {suffix}"))));
+                SendToSB((prefix + " |[ " + message + " ]| " + suffix).Trim(), LogLevel.Info);
             }
         }
         public static void Log(Exception ex, string prefix = "", string suffix = "")
@@ -52,6 +60,7 @@ namespace Core
             Logger.Log(LogLevel.Error, (prefix + " |[ " + ex.Message + " ]| " + suffix).Trim());
             if (CoreConsole.OnLog != null && CoreConsole.OnLog.GetInvocationList().Length > 0)
                 CoreConsole.OnLog.Invoke(null, new EventArgData(new DataStructure<string>(($"ERROR: {prefix} |[ {ex.Message} ]| {suffix}"))));
+            SendToSB((prefix + " |[ " + ex.Message + " ]| " + suffix).Trim(), LogLevel.Error);
         }
 
         public static void Log(string message, IComputable computable, bool isException = false, string prefix = "", string suffix = "")
@@ -63,6 +72,7 @@ namespace Core
                 Logger.Log(LogLevel.Error, (computable.ID.ToString() + " : " + prefix + " |[ " + message + " ]| " + suffix).Trim());
                 if (CoreConsole.OnLog != null && CoreConsole.OnLog.GetInvocationList().Length > 0)
                     CoreConsole.OnLog.Invoke(null, new EventArgData(new DataStructure<string>(($"ERROR: {prefix} |[ {message} ]| {suffix}"))));
+                SendToSB((prefix + " |[ " + message + " ]| " + suffix).Trim(), LogLevel.Error);
             }
             else
             {
@@ -72,6 +82,7 @@ namespace Core
                 if (CoreConsole.OnLog != null && CoreConsole.OnLog.GetInvocationList().Length > 0)
                     CoreConsole.OnLog.Invoke(null, new EventArgData(new DataStructure<string>(($"INFO: {prefix} |[ {message} ]| {suffix}"))));
                 computable.OnLog_Internal(new EventArgData(new DataStructure<string>(($"INFO: {prefix} |[ {message} ]| {suffix}"))));
+                SendToSB((prefix + " |[ " + message + " ]| " + suffix).Trim(), LogLevel.Info);
             }
         }
         public static void Log(Exception ex, IComputable computable, string prefix = "", string suffix = "")
@@ -82,11 +93,12 @@ namespace Core
             if (CoreConsole.OnLog != null && CoreConsole.OnLog.GetInvocationList().Length > 0)
                 CoreConsole.OnLog.Invoke(null, new EventArgData(new DataStructure<string>(($"ERROR: {prefix} |[ {ex.Message} ]| {suffix}"))));
             computable.OnLog_Internal(new EventArgData(new DataStructure<string>(($"ERROR: {prefix} |[ {ex.Message} ]| {suffix}"))));
+            SendToSB((prefix + " |[ " + ex.Message + " ]| " + suffix).Trim(), LogLevel.Error);
         }
 
         private CoreConsole()
         {
-            if (Client.Instance != null)
+            if (Supabase.Client.Instance != null)
             {
                 Initialize();
             }
@@ -94,12 +106,38 @@ namespace Core
 
         private static async void sLoad(string url, string key)
         {
-            await Client.InitializeAsync(url, key);
+            await Supabase.Client.InitializeAsync(url, key);
+            //table = Postgrest.Client.Instance.Table<FeedbackReport>();
+            //var task = Task.Run(() => table.Get());
+            //task.Wait();
+            //if (task.IsCompleted)
+            //{
+            //    FeedbackReport fr = task.Result.Models.FirstOrDefault();
+            //    string temp = fr.Body;
+            //}
         }
         
-        private static void LogFromNLog(string message, LogLevel level)
+        public static void SendToSB(string message, LogLevel level)
         {
-
+            var newMessage = new FeedbackReport { Data = message, Tags = $"{{\"log\":\"{level.Name}\"}}" };
+            if (Core.GetUser() != null && table != null)
+            {
+                //var task = Task.Run(() => table.Get());
+                //task.Wait();
+                //if (task.IsCompleted)
+                //{
+                //    FeedbackReport fr = task.Result.Models.FirstOrDefault();
+                //    string temp = fr.Body;
+                //}
+                //string temp = table.Get().Result.Models.First().Body;
+                //table.Insert(newMessage);
+                //string temp = table.BaseUrl;
+            }
+            else
+            {
+                //Table<FeedbackReport> tbl = Postgrest.Client.Instance.Table<FeedbackReport>();
+                //tbl.Insert(newMessage);
+            }
         }
 
         public static void Initialize()
@@ -115,17 +153,21 @@ namespace Core
             };
             var logconsole = new NLog.Targets.ConsoleTarget("logconsole") { DetectConsoleAvailable = true };
             var logmethod = new NLog.Targets.MethodCallTarget("logmethod");
-            logmethod.MethodName = "LogFromNLog";
+            logmethod.MethodName = "SendToSB";
             logmethod.Parameters.Add(new NLog.Targets.MethodCallParameter("message", "${message}"));
             logmethod.Parameters.Add(new NLog.Targets.MethodCallParameter("level", "${level}"));
 
             // Rules for mapping loggers to targets
             config.AddRule(LogLevel.Info, LogLevel.Fatal, logconsole);
-            config.AddRule(LogLevel.Info, LogLevel.Fatal, logmethod);
+            //config.AddRule(LogLevel.Info, LogLevel.Fatal, logmethod);
             config.AddRule(LogLevel.Debug, LogLevel.Fatal, logfile);
 
             // Apply config           
             LogManager.Configuration = config;
+
+            //Postgrest.Client.Initialize("https://kbtksyoszkavumwphzai.supabase.co");
+            //table = Postgrest.Client.Instance.Table<FeedbackReport>();
+            //table = new SupabaseTable<FeedbackReport>("https://kbtksyoszkavumwphzai.supabase.co", new ClientOptions());
 
             //Supabase vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
@@ -138,10 +180,12 @@ namespace Core
             sLoad(url, key);
             // That's it - forreal. Crazy right?
 
+
             // The Supabase Instance can be accessed at any time using:
             //  Supabase.Client.Instance {.Realtime|.Auth|etc.}
             // For ease of readability we'll use this:
             //var instance = Client.Instance;
+            
         }
 
 
@@ -181,4 +225,31 @@ namespace Core
     //    Warning,
     //    Error
     //}
+
+    [Table("public_testing")]
+    public class FeedbackReport : BaseModel
+    {
+        [PrimaryKey("id")]
+        public int Id { get; set; }
+
+        [Column("body")]
+        public string Body { get; set; }
+
+        [Column("data")]
+        public string Data { get; set; }
+
+        [Column("tags")]
+        public string Tags { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is FeedbackReport report &&
+                    Id == report.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id);
+        }
+    }
 }

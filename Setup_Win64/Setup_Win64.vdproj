@@ -1,0 +1,3843 @@
+﻿"DeployProject"
+{
+"VSVersion" = "3:800"
+"ProjectType" = "8:{06A35CCD-C46D-44D5-987B-CF40FF872267}"
+"IsWebType" = "8:FALSE"
+"ProjectName" = "8:Setup_Win64"
+"LanguageId" = "3:1033"
+"CodePage" = "3:1252"
+"UILanguageId" = "3:1033"
+"SccProjectName" = "8:"
+"SccLocalPath" = "8:"
+"SccAuxPath" = "8:"
+"SccProvider" = "8:"
+    "Hierarchy"
+    {
+        "Entry"
+        {
+        "MsmKey" = "8:_0C7DEE43985743198D5DDE4535D0B6C8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_0C8D791B55CF4DFFA8BA1972869B95B4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1398FB9670F64DCA9CC178F38FBCCC45"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_14A7383799EA420D9C66A415E95D80B6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1C67CD3AF1ED4438BE49939EDD2CA89E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1DBA135AE2CA4011855E441072E2B77A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1F0D4FDF8E0C40EDA109BEF9BD762425"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1F52470C3A6F41438BB760FD9C4BD71B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_204888A793FD4ACE870341F52013CD63"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_261679A7AE3B4444A39CB68213D8588C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_296454A25EC14F1AA3A55F1EE3C94903"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2B1473E881C44C538A66F90EDE906486"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2D311319353E4E9584FD73B9AC00D4D8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2F9266FBB42D4F8E849378BFBA74EE86"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2FBA2A6C70B048BBB9FAAC86510943DF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_30981F9DF9F64462B61696D60BE4C569"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_331B303ED425442C84C82C2968B2FE32"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_338B22D6609043CF82F928DA1A92730D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_35E9323EA5F74580971C8838176E4B57"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_38DE923AA51841DB844456F92E68AA9E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3A3E71E0543A4EEE9D29AC9CDAE7DF73"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3C761705B2E0496788CF33BD6BC5886D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3DDAE83E8BD24FA5944FB1F891D4730A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3EFE1B1543E74F788C42FBB3B4AFBC0E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_40932727CF2F40C7AF73C67C1C0F76A4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_43CDAC8B47BF4A04BCD679BEC1ABC616"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_48D6F515DDFB4002A7473A771AF0BCC9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4CE5994A72CE4F11A39F7FDA22A4E25A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4EC731A7999D41949744C3F63BC8DB2F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4EDD3A8D6CDC4D2CA8D02BA6C202AB7B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_50BBB32424D743858889C43A0C0B3849"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5664B05F716C4D6DBD95A5BB68E73DFC"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_583E989229314E11BEFEF4600A5C8754"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5AB851155CD14F158E67D01E1223FF12"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5E61C16B6EE84F5D95DCC268CF9225DE"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5F93546A24AE444D803C4D751F663465"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_600DA34C7118435B89339F4C9A7498FF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6057746A09704F8E9C63922930EB7B54"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_60CE54DEDFEF492095C756F42EFD7C86"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_62161377E46C4D17A3B13A2EF9C769B4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6410A93FD8E344BCBF97347B75B14CD4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_65465592D06A48A18FECB4FAE47883D2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_67B7FB64FC6A4AECAD52C0D540F1C947"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6C0DF191F9314CAEB0F14C63D6993924"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6EB9EB00FB634011BD22BF862A92FFC0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_73C4AC34CAFB43FFB3B49E5A21CA023A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7AFD9CBFE718499B9AEA73149AA1C236"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7E89848C75824ED99C9979F62522FAAF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7F8D427EF82C439DB09CE5CC571FA370"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7FCB4CCCF192446D97D92B606B48970F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_82D19D5DFD154A6E85F9DE8DECBCCF1E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_84E5C5BBBB5F41D6A7EA5F1C77E4DF64"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8505889A677D496093960FF734271B52"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8C836C59E6674C44A0421CE96835F7AD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_965AD6BE054B404FB228C9BEE6F2FAA4"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9833ECA7615C4449B9FB87D54CC41501"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9B10AC2DE2E248DD9067616239AE2205"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9C5BC755B90F486783F375C2C654E52C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9C849EF6C25742C399AE8304271BEC00"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9EEC39BA0265451DA47FB0DC40D128AA"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9F24B59D55F74E2DB73D9ABC1FB67C28"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9FDD7272BAE84264A2DB5BBCB0A70089"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A20067C3F7EB476597CEAC99F474A612"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A3E54883226B41BA902C9165BED81A6A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A5076FF8C98146B0B08A196DA11AC79C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A55666DEA8EA433E9B1AFACEE5A08CFD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A6316E182BDD419F9DC38F10D9F28556"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A7275F06576848EC854FB15D2C2793F3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A953A4540A38491A919657BBE80BF758"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A9F38F195AC546A38552A2B79395F80B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ABF971CE2B91496591AF62E806CDACB2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B1C81EEDF711413A88C857333EC466D5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B400FFEA34D24F95A4D3F5174409380E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B8D48AEFBB9F47F69F327A1EAA97C785"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B9BB1BA51A28499680E64B5576C44331"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_BABF3E254066404580D1E025555668A1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_BBE5B63A51BB4B9D9DD6479BA1755A4A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_BCB5570067F8496CB3453F9D78F265E3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_BCC1B956DF5146768F210DC2152F836C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_BFF33E30B70544D8BA6B243E80CB875A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C0ED3E0FDE4F4554BEF734C717CE65F3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C2BD25B439F24E2A8A3A2ECB63DB26B9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C9457C6CB5CB4A0C8D29A73257B117C9"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CA91D879D59D44CB80A8D20641A8DEB1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CB425B3E06DE4FA2B2FD894620783825"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D00C0574C740418E87C0AAB53FEEA6FB"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D44591E0560143A99E852945EB23D12B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D4E7CAD0563B46E3AB08F161B593B700"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D80A26B590D74877BFDF2A8D8C22C4A6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E71C4279C96847E988BE08DF172C3CF6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E9A387DD5ED649F5AAA33EE981811917"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EAD49F7D4FB34063A539B856063E5817"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EC7AA2A6CE8A42ADB81E6182834A3DE5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ED7FCADD3BE44D8C90BC96BF819D197B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EE02093D72A74C9996DE34B50B6D31E6"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F223FC685CFD4CF1AF65D573CAD816A0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F4F18A1807094ED6AA583163F67AB8E7"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+    }
+    "Configurations"
+    {
+        "Debug"
+        {
+        "DisplayName" = "8:Debug"
+        "IsDebugOnly" = "11:TRUE"
+        "IsReleaseOnly" = "11:FALSE"
+        "OutputFilename" = "8:Debug\\Setup_Win64.msm"
+        "PackageFilesAs" = "3:2"
+        "PackageFileSize" = "3:-2147483648"
+        "CabType" = "3:1"
+        "Compression" = "3:2"
+        "SignOutput" = "11:FALSE"
+        "CertificateFile" = "8:"
+        "PrivateKeyFile" = "8:"
+        "TimeStampServer" = "8:"
+        "InstallerBootstrapper" = "3:1"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:FALSE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
+        }
+        "Release"
+        {
+        "DisplayName" = "8:Release"
+        "IsDebugOnly" = "11:FALSE"
+        "IsReleaseOnly" = "11:TRUE"
+        "OutputFilename" = "8:Release\\Setup_Win64.msm"
+        "PackageFilesAs" = "3:2"
+        "PackageFileSize" = "3:-2147483648"
+        "CabType" = "3:1"
+        "Compression" = "3:3"
+        "SignOutput" = "11:FALSE"
+        "CertificateFile" = "8:"
+        "PrivateKeyFile" = "8:"
+        "TimeStampServer" = "8:"
+        "InstallerBootstrapper" = "3:1"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:FALSE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
+        }
+    }
+    "Deployable"
+    {
+        "CustomAction"
+        {
+        }
+        "DefaultFeature"
+        {
+        "Name" = "8:DefaultFeature"
+        "Title" = "8:"
+        "Description" = "8:"
+        }
+        "File"
+        {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0C7DEE43985743198D5DDE4535D0B6C8"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\liquid\\liquid.js"
+            "TargetName" = "8:liquid.js"
+            "Tag" = "8:"
+            "Folder" = "8:_0E73633FCA5F48A9A5EC3C819010155B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0C8D791B55CF4DFFA8BA1972869B95B4"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\sparql\\sparql.js"
+            "TargetName" = "8:sparql.js"
+            "Tag" = "8:"
+            "Folder" = "8:_2858E32519AC46EF9A64037BE5FF2193"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1398FB9670F64DCA9CC178F38FBCCC45"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\objective-c\\objective-c.js"
+            "TargetName" = "8:objective-c.js"
+            "Tag" = "8:"
+            "Folder" = "8:_CFE8A06EB0534118A9130EE954184A73"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_14A7383799EA420D9C66A415E95D80B6"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\qsharp\\qsharp.js"
+            "TargetName" = "8:qsharp.js"
+            "Tag" = "8:"
+            "Folder" = "8:_A181A154A8D94D65A3B20DC8C87B5710"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1C67CD3AF1ED4438BE49939EDD2CA89E"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\typescript\\typescript.js"
+            "TargetName" = "8:typescript.js"
+            "Tag" = "8:"
+            "Folder" = "8:_643C52AC030F4EE08AEE50AAFD3B7859"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1DBA135AE2CA4011855E441072E2B77A"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\scheme\\scheme.js"
+            "TargetName" = "8:scheme.js"
+            "Tag" = "8:"
+            "Folder" = "8:_B4258AF7D2B24D798B237369ACA17E33"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1F0D4FDF8E0C40EDA109BEF9BD762425"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\redis\\redis.js"
+            "TargetName" = "8:redis.js"
+            "Tag" = "8:"
+            "Folder" = "8:_358439523C6040178E4105C9EF9EEF0D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1F52470C3A6F41438BB760FD9C4BD71B"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\ruby\\ruby.js"
+            "TargetName" = "8:ruby.js"
+            "Tag" = "8:"
+            "Folder" = "8:_F3A194264E124B63B0555193E0A18BA4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_204888A793FD4ACE870341F52013CD63"
+            {
+            "SourcePath" = "8:..\\MathLibrary\\BasicOperations\\Addition.cs"
+            "TargetName" = "8:CSharpDefaultScript.cs"
+            "Tag" = "8:"
+            "Folder" = "8:_788086FF962B4E2382EA41392A8C72A6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_261679A7AE3B4444A39CB68213D8588C"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\cypher\\cypher.js"
+            "TargetName" = "8:cypher.js"
+            "Tag" = "8:"
+            "Folder" = "8:_73137531088B4A6291B35864A24227C5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_296454A25EC14F1AA3A55F1EE3C94903"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\pug\\pug.js"
+            "TargetName" = "8:pug.js"
+            "Tag" = "8:"
+            "Folder" = "8:_D025BD6435A24F0196A09D5903F64DDF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2B1473E881C44C538A66F90EDE906486"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\mysql\\mysql.js"
+            "TargetName" = "8:mysql.js"
+            "Tag" = "8:"
+            "Folder" = "8:_E3A60FD77CC64615B922EF65FB8879E5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2D311319353E4E9584FD73B9AC00D4D8"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\pascaligo\\pascaligo.js"
+            "TargetName" = "8:pascaligo.js"
+            "Tag" = "8:"
+            "Folder" = "8:_0DC4DA69A34B4D3AA8645713DCBD6A45"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2F9266FBB42D4F8E849378BFBA74EE86"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\fsharp\\fsharp.js"
+            "TargetName" = "8:fsharp.js"
+            "Tag" = "8:"
+            "Folder" = "8:_F807DA29BDA64841B896466E1BECD03D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2FBA2A6C70B048BBB9FAAC86510943DF"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\java\\java.js"
+            "TargetName" = "8:java.js"
+            "Tag" = "8:"
+            "Folder" = "8:_88E1314C6EBD4483B023DEC23A71ABD8"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_30981F9DF9F64462B61696D60BE4C569"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\st\\st.js"
+            "TargetName" = "8:st.js"
+            "Tag" = "8:"
+            "Folder" = "8:_2B81DEAFC04242C9B7C92789AA05F24F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_331B303ED425442C84C82C2968B2FE32"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\language\\css\\cssMode.js"
+            "TargetName" = "8:cssMode.js"
+            "Tag" = "8:"
+            "Folder" = "8:_D78212F89E5F4BA4B961516B546E483E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_338B22D6609043CF82F928DA1A92730D"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\editor\\editor.main.js"
+            "TargetName" = "8:editor.main.js"
+            "Tag" = "8:"
+            "Folder" = "8:_92CD9B4CC58B458A9D2B80D7F2EC51C0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_35E9323EA5F74580971C8838176E4B57"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\swift\\swift.js"
+            "TargetName" = "8:swift.js"
+            "Tag" = "8:"
+            "Folder" = "8:_B873E62921754D7A8CA90C8E0F438194"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_38DE923AA51841DB844456F92E68AA9E"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\loader.js"
+            "TargetName" = "8:loader.js"
+            "Tag" = "8:"
+            "Folder" = "8:_AC9F0DC02C47406F9903DB9FC9CD1C32"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3A3E71E0543A4EEE9D29AC9CDAE7DF73"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\base\\worker\\workerMain.js"
+            "TargetName" = "8:workerMain.js"
+            "Tag" = "8:"
+            "Folder" = "8:_249B0479138C44E3AA4C30494DD90300"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3C761705B2E0496788CF33BD6BC5886D"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\flow9\\flow9.js"
+            "TargetName" = "8:flow9.js"
+            "Tag" = "8:"
+            "Folder" = "8:_D638CF9F6C804328870FE1EF16D3AC60"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3DDAE83E8BD24FA5944FB1F891D4730A"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\elixir\\elixir.js"
+            "TargetName" = "8:elixir.js"
+            "Tag" = "8:"
+            "Folder" = "8:_2FDB846C178A403DB18681C65A7F3933"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3EFE1B1543E74F788C42FBB3B4AFBC0E"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\pgsql\\pgsql.js"
+            "TargetName" = "8:pgsql.js"
+            "Tag" = "8:"
+            "Folder" = "8:_A7BA0BA899194551A3303CB168DC969C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_40932727CF2F40C7AF73C67C1C0F76A4"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\html\\html.js"
+            "TargetName" = "8:html.js"
+            "Tag" = "8:"
+            "Folder" = "8:_B4871925334C459BAE8003934D49F213"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_43CDAC8B47BF4A04BCD679BEC1ABC616"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\handlebars\\handlebars.js"
+            "TargetName" = "8:handlebars.js"
+            "Tag" = "8:"
+            "Folder" = "8:_B742179684224622AF793F0ABE33B56D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_48D6F515DDFB4002A7473A771AF0BCC9"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\lua\\lua.js"
+            "TargetName" = "8:lua.js"
+            "Tag" = "8:"
+            "Folder" = "8:_B1EAC1F5FFC248BDB7EC1B311281C457"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4CE5994A72CE4F11A39F7FDA22A4E25A"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\css\\css.js"
+            "TargetName" = "8:css.js"
+            "Tag" = "8:"
+            "Folder" = "8:_BBCB11B5C175442287E40AEF60AF41C7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4EC731A7999D41949744C3F63BC8DB2F"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\scss\\scss.js"
+            "TargetName" = "8:scss.js"
+            "Tag" = "8:"
+            "Folder" = "8:_F1B1AC6A4EBB43E79CBBF1E517B0052B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4EDD3A8D6CDC4D2CA8D02BA6C202AB7B"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\markdown\\markdown.js"
+            "TargetName" = "8:markdown.js"
+            "Tag" = "8:"
+            "Folder" = "8:_1BB4B965A3B2442E86694D061CFEC69F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_50BBB32424D743858889C43A0C0B3849"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\go\\go.js"
+            "TargetName" = "8:go.js"
+            "Tag" = "8:"
+            "Folder" = "8:_ADAE9848B669412C986DCD75DBB117C0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5664B05F716C4D6DBD95A5BB68E73DFC"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\lexon\\lexon.js"
+            "TargetName" = "8:lexon.js"
+            "Tag" = "8:"
+            "Folder" = "8:_1AE2C56BB00741E3B9A20AF193BB23AD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_583E989229314E11BEFEF4600A5C8754"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\language\\css\\cssWorker.js"
+            "TargetName" = "8:cssWorker.js"
+            "Tag" = "8:"
+            "Folder" = "8:_D78212F89E5F4BA4B961516B546E483E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5AB851155CD14F158E67D01E1223FF12"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\base\\common\\worker\\simpleWorker.nls.js"
+            "TargetName" = "8:simpleWorker.nls.js"
+            "Tag" = "8:"
+            "Folder" = "8:_3EA18442066643A2989FB7CA554CB058"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5E61C16B6EE84F5D95DCC268CF9225DE"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\less\\less.js"
+            "TargetName" = "8:less.js"
+            "Tag" = "8:"
+            "Folder" = "8:_118620A05A004F15BE0595104C10207D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5F93546A24AE444D803C4D751F663465"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\postiats\\postiats.js"
+            "TargetName" = "8:postiats.js"
+            "Tag" = "8:"
+            "Folder" = "8:_4CF4611FB9C844A8B1349F0171D3283D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_600DA34C7118435B89339F4C9A7498FF"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\m3\\m3.js"
+            "TargetName" = "8:m3.js"
+            "Tag" = "8:"
+            "Folder" = "8:_2E786DC3A3A942AE989FD5964644A511"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6057746A09704F8E9C63922930EB7B54"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\cpp\\cpp.js"
+            "TargetName" = "8:cpp.js"
+            "Tag" = "8:"
+            "Folder" = "8:_8FAA397D4C3C4916AEAD59747820FFB1"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_60CE54DEDFEF492095C756F42EFD7C86"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\csp\\csp.js"
+            "TargetName" = "8:csp.js"
+            "Tag" = "8:"
+            "Folder" = "8:_B7AFF3F414354DA7A2DC442ACE6D7C66"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_62161377E46C4D17A3B13A2EF9C769B4"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\xml\\xml.js"
+            "TargetName" = "8:xml.js"
+            "Tag" = "8:"
+            "Folder" = "8:_4A09AE2A895C4A22AF870535E2E14070"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6410A93FD8E344BCBF97347B75B14CD4"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\language\\json\\jsonMode.js"
+            "TargetName" = "8:jsonMode.js"
+            "Tag" = "8:"
+            "Folder" = "8:_EAF90A57F3ED4B43877FDCF10F7BAFD7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_65465592D06A48A18FECB4FAE47883D2"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\twig\\twig.js"
+            "TargetName" = "8:twig.js"
+            "Tag" = "8:"
+            "Folder" = "8:_9454A8DD0E0E4C788BF0C76CECFA2B77"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_67B7FB64FC6A4AECAD52C0D540F1C947"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\bicep\\bicep.js"
+            "TargetName" = "8:bicep.js"
+            "Tag" = "8:"
+            "Folder" = "8:_45764884758142219927846E6306193A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6C0DF191F9314CAEB0F14C63D6993924"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\powershell\\powershell.js"
+            "TargetName" = "8:powershell.js"
+            "Tag" = "8:"
+            "Folder" = "8:_B5B46B527C79444F910D57FFA746FA6B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6EB9EB00FB634011BD22BF862A92FFC0"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\clojure\\clojure.js"
+            "TargetName" = "8:clojure.js"
+            "Tag" = "8:"
+            "Folder" = "8:_EED402A27B304C00B3EBEE69F1C1AD74"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_73C4AC34CAFB43FFB3B49E5A21CA023A"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\language\\typescript\\tsMode.js"
+            "TargetName" = "8:tsMode.js"
+            "Tag" = "8:"
+            "Folder" = "8:_AE0817BA24F44D5893D2DED4BD5E4FAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7AFD9CBFE718499B9AEA73149AA1C236"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\dart\\dart.js"
+            "TargetName" = "8:dart.js"
+            "Tag" = "8:"
+            "Folder" = "8:_69A8F0ED037545B8AFCE3745F46C5D1E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7E89848C75824ED99C9979F62522FAAF"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\sb\\sb.js"
+            "TargetName" = "8:sb.js"
+            "Tag" = "8:"
+            "Folder" = "8:_AFCC17288475478BA6DB2ADE68F03E2E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7F8D427EF82C439DB09CE5CC571FA370"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\php\\php.js"
+            "TargetName" = "8:php.js"
+            "Tag" = "8:"
+            "Folder" = "8:_EBBDC897AFC945B2A09342C782D000E8"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7FCB4CCCF192446D97D92B606B48970F"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\graphql\\graphql.js"
+            "TargetName" = "8:graphql.js"
+            "Tag" = "8:"
+            "Folder" = "8:_4850E7B9A00E45E3819C2BE04AD193CA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_82D19D5DFD154A6E85F9DE8DECBCCF1E"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\julia\\julia.js"
+            "TargetName" = "8:julia.js"
+            "Tag" = "8:"
+            "Folder" = "8:_2A8836DD107E4A74B139CB66B56392C8"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_84E5C5BBBB5F41D6A7EA5F1C77E4DF64"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\pla\\pla.js"
+            "TargetName" = "8:pla.js"
+            "Tag" = "8:"
+            "Folder" = "8:_A5275B78A1EB4AD4B7281558DF2C465D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8505889A677D496093960FF734271B52"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\solidity\\solidity.js"
+            "TargetName" = "8:solidity.js"
+            "Tag" = "8:"
+            "Folder" = "8:_FABEE5802CED49108C006E98B002578F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8C836C59E6674C44A0421CE96835F7AD"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\restructuredtext\\restructuredtext.js"
+            "TargetName" = "8:restructuredtext.js"
+            "Tag" = "8:"
+            "Folder" = "8:_A6CCD3A250B940B787A6B113D2EE5173"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_965AD6BE054B404FB228C9BEE6F2FAA4"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\package-lock.json"
+            "TargetName" = "8:package-lock.json"
+            "Tag" = "8:"
+            "Folder" = "8:_8CFD36683D5C491A97011A39A90482ED"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9833ECA7615C4449B9FB87D54CC41501"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\bat\\bat.js"
+            "TargetName" = "8:bat.js"
+            "Tag" = "8:"
+            "Folder" = "8:_DA7B9227486D46B399CA9C2CAA6A93EA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9B10AC2DE2E248DD9067616239AE2205"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\csharp\\csharp.js"
+            "TargetName" = "8:csharp.js"
+            "Tag" = "8:"
+            "Folder" = "8:_11A2D6512D2D4DBB81C36C1371718104"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9C5BC755B90F486783F375C2C654E52C"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\abap\\abap.js"
+            "TargetName" = "8:abap.js"
+            "Tag" = "8:"
+            "Folder" = "8:_985CD4B8E3524ED1BF7AC670970C2A79"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9C849EF6C25742C399AE8304271BEC00"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\perl\\perl.js"
+            "TargetName" = "8:perl.js"
+            "Tag" = "8:"
+            "Folder" = "8:_D32A7434F9F94EBC87AA62D548FA780E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9EEC39BA0265451DA47FB0DC40D128AA"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\azcli\\azcli.js"
+            "TargetName" = "8:azcli.js"
+            "Tag" = "8:"
+            "Folder" = "8:_640D6C7B0E234CE6997694E2A8C6B9C0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9F24B59D55F74E2DB73D9ABC1FB67C28"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\ini\\ini.js"
+            "TargetName" = "8:ini.js"
+            "Tag" = "8:"
+            "Folder" = "8:_8ABF69F509B24FE68B62924CC5C97020"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A20067C3F7EB476597CEAC99F474A612"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\kotlin\\kotlin.js"
+            "TargetName" = "8:kotlin.js"
+            "Tag" = "8:"
+            "Folder" = "8:_C3891546FD8F47CDA4FC21BCB94A548B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A3E54883226B41BA902C9165BED81A6A"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\language\\typescript\\tsWorker.js"
+            "TargetName" = "8:tsWorker.js"
+            "Tag" = "8:"
+            "Folder" = "8:_AE0817BA24F44D5893D2DED4BD5E4FAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A5076FF8C98146B0B08A196DA11AC79C"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\sophia\\sophia.js"
+            "TargetName" = "8:sophia.js"
+            "Tag" = "8:"
+            "Folder" = "8:_190B62914B324BAA9E252027302B0BCD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A55666DEA8EA433E9B1AFACEE5A08CFD"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\apex\\apex.js"
+            "TargetName" = "8:apex.js"
+            "Tag" = "8:"
+            "Folder" = "8:_7EE8C66E8846469585CCEFF1BAA5AAB3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A6316E182BDD419F9DC38F10D9F28556"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\msdax\\msdax.js"
+            "TargetName" = "8:msdax.js"
+            "Tag" = "8:"
+            "Folder" = "8:_E18A3F04AD4348AE91AC2D77DC1EFB48"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A7275F06576848EC854FB15D2C2793F3"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\index.html"
+            "TargetName" = "8:index.html"
+            "Tag" = "8:"
+            "Folder" = "8:_8CFD36683D5C491A97011A39A90482ED"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A953A4540A38491A919657BBE80BF758"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\protobuf\\protobuf.js"
+            "TargetName" = "8:protobuf.js"
+            "Tag" = "8:"
+            "Folder" = "8:_49A7097AB89C4E628EF94A7B61697FDF"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A9F38F195AC546A38552A2B79395F80B"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\ecl\\ecl.js"
+            "TargetName" = "8:ecl.js"
+            "Tag" = "8:"
+            "Folder" = "8:_543FF50634594F87AAD9C4CD75A4CA19"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ABF971CE2B91496591AF62E806CDACB2"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\sql\\sql.js"
+            "TargetName" = "8:sql.js"
+            "Tag" = "8:"
+            "Folder" = "8:_838F73AD982848C390CED2E9F34467D5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B1C81EEDF711413A88C857333EC466D5"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\base\\browser\\ui\\codicons\\codicon\\codicon.ttf"
+            "TargetName" = "8:codicon.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_77F96A0D23AD46FC9FED3A4E2DDF60F3"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B400FFEA34D24F95A4D3F5174409380E"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\tcl\\tcl.js"
+            "TargetName" = "8:tcl.js"
+            "Tag" = "8:"
+            "Folder" = "8:_5D9FAD2D88584F1693FA3E49B60CAD6F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B8D48AEFBB9F47F69F327A1EAA97C785"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\shell\\shell.js"
+            "TargetName" = "8:shell.js"
+            "Tag" = "8:"
+            "Folder" = "8:_485AAC540F844F728C47027B90EE8FEC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B9BB1BA51A28499680E64B5576C44331"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\language\\html\\htmlMode.js"
+            "TargetName" = "8:htmlMode.js"
+            "Tag" = "8:"
+            "Folder" = "8:_39BCD00B3BAD4C958A1431BCA99E096C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BABF3E254066404580D1E025555668A1"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\javascript\\javascript.js"
+            "TargetName" = "8:javascript.js"
+            "Tag" = "8:"
+            "Folder" = "8:_B1AB7188842C448DA4DCC140C1903120"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BBE5B63A51BB4B9D9DD6479BA1755A4A"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\redshift\\redshift.js"
+            "TargetName" = "8:redshift.js"
+            "Tag" = "8:"
+            "Folder" = "8:_8B45A0E981AE463481778E044D431D03"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BCB5570067F8496CB3453F9D78F265E3"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\package.json"
+            "TargetName" = "8:package.json"
+            "Tag" = "8:"
+            "Folder" = "8:_8CFD36683D5C491A97011A39A90482ED"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BCC1B956DF5146768F210DC2152F836C"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\powerquery\\powerquery.js"
+            "TargetName" = "8:powerquery.js"
+            "Tag" = "8:"
+            "Folder" = "8:_63987CA16897418681B32190EE13827D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BFF33E30B70544D8BA6B243E80CB875A"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\systemverilog\\systemverilog.js"
+            "TargetName" = "8:systemverilog.js"
+            "Tag" = "8:"
+            "Folder" = "8:_7673596ED8134F48ADBD9CCA0E4FBF5E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C0ED3E0FDE4F4554BEF734C717CE65F3"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\pascal\\pascal.js"
+            "TargetName" = "8:pascal.js"
+            "Tag" = "8:"
+            "Folder" = "8:_CB8C7636F92B4334AD1356C3B2545528"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C2BD25B439F24E2A8A3A2ECB63DB26B9"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\cameligo\\cameligo.js"
+            "TargetName" = "8:cameligo.js"
+            "Tag" = "8:"
+            "Folder" = "8:_1B8DE118B85446C685B1CF4AB801ADC0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C9457C6CB5CB4A0C8D29A73257B117C9"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\vb\\vb.js"
+            "TargetName" = "8:vb.js"
+            "Tag" = "8:"
+            "Folder" = "8:_13FD4C15EF444E1DBA122F102478D268"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CA91D879D59D44CB80A8D20641A8DEB1"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\editor\\editor.main.nls.js"
+            "TargetName" = "8:editor.main.nls.js"
+            "Tag" = "8:"
+            "Folder" = "8:_92CD9B4CC58B458A9D2B80D7F2EC51C0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CB425B3E06DE4FA2B2FD894620783825"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\r\\r.js"
+            "TargetName" = "8:r.js"
+            "Tag" = "8:"
+            "Folder" = "8:_1036BB4F61BD4692A42839B89E8B6037"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D00C0574C740418E87C0AAB53FEEA6FB"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\razor\\razor.js"
+            "TargetName" = "8:razor.js"
+            "Tag" = "8:"
+            "Folder" = "8:_9B47F210E32F4EEEA749CBF7C276F6BA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D44591E0560143A99E852945EB23D12B"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\mips\\mips.js"
+            "TargetName" = "8:mips.js"
+            "Tag" = "8:"
+            "Folder" = "8:_9EF0100372A045B8A6B60DA8890D038D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D4E7CAD0563B46E3AB08F161B593B700"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\language\\json\\jsonWorker.js"
+            "TargetName" = "8:jsonWorker.js"
+            "Tag" = "8:"
+            "Folder" = "8:_EAF90A57F3ED4B43877FDCF10F7BAFD7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D80A26B590D74877BFDF2A8D8C22C4A6"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\yaml\\yaml.js"
+            "TargetName" = "8:yaml.js"
+            "Tag" = "8:"
+            "Folder" = "8:_CE08EBB2A82242D4AF1D3C110D033EEC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E71C4279C96847E988BE08DF172C3CF6"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\dockerfile\\dockerfile.js"
+            "TargetName" = "8:dockerfile.js"
+            "Tag" = "8:"
+            "Folder" = "8:_536CF26B173841FFBE4AEDBD8D807E4E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E9A387DD5ED649F5AAA33EE981811917"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\coffee\\coffee.js"
+            "TargetName" = "8:coffee.js"
+            "Tag" = "8:"
+            "Folder" = "8:_561EB0296F0E432DB526FDAEC9ED391F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EAD49F7D4FB34063A539B856063E5817"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\scala\\scala.js"
+            "TargetName" = "8:scala.js"
+            "Tag" = "8:"
+            "Folder" = "8:_B41A727F8CC54D459A24B3C044E01B36"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EC7AA2A6CE8A42ADB81E6182834A3DE5"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\freemarker2\\freemarker2.js"
+            "TargetName" = "8:freemarker2.js"
+            "Tag" = "8:"
+            "Folder" = "8:_782871799B394406B5561D3F236883CC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ED7FCADD3BE44D8C90BC96BF819D197B"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\rust\\rust.js"
+            "TargetName" = "8:rust.js"
+            "Tag" = "8:"
+            "Folder" = "8:_17DF344C10474023B3F12C29A72EA0E9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EE02093D72A74C9996DE34B50B6D31E6"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\basic-languages\\python\\python.js"
+            "TargetName" = "8:python.js"
+            "Tag" = "8:"
+            "Folder" = "8:_926F4C2D9EA3459EB2E653F8BEBD81AB"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F223FC685CFD4CF1AF65D573CAD816A0"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\language\\html\\htmlWorker.js"
+            "TargetName" = "8:htmlWorker.js"
+            "Tag" = "8:"
+            "Folder" = "8:_39BCD00B3BAD4C958A1431BCA99E096C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F4F18A1807094ED6AA583163F67AB8E7"
+            {
+            "SourcePath" = "8:..\\Verse3\\bin\\x64\\Release\\net6.0-windows\\MonacoEditor\\min\\vs\\editor\\editor.main.css"
+            "TargetName" = "8:editor.main.css"
+            "Tag" = "8:"
+            "Folder" = "8:_92CD9B4CC58B458A9D2B80D7F2EC51C0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+        }
+        "FileType"
+        {
+        }
+        "Folder"
+        {
+            "{F4FE1E22-A4D2-4EE8-9259-29A1CE8BB2FF}:_1DD405F63F0C4B4FA6025FFBAD42A419"
+            {
+            "DefaultLocation" = "8:[TARGETDIR]"
+            "DisplayName" = "8:Module Retargetable Folder"
+            "Description" = "8:"
+            "Name" = "8:Module Retargetable Folder"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:NEWRETARGETABLEPROPERTY1"
+                "Folders"
+                {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_8CFD36683D5C491A97011A39A90482ED"
+                    {
+                    "Name" = "8:MonacoEditor"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_EBCB98899108468DAF2B12B7E3292CE9"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_CF80F0AE6D5049CFAB462BD2CDCE9E9F"
+                            {
+                            "Name" = "8:min"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_BB650DED760E4309877781ACB78B8BAA"
+                                "Folders"
+                                {
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_AC9F0DC02C47406F9903DB9FC9CD1C32"
+                                    {
+                                    "Name" = "8:vs"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_CE66C4B8207A40F2B65EDD3AD837120E"
+                                        "Folders"
+                                        {
+                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_2374A98BA2BB4F609710221012CD56E6"
+                                            {
+                                            "Name" = "8:language"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "Property" = "8:_76DCCC4804B1484B97E934C5780E97BA"
+                                                "Folders"
+                                                {
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_39BCD00B3BAD4C958A1431BCA99E096C"
+                                                    {
+                                                    "Name" = "8:html"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_EB2E2D813FD9426BB0C143EE0EEB33B7"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_AE0817BA24F44D5893D2DED4BD5E4FAD"
+                                                    {
+                                                    "Name" = "8:typescript"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_450447E677224EE5AD15A1B78F5D407E"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_D78212F89E5F4BA4B961516B546E483E"
+                                                    {
+                                                    "Name" = "8:css"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_CCDDC8E186514A279837B4C72A69F971"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_EAF90A57F3ED4B43877FDCF10F7BAFD7"
+                                                    {
+                                                    "Name" = "8:json"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_0D55E0A37B6B49EF86DB803B9DCE5B6C"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_5D18225F33EF4165BEA025C90046AF18"
+                                            {
+                                            "Name" = "8:base"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "Property" = "8:_6574FF0E6ABF4242BE4624163AC50A9A"
+                                                "Folders"
+                                                {
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_249B0479138C44E3AA4C30494DD90300"
+                                                    {
+                                                    "Name" = "8:worker"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_2DD8BB32F5D84C378E5B72440AE1A5E2"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_9FBBFD01AF13491FB90A9D0E0AE74D36"
+                                                    {
+                                                    "Name" = "8:browser"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_43943FCD110F4FE7B10BD97461593A0B"
+                                                        "Folders"
+                                                        {
+                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_5ACE8E12E7214966815D0F8B860D8D72"
+                                                            {
+                                                            "Name" = "8:ui"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "Property" = "8:_04EE30D0647B490DA896366304E19EEA"
+                                                                "Folders"
+                                                                {
+                                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_90827CFB60D347828E83ED911E50A06A"
+                                                                    {
+                                                                    "Name" = "8:codicons"
+                                                                    "AlwaysCreate" = "11:FALSE"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "Property" = "8:_05D27C6DCFB3431EB34FD3638A0E296A"
+                                                                        "Folders"
+                                                                        {
+                                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_77F96A0D23AD46FC9FED3A4E2DDF60F3"
+                                                                            {
+                                                                            "Name" = "8:codicon"
+                                                                            "AlwaysCreate" = "11:FALSE"
+                                                                            "Condition" = "8:"
+                                                                            "Transitive" = "11:FALSE"
+                                                                            "Property" = "8:_FBC0B1FC410A4620B08629A4589C9B3F"
+                                                                                "Folders"
+                                                                                {
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_FB76E1C8B6C248888A6A272802D8BC12"
+                                                    {
+                                                    "Name" = "8:common"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_A4F5E72FE0EE42DF8BF301FF7D813736"
+                                                        "Folders"
+                                                        {
+                                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_3EA18442066643A2989FB7CA554CB058"
+                                                            {
+                                                            "Name" = "8:worker"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "Property" = "8:_DFD8F54E55F54180B31EAD651EF379B8"
+                                                                "Folders"
+                                                                {
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_92CD9B4CC58B458A9D2B80D7F2EC51C0"
+                                            {
+                                            "Name" = "8:editor"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "Property" = "8:_6F71CEA1FBAC4176B08BAD5AA07AE4BA"
+                                                "Folders"
+                                                {
+                                                }
+                                            }
+                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_CEAFFF726430423489F2E2687A228B5A"
+                                            {
+                                            "Name" = "8:basic-languages"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "Property" = "8:_156596AAC52E407C99B3231E42C5080C"
+                                                "Folders"
+                                                {
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_0DC4DA69A34B4D3AA8645713DCBD6A45"
+                                                    {
+                                                    "Name" = "8:pascaligo"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_F41A46988FE64430A144209419C89878"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_0E73633FCA5F48A9A5EC3C819010155B"
+                                                    {
+                                                    "Name" = "8:liquid"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_EF0DADA8497243E88C040FE7537C83A2"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_1036BB4F61BD4692A42839B89E8B6037"
+                                                    {
+                                                    "Name" = "8:r"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_38BEDBC945EB4C9994294DB130021C2F"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_118620A05A004F15BE0595104C10207D"
+                                                    {
+                                                    "Name" = "8:less"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_E10CDA4C55DA4F5DAFAAC26478CEE216"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_11A2D6512D2D4DBB81C36C1371718104"
+                                                    {
+                                                    "Name" = "8:csharp"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_20AC7D58737D4A39834A533F4725CA9B"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_13FD4C15EF444E1DBA122F102478D268"
+                                                    {
+                                                    "Name" = "8:vb"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_3011BA6E02CF4ED78B6C4E55C31B768C"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_17DF344C10474023B3F12C29A72EA0E9"
+                                                    {
+                                                    "Name" = "8:rust"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_FFFD43EAC4534A02851E2A2E65E5B3E6"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_190B62914B324BAA9E252027302B0BCD"
+                                                    {
+                                                    "Name" = "8:sophia"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_D4D716ABEDB944709A1EF936DA66EF97"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_1AE2C56BB00741E3B9A20AF193BB23AD"
+                                                    {
+                                                    "Name" = "8:lexon"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_474FF46E6677496CAD466E0D5ED92750"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_1B8DE118B85446C685B1CF4AB801ADC0"
+                                                    {
+                                                    "Name" = "8:cameligo"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_1D1A0A4FC1914CDE9AE407AC0BD8C194"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_1BB4B965A3B2442E86694D061CFEC69F"
+                                                    {
+                                                    "Name" = "8:markdown"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_5DD888110CB64D58A07FEAA05F423056"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_2858E32519AC46EF9A64037BE5FF2193"
+                                                    {
+                                                    "Name" = "8:sparql"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_A891B315F5144DE8A827997BFF67E221"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_2A8836DD107E4A74B139CB66B56392C8"
+                                                    {
+                                                    "Name" = "8:julia"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_460A4C777D6045619AA377FF7BF0C3BB"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_2B81DEAFC04242C9B7C92789AA05F24F"
+                                                    {
+                                                    "Name" = "8:st"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_64F6E4561D8440CB86A44B2B156EAC73"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_2E786DC3A3A942AE989FD5964644A511"
+                                                    {
+                                                    "Name" = "8:m3"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_8D4703A54DF547F681A83DD7E07A816D"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_2FDB846C178A403DB18681C65A7F3933"
+                                                    {
+                                                    "Name" = "8:elixir"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_591F98027EF841C2A4F3DF8C78B6E573"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_358439523C6040178E4105C9EF9EEF0D"
+                                                    {
+                                                    "Name" = "8:redis"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_4D11348435AD472EBE1A21D7E46B0F0F"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_45764884758142219927846E6306193A"
+                                                    {
+                                                    "Name" = "8:bicep"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_F1835C7545044DEBBCACFA9CE1AD16E1"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_4850E7B9A00E45E3819C2BE04AD193CA"
+                                                    {
+                                                    "Name" = "8:graphql"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_6BFDBAA151004AD4B381B75862910DAB"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_485AAC540F844F728C47027B90EE8FEC"
+                                                    {
+                                                    "Name" = "8:shell"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_04624B02778A46C2909665CBBA889A61"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_49A7097AB89C4E628EF94A7B61697FDF"
+                                                    {
+                                                    "Name" = "8:protobuf"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_DB5D0FE1BBD440CA881143C2DA8DCAA6"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_4A09AE2A895C4A22AF870535E2E14070"
+                                                    {
+                                                    "Name" = "8:xml"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_2622DBACB8D946B8939E5A9E7FDB50D4"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_4CF4611FB9C844A8B1349F0171D3283D"
+                                                    {
+                                                    "Name" = "8:postiats"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_9F3CF28FB727497B80D5A498737FA9B8"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_536CF26B173841FFBE4AEDBD8D807E4E"
+                                                    {
+                                                    "Name" = "8:dockerfile"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_FF20DB88CEB64BF5A69DCF85C854E5DC"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_543FF50634594F87AAD9C4CD75A4CA19"
+                                                    {
+                                                    "Name" = "8:ecl"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_75A2B23AFC64487880251DD1A27B6E74"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_561EB0296F0E432DB526FDAEC9ED391F"
+                                                    {
+                                                    "Name" = "8:coffee"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_93E8BF3706694C588D38270C253A07FD"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_5D9FAD2D88584F1693FA3E49B60CAD6F"
+                                                    {
+                                                    "Name" = "8:tcl"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_6869A8268C3043A88EDB4E9DCC7DA6E5"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_63987CA16897418681B32190EE13827D"
+                                                    {
+                                                    "Name" = "8:powerquery"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_C05B3B80E6B146DC9553BC5687F71103"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_640D6C7B0E234CE6997694E2A8C6B9C0"
+                                                    {
+                                                    "Name" = "8:azcli"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_025D437506CB4A898DA088B1C6791514"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_643C52AC030F4EE08AEE50AAFD3B7859"
+                                                    {
+                                                    "Name" = "8:typescript"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_E5EE139926534C768982E7D987E4068D"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_69A8F0ED037545B8AFCE3745F46C5D1E"
+                                                    {
+                                                    "Name" = "8:dart"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_B112B08A95B345F6A482AF6A35D80D04"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_73137531088B4A6291B35864A24227C5"
+                                                    {
+                                                    "Name" = "8:cypher"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_864A28FC135943BBABB3B4F32EA391EC"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_7673596ED8134F48ADBD9CCA0E4FBF5E"
+                                                    {
+                                                    "Name" = "8:systemverilog"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_10D335BA1449451796D948637C6FC995"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_782871799B394406B5561D3F236883CC"
+                                                    {
+                                                    "Name" = "8:freemarker2"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_EFD3C528CD614D0C8B929ACCC941AEBB"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_7EE8C66E8846469585CCEFF1BAA5AAB3"
+                                                    {
+                                                    "Name" = "8:apex"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_7C9E8432FF584E5A85F86BBF248CBE30"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_838F73AD982848C390CED2E9F34467D5"
+                                                    {
+                                                    "Name" = "8:sql"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_633EC937662D48EC960CEBF19498EA01"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_88E1314C6EBD4483B023DEC23A71ABD8"
+                                                    {
+                                                    "Name" = "8:java"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_64CCAC561A0B4BC6B9A758AFBE14B0D1"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_8ABF69F509B24FE68B62924CC5C97020"
+                                                    {
+                                                    "Name" = "8:ini"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_1E2B46256094495DAD74C838B4DC7395"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_8B45A0E981AE463481778E044D431D03"
+                                                    {
+                                                    "Name" = "8:redshift"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_89F6B6C431944E07B4E3CD1C739FCDAE"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_8FAA397D4C3C4916AEAD59747820FFB1"
+                                                    {
+                                                    "Name" = "8:cpp"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_ACF6980F9A0349D19CDCB5EC1A108796"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_926F4C2D9EA3459EB2E653F8BEBD81AB"
+                                                    {
+                                                    "Name" = "8:python"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_35DF6509D84641739ADB00C3483489BF"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_9454A8DD0E0E4C788BF0C76CECFA2B77"
+                                                    {
+                                                    "Name" = "8:twig"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_72E4D24106814E36B997230BEBA647F8"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_985CD4B8E3524ED1BF7AC670970C2A79"
+                                                    {
+                                                    "Name" = "8:abap"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_2006CB8DAA1D4ABD9BEFAF9D95138A98"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_9B47F210E32F4EEEA749CBF7C276F6BA"
+                                                    {
+                                                    "Name" = "8:razor"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_353346FE1D88488F884B51EE3C66BF46"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_9EF0100372A045B8A6B60DA8890D038D"
+                                                    {
+                                                    "Name" = "8:mips"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_DEBCC3100D7645349F62E60F24F0FAF4"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_A181A154A8D94D65A3B20DC8C87B5710"
+                                                    {
+                                                    "Name" = "8:qsharp"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_D9AB7B29DE3140B688F4A57C2F531B82"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_A5275B78A1EB4AD4B7281558DF2C465D"
+                                                    {
+                                                    "Name" = "8:pla"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_85518C02A8884B688BEB6014C0481E17"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_A6CCD3A250B940B787A6B113D2EE5173"
+                                                    {
+                                                    "Name" = "8:restructuredtext"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_6FEF59423C614A7E97D95A691799ABF6"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_A7BA0BA899194551A3303CB168DC969C"
+                                                    {
+                                                    "Name" = "8:pgsql"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_9D108DAB2F744D639ACB033BEAB76BE7"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_ADAE9848B669412C986DCD75DBB117C0"
+                                                    {
+                                                    "Name" = "8:go"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_54C29D5DBEE242198D013DC3886E5FCA"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_AFCC17288475478BA6DB2ADE68F03E2E"
+                                                    {
+                                                    "Name" = "8:sb"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_5CDC910F8FFE465694188B7B93DA6174"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_B1AB7188842C448DA4DCC140C1903120"
+                                                    {
+                                                    "Name" = "8:javascript"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_84F84512245342DB806D325B8FA8A229"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_B1EAC1F5FFC248BDB7EC1B311281C457"
+                                                    {
+                                                    "Name" = "8:lua"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_E1EB866BC4DA4C9D8A66D2CA18859CCA"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_B41A727F8CC54D459A24B3C044E01B36"
+                                                    {
+                                                    "Name" = "8:scala"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_2AB67E3E7739416788D81759A81D06AD"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_B4258AF7D2B24D798B237369ACA17E33"
+                                                    {
+                                                    "Name" = "8:scheme"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_9CCCDE18421B47F1A0FC6CE1C098E251"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_B4871925334C459BAE8003934D49F213"
+                                                    {
+                                                    "Name" = "8:html"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_4917952865754E4C9589DD0038BECA4A"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_B5B46B527C79444F910D57FFA746FA6B"
+                                                    {
+                                                    "Name" = "8:powershell"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_39FC3166DB4D449C8FC653BBE46F56C0"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_B742179684224622AF793F0ABE33B56D"
+                                                    {
+                                                    "Name" = "8:handlebars"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_297BEAF7A3334B8CA3E8CBEAC017FF2C"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_B7AFF3F414354DA7A2DC442ACE6D7C66"
+                                                    {
+                                                    "Name" = "8:csp"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_4AFF85CFB518495689BF5E42D3056634"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_B873E62921754D7A8CA90C8E0F438194"
+                                                    {
+                                                    "Name" = "8:swift"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_4DFB5504CDC74584BD21FE548579CA34"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_BBCB11B5C175442287E40AEF60AF41C7"
+                                                    {
+                                                    "Name" = "8:css"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_57F5367210304C64BB0D96309CCF9A02"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_C3891546FD8F47CDA4FC21BCB94A548B"
+                                                    {
+                                                    "Name" = "8:kotlin"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_E3E3FA85F87B40078A5582E463C55803"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_CB8C7636F92B4334AD1356C3B2545528"
+                                                    {
+                                                    "Name" = "8:pascal"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_ABC862554D154CAB851C6AF6AD98ABA6"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_CE08EBB2A82242D4AF1D3C110D033EEC"
+                                                    {
+                                                    "Name" = "8:yaml"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_CBD3B9989D3D4B1A8AA62F8F138A2C51"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_CFE8A06EB0534118A9130EE954184A73"
+                                                    {
+                                                    "Name" = "8:objective-c"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_C6F98B2B07F0410481D3E01D8E6280EC"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_D025BD6435A24F0196A09D5903F64DDF"
+                                                    {
+                                                    "Name" = "8:pug"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_AFCF94AB615D4E20926F84FA6B997872"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_D32A7434F9F94EBC87AA62D548FA780E"
+                                                    {
+                                                    "Name" = "8:perl"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_23B8D827EA6F41B59DF06F2279B57C4C"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_D638CF9F6C804328870FE1EF16D3AC60"
+                                                    {
+                                                    "Name" = "8:flow9"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_1EA38D6B760B4BF5A2AAB71485492005"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_DA7B9227486D46B399CA9C2CAA6A93EA"
+                                                    {
+                                                    "Name" = "8:bat"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_FA5FC74A43D04147B90C20F673715ABD"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_E18A3F04AD4348AE91AC2D77DC1EFB48"
+                                                    {
+                                                    "Name" = "8:msdax"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_06CA85616E354EDD999C782963490AE4"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_E3A60FD77CC64615B922EF65FB8879E5"
+                                                    {
+                                                    "Name" = "8:mysql"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_4D068208E15140DB995BDB25813798CD"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_EBBDC897AFC945B2A09342C782D000E8"
+                                                    {
+                                                    "Name" = "8:php"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_422ACBFEDF974FA79F4F08523A51C254"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_EED402A27B304C00B3EBEE69F1C1AD74"
+                                                    {
+                                                    "Name" = "8:clojure"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_0D4CB0765CD447658A6D716E1633E502"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_F1B1AC6A4EBB43E79CBBF1E517B0052B"
+                                                    {
+                                                    "Name" = "8:scss"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_D2DF7C599BB04A75BD26E22C351B53E5"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_F3A194264E124B63B0555193E0A18BA4"
+                                                    {
+                                                    "Name" = "8:ruby"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_A607C8BD20E949B0BFC5A600E592A62E"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_F807DA29BDA64841B896466E1BECD03D"
+                                                    {
+                                                    "Name" = "8:fsharp"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_B81209BA3C7740A1A40D1A561E8E3802"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_FABEE5802CED49108C006E98B002578F"
+                                                    {
+                                                    "Name" = "8:solidity"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_973A856E93F843A38052C4CD13FD5017"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            "{1525181F-901A-416C-8A58-119130FE478E}:_8A17C959577D4F088ED7582EB90FA0EE"
+            {
+            "Name" = "8:#1915"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:AppDataFolder"
+                "Folders"
+                {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_1200304CD9E748DAA7A119A2781251A8"
+                    {
+                    "Name" = "8:Verse3"
+                    "AlwaysCreate" = "11:TRUE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_E702C998B7EB4342853D3994139D0A9A"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_0676882B54FF4B368E2D3186EAFCBDDD"
+                            {
+                            "Name" = "8:References"
+                            "AlwaysCreate" = "11:TRUE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_143FD6440E8246D19791B9ED5668F682"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_788086FF962B4E2382EA41392A8C72A6"
+                            {
+                            "Name" = "8:DefaultScripts"
+                            "AlwaysCreate" = "11:TRUE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_E52263B5CE9F452781E91F21AA97E724"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_79AD4A768198405C882C90B64714149C"
+                            {
+                            "Name" = "8:MonacoEditor"
+                            "AlwaysCreate" = "11:TRUE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_2033613191F349B2892A5ECFD996FD82"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_9965AF009ACB4C62A43FDBFA18EB1549"
+                            {
+                            "Name" = "8:CanvasExports"
+                            "AlwaysCreate" = "11:TRUE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_1B8162DAD66C4F33942C3D13312AE3B4"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_D5EDF295DB9F4CDCABE13F3BED86FC9E"
+                            {
+                            "Name" = "8:Libraries"
+                            "AlwaysCreate" = "11:TRUE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_DC40C9930AFE4EB980E5F83D5B7A9539"
+                                "Folders"
+                                {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            "{1525181F-901A-416C-8A58-119130FE478E}:_A011D1E385DC49FABA35454679D798A9"
+            {
+            "Name" = "8:#1916"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:DesktopFolder"
+                "Folders"
+                {
+                }
+            }
+        }
+        "Sequences"
+        {
+        }
+        "MergeModule"
+        {
+        }
+        "Module"
+        {
+        "ModuleSignature" = "8:MergeModule.4E5016CF7F62425E9D063CA501564B35"
+        "Version" = "8:1.0.0.0"
+        "Title" = "8:Setup_Win64"
+        "Subject" = "8:"
+        "Author" = "8:Praneet Mathur"
+        "Keywords" = "8:"
+        "Comments" = "8:"
+        "SearchPath" = "8:"
+        "UseSystemSearchPath" = "11:TRUE"
+        "TargetPlatform" = "3:1"
+        "PreBuildEvent" = "8:"
+        "PostBuildEvent" = "8:"
+        "RunPostBuildEvent" = "3:0"
+        }
+        "ProjectOutput"
+        {
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9FDD7272BAE84264A2DB5BBCB0A70089"
+            {
+            "SourcePath" = "8:..\\Verse3\\obj\\x64\\Release\\net6.0-windows\\apphost.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_1DD405F63F0C4B4FA6025FFBAD42A419"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:PublishItems"
+            "OutputProjectGuid" = "8:{6798D456-CCB9-4FAA-9308-F6229C44189D}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+        }
+        "Registry"
+        {
+            "HKLM"
+            {
+                "Keys"
+                {
+                }
+            }
+            "HKCU"
+            {
+                "Keys"
+                {
+                }
+            }
+            "HKCR"
+            {
+                "Keys"
+                {
+                }
+            }
+            "HKU"
+            {
+                "Keys"
+                {
+                }
+            }
+            "HKPU"
+            {
+                "Keys"
+                {
+                }
+            }
+        }
+        "Shortcut"
+        {
+        }
+    }
+}

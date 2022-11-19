@@ -101,6 +101,7 @@
             // 
             // saveAsToolStripMenuItem
             // 
+            this.saveAsToolStripMenuItem.Enabled = false;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.saveAsToolStripMenuItem.Text = "&Save As..";
@@ -108,6 +109,7 @@
             // 
             // openToolStripMenuItem1
             // 
+            this.openToolStripMenuItem1.Enabled = false;
             this.openToolStripMenuItem1.Name = "openToolStripMenuItem1";
             this.openToolStripMenuItem1.Size = new System.Drawing.Size(199, 22);
             this.openToolStripMenuItem1.Text = "&Open..";
