@@ -1,8 +1,10 @@
 using Core;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -75,7 +77,7 @@ namespace Verse3.VanillaElements
         //    }
         //    catch/* (Exception ex)*/
         //    {
-        //        //throw ex;
+        //        //CoreConsole.Log(ex);
         //    }
         //}
 
@@ -120,9 +122,9 @@ namespace Verse3.VanillaElements
                         {
                             this._element.NodeContentColor = Brushes.White;
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            throw;
+                            CoreConsole.Log(ex);
                         }
                         foreach (BezierElement bezier in node.Connections)
                         {
@@ -140,16 +142,29 @@ namespace Verse3.VanillaElements
                             }
                         }
                     }
+                    else
+                    {
+                        try
+                        {
+                            this._element.NodeContentColor = Brushes.Transparent;
+                            //RenderingCore.Render(this._element.Parent);
+                        }
+                        catch (Exception ex)
+                        {
+                            CoreConsole.Log(ex);
+                        }
+                    }
                 }
                 else
                 {
                     try
                     {
                         this._element.NodeContentColor = Brushes.Transparent;
+                        //RenderingCore.Render(this._element.Parent);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        throw;
+                        CoreConsole.Log(ex);
                     }
                 }
             }
@@ -230,8 +245,10 @@ namespace Verse3.VanillaElements
         }
     }
 
+    [Serializable]
     public class DataNodeElement<T> : DataNode<T>
     {
+        [JsonIgnore]
         public override Type ViewType => typeof(DataNodeElementView);
 
         #region Constructor and Compute
@@ -258,6 +275,16 @@ namespace Verse3.VanillaElements
             {
                 this.HorizontalAlignment = HorizontalAlignment.Center;
             }
+        }
+
+        public DataNodeElement(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            this.PropertyChanged += NodeElement_PropertyChanged;
+        }
+
+        public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
         }
 
         #endregion
@@ -295,7 +322,7 @@ namespace Verse3.VanillaElements
                 {
                     if (DataViewModel.ActiveNode.NodeType != this.NodeType)
                     {
-                        if (DataViewModel.ActiveNode.GetType() == this.GetType())
+                        if (NodeUtilities.CheckCompatibility(DataViewModel.ActiveNode, this))
                         {
                             if (b.SetDestination(this as INode))
                             {
@@ -321,15 +348,16 @@ namespace Verse3.VanillaElements
             if (this.RenderPipelineInfo.Parent is IComputable)
             {
                 IComputable computable = (IComputable)this.RenderPipelineInfo.Parent;
-                ComputationPipeline.ComputeComputable(computable);
+                ComputationCore.Compute(computable);
             }
-            RenderPipeline.RenderRenderable(this.RenderPipelineInfo.Parent);
+            RenderingCore.Render(this.RenderPipelineInfo.Parent);
         }
 
         private string _name = "";
         public override string Name { get => _name; set => _name = value; }
 
         private HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center;
+        [JsonIgnore]
         public HorizontalAlignment HorizontalAlignment
         {
             get
@@ -358,6 +386,7 @@ namespace Verse3.VanillaElements
         }
 
         private System.Windows.Media.Brush nodeColor = System.Windows.Media.Brushes.Transparent;
+        [JsonIgnore]
         public System.Windows.Media.Brush NodeColor
         {
             get
@@ -386,6 +415,7 @@ namespace Verse3.VanillaElements
         }
 
         private System.Windows.Media.Brush nodeContentColor = System.Windows.Media.Brushes.Transparent;
+        [JsonIgnore]
         public System.Windows.Media.Brush NodeContentColor
         {
             get
@@ -414,13 +444,16 @@ namespace Verse3.VanillaElements
         }
 
     }
-        
+    
     public class MousePositionNode : INode
     {
         public static readonly MousePositionNode Instance = new MousePositionNode();
         private ElementsLinkedList<IConnection> connections = new ElementsLinkedList<IConnection>();
 
         private MousePositionNode()
+        {
+        }
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
         }
 

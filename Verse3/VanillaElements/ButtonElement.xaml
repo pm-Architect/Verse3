@@ -31,13 +31,14 @@
         MaxHeight="50"
         >
         <Button
+            x:Name="ButtonBlock"
             Style="{StaticResource ButtonPrimary}"
             Content="{Binding DisplayedText}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             FontFamily="Maven Pro"
             Margin="10"
-            Background="#ff6700"
+            Background="{Binding BackgroundColor}"
             Foreground="White"
             Click="Button_Click"
             />

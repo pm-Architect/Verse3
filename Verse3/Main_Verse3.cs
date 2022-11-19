@@ -19,6 +19,7 @@ namespace Verse3
     public partial class Main_Verse3 : Form
     {
         private int childFormNumber = 0;
+        public static AppDomain domain_;
 
         public Main_Verse3()
         {
@@ -92,9 +93,12 @@ namespace Verse3
 
         }
 
+        public EditorForm ActiveEditor { get => (EditorForm)ActiveMdiChild; }
+        public static Main_Verse3 ActiveMain { get => Program.main_; }
+
         private void ShowNewForm(object sender, EventArgs e)
         {
-            Form childForm = new Form1();
+            Form childForm = new EditorForm();
             childForm.MdiParent = this;
             childForm.Text = "Window " + childFormNumber++;
             childForm.Show();
@@ -170,7 +174,7 @@ namespace Verse3
             //#if DEBUG
             if (Debugger.IsAttached)
             {
-                Form childForm = new Form1();
+                Form childForm = new EditorForm();
                 childForm.MdiParent = this;
                 childForm.Text = "Window " + childFormNumber++;
                 childForm.Show();
@@ -182,10 +186,10 @@ namespace Verse3
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (this.ActiveMdiChild is Form1)
+            if (this.ActiveMdiChild is EditorForm)
             {
-                toolStripStatusLabel.Text = (this.ActiveMdiChild as Form1).InfiniteCanvasWPFControl.AverageFPS.ToString();
-                toolStripStatusLabel1.Text = (this.ActiveMdiChild as Form1).InfiniteCanvasWPFControl.GetMouseRelPosition().ToString();
+                toolStripStatusLabel.Text = (this.ActiveMdiChild as EditorForm).InfiniteCanvasWPFControl.AverageFPS.ToString();
+                toolStripStatusLabel1.Text = (this.ActiveMdiChild as EditorForm).InfiniteCanvasWPFControl.GetMouseRelPosition().ToString();
             }
             else
             {
@@ -195,7 +199,7 @@ namespace Verse3
                     toolStripButton2.Enabled = true;
                     if (Core.Core.GetUser() != null)
                     {
-                        Form childForm = new Form1();
+                        Form childForm = new EditorForm();
                         childForm.MdiParent = this;
                         childForm.Text = Core.Core.GetUser().Email;
                         childForm.Show();
@@ -282,7 +286,7 @@ namespace Verse3
             if (Core.Core.GetUser() != null)
             {
                 //TODO:Splash screen?
-                Form childForm = new Form1();
+                Form childForm = new EditorForm();
                 childForm.MdiParent = this;
                 childForm.Text = Core.Core.GetUser().Email;
                 childForm.Show();
@@ -309,21 +313,28 @@ namespace Verse3
             loggedIn = true;
         }
 
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutBox about = new AboutBox();
+            about.ShowDialog();
+        }
+
+
         //List<EmbeddedIDE> ides = new List<EmbeddedIDE>();
 
         //private void toolStripButton3_Click(object sender, EventArgs e)
         //{
-            //EmbeddedIDE ide = new EmbeddedIDE();
-            //ides.Add(ide);
-            //ide.Show();
+        //EmbeddedIDE ide = new EmbeddedIDE();
+        //ides.Add(ide);
+        //ide.Show();
         //}
 
         //private void toolStripButton4_Click(object sender, EventArgs e)
         //{
-            //if (ides.Count == 1)
-            //{
-            //    ides[0].GetScript();
-            //}
+        //if (ides.Count == 1)
+        //{
+        //    ides[0].GetScript();
+        //}
         //}
 
         //private async void P_OutputDataReceived(object sender, DataReceivedEventArgs e)

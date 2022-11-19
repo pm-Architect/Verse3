@@ -101,6 +101,7 @@ namespace Verse3.VanillaElements
         #endregion
     }
 
+    //[Serializable]
     public class TextElement : BaseElement
     {
         #region Properties

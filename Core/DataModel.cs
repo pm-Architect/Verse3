@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 using static Core.Geometry2D;
 
 namespace Core
@@ -9,7 +13,11 @@ namespace Core
     /// A simple example of a data-model.  
     /// The purpose of this data-model is to share display data between the main window and overview window.
     /// </summary>
-    public class DataModel : INotifyPropertyChanged
+    ////[DataContract]
+    [Serializable]
+    //[XmlRoot("DataModel")]
+    //[XmlType("DataModel")]
+    public class DataModel : INotifyPropertyChanged/*, ISerializable*/
     {
         #region INotifyPropertyChanged Members
 
@@ -36,36 +44,42 @@ namespace Core
         /// The singleton instance.
         /// This is a singleton for convenience.
         /// </summary>
-        protected static DataModel instance = new DataModel();
+        protected static DataModel instance = null;
 
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
+        [JsonIgnore]
         protected ElementsLinkedList<IElement> elements = new ElementsLinkedList<IElement>();
 
         ///
         /// The current scale at which the content is being viewed.
         /// 
+        [JsonIgnore]
         protected double contentScale = 1;
 
         ///
         /// The X coordinate of the offset of the viewport onto the content (in content coordinates).
         /// 
+        [JsonIgnore]
         protected double contentOffsetX = 0;
 
         ///
         /// The Y coordinate of the offset of the viewport onto the content (in content coordinates).
         /// 
+        [JsonIgnore]
         protected double contentOffsetY = 0;
 
         ///
         /// The width of the content (in content coordinates).
         /// 
+        [JsonIgnore]
         protected double contentWidth = 0;
 
         ///
         /// The heigth of the content (in content coordinates).
         /// 
+        [JsonIgnore]
         protected double contentHeight = 0;
 
         ///
@@ -73,6 +87,7 @@ namespace Core
         /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
         /// data model so that the value can be shared with the overview window.
         /// 
+        [JsonIgnore]
         protected double contentViewportWidth = 0;
 
         ///
@@ -80,6 +95,7 @@ namespace Core
         /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
         /// data model so that the value can be shared with the overview window.
         /// 
+        [JsonIgnore]
         protected double contentViewportHeight = 0;
 
         #endregion Data Members
@@ -89,14 +105,15 @@ namespace Core
         /// <summary>
         /// Retreive the singleton instance.
         /// </summary>
+        //[XmlIgnore]
         public static DataModel Instance
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new DataModel();
-                }
+                //if (instance == null)
+                //{
+                //    instance = new DataModel();
+                //}
                 return DataModel.instance;
             }
             protected set
@@ -105,15 +122,33 @@ namespace Core
             }
         }
 
+        [JsonIgnore]
         public static double ContentCanvasMarginOffset = 0.0;
 
-        public DataModel() : base()
+        protected DataModel() : base()
         {
             //
             // Initialize the data model.
             //
-            DataModel.instance = this;
+            //DataModel.instance = this;
         }
+
+        //protected DataModel(SerializationInfo info, StreamingContext context) : base()
+        //{
+        //    //
+        //    // Initialize the data model.
+        //    //
+        //    //DataModel.instance = this;
+        //    this.elements = (ElementsLinkedList<IElement>)info.GetValue("elements", typeof(ElementsLinkedList<IElement>));
+        //    //this.elements = (ElementsLinkedList<IElement>)info.GetValue("elements", typeof(ElementsLinkedList<ShellElement>));
+        //    //this.contentScale = (double)info.GetValue("contentScale", typeof(double));
+        //    //this.contentOffsetX = (double)info.GetValue("contentOffsetX", typeof(double));
+        //    //this.contentOffsetY = (double)info.GetValue("contentOffsetY", typeof(double));
+        //    //this.contentWidth = (double)info.GetValue("contentWidth", typeof(double));
+        //    //this.contentHeight = (double)info.GetValue("contentHeight", typeof(double));
+        //    //this.contentViewportWidth = (double)info.GetValue("contentViewportWidth", typeof(double));
+        //    //this.contentViewportHeight = (double)info.GetValue("contentViewportHeight", typeof(double));
+        //}
 
         #endregion
 
@@ -122,6 +157,7 @@ namespace Core
         /// <summary>
         /// The list of rectangles that is displayed both in the main window and in the overview window.
         /// </summary>
+        [JsonIgnore]
         public ElementsLinkedList<IElement> Elements
         {
             get
@@ -139,9 +175,23 @@ namespace Core
             return this.Elements.Find(guid).Value;
         }
 
+        //public void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    info.AddValue("elements", this.elements);
+        //    //info.AddValue("contentScale", this.contentScale);
+        //    //info.AddValue("contentOffsetX", this.contentOffsetX);
+        //    //info.AddValue("contentOffsetY", this.contentOffsetY);
+        //    //info.AddValue("contentWidth", this.contentWidth);
+        //    //info.AddValue("contentHeight", this.contentHeight);
+        //    //info.AddValue("contentViewportWidth", this.contentViewportWidth);
+        //    //info.AddValue("contentViewportHeight", this.contentViewportHeight);
+        //}
+
         ///
         /// The current scale at which the content is being viewed.
         /// 
+        //[XmlIgnore]
+        [JsonIgnore]
         public double ContentScale
         {
             get
@@ -156,6 +206,8 @@ namespace Core
             }
         }
 
+        //[XmlIgnore]
+        [JsonIgnore]
         public CanvasPoint ContentOffset
         {
             get
@@ -172,6 +224,8 @@ namespace Core
         ///
         /// The X coordinate of the offset of the viewport onto the content (in content coordinates).
         /// 
+        //[XmlIgnore]
+        [JsonIgnore]
         public double ContentOffsetX
         {
             get
@@ -189,6 +243,8 @@ namespace Core
         ///
         /// The Y coordinate of the offset of the viewport onto the content (in content coordinates).
         /// 
+        //[XmlIgnore]
+        [JsonIgnore]
         public double ContentOffsetY
         {
             get
@@ -203,6 +259,8 @@ namespace Core
             }
         }
 
+        //[XmlIgnore]
+        [JsonIgnore]
         public CanvasSize ContentSize
         {
             get
@@ -219,6 +277,8 @@ namespace Core
         ///
         /// The width of the content (in content coordinates).
         /// 
+        //[XmlIgnore]
+        [JsonIgnore]
         public double ContentWidth
         {
             get
@@ -236,6 +296,8 @@ namespace Core
         ///
         /// The heigth of the content (in content coordinates).
         /// 
+        //[XmlIgnore]
+        [JsonIgnore]
         public double ContentHeight
         {
             get
@@ -251,6 +313,8 @@ namespace Core
         }
 
 
+        //[XmlIgnore]
+        [JsonIgnore]
         public CanvasSize ContentViewportSize
         {
             get
@@ -269,6 +333,8 @@ namespace Core
         /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
         /// data model so that the value can be shared with the overview window.
         /// 
+        //[XmlIgnore]
+        [JsonIgnore]
         public double ContentViewportWidth
         {
             get
@@ -288,6 +354,8 @@ namespace Core
         /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
         /// data model so that the value can be shared with the overview window.
         /// 
+        //[XmlIgnore]
+        [JsonIgnore]
         public double ContentViewportHeight
         {
             get
@@ -303,17 +371,78 @@ namespace Core
         }
 
         #endregion
+
+        
     }
 
-    public interface IElement : INotifyPropertyChanged, IDisposable
+    internal class ShellElement : IElement
+    {
+        public Guid ID { get; }
+
+        public ElementState ElementState { get; set; }
+        public ElementType ElementType { get; set; }
+
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
+        ~ShellElement() => Dispose();
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            try
+            {
+                info.AddValue("ID", this.ID);
+                //info.AddValue("X", this.X);
+                //info.AddValue("Y", this.Y);
+                //info.AddValue("Width", this.Width);
+                //info.AddValue("Height", this.Height);
+                info.AddValue("ElementType", this.ElementType);
+                //info.AddValue("State", this.State);
+                //info.AddValue("IsSelected", this.IsSelected);
+                //info.AddValue("BoundingBox", this.BoundingBox);
+                //info.AddValue("ElementState", this.ElementState);
+                //info.AddValue("Parent", this.Parent);
+                //info.AddValue("Children", this.Children);
+            }
+            catch (Exception ex)
+            {
+                CoreConsole.Log(ex);
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        {
+            if (!Equals(field, newValue))
+            {
+                field = newValue;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    public interface IElement : INotifyPropertyChanged, IDisposable, ISerializable
     {
         #region Properties
 
         /// <summary>
         /// GUID of the element.
         /// </summary>
+        //[XmlIgnore]
         public Guid ID { get; }
 
+        [JsonIgnore]
         public ElementState ElementState { get; set; }
 
         public ElementType ElementType { get; set; }

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.Serialization;
 
 namespace Core
 {
@@ -10,7 +12,8 @@ namespace Core
         /// <summary>
         /// Bounding Box
         /// </summary>
-        public class BoundingBox : Observable, IEquatable<BoundingBox>
+        [Serializable]
+        public class BoundingBox : Observable, IEquatable<BoundingBox>, ISerializable
         {
             #region Constructors
 
@@ -34,6 +37,11 @@ namespace Core
             {
                 this.Location = new CanvasPoint(x, y);
                 this.Size = new CanvasSize(w, h);
+            }
+            public BoundingBox(SerializationInfo info, StreamingContext context)
+            {
+                this.Location = (CanvasPoint)info.GetValue("Location", typeof(CanvasPoint));
+                this.Size = (CanvasSize)info.GetValue("Size", typeof(CanvasSize));
             }
 
             public static BoundingBox Unset = new BoundingBox();
@@ -68,6 +76,7 @@ namespace Core
                     }
                 }
             }
+            [JsonIgnore]
             public double Left
             {
                 get
@@ -75,6 +84,7 @@ namespace Core
                     return this.Location.X;
                 }
             }
+            [JsonIgnore]
             public double Right
             {
                 get
@@ -82,6 +92,7 @@ namespace Core
                     return (this.Location.X + this.Size.Width);
                 }
             }
+            [JsonIgnore]
             public double Top
             {
                 get
@@ -89,6 +100,7 @@ namespace Core
                     return this.Location.Y;
                 }
             }
+            [JsonIgnore]
             public double Bottom
             {
                 get
@@ -97,6 +109,7 @@ namespace Core
                 }
             }
 
+            [JsonIgnore]
             public CanvasPoint Center
             {
                 get
@@ -430,22 +443,39 @@ namespace Core
             }
 
             #endregion
+
+            public void GetObjectData(SerializationInfo info, StreamingContext context)
+            {
+                info.AddValue("Location", this.Location);
+                info.AddValue("Size", this.Size);
+            }
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
         /// Canvas Point
         /// </summary>
-        public class CanvasPoint : Observable, IEquatable<CanvasSize>, IEquatable<CanvasPoint>
+        [Serializable]
+        public class CanvasPoint : Observable, IEquatable<CanvasSize>, IEquatable<CanvasPoint>, ISerializable
         {
             //TODO: MAKE IMPLICIT CASTS TO OTHER POINT TYPES
             #region Constructors
 
             public static readonly CanvasPoint Unset = new CanvasPoint(double.NaN, double.NaN);
+            public CanvasPoint()
+            {
+                this.X = double.NaN;
+                this.Y = double.NaN;
+            }
 
             public CanvasPoint(double x, double y)
             {
                 this.X = x;
                 this.Y = y;
+            }
+            public CanvasPoint(SerializationInfo info, StreamingContext context)
+            {
+                this.X = info.GetDouble("X");
+                this.Y = info.GetDouble("Y");
             }
 
             #endregion
@@ -552,21 +582,39 @@ namespace Core
             }
 
             #endregion
+
+            public void GetObjectData(SerializationInfo info, StreamingContext context)
+            {
+                info.AddValue("X", this.X);
+                info.AddValue("Y", this.Y);
+            }
         }
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
         /// Canvas Size
         /// </summary>
-        public class CanvasSize : Observable, IEquatable<CanvasSize>, IEquatable<CanvasPoint>
+        [Serializable]
+        public class CanvasSize : Observable, IEquatable<CanvasSize>, IEquatable<CanvasPoint>, ISerializable
         {
             #region Constructors
 
             public static readonly CanvasSize Unset = new CanvasSize(double.NaN, double.NaN);
 
+            public CanvasSize()
+            {
+                this.Width = double.NaN;
+                this.Height = double.NaN;
+            }
+
             public CanvasSize(double w, double h)
             {
                 this.Width = w;
                 this.Height = h;
+            }
+            public CanvasSize(SerializationInfo info, StreamingContext context)
+            {
+                this.Width = info.GetDouble("Width");
+                this.Height = info.GetDouble("Height");
             }
 
             #endregion
@@ -664,6 +712,12 @@ namespace Core
             }
 
             #endregion
+
+            public void GetObjectData(SerializationInfo info, StreamingContext context)
+            {
+                info.AddValue("Width", this.Width);
+                info.AddValue("Height", this.Height);
+            }
         }
     }
 }

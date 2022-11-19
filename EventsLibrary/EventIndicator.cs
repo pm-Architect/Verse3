@@ -9,117 +9,54 @@ namespace EventsLibrary
     public class EventIndicator : BaseComp
     {
         internal int _counter = 0;
-        //private double _inputValue = 0.0;
-
-        public string? ElementText
-        {
-            get
-            {
-                string? name = this.GetType().FullName;
-                string? viewname = this.ViewType.FullName;
-                string? dataIN = _counter.ToString();
-                //string? zindex = DataViewModel.WPFControl.Content.
-                //TODO: Z Index control for IRenderable
-                return /*$"Name: {name}" +*/
-                    //$"\nView: {viewname}" +
-                    //$"\nID: {this.ID}" +
-                    //$"\nX: {this.X}" +
-                    //$"\nY: {this.Y}" +
-                    $"Counter: {dataIN}";
-            }
-        }
-
-        #region Properties
-
-
-        #endregion
+        internal string _argstring = "";
 
         #region Constructors
 
-        public EventIndicator() : base(0, 0)
+        public EventIndicator() : base()
         {
-            //this.background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
-            //Random rng = new Random();
-            //byte r = (byte)rng.Next(0, 255);
-            //this.backgroundTint = new SolidColorBrush(Color.FromArgb(100, r, r, r));
         }
-
-        public EventIndicator(int x, int y, int width = 250, int height = 100) : base(x, y)
+        public EventIndicator(int x, int y) : base(x, y)
         {
-            //base.boundingBox = new BoundingBox(x, y, width, height);
-
-            //Random rnd = new Random();
-            //byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
-            //this.Background = new SolidColorBrush(Colors.Gray);
+            this.previewTextBlock.DisplayedText = $"Counter: {_counter}\nArgs: {_argstring}";
         }
 
         #endregion
 
         public override void Compute()
         {
-            //this.ComputationPipelineInfo.IOManager.SetData<double>(_sliderValue, 0);
-            //if (this.ComputationPipelineInfo.IOManager.DataOutputNodes != null && this.ComputationPipelineInfo.IOManager.DataOutputNodes.Count == 1)
-            //{
-            //    if (this.ComputationPipelineInfo.IOManager.DataOutputNodes[0] is NodeElement)
-            //        ((NodeElement)this.ComputationPipelineInfo.IOManager.DataOutputNodes[0]).DataGoo.Data = _sliderValue;
-            //}
+            this.previewTextBlock.DisplayedText = $"Counter = {_counter}\nArgs = {_argstring}";
         }
-        public override CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Event Indicator",
-                Group = "Event Utilities",
-                Tab = "Events",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
-
-        internal TextElement textBlock = new TextElement();
-        internal SliderElement sliderBlock = new SliderElement();
-        internal ButtonClickedEventNode nodeBlock;
-        internal ButtonClickedEventNode nodeBlock1;
+        public override CompInfo GetCompInfo() => new CompInfo(this, "Event Indicator", "Event Utilities", "Events");
+        
+        internal GenericEventNode nodeBlock;
+        internal GenericEventNode nodeBlock1;
+        internal GenericDataNode nodeBlock2;
         public override void Initialize()
         {
             base.titleTextBlock.TextRotation = 0;
 
-            nodeBlock = new ButtonClickedEventNode(this, NodeType.Input);
-            nodeBlock.Width = 50;
+            nodeBlock = new GenericEventNode(this, NodeType.Input);
             nodeBlock.NodeEvent += NodeBlock_NodeEvent;
-            this.ChildElementManager.AddEventInputNode(nodeBlock as IEventNode);
+            this.ChildElementManager.AddEventInputNode(nodeBlock);
 
-            string? txt = this.ElementText;
-            textBlock = new TextElement();
-            textBlock.DisplayedText = txt;
-            textBlock.TextAlignment = TextAlignment.Center;
-            this.ChildElementManager.AddElement(textBlock);
+            nodeBlock1 = new GenericEventNode(this, NodeType.Output);
+            this.ChildElementManager.AddEventOutputNode(nodeBlock1);
 
-            nodeBlock1 = new ButtonClickedEventNode(this, NodeType.Output);
-            nodeBlock1.Width = 50;
-            this.ChildElementManager.AddEventOutputNode(nodeBlock1 as IEventNode);
+            nodeBlock2 = new GenericDataNode(this, NodeType.Output);
+            this.ChildElementManager.AddDataOutputNode(nodeBlock2, "Args");
         }
 
         private void NodeBlock_NodeEvent(IEventNode container, EventArgData e)
         {
             _counter++;
             nodeBlock1.EventOccured(e);
-            textBlock.DisplayedText = this.ElementText;
+            if (e.Count > 0)
+            {
+                _argstring = e.ToString();
+                this.ChildElementManager.SetData(e.Data, nodeBlock2);
+            }
+            ComputationCore.Compute(this, false);
         }
-
-        //private IRenderable _parent;
-        //public IRenderable Parent => _parent;
-        //private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
-        //public ElementsLinkedList<IRenderable> Children => _children;
     }
 }

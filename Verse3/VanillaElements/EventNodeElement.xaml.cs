@@ -1,9 +1,11 @@
 using Core;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -77,7 +79,7 @@ namespace Verse3.VanillaElements
         //    }
         //    catch/* (Exception ex)*/
         //    {
-        //        //throw ex;
+        //        //CoreConsole.Log(ex);
         //    }
         //}
 
@@ -131,9 +133,31 @@ namespace Verse3.VanillaElements
                             }
                         }
                     }
-                    else (this._element as EventNodeElement).NodeContentColor = Brushes.Transparent;
+                    else
+                    {
+                        try
+                        {
+                            (this._element as EventNodeElement).NodeContentColor = Brushes.Transparent;
+                            //RenderingCore.Render((this._element as EventNodeElement).Parent);
+                        }
+                        catch (Exception)
+                        {
+                            throw;
+                        }
+                    }
                 }
-                else (this._element as EventNodeElement).NodeContentColor = Brushes.Transparent;
+                else
+                {
+                    try
+                    {
+                        (this._element as EventNodeElement).NodeContentColor = Brushes.Transparent;
+                        //RenderingCore.Render((this._element as EventNodeElement).Parent);
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }
             }
         }
 
@@ -214,9 +238,10 @@ namespace Verse3.VanillaElements
 
     public class EventNodeElement : EventNode
     {
+        [JsonIgnore]
         public override Type ViewType => typeof(EventNodeElementView);
 
-        #region Constructor and Compute
+        #region Constructor
 
         public EventNodeElement(IRenderable parent, NodeType type = NodeType.Unset) : base(parent, type)
         {
@@ -241,6 +266,15 @@ namespace Verse3.VanillaElements
                 this.HorizontalAlignment = HorizontalAlignment.Center;
             }
         }
+        public EventNodeElement(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            this.PropertyChanged += NodeElement_PropertyChanged;
+        }
+
+        public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+        }
 
         #endregion
 
@@ -254,6 +288,14 @@ namespace Verse3.VanillaElements
 
         public override void ToggleActive()
         {
+            //if (this.IsActive)
+            //{
+            //    this.IsActive = false;
+            //}
+            //else
+            //{
+            //    this.IsActive = true;
+            //}
             //Set as active Node
             BezierElement b = (BezierElement)DataViewModel.ActiveConnection;
             if (DataViewModel.ActiveConnection == default)
@@ -277,13 +319,13 @@ namespace Verse3.VanillaElements
                 {
                     if (DataViewModel.ActiveNode.NodeType != this.NodeType)
                     {
-                        if (DataViewModel.ActiveNode.GetType() == this.GetType())
+                        if (DataViewModel.ActiveNode.GetType().BaseType == this.GetType().BaseType)
                         {
                             if (b.SetDestination(this as INode))
                             {
                                 if (DataViewModel.ActiveNode is IComputable && DataViewModel.ActiveNode != this && DataViewModel.ActiveNode.NodeType == NodeType.Output)
                                 {
-                                    this.ComputationPipelineInfo.AddDataUpStream(DataViewModel.ActiveNode as IComputable);
+                                    this.ComputationPipelineInfo.AddEventUpStream(DataViewModel.ActiveNode as IComputable);
                                 }
                                 DataViewModel.ActiveNode = this as INode;
                                 if (MousePositionNode.Instance.Connections.Contains(b))
@@ -304,15 +346,16 @@ namespace Verse3.VanillaElements
             if (this.RenderPipelineInfo.Parent is IComputable)
             {
                 IComputable computable = (IComputable)this.RenderPipelineInfo.Parent;
-                ComputationPipeline.ComputeComputable(computable);
+                ComputationCore.Compute(computable);
             }
-            RenderPipeline.RenderRenderable(this.RenderPipelineInfo.Parent);
+            RenderingCore.Render(this.RenderPipelineInfo.Parent);
         }
 
         private string _name = "";
         public override string Name { get => _name; set => _name = value; }
 
         private HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center;
+        [JsonIgnore]
         public HorizontalAlignment HorizontalAlignment
         {
             get
@@ -341,60 +384,29 @@ namespace Verse3.VanillaElements
         }
 
         private System.Windows.Media.Brush nodeColor = System.Windows.Media.Brushes.Transparent;
+        [JsonIgnore]
         public System.Windows.Media.Brush NodeColor
         {
             get
             {
-                //if (this.Connections != null && this.Connections.Count > 0)
-                //{
-                //    if (nodeContentColor != System.Windows.Media.Brushes.White)
-                //    {
-                //        nodeContentColor = System.Windows.Media.Brushes.White;
-                //        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.White);
-                //        //OnPropertyChanged("NodeContentColor");
-                //    }
-                //}
-                //else
-                //{
-                //    if (nodeContentColor != System.Windows.Media.Brushes.Transparent)
-                //    {
-                //        nodeContentColor = System.Windows.Media.Brushes.Transparent;
-                //        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.Transparent);
-                //        //OnPropertyChanged("NodeContentColor");
-                //    }
-                //}
                 return nodeColor;
             }
-            internal set => SetProperty(ref nodeColor, value);
+            set => SetProperty(ref nodeColor, value);
         }
 
         private System.Windows.Media.Brush nodeContentColor = System.Windows.Media.Brushes.Transparent;
+        [JsonIgnore]
         public System.Windows.Media.Brush NodeContentColor
         {
             get
             {
-                //if (this.Connections != null && this.Connections.Count > 0)
-                //{
-                //    if (nodeContentColor != System.Windows.Media.Brushes.White)
-                //    {
-                //        nodeContentColor = System.Windows.Media.Brushes.White;
-                //        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.White);
-                //        //OnPropertyChanged("NodeContentColor");
-                //    }
-                //}
-                //else
-                //{
-                //    if (nodeContentColor != System.Windows.Media.Brushes.Transparent)
-                //    {
-                //        nodeContentColor = System.Windows.Media.Brushes.Transparent;
-                //        SetProperty(ref nodeContentColor, System.Windows.Media.Brushes.Transparent);
-                //        //OnPropertyChanged("NodeContentColor");
-                //    }
-                //}
                 return nodeContentColor;
             }
-            internal set => SetProperty(ref nodeContentColor, value);
+            set => SetProperty(ref nodeContentColor, value);
         }
+
+        [JsonIgnore]
+        public bool IsActive { get; protected set; }
     }
 
     //public class NodeNameDisplaySideConverter : IValueConverter

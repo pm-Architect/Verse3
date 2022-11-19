@@ -36,9 +36,18 @@
 
         function getValue() {
             window.chrome.webview.postMessage(editor.getValue());
-            console.log(editor.getValue());
+            // console.log(editor.getValue());
             return editor.getValue();
         }
+
+        function setValue(value) {
+            // console.log(value);
+            // monaco.editor.createModel(value, 'csharp');
+            // editor.setModel(model);
+            editor.setValue(value);
+            // console.log(editor.getValue());
+        }
+
     </script>
 </body>
 </html>

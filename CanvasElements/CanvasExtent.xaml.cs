@@ -2,6 +2,7 @@ using Core;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Windows.Controls;
 using Verse3;
 using static Core.Geometry2D;
@@ -17,15 +18,15 @@ namespace CanvasElements
         {
             InitializeComponent();
         }
-
-        public IRenderable Element => throw new System.NotImplementedException();
+        
+        public IRenderable Element => null;
 
         public void Render()
         {
-            throw new System.NotImplementedException();
         }
     }
 
+    
     public class CanvasExtentElement : IRenderable
     {
         #region Data Members
@@ -54,7 +55,8 @@ namespace CanvasElements
                 }
                 else
                 {
-                    throw new InvalidCastException();
+                    Exception ex = new Exception("Invalid View Type");
+                    CoreConsole.Log(ex);
                 }
             }
         }
@@ -92,45 +94,51 @@ namespace CanvasElements
 
         public IRenderable Parent => RenderPipelineInfo.Parent;
         public ElementsLinkedList<IRenderable> Children => RenderPipelineInfo.Children;
+        public bool RenderExpired { get; set; }
+
+        public void SetX(double x)
+        {
+            BoundingBox.Location.X = x;
+            OnPropertyChanged("X");
+        }
+
+        public void SetY(double y)
+        {
+            BoundingBox.Location.Y = y;
+            OnPropertyChanged("Y");
+        }
+
+        public void SetWidth(double x)
+        {
+            BoundingBox.Size.Width = x;
+            OnPropertyChanged("Width");
+        }
+
+        public void SetHeight(double x)
+        {
+            BoundingBox.Size.Height = x;
+            OnPropertyChanged("Height");
+        }
+
+        public void Render()
+        {
+            if (RenderView != null)
+                RenderView.Render();
+        }
 
         #endregion
 
         public CanvasExtentElement() : base()
         {
-            renderPipelineInfo = new RenderPipelineInfo(this);
         }
 
-        public CanvasExtentElement(int x, int y, int width = 10, int height = 10) : base()
+        public CanvasExtentElement(int x, int y) : base()
         {
             renderPipelineInfo = new RenderPipelineInfo(this);
-            this.boundingBox = new BoundingBox(x, y, width, height);
-
-            //this.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6700"));
-            //Random rnd = new Random();
-            //byte rc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //byte gc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //byte bc = (byte)Math.Round(rnd.NextDouble() * 255.0);
-            //this.BackgroundTint = new SolidColorBrush(Color.FromRgb(rc, gc, bc));
+            this.boundingBox = new BoundingBox(x, y, 10, 10);
         }
 
-        public CompInfo GetCompInfo()
-        {
-            Type[] types = { typeof(int), typeof(int), typeof(int), typeof(int) };
-            CompInfo ci = new CompInfo
-            {
-                ConstructorInfo = this.GetType().GetConstructor(types),
-                Name = "Extent",
-                Group = "_CanvasElements",
-                Tab = "_CanvasElements",
-                Description = "",
-                Author = "",
-                License = "",
-                Repository = "",
-                Version = "",
-                Website = ""
-            };
-            return ci;
-        }
+        public CompInfo GetCompInfo() => new CompInfo(this, "Extent", "_CanvasElements", "_CanvasElements");
 
         #region INotifyPropertyChanged Members
 
@@ -157,6 +165,7 @@ namespace CanvasElements
         }
 
         #endregion
+
         public void Dispose()
         {
             if (this.RenderPipelineInfo.Children != null && this.RenderPipelineInfo.Children.Count > 0)
@@ -169,5 +178,8 @@ namespace CanvasElements
             GC.SuppressFinalize(this);
         }
         ~CanvasExtentElement() => Dispose();
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+        }
     }
 }

@@ -51,9 +51,22 @@ namespace VanillaElements
         {
             InitializeComponent();
             EmulatedIDEBrowser.WebMessageReceived += WebMessageReceived;
+            EmulatedIDEBrowser.NavigationCompleted += EmulatedIDEBrowser_NavigationCompleted;
             //Get path of MonacoEditor folder in AppData
             string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Verse3\\MonacoEditor";
             this.EmulatedIDEBrowser.Source = new Uri(System.IO.Path.Combine(path, "index.html"));
+        }
+
+        private void EmulatedIDEBrowser_NavigationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e)
+        {
+            SetScript("");
+            string path1 = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Verse3", "DefaultScripts",
+                "CSharpDefaultScript.cs");
+            if (File.Exists(path1))
+            {
+                string script = File.ReadAllText(path1);
+                SetScript(script);
+            }
         }
 
 
@@ -197,12 +210,12 @@ namespace VanillaElements
         {
             if (t.IsFaulted)
             {
-                Console.WriteLine(t.Exception.ToString());
+                CoreConsole.Log(t.Exception.ToString());
                 return null;
             }
             else
             {
-                Console.WriteLine(t.Result.ToString());
+                CoreConsole.Log(t.Result.ToString());
                 this.Element._script = t.Result.ToString();
                 return t.Result.ToString();
             }
@@ -215,7 +228,7 @@ namespace VanillaElements
 
         private void WebMessageReceived(object sender, Microsoft.Web.WebView2.Core.CoreWebView2WebMessageReceivedEventArgs e)
         {
-            Console.WriteLine(e.TryGetWebMessageAsString());
+            CoreConsole.Log(e.TryGetWebMessageAsString());
             this.Element._script = e.TryGetWebMessageAsString();
             this.Element.UpdateScript(e.TryGetWebMessageAsString());
         }
@@ -228,18 +241,34 @@ namespace VanillaElements
                 this.OverlayImage.Visibility = Visibility.Hidden;
                 this.EmulatedIDEBrowser.IsEnabled = true;
                 this.EmulatedIDEBrowser.Visibility = Visibility.Visible;
+                DataViewModel.WPFControl.ClearSelection();
             }
         }
 
         private void EmulatedIDEBrowser_LostFocus(object sender, RoutedEventArgs e)
         {
-            RenderPipeline.RenderRenderable(this.Element);
+            RenderingCore.Render(this.Element);
+        }
+
+        internal void SetScript(string v)
+        {
+            v = System.Web.HttpUtility.JavaScriptStringEncode(v);
+            ExecuteJS("setValue(\"" + v + "\");");
         }
     }
 
+    //[Serializable]
     public class IDEElement : BaseElement
     {
         public override Type ViewType => typeof(IDEElementView);
+
+        public void SetScript(string v)
+        {
+            if (this.RenderView != null)
+            {
+                (this.RenderView as IDEElementView).SetScript(v);
+            }
+        }
 
         public override ElementType ElementType { get => ElementType.UIElement; set => base.ElementType = ElementType.UIElement; }
 

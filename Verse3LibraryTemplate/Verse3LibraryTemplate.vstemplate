@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>Verse3 Library Template</Name>
+    <Description>Verse3 Library Template</Description>
+    <Icon>Verse3LibraryTemplate.ico</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <LanguageTag>csharp</LanguageTag>
+    <PlatformTag>windows</PlatformTag>
+    <ProjectTypeTag>desktop</ProjectTypeTag>
+    <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+    <SortOrder>1000</SortOrder>
+    <TemplateID>121c4fb5-134b-40e2-a61a-442166304439</TemplateID>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>Verse3LibraryTemplate</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="Verse3TemplateLibrary.csproj" ReplaceParameters="true" TargetFileName="$safeprojectname$.csproj">
+      <Folder Name="References" TargetFolderName="References">
+        <ProjectItem ReplaceParameters="true" TargetFileName="Core.dll">Core.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="CoreInterop.dll">CoreInterop.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="InfiniteCanvas.dll">InfiniteCanvas.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="System.Reactive.dll">System.Reactive.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="Verse3.dll">Verse3.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="WebView2Loader.dll">WebView2Loader.dll</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="$safeprojectname$Comp.cs">SampleComp.cs</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

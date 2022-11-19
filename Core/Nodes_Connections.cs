@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.ComponentModel;
+using System.Runtime.Serialization;
 using static Core.Geometry2D;
 
 namespace Core
@@ -7,14 +10,18 @@ namespace Core
 
     public interface INode : IElement
     {
+        [JsonIgnore]
         public IElement Parent { get; set; }
+        [JsonIgnore]
         public ElementsLinkedList<IConnection> Connections { get; }
+        [JsonIgnore]
         public NodeType NodeType { get; }
+        [JsonIgnore]
         public CanvasPoint Hotspot { get; }
         public string Name { get; set; }
-        public new ElementType ElementType { get => ElementType.Node; }
-
+        public new ElementType ElementType { get/* => ElementType.Node*/; }
     }
+
 
     public interface IDataNode : INode, IDataGooContainer
     {
@@ -35,25 +42,103 @@ namespace Core
         public delegate void NodeEventHandler(IEventNode container, EventArgData e);
         public event NodeEventHandler NodeEvent;
         public EventArgData EventArgData { get; set; }
-        public void TriggerEvent();
+        public void TriggerEvent(EventArgData e);
         public bool EventOccured(EventArgData e);
         void ToggleActive();
     }
 
-    public class EventArgData : DataStructure<EventArgs>
+    public class EventArgData : DataStructure<object>
     {
-        //TODO: Implement relevant fields
+        public EventArgData() : base()
+        {
+        }
+        public EventArgData(object eventargs) : base(eventargs)
+        {
+            if (this._metadata != null)
+            {
+                _metadata.DataStructurePattern = DataStructurePattern.EventArgData;
+            }
+        }
+        public EventArgData(DataStructure argdata) : base(argdata)
+        {
+            if (this._metadata != null)
+            {
+                _metadata.DataStructurePattern = DataStructurePattern.EventArgData;
+            }
+        }
+
+        public new DataStructure Data
+        {
+            get
+            {
+                if (base.Count == 1 && base[0] is DataStructure data)
+                    return data;
+                else return null;
+            }
+        }
+
+        public override string ToString()
+        {
+            if (base.Count == 1 && base[0] is DataStructure data)
+                return data.ToString();
+            else return null;
+        }
     }
 
     public interface IConnection : IElement
     {
         public INode Origin { get; }
         public INode Destination { get; }
+        [JsonIgnore]
         public ConnectionType ConnectionType { get; }
-        public new ElementType ElementType { get => ElementType.Connection; }
+        public new ElementType ElementType { get/* => ElementType.Connection*/; }
     }
 
     #endregion
+
+    public static class NodeUtilities
+    {
+        public static bool CheckCompatibility(INode origin, INode destination)
+        {
+            if (origin.NodeType == NodeType.Input && destination.NodeType == NodeType.Output
+                || origin.NodeType == NodeType.Output && destination.NodeType == NodeType.Input)
+            {
+                if (origin is IDataNode && destination is IDataNode)
+                {
+                    if ((origin as IDataNode).DataValueType == (destination as IDataNode).DataValueType)
+                    {
+                        return true;
+                    }
+                    else if ((destination as IDataNode).DataValueType.IsAssignableFrom((origin as IDataNode).DataValueType))
+                    {
+                        return true;
+                    }
+                    else if ((origin as IDataNode).DataValueType.IsAssignableFrom((destination as IDataNode).DataValueType))
+                    {
+                        //CAST!!
+                        return true;
+                    }
+                }
+                else if (origin is IEventNode && destination is IEventNode)
+                {
+                    if ((origin as IEventNode).EventArgData != null && (destination as IEventNode).EventArgData != null)
+                    {
+                        if ((origin as IEventNode).EventArgData.DataType == (destination as IEventNode).EventArgData.DataType)
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        //TODO: Warn user that event data type does not match or are null!!!!
+                        //DISALLOW if a flag is true
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }
 
     //public class HorizontalAlignmentConverter : IValueConverter
     //{

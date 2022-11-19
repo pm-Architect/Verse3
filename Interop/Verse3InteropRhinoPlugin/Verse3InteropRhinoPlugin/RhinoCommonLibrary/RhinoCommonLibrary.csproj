@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+    <AutoGenerateBindingRedirects>True</AutoGenerateBindingRedirects>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Rhino3dm" Version="0.3.0">
+      <IncludeAssets>compile;build</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Verse3InteropRhinoPlugin\Verse3InteropRhinoPlugin.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Core">
+      <HintPath>..\..\..\..\CoreInterop\bin\Debug\netstandard2.0\Core.dll</HintPath>
+    </Reference>
+    <Reference Include="CoreInterop">
+      <HintPath>..\..\..\..\CoreInterop\bin\Debug\netstandard2.0\CoreInterop.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="Verse3">
+      <HintPath>..\..\..\..\Verse3\bin\Debug\net6.0-windows\Verse3.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(AppData)\Verse3\Libraries\$(TargetName).verse&quot;" />
+  </Target>
+
+</Project>

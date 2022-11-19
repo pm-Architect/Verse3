@@ -1,4 +1,4 @@
-﻿using Core;
+using Core;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
@@ -13,13 +13,13 @@ namespace Verse3
     public static class AssemblyCompiler
     {
         #region Properties
-        public static List<string> CompileLog { get; set; }
-        private static List<MetadataReference> references { get; set; }
+        public static List<string> CompileLog { get; set; } = new List<string>();
+        private static List<MetadataReference> references { get; set; } = new List<MetadataReference>();
         #endregion
 
         internal static void Init()
         {
-            if (references == null)
+            if (references == null || references.Count == 0)
             {
                 references = new List<MetadataReference>();
                 foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -29,13 +29,24 @@ namespace Verse3
                         continue;
                     }
                     var name = assembly.GetName().Name + ".dll";
-                    Console.WriteLine(name);
-                    references.Add(MetadataReference.CreateFromFile(name));
+                    CoreConsole.Log(name);
+                    string loc = assembly.Location;
+                    try
+                    {
+                        if (loc != String.Empty && File.Exists(loc))
+                            references.Add(MetadataReference.CreateFromFile(loc));
+                        else
+                            CoreConsole.Log("Error loading assembly at :" + loc);
+                    }
+                    catch (Exception ex)
+                    {
+                        CoreConsole.Log(ex);
+                    }
                 }
             }
         }
 
-        internal static Assembly Compile(string code)
+        public static byte[] Compile(string code, string asmName)
         {
             AssemblyCompiler.Init();
 
@@ -53,7 +64,7 @@ namespace Verse3
 
             CompileLog.Add("Parse SyntaxTree Success");
 
-            CSharpCompilation compilation = CSharpCompilation.Create("Verse3.Vanilla", new[] { syntaxTree },
+            CSharpCompilation compilation = CSharpCompilation.Create(asmName, new[] { syntaxTree },
                 references, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
             using (MemoryStream stream = new MemoryStream())
@@ -75,20 +86,20 @@ namespace Verse3
 
                 stream.Seek(0, SeekOrigin.Begin);
 
-                //                var context = new CollectibleAssemblyLoadContext();
-                Assembly assembly = AppDomain.CurrentDomain.Load(stream.ToArray());
-                return assembly;
+                //ERROR: Assembly loading on the wrong thread?
+                //Assembly assembly = Assembly.Load(stream.ToArray());
+                return stream.ToArray();
             }
         }
 
-        internal static Type CompileOnly(string code)
+        internal static byte[] CompileOnly(string code)
         {
             AssemblyCompiler.Init();
 
-            var assembly = AssemblyCompiler.Compile(code);
+            var assembly = AssemblyCompiler.Compile(code, ("tmp_" + DateTime.UtcNow.ToFileTimeUtc().ToString()));
             if (assembly != null)
             {
-                return assembly.GetExportedTypes().FirstOrDefault();
+                return assembly;
             }
 
             return null;
@@ -98,6 +109,8 @@ namespace Verse3
         {
             try
             {
+                //TODO: TODO: IMPORTANT!! Implement parameter passing for parametric construction of elements at load time
+                //Use case example: License key for a paid element in a library can be passed as a parameter and checked by the constructor on load
                 var instance = Activator.CreateInstance(type) as IElement;
                 if (instance != null)
                 {
@@ -105,8 +118,9 @@ namespace Verse3
                 }
                 return null;
             }
-            catch
+            catch (Exception ex)
             {
+                CoreConsole.Log(ex);
                 return null;
             }
         }

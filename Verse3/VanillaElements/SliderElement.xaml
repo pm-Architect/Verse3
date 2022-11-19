@@ -8,9 +8,10 @@
              x:Class="Verse3.VanillaElements.SliderElementView"
              d:DataContext="{d:DesignInstance Type={x:Type local:SliderElement}}"
              mc:Ignorable="d" 
-             d:DesignHeight="40"
-             d:DesignWidth="120"
-             d:MinWidth="100"
+             d:DesignHeight="50"
+             d:DesignWidth="200"
+             d:MinWidth="200"
+             d:MaxWidth="200"
              MouseDown="OnMouseDown"
              MouseMove="OnMouseMove"
              MouseUp="OnMouseUp"
@@ -29,8 +30,9 @@
     <Grid
         Width="{Binding BoundingBox.Size.Width}"
         Height="{Binding BoundingBox.Size.Height}"
-        MinWidth="100"
-        MinHeight="20"
+        MinWidth="200"
+        MaxWidth="200"
+        MinHeight="50"
         MaxHeight="50"
         >
         <hc:PreviewSlider
@@ -38,11 +40,18 @@
             Minimum="{Binding Minimum}"
             Maximum="{Binding Maximum}"
             ValueChanged="SliderBlock_ValueChanged"
+            Background="#ff6700"
+            Foreground="#ff6700"
+            MinHeight="30"
+            MaxHeight="50"
+            MinWidth="180"
+            MaxWidth="200"
             Value="{Binding Value, Mode=TwoWay}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Margin="10"
-            Interval="{Binding Interval}"
+            TickFrequency="{Binding TickFrequency}"
+            IsSnapToTickEnabled="True"
             >
             <hc:PreviewSlider.PreviewContent>
                 <Label

@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <StartupObject>Verse3InteropTestClient.Program</StartupObject>
+    <LangVersion>10</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Core">
+      <HintPath>..\..\..\CoreInterop\bin\Debug\netstandard2.0\Core.dll</HintPath>
+    </Reference>
+    <Reference Include="CoreInterop">
+      <HintPath>..\..\..\CoreInterop\bin\Debug\netstandard2.0\CoreInterop.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

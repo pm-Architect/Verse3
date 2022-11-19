@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using static Core.Geometry2D;
 
 namespace Core
@@ -33,7 +34,10 @@ namespace Core
             try
             {
                 //Parallel.ForEach(DataModel.Instance.Elements, e => { });
-                foreach (IElement e in DataModel.Instance.Elements)
+                //TODO: Multithreading
+                //https://medium.com/@alex.puiu/parallel-foreach-async-in-c-36756f8ebe62
+                ElementsLinkedList<IElement> _elementsBuffer = DataModel.Instance.Elements;
+                foreach (IElement e in _elementsBuffer)
                 {
                     if (e != null && e is IRenderable)
                     {
@@ -132,18 +136,23 @@ namespace Core
     public class RenderPipelineInfo
     {
         private IRenderable _renderable;
+        [JsonIgnore]
         public IRenderable Renderable => _renderable;
         //private IRenderable _zPrev;
         //public IRenderable ZPrev => _zPrev;
         //private IRenderable _zNext;
         //public IRenderable ZNext => _zNext;
+        [JsonIgnore]
         private IRenderable _parent;
+        [JsonIgnore]
         public IRenderable Parent
         {
             get { return _parent; }
             set { _parent = value; }
         }
+        [JsonIgnore]
         private ElementsLinkedList<IRenderable> _children = new ElementsLinkedList<IRenderable>();
+        [JsonIgnore]
         public ElementsLinkedList<IRenderable> Children => _children;
 
         public RenderPipelineInfo(IRenderable renderable)
@@ -184,23 +193,29 @@ namespace Core
     {
         #region Render Pipeline Info
 
+        [JsonIgnore]
         public RenderPipelineInfo RenderPipelineInfo { get; }
         //TODO: GUID Lookup in DataModel Instance
         //public IRenderable ZPrev { get; }
         //public IRenderable ZNext { get; }
-        public IRenderable Parent { get => RenderPipelineInfo.Parent; }
-        public ElementsLinkedList<IRenderable> Children { get => RenderPipelineInfo.Children; }
+        [JsonIgnore]
+        public IRenderable Parent { get/* => RenderPipelineInfo.Parent*/; }
+        [JsonIgnore]
+        public ElementsLinkedList<IRenderable> Children { get/* => RenderPipelineInfo.Children*/; }
 
         #endregion
 
         #region Properties
 
 #nullable enable
+        [JsonIgnore]
         public Type? ViewType { get; }
 #nullable restore
+        [JsonIgnore]
         object ViewKey { get; set; }
+        [JsonIgnore]
         IRenderView RenderView { get; set; }
-
+        [JsonIgnore]
         public bool Visible { get; set; }
 
         #endregion
@@ -215,56 +230,63 @@ namespace Core
         /// <summary>
         /// The X coordinate of the location of the element Bounding Box (in content coordinates).
         /// </summary>
+        [JsonIgnore]
         double X { get; }
         /// <summary>
         /// Set the X coordinate of the location of the element Bounding Box (in content coordinates).
         /// </summary>
-        void SetX(double x)
-        {
+        void SetX(double x);
+        /*{
             BoundingBox.Location.X = x;
             OnPropertyChanged("X");
-        }
+        }*/
 
         /// <summary>
         /// The Y coordinate of the location of the element Bounding Box (in content coordinates).
         /// </summary>
+        [JsonIgnore]
         double Y { get; }
         /// <summary>
         /// Set the Y coordinate of the location of the element Bounding Box (in content coordinates).
         /// </summary>
-        void SetY(double x)
-        {
+        void SetY(double x);
+        /*{
             BoundingBox.Location.Y = x;
             OnPropertyChanged("Y");
-        }
+        }*/
 
         /// <summary>
         /// The width of the element Bounding Box (in content coordinates).
         /// </summary>
+        [JsonIgnore]
         double Width { get; set; }
         /// <summary>
         /// Set the width of the element Bounding Box (in content coordinates).
         /// </summary>
-        void SetWidth(double x) { BoundingBox.Size.Width = x; OnPropertyChanged("Width"); }
+        void SetWidth(double x); /*{ BoundingBox.Size.Width = x; OnPropertyChanged("Width"); }*/
 
         /// <summary>
         /// The height of the element Bounding Box (in content coordinates).
         /// </summary>
+        [JsonIgnore]
         double Height { get; set; }
+        [JsonIgnore]
         bool IsSelected { get; set; }
+        [JsonIgnore]
+        bool RenderExpired { get; set; }
 
         /// <summary>
         /// Set the height of the element Bounding Box (in content coordinates).
         /// </summary>
-        void SetHeight(double x) { BoundingBox.Size.Height = x; OnPropertyChanged("Height"); }
+        void SetHeight(double x); /*{ BoundingBox.Size.Height = x; OnPropertyChanged("Height"); }*/
 
         #endregion
 
-        void Render()
-        {
+        void Render();
+        /*{
             if (RenderView != null)
                 RenderView.Render();
-        }
+        }*/
     }
 
     public interface IRenderView

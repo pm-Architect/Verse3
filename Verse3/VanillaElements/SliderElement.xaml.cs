@@ -109,6 +109,7 @@ namespace Verse3.VanillaElements
         }
     }
 
+    //[Serializable]
     public class SliderElement : BaseElement
     {
         #region Properties
@@ -122,15 +123,14 @@ namespace Verse3.VanillaElements
         public double Maximum { get => maximum; set => SetProperty(ref maximum, value); }
 
         private double _value;
-        public double Value { get => _value; set => SetProperty(ref _value, value); }
+        public double Value { get => _value;
+            set => SetProperty(ref _value, value); }
 
-        private int interval;
-        public int Interval { get => interval; set => SetProperty(ref interval, value); }
+        private double tickFrequency;
+        public double TickFrequency { get => tickFrequency; set => SetProperty(ref tickFrequency, value); }
 
         #endregion
-
-
-
+        
         #region Constructors
 
         public SliderElement() : base()
@@ -138,6 +138,7 @@ namespace Verse3.VanillaElements
             this.Minimum = 0;
             this.Maximum = 100;
             this.Value = 50;
+            this.TickFrequency = 0.001;
         }
 
         #endregion

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Core
@@ -33,14 +34,19 @@ namespace Core
             int count = 0;
             try
             {
-                if (ComputationPipeline.Instance._current != null)
+                if (sender != null)
+                {
+                    count = ComputeComputable(sender);
+                }
+                else if (ComputationPipeline.Instance._current != null)
                 {
                     count = ComputeComputable(ComputationPipeline.Instance._current);
                 }
             }
-            catch /*(Exception e)*/
+            catch (Exception e)
             {
                 //TODO: Log to console
+                CoreConsole.Log(e);
             }
             return count;
         }
@@ -63,17 +69,29 @@ namespace Core
                 {
 
                     ComputationPipeline.Instance._current = computable;
-                    if (computable.ComputationPipelineInfo.IOManager.EventInputNodes != null &&
-                        computable.ComputationPipelineInfo.IOManager.EventInputNodes.Count > 0)
+                    //if (computable.ComputationPipelineInfo.IOManager.EventInputNodes != null &&
+                    //    computable.ComputationPipelineInfo.IOManager.EventInputNodes.Count > 0)
+                    //{
+                    //    //TODO: Log to console
+                    //    //Computables with EventUS will only compute when their EventUS computables trigger the event they are listening to
+                    //    computable.CollectData();
+                    //}
+                    //else
+                    //{
+                    //ComputeForDataStructureFlag
+                    //TODO: Create a task to compute and store the task in the computable as part of it's state
+                    //https://medium.com/@alex.puiu/parallel-foreach-async-in-c-36756f8ebe62
+                    if (computable.CollectData())
                     {
-                        //TODO: Log to console
-                        //Computables with EventUS will only compute when their EventUS computables trigger the event they are listening to
-                        computable.CollectData();
+                        computeSuccess = false;
+                        computable.ComputationPipelineInfo.ComputableElementState = ComputableElementState.Failed;
+                        computable.OnLog_Internal(new EventArgData(new DataStructure<string>("CollectData failed - Check Inputs.")));
                     }
                     else
                     {
-                        computable.CollectData();
+                        computable.ComputationPipelineInfo.ComputableElementState = ComputableElementState.Computing;
                         computable.Compute();
+                        computable.ComputationPipelineInfo.ComputableElementState = ComputableElementState.Computed;
                         computable.DeliverData();
 
                         count++;
@@ -103,22 +121,26 @@ namespace Core
                             //}
                         }
                     }
+                    
+                    //}
                 }
                 if (computeSuccess) return count;
                 else return -1;
             }
-            catch /*(Exception e)*/
+            catch (Exception ex)
             {
+                CoreConsole.Log(ex, computable);
                 computable.ComputableElementState = ComputableElementState.Failed;
-                //TODO: Log to console
             }
             finally
             {
+                //TODO: Don't render if running Headlessly (ENV VARIABLE)
                 computable.ComputableElementState = ComputableElementState.Computed;
                 if (computable is IRenderable)
                 {
                     IRenderable r = computable as IRenderable;
-                    RenderPipeline.RenderRenderable(r);
+                    //RenderPipeline.RenderRenderable(r);
+                    RenderingCore.Render(r);
                 }
             }
             return count;
@@ -127,12 +149,15 @@ namespace Core
 
     public interface IComputable : IElement
     {
+        public void OnLog_Internal(EventArgData e);
+        //[JsonIgnore]
         public ComputationPipelineInfo ComputationPipelineInfo { get; }
 
         //public ElementsLinkedList<INode> Nodes { get; }
 
-        void CollectData();
+        bool CollectData();
 
+        [JsonIgnore]
         public ComputableElementState ComputableElementState { get; set; }
         //public ElementConsole Console { get; }
         //public bool Enabled { get; set; }
@@ -144,22 +169,35 @@ namespace Core
         void DeliverData();
     }
 
+    [Serializable]
     public class ComputationPipelineInfo
     {
+        [JsonIgnore]
         private IComputable _computable;
+        [JsonIgnore]
         private IOManager _ioManager;
+        [JsonIgnore]
         public IOManager IOManager => _ioManager;
+        //[JsonIgnore]
         private ElementsLinkedList<IComputable> _dataDS = new ElementsLinkedList<IComputable>();
         public ElementsLinkedList<IComputable> DataDS => _dataDS;
 
+        //[JsonIgnore]
         private ElementsLinkedList<IComputable> _dataUS = new ElementsLinkedList<IComputable>();
         public ElementsLinkedList<IComputable> DataUS => _dataUS;
 
+        //[JsonIgnore]
         private ElementsLinkedList<IComputable> _eventDS = new ElementsLinkedList<IComputable>();
         public ElementsLinkedList<IComputable> EventDS => _eventDS;
 
+        //[JsonIgnore]
         private ElementsLinkedList<IComputable> _eventUS = new ElementsLinkedList<IComputable>();
         public ElementsLinkedList<IComputable> EventUS => _eventUS;
+
+        [JsonIgnore]
+        private ComputableElementState computableElementState = ComputableElementState.Default;
+        public ComputableElementState ComputableElementState { get => computableElementState; internal set => computableElementState = value; }
+
         public ComputationPipelineInfo(IComputable computable)
         {
             this._computable = computable;
@@ -201,9 +239,9 @@ namespace Core
                 eventDS.ComputationPipelineInfo.AddEventUpStream(_computable);
             }
         }
-        public void CollectData()
+        public bool CollectData()
         {
-            IOManager.CollectData();
+            return IOManager.CollectData();
             //if (this._dataUS.Count > 0)
             //{
             //    foreach (IComputable dataUS in this._dataUS)
@@ -243,7 +281,22 @@ namespace Core
         public ElementsLinkedList<IEventNode> EventInputNodes => _eventInputNodes;
         private ElementsLinkedList<IEventNode> _eventOutputNodes = new ElementsLinkedList<IEventNode>();
         public ElementsLinkedList<IEventNode> EventOutputNodes => _eventOutputNodes;
-
+        private int _primaryDataOutput = -1;
+        public int PrimaryDataOutput
+        {
+            get
+            {
+                return _primaryDataOutput;
+            }
+            set
+            {
+                if (_dataOutputNodes.ItemAtIndex(value) != null)
+                {
+                    _primaryDataOutput = value;
+                }
+                else _primaryDataOutput = -1;
+            }
+        }
         //public int ConnectionCount
         //{
         //    get
@@ -310,7 +363,7 @@ namespace Core
         {
             if (container.NodeType == NodeType.Input)
             {
-                if (container.Parent is IComputable) ComputationPipeline.ComputeComputable(container.Parent as IComputable);
+                if (container.Parent is IComputable) ComputationCore.Compute(container.Parent as IComputable);
             }
             else if (container.NodeType == NodeType.Output)
             {
@@ -329,7 +382,7 @@ namespace Core
                 bool gate = container.EventOccured(e);
                 if (gate)
                 {
-                    if (container.Parent is IComputable) ComputationPipeline.ComputeComputable(container.Parent as IComputable);
+                    if (container.Parent is IComputable) ComputationCore.Compute(container.Parent as IComputable);
                 }
             }
             else if (container.NodeType == NodeType.Output)
@@ -417,66 +470,207 @@ namespace Core
 
         public object GetData(int index)
         {
+            if (index >= this.DataInputNodes.Count || index < 0) return default;
             return this._dataInputNodes[index].DataGoo.Data;
         }
         public Type GetData(out object output, int index)
         {
+            if (index >= this.DataInputNodes.Count || index < 0)
+            {
+                output = default;
+                return default;
+            }
             output = this._dataInputNodes[index].DataGoo.Data;
-            return this._dataInputNodes[index].DataGoo.Data.GetType();
+            if (output != null)
+            {
+                return this._dataInputNodes[index].DataGoo.Data.GetType();
+            }
+            else return null;
         }
         public T GetData<T>(int index)
         {
+            if (index >= this.DataInputNodes.Count || index < 0) return default;
+            if (this._dataInputNodes[index].DataValueType == typeof(T))
+            {
+                if (this._dataInputNodes[index].DataGoo.IsValid && this._dataInputNodes[index].DataGoo.Data != null)
+                {
+                    object ret = this._dataInputNodes[index].DataGoo.Data;
+                    if (ret is T castData)
+                    {
+                        return castData;
+                    }
+                    else if (ret is IDataGoo<T> goo)
+                    {
+                        return goo.Data;
+                    }
+                    else if (ret is object[] array)
+                    {
+                        if (array.Length == 1)
+                        {
+                            if (array[0] is T)
+                            {
+                                return (T)array[0];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Exception ex = new Exception("Data type mismatch");
+                        CoreConsole.Log(ex);
+                    }
+                }
+            }
+            return default;
+        }
+        public T GetData<T>(int index, T defaultValue = default)
+        {
+            if (index >= this.DataInputNodes.Count || index < 0) return defaultValue;
             if (this._dataInputNodes[index].DataValueType == typeof(T))
             {
                 if (this._dataInputNodes[index].DataGoo.IsValid && this._dataInputNodes[index].DataGoo.Data != null)
                 {
                     if (this._dataInputNodes[index].DataGoo.Data is T)
                     {
-                        return (this._dataInputNodes[index].DataGoo as DataStructure<T>).Data;
+                        object ret = this._dataInputNodes[index].DataGoo.Data;
+                        if (ret is T castData)
+                        {
+                            return castData;
+                        }
+                        else if (ret is IDataGoo<T> goo)
+                        {
+                            return goo.Data;
+                        }
+                        else if (ret is object[] array)
+                        {
+                            if (array.Length == 1)
+                            {
+                                if (array[0] is T)
+                                {
+                                    return (T)array[0];
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Exception ex = new Exception("Data type mismatch");
+                            CoreConsole.Log(ex);
+                        }
                     }
                     else
                     {
-                        throw new Exception("Data type mismatch");
+                        Exception ex = new Exception("Data type mismatch");
+                        CoreConsole.Log(ex);
                     }
                 }
             }
-            return default;
+            return defaultValue;
         }
-        public bool GetData<T>(out T output, int index)
+        public bool GetData<T>(out object output, int index)
         {
-            if (this._dataInputNodes[index].DataValueType == typeof(T))
+            try
             {
-                output = (this._dataInputNodes[index].DataGoo as DataStructure<T>).Data;
-                return true;
+                if (index >= this.DataInputNodes.Count || index < 0)
+                {
+                    output = default;
+                    return default;
+                }
+                if (this._dataInputNodes[index].DataValueType == typeof(T))
+                {
+                    output = (this._dataInputNodes[index].DataGoo as DataStructure<T>).Data;
+                    object ret = this._dataInputNodes[index].DataGoo.Data;
+                    if (ret is T castData)
+                    {
+                        output = castData;
+                        return true;
+                    }
+                    else if (ret is IDataGoo<T> goo)
+                    {
+                        output = goo.Data;
+                        return true;
+                    }
+                    else if (ret is object[] array)
+                    {
+                        if (array.Length == 1)
+                        {
+                            if (array[0] is T)
+                            {
+                                output = (T)array[0];
+                                return true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Exception ex = new Exception("Data type mismatch");
+                        CoreConsole.Log(ex);
+                    }
+                    return false;
+                }
+                else
+                {
+                    output = default;
+                    return false;
+                }
             }
-            else
+            catch (Exception ex)
             {
+                CoreConsole.Log(ex);
                 output = default;
                 return false;
             }
         }
 
+        //---------------------------
+        
         public bool SetData(object data, int index)
         {
-            if (this._dataOutputNodes[index].DataValueType == data.GetType())
+            if (index >= this.DataOutputNodes.Count || index < 0) return false;
+            if (data is null) return false;
+            if (this._dataOutputNodes[index].DataValueType.IsAssignableFrom(data.GetType()))
             {
                 this._dataOutputNodes[index].DataGoo.Data = data;
                 return true;
             }
             else return false;
         }
+        public bool SetData(DataStructure data, int index)
+        {
+            if (index >= this.DataOutputNodes.Count || index < 0) return false;
+            if (data is null || !data.IsValid) return false;
+            if (this._dataOutputNodes[index].DataValueType.IsAssignableFrom(data.DataType))
+            {
+                this._dataOutputNodes[index].DataGoo = data;
+                return true;
+            }
+            else return false;
+        }
         public bool SetData<T>(T data, int index)
         {
-            if (this._dataOutputNodes[index].DataValueType == typeof(T))
+            if (index >= this.DataOutputNodes.Count || index < 0) return false;
+            if (data is null) return false;
+            if (typeof(DataStructure<T>).IsAssignableFrom(data.GetType())) return SetData<T>(data as DataStructure<T>, index);
+            if (this._dataOutputNodes[index].DataValueType.IsAssignableFrom(data.GetType()))
             {
                 (this._dataOutputNodes[index].DataGoo as DataStructure<T>).Data = data;
                 return true;
             }
             else return false;
         }
-
-        public void CollectData()
+        public bool SetData<T>(DataStructure<T> data, int index)
         {
+            if (index >= this.DataOutputNodes.Count || index < 0) return false;
+            if (data is null || !data.IsValid) return false;
+            if (this._dataOutputNodes[index].DataValueType == data.DataType)
+            {
+                this._dataOutputNodes[index].DataGoo = data;
+                return true;
+            }
+            else return false;
+        }
+
+        public bool CollectData()
+        {
+            bool result = false;
             foreach (IDataNode dataInputNode in this._dataInputNodes)
             {
                 //TODO: ONLY WHEN/IF CONNECTIONS CHANGED
@@ -495,6 +689,7 @@ namespace Core
                 }
                 dataInputNode.CollectData();
             }
+            return result;
         }
         public void DeliverData()
         {

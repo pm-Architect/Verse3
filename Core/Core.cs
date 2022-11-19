@@ -1,7 +1,9 @@
 ﻿using Supabase;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Core
@@ -13,6 +15,10 @@ namespace Core
         public static void InitConsole()
         {
             CoreConsole.Initialize();
+        }
+        public static void Log(string message)
+        {
+            CoreConsole.Log(message);
         }
         public static async Task<string> Login()
         {
@@ -115,11 +121,148 @@ namespace Core
 
     public static class ComputationCore
     {
-
+        public static int SystemCoreCount
+        {
+            get
+            {
+                return Environment.ProcessorCount / 2;
+            }
+        }
+        private static Dictionary<string, Thread> threads = new Dictionary<string, Thread>();
+        public static void Compute(IComputable computable, bool inNewThread = true)
+        {
+            if (inNewThread)
+            {
+                try
+                {
+                    if (threads.Count > 0)
+                    {
+                        foreach (Thread t in threads.Values)
+                        {
+                            if (t != null)
+                            {
+                                if (t.IsAlive)
+                                {
+                                    if (t.ThreadState != System.Threading.ThreadState.Running)
+                                    {
+                                        if (t.ThreadState == System.Threading.ThreadState.Aborted ||
+                                            t.ThreadState == System.Threading.ThreadState.Stopped ||
+                                            t.ThreadState == System.Threading.ThreadState.Unstarted)
+                                        {
+                                            threads.Remove(t.Name);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    threads.Remove(t.Name);
+                                }
+                            }
+                        }
+                    }
+                    //TODO: collect system info
+                    //TODO: handle core limit reached - i.e. More threads needed than cores available
+                    if (SystemCoreCount >= 8)
+                    {
+                        Thread t = new Thread(new ThreadStart(() => ComputationPipeline.ComputeComputable(computable)));
+                        t.Name = "_verse_computation_thread_" + threads.Count + "_" + t.ManagedThreadId + "_" + computable.ID.ToString();
+                        t.IsBackground = true;
+                        t.Priority = ThreadPriority.AboveNormal;
+                        threads.Add(t.Name, t);
+                        if (threads.Count > 1)
+                        {
+                            foreach (Thread thread in threads.Values)
+                            {
+                                if (thread.IsAlive)
+                                {
+                                    if (thread.ThreadState != System.Threading.ThreadState.Running)
+                                    {
+                                        if (thread.ThreadState == System.Threading.ThreadState.Aborted ||
+                                            thread.ThreadState == System.Threading.ThreadState.Stopped ||
+                                            thread.ThreadState == System.Threading.ThreadState.Unstarted)
+                                        {
+                                            threads.Remove(thread.Name);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //wait for thread to complete
+                                        thread.Join();
+                                    }
+                                }
+                                else
+                                {
+                                    threads.Remove(thread.Name);
+                                }
+                            }
+                        }
+                        t.Start();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    CoreConsole.Log(ex);
+                    //CoreConsole.Log(ex);
+                }
+            }
+            else
+            {
+                try
+                {
+                    ComputationPipeline.ComputeComputable(computable);
+                }
+                catch (Exception ex)
+                {
+                    CoreConsole.Log(ex);
+                    //CoreConsole.Log(ex);
+                }
+            }
+        }
     }
 
-    internal static class AssemblyManager
+    public static class RenderingCore
     {
-
+        private static Thread renderThread;
+        public static void Render(IRenderable renderable, bool inNewThread = true)
+        {
+            if (inNewThread)
+            {
+                if (renderThread != null)
+                {
+                    if (renderThread.IsAlive)
+                    {
+                        if (renderThread.ThreadState != System.Threading.ThreadState.Aborted &&
+                            renderThread.ThreadState != System.Threading.ThreadState.Stopped &&
+                            renderThread.ThreadState != System.Threading.ThreadState.Unstarted)
+                        {
+                            renderable.RenderExpired = true;
+                            Thread renderAwait = new Thread(new ThreadStart(() =>
+                            {
+                                while (renderThread.ThreadState != System.Threading.ThreadState.Aborted &&
+                                    renderThread.ThreadState != System.Threading.ThreadState.Stopped &&
+                                    renderThread.ThreadState != System.Threading.ThreadState.Unstarted)
+                                {
+                                    Thread.Sleep(1);
+                                }
+                            }));
+                        }
+                    }
+                }
+                else
+                {
+                    renderThread = new Thread(new ThreadStart(() => RenderPipeline.RenderRenderable(renderable)));
+                    renderThread.Name = "_verse_render_thread_0_" + renderThread.ManagedThreadId;
+                    renderThread.IsBackground = true;
+                    renderThread.Priority = ThreadPriority.AboveNormal;
+                    renderable.RenderExpired = false;
+                    renderThread.Start();
+                }
+            }
+            else
+            {
+                RenderPipeline.RenderRenderable(renderable);
+                renderable.RenderExpired = false;
+            }
+        }
     }
 }

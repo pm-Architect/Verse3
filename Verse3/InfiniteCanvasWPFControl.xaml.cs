@@ -3,6 +3,7 @@ using InfiniteCanvas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -123,12 +124,16 @@ namespace Verse3
         /// </summary>
         public void ExpandContent()
         {
-            DataViewModel.InitDataViewModel(this);
-            LBcontent.ItemsSource = DataViewModel.Instance.Elements;
+            if (DataViewModel.WPFControl != this)
+                DataViewModel.InitDataViewModel(this);
+            if (LBcontent.ItemsSource != DataViewModel.Instance.Elements)
+                LBcontent.ItemsSource = DataViewModel.Instance.Elements;
+
             double xOffset = 0;
             double yOffset = 0;
             Rect contentRect = new Rect(0, 0, 0, 0);
-            foreach (IRenderable elementsData in DataViewModel.Instance.Elements)
+            ElementsLinkedList<IElement> _elementsBuffer = DataViewModel.Instance.Elements;
+            foreach (IRenderable elementsData in _elementsBuffer)
             {
                 if (elementsData.X < xOffset)
                 {
@@ -148,8 +153,7 @@ namespace Verse3
             //
             xOffset = Math.Abs(xOffset);
             yOffset = Math.Abs(yOffset);
-
-            foreach (IRenderable el in DataViewModel.Instance.Elements)
+            foreach (IRenderable el in _elementsBuffer)
             {
                 if (el != null)
                 {
@@ -176,7 +180,7 @@ namespace Verse3
         }
 
         private Point currCanvasMousePosition = new Point();
-        internal System.Drawing.Point GetMouseRelPosition(object sender = null)
+        public System.Drawing.Point GetMouseRelPosition(object sender = null)
         {
             System.Drawing.Point p = new System.Drawing.Point((int)currCanvasMousePosition.X, (int)currCanvasMousePosition.Y);
             MousePositionChanged?.Invoke(sender, p);
@@ -482,29 +486,138 @@ namespace Verse3
 
         private void InfiniteCanvasControl1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Delete)
+            switch (e.Key)
             {
-                if (this.LBcontent.SelectedItems != null && this.LBcontent.SelectedItems.Count > 0)
-                {
-                    List<IRenderable> toBeDeleted = new List<IRenderable>();
-                    for (int i = 0; i < this.LBcontent.SelectedItems.Count; i++)
+                case Key.Delete:
                     {
-                        if (this.LBcontent.SelectedItems.Count > i)
+                        if (this.LBcontent.SelectedItems != null && this.LBcontent.SelectedItems.Count > 0)
                         {
-                            IRenderable renderable = this.LBcontent.SelectedItems[i] as IRenderable;
-                            if (renderable != null)
+                            List<IRenderable> toBeDeleted = new List<IRenderable>();
+                            for (int i = 0; i < this.LBcontent.SelectedItems.Count; i++)
                             {
-                                toBeDeleted.Add(renderable);
+                                if (this.LBcontent.SelectedItems.Count > i)
+                                {
+                                    IRenderable renderable = this.LBcontent.SelectedItems[i] as IRenderable;
+                                    if (renderable != null)
+                                    {
+                                        toBeDeleted.Add(renderable);
+                                    }
+                                }
+                            }
+                            this.ClearSelection();
+                            foreach (IRenderable renderable1 in toBeDeleted)
+                            {
+                                if (renderable1 is BaseComp bc)
+                                {
+                                    List<IConnection> toBeDeletedConnections = new List<IConnection>();
+                                    if (bc.ComputationPipelineInfo.IOManager.DataInputNodes.Count > 0)
+                                    {
+                                        foreach (IDataNode dataInputNode in bc.ComputationPipelineInfo.IOManager.DataInputNodes)
+                                        {
+                                            if (dataInputNode.Connections.Count > 0)
+                                            {
+                                                foreach (IConnection dataConnection in dataInputNode.Connections)
+                                                {
+                                                    if (dataConnection is BezierElement be) toBeDeletedConnections.Add(be);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (bc.ComputationPipelineInfo.IOManager.DataOutputNodes.Count > 0)
+                                    {
+                                        foreach (IDataNode dataOutputNode in bc.ComputationPipelineInfo.IOManager.DataOutputNodes)
+                                        {
+                                            if (dataOutputNode.Connections.Count > 0)
+                                            {
+                                                foreach (IConnection dataConnection in dataOutputNode.Connections)
+                                                {
+                                                    if (dataConnection is BezierElement be) toBeDeletedConnections.Add(be);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (bc.ComputationPipelineInfo.IOManager.EventInputNodes.Count > 0)
+                                    {
+                                        foreach (IEventNode eventInputNode in bc.ComputationPipelineInfo.IOManager.EventInputNodes)
+                                        {
+                                            if (eventInputNode.Connections.Count > 0)
+                                            {
+                                                foreach (IConnection eventConnection in eventInputNode.Connections)
+                                                {
+                                                    if (eventConnection is BezierElement be) toBeDeletedConnections.Add(be);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (bc.ComputationPipelineInfo.IOManager.EventOutputNodes.Count > 0)
+                                    {
+                                        foreach (IEventNode eventOutputNode in bc.ComputationPipelineInfo.IOManager.EventOutputNodes)
+                                        {
+                                            if (eventOutputNode.Connections.Count > 0)
+                                            {
+                                                foreach (IConnection eventConnection in eventOutputNode.Connections)
+                                                {
+                                                    if (eventConnection is BezierElement be) toBeDeletedConnections.Add(be);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (toBeDeletedConnections.Count > 0)
+                                    {
+                                        foreach (IConnection connection in toBeDeletedConnections)
+                                        {
+                                            if (connection is BezierElement bezierElement)
+                                            {
+                                                bezierElement.Remove();
+                                            }
+                                        }
+                                    }
+                                }
+                                renderable1.Dispose();
+                            }
+                            e.Handled = true;
+                        }
+                        break;
+                    }
+                case Key.Escape:
+                    {
+                        if (DataViewModel.ActiveConnection != default)
+                        {
+                            DataViewModel.ActiveConnection.Origin.Connections.Remove(DataViewModel.ActiveConnection);
+                            DataViewModel.ActiveConnection.Destination.Connections.Remove(DataViewModel.ActiveConnection);
+                            DataViewModel.Instance.Elements.Remove(DataViewModel.ActiveConnection);
+                            DataViewModel.ActiveConnection.Dispose();
+                            DataViewModel.ActiveConnection = default;
+                        }
+                        break;
+                    }
+                case Key.Space:
+                    {
+                        if (DataViewModel.SearchBarCompInfo.ConstructorInfo != null)
+                        {
+                            if (DataViewModel.SearchBarCompInfo.ConstructorInfo.GetParameters().Length > 0)
+                            {
+                                ParameterInfo[] pi = DataViewModel.SearchBarCompInfo.ConstructorInfo.GetParameters();
+                                object[] args = new object[pi.Length];
+                                for (int i = 0; i < pi.Length; i++)
+                                {
+                                    if (!(pi[i].DefaultValue is DBNull)) args[i] = pi[i].DefaultValue;
+                                    else
+                                    {
+                                        if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "x")
+                                            args[i] = DataViewModel.WPFControl.GetMouseRelPosition().X;
+                                        else if (pi[i].ParameterType == typeof(int) && pi[i].Name.ToLower() == "y")
+                                            args[i] = DataViewModel.WPFControl.GetMouseRelPosition().Y;
+                                    }
+                                }
+                                IElement elInst = DataViewModel.SearchBarCompInfo.ConstructorInfo.Invoke(args) as IElement;
+                                DataViewModel.Instance.Elements.Add(elInst);
                             }
                         }
+                        break;
                     }
-                    this.ClearSelection();
-                    foreach (IRenderable renderable1 in toBeDeleted)
-                    {
-                        renderable1.Dispose();
-                    }
-                    e.Handled = true;
-                }
+                default:
+                    break;
             }
         }
 
@@ -775,7 +888,8 @@ namespace Verse3
             if (!add) this.ClearSelection();
             
             BoundingBox selectionBounds = new BoundingBox(contentX, contentY, contentWidth, contentHeight);
-            foreach (IRenderable renderable in DataViewModel.Instance.Elements)
+            ElementsLinkedList<IElement> _elementsBuffer = DataViewModel.Instance.Elements;
+            foreach (IRenderable renderable in _elementsBuffer)
             {
                 if (renderable != null)
                 {

@@ -20,6 +20,7 @@
         Height="{Binding BoundingBox.Size.Height}"
         MinWidth="100"
         MinHeight="20"
+        MaxHeight="120"
         >
         <hc:TextBox
             Name="TextBoxBlock"
@@ -27,6 +28,9 @@
             Margin="10"
             FontFamily="Maven Pro"
             TextChanged="TextBoxBlock_TextChanged"
+            TextWrapping="Wrap"
+            AcceptsReturn="True"
+            VerticalScrollBarVisibility="Visible"
             />
     </Grid>
 </UserControl>

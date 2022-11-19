@@ -1,7 +1,9 @@
 using Core;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -111,9 +113,20 @@ namespace Verse3.VanillaElements
 
             if ((Keyboard.Modifiers & ModifierKeys.Control) != 0)
             {
-                //TODO: Delete connection
-                this.Element.Remove();
-                //return;
+                try
+                {
+                    //TODO: Delete connection
+                    IRenderable start = this.Element.Origin as IRenderable;
+                    IRenderable end = this.Element.Destination as IRenderable;
+                    this.Element.Remove();
+                    RenderPipeline.RenderRenderable(start);
+                    RenderPipeline.RenderRenderable(end);
+                    //return;
+                }
+                catch (Exception ex)
+                {
+                    CoreConsole.Log(ex);
+                }
             }
 
             DataViewModel.WPFControl.MouseHandlingMode = MouseHandlingMode.None;
@@ -369,6 +382,7 @@ namespace Verse3.VanillaElements
         }
     }
 
+    [Serializable]
     public class BezierElement : BaseElement, IConnection
     {
         #region Data Members
@@ -383,28 +397,59 @@ namespace Verse3.VanillaElements
 
         #region Properties
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public BoundingBox InnerBoundingBox { get => this.innerBoundingBox; private set => this.innerBoundingBox = value; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public Point StartPoint => new Point(this.Origin.Hotspot.X, this.Origin.Hotspot.Y);
-        public Point EndPoint => new Point(this.Destination.Hotspot.X, this.Destination.Hotspot.Y);        
-        public override Type ViewType => typeof(BezierElementView);        
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public Point EndPoint => new Point(this.Destination.Hotspot.X, this.Destination.Hotspot.Y);
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public override Type ViewType => typeof(BezierElementView);
+        [JsonIgnore]
+        [IgnoreDataMember]
         public BezierDirection Direction { get; private set; }
+        //[JsonIgnore]
+        //[IgnoreDataMember]
         public INode Origin { get => this.origin; }
+        //[JsonIgnore]
+        //[IgnoreDataMember]
         public INode Destination { get => this.destination; }
         public ConnectionType ConnectionType { get; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public bool TopToBottom => (this.origin.Hotspot.Y < this.destination.Hotspot.Y);
+        [JsonIgnore]
+        [IgnoreDataMember]
         public bool LeftToRight => (this.origin.Hotspot.X < this.destination.Hotspot.X);
-
+        
         #endregion
 
         public bool SetDestination(INode destination)
         {
-            //TODO: Check whether destination is valid
-            bool check = (destination.GetType() == this.origin.GetType());
-            check = check && (destination.NodeType != this.origin.NodeType);
-            if (!check) return false;
             //TODO: LOOP WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //this.destination.Connections.Remove(this);
-            this.destination = destination;
+            if (this.destination != MousePositionNode.Instance && this.origin == MousePositionNode.Instance)
+            {
+                //TODO: Check whether destination is valid
+                bool check = (destination.GetType().BaseType == this.destination.GetType().BaseType);
+                check = check && (destination.NodeType != this.destination.NodeType);
+                check = NodeUtilities.CheckCompatibility(destination, this.destination);
+                if (!check) return false;
+                this.origin = destination;
+            }
+            else
+            {
+                //TODO: Check whether destination is valid
+                bool check = (destination.GetType().BaseType == this.origin.GetType().BaseType);
+                check = check && (destination.NodeType != this.origin.NodeType);
+                check = NodeUtilities.CheckCompatibility(this.origin, destination);
+                if (!check) return false;
+                this.destination = destination;
+            }
             //this.destination.Connections.Add(this);
             RedrawBezier(this.origin, this.destination);
             if (this.RenderView != null)
@@ -416,12 +461,19 @@ namespace Verse3.VanillaElements
 
         public void Remove()
         {
-            this.origin.Connections.Remove(this);
-            this.destination.Connections.Remove(this);
-            //this.origin = null;
-            //this.destination = null;
-            DataViewModel.Instance.Elements.Remove(this);
-            this.Dispose();
+            try
+            {
+                this.origin.Connections.Remove(this);
+                this.destination.Connections.Remove(this);
+                //this.origin = null;
+                //this.destination = null;
+                DataViewModel.Instance.Elements.Remove(this);
+                this.Dispose();
+            }
+            catch (Exception ex)
+            {
+                CoreConsole.Log(ex);
+            }
         }
 
         #region Constructors
@@ -434,9 +486,31 @@ namespace Verse3.VanillaElements
         {
             if (this.origin != start) this.origin = start;
             if (this.destination != end) this.destination = end;
-            if (this.origin.NodeType == NodeType.Input) this.Direction = BezierDirection.ForceRightToLeft;
-            else this.Direction = BezierDirection.ForceLeftToRight;
-            RedrawBezier(start, end);
+            //if (this.origin.NodeType == NodeType.Input) this.Direction = BezierDirection.ForceRightToLeft;
+            //else this.Direction = BezierDirection.ForceLeftToRight;
+            if (this.origin.NodeType == NodeType.Input)
+            {
+                this.destination = start;
+                this.origin = end;
+            }
+            RedrawBezier(this.origin, this.destination);
+        }
+
+        public BezierElement(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            INode o = (INode)info.GetValue("origin", typeof(INode));
+            INode d = (INode)info.GetValue("destination", typeof(INode));
+            if (o != null) this.origin = o;
+            if (d != null) this.destination = d;
+            if (this.origin != null && this.Destination != null) RedrawBezier(this.origin, this.destination);
+            else throw new NullReferenceException("BezierElement: Origin and/or Destination is null");
+        }
+
+        public new void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            info.AddValue("origin", this.origin);
+            info.AddValue("destination", this.destination);
         }
 
         #endregion

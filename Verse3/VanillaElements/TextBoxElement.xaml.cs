@@ -101,10 +101,12 @@ namespace Verse3.VanillaElements
 
         private void TextBoxBlock_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Element.OnTextChanged(sender, e);
+            Element.InputText = TextBoxBlock.Text;
+            Element.ValueChanged.Invoke(sender, e);
         }
     }
 
+    //[Serializable]
     public class TextBoxElement : BaseElement
     {
         #region Properties
@@ -113,6 +115,7 @@ namespace Verse3.VanillaElements
 
         private string inputText;
         public string InputText { get => inputText; set => SetProperty(ref inputText, value); }
+        public EventHandler<TextChangedEventArgs> ValueChanged { get; set; }
 
         #endregion
 
@@ -124,10 +127,5 @@ namespace Verse3.VanillaElements
         }
 
         #endregion
-
-        public void OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            //TODO: Set the output data of this element
-        }
     }
 }
