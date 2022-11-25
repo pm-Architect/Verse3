@@ -13,11 +13,13 @@ From the Geometry nodes and Shading nodes in Blender, the Blueprint system in Un
 
 ## Installation
 
-Install Verse3 with npm
-
-```bash
-## do xyz
-```
+- Download the SetupVerse3_Win64.msi file and run it to install Verse3.
+- Navigate to "C:\Program Files\iiterate Technologies GmbH\Verse3" and run Verse3.exe to run the Verse3 editor application.
+- Click on the key icon and log in with your LinkedIn account to access the editor interface
+- If you have Rhino 7 installed, download and install Verse3.rhi to test interoperability with Rhino. Run the command Verse3Interop.
+- Saving and opening files is disabled in this release.
+- This is an EARLY RELEASE - No Warranties. Use at your own risk.
+- The primary purpose of this release is to aid user studies for an independent research paper.
     
 ## Usage/Examples
 
@@ -69,17 +71,6 @@ Verse3 can be used for business automation, data analysis, parametric modelling,
 #### Why do we need this VPL?
 
 VPLs have been used for a wide variety of specialized use cases. Verse3 aims to bridge the various use cases of VPLs in dfferent contexts and address their shortcomings.
-
-
-## Authors
-
-- [@praneetmathur](https://github.com/pm-Architect)
-- [@aashwinshrivastava](https://github.com/aashwinshriv)
-
-
-## Acknowledgements
-
- - [Emil Poulsen](https://github.com/EmilPoulsen)
  
 ## Roadmap
 
