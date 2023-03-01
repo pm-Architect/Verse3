@@ -1,4 +1,4 @@
-# Project Title
+# Verse3
 
 Verse3 is an event-based visual programming language (VPL). 
 
