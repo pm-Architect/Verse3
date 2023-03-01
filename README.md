@@ -61,7 +61,6 @@ So who can use Verse3 and for which use-cases?
 
 - 𝗦𝘁𝗿𝗲𝗮𝗺𝗹𝗶𝗻𝗲𝗱 𝗽𝗹𝘂𝗴𝗶𝗻 𝗱𝗲𝘃𝗲𝗹𝗼𝗽𝗺𝗲𝗻𝘁: With a simpler SDK interface, developing a plugin or migrating one from Grasshopper is as straightforward as possible.
 
-![App Screenshot](https://iiterate.de/images/project_photos/Verse3/Verse7.jpg)
 ## FAQs
 
 #### What can Verse3 be used for?
