@@ -1,7 +1,3 @@
-
-![Logo](https://iiterate.de/images/logos/ilogo5.png)
-
-
 # Project Title
 
 Verse3 is an event-based visual programming language (VPL). 
